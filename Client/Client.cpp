@@ -44,9 +44,15 @@ void Client::sendNewMessage(short id,vector<char> data)
 void Client::write(short id, vector<char>data)
 {
 	vector<char> toSend(data);
-	short size = (short) data.size()+3;//2byte länge, 2byte id
+	short size = (short) data.size()+4;//2byte länge, 2byte id
 	
-	toSend.insert(toSend.begin(),id);
+	toSend.insert(toSend.begin(),(char)id);
+	toSend.insert(toSend.begin(),(char)(id>>8));
+	
+	toSend.insert(toSend.begin(),(char)size);
+	toSend.insert(toSend.begin(),(char)(size>>8));
+
+
 }
 
 void Client::beginRead()

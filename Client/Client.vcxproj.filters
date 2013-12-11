@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{cbc0b04d-cb4c-408e-ba04-f15cb0c4f421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic\Source">
+      <UniqueIdentifier>{e2e1ed0b-5b4f-4ba7-9552-372e45c420c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SplittedSprite.cpp">
+      <Filter>Graphic\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
