@@ -17,6 +17,9 @@
     <Filter Include="Codes\Network">
       <UniqueIdentifier>{e5e3f10c-8f0a-4600-baaf-d932113eafe2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DLLs">
+      <UniqueIdentifier>{b16b10b5-3498-4d58-90a4-f29065231f04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -36,5 +39,43 @@
     <ClInclude Include="Client.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libsndfile-1.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="openal32.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-audio-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-audio-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-graphics-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-graphics-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-network-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-network-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-system-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-system-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-window-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-window-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
   </ItemGroup>
 </Project>
