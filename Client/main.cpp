@@ -18,7 +18,7 @@ int main()//Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das
 
 
 	Client test;
-	test.connectToServer("127.0.0.1",1194);
+	test.connectToServer("127.0.0.1",424242);
 	test.write(1,blubb);
 	test.write(42,blubb);
 	test.write(1,blubb);

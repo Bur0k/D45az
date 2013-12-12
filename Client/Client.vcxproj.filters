@@ -20,16 +20,19 @@
     <Filter Include="DLLs">
       <UniqueIdentifier>{b16b10b5-3498-4d58-90a4-f29065231f04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\Network\Source">
+      <UniqueIdentifier>{cb51fa42-70d9-4a1e-aa03-5874984ca19b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp">
-      <Filter>Codes\Network</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Codes</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Codes\Network\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
