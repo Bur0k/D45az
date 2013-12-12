@@ -4,10 +4,13 @@ using namespace std;
 
 int main()
 {
-	return 0;
+	
 
 	//HALLO
 	//HALLO2
 
-	cout << "hallo welt" << endl;
+	// Was geht ab?
+
+	cout << "Hallo Welt" << endl;
+	return 0;
 }
