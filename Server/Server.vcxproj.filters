@@ -19,6 +19,9 @@
     <ClInclude Include="Server.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
+    <ClInclude Include="ClientHandler.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -26,6 +29,9 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Codes</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientHandler.cpp">
+      <Filter>Codes\Network\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

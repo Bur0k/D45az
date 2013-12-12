@@ -9,11 +9,20 @@ Client::Client()
 
 Client::~Client()
 {
-	for (int i = 0; i < writeThreads.size(); i++)
+	runRead = false;
+	for (unsigned int i = 0; i < writeThreads.size(); i++)
 	{
 		writeThreads[i]->join();
 		delete writeThreads[i];
 	}
+
+	if(readThread!=NULL)
+	{
+		readThread->join();
+		delete readThread;
+	}
+
+	closesocket(s);
 }
 
 void Client::connectToServer(string ip, int port)
@@ -45,6 +54,13 @@ void Client::connectToServer(string ip, int port)
 	if (connect(s, (sockaddr*) &si, sizeof(struct sockaddr)) == -1)
 	{
 		sendError(-2,"Socket could not connect: "+to_string(WSAGetLastError()));
+		return ;
+	}
+
+	u_long nonBlockMode = 1;
+	if (ioctlsocket(s, FIONBIO, &nonBlockMode) != NO_ERROR)
+	{
+		sendError(-5,"Could not set Non-Blocking mode: "+to_string(WSAGetLastError()));
 		return ;
 	}
 }
@@ -101,11 +117,26 @@ void Client::beginRead()
 			static char buffer[1024];
 			static short currPos = 0;
 			static short nextMsgSize = 0;
+			
+			Sleep(1);
 
 			int recievedBytes = recv(s,buffer+currPos,1024-currPos,0);
+			if(recievedBytes == 0)
+				;//Connection closed
+			else if(recievedBytes <0)
+			{
+				if(WSAGetLastError() == 10035)//Would block
+					continue;
+				else//Anderer ECHTER Fehler
+				{
+					runRead = false;
+					sendNewMessage(-1,vector<char>());
+					break;
+				}
+			}
+			
 			currPos += recievedBytes;
-
-			while (currPos >= nextMsgSize && currPos < 1)
+			while (currPos >= nextMsgSize && currPos != 0)
 			{
 				if (nextMsgSize == 0)
 					nextMsgSize = (buffer[0]<<8)+buffer[1];
@@ -114,10 +145,10 @@ void Client::beginRead()
 					currPos -= nextMsgSize;
 					short id = (buffer[currPos+2]>>8) + buffer[currPos+3];
 
-					char* msg = new char[nextMsgSize];
+					char* msg = new char[nextMsgSize-4];
 					memcpy(msg,buffer+currPos+4,sizeof(char)*(nextMsgSize-4));
 					vector<char> message;
-					for(int i=0;i<nextMsgSize;i++)
+					for(int i=0;i<nextMsgSize-4;i++)
 						message.push_back(msg[i]);
 
 					sendNewMessage(id,message);
@@ -127,24 +158,6 @@ void Client::beginRead()
 					delete[] msg;
 				}
 			}
-			/*int recievedBytes = inputStream.read(currMsg, currPos, 512 - currPos);
-			currPos += recievedBytes;
-
-			while (currPos >= nextMsgSize && currPos != 0)
-			{
-			if (nextMsgSize == 0)
-			nextMsgSize = (byte) currMsg[0];
-			else
-			{
-			currPos -= nextMsgSize;
-			byte[] msg = Arrays.copyOfRange(currMsg, currPos + 1, currPos + nextMsgSize);
-
-			for (newMessageListener hl : listeners)
-			hl.gotNewMessage(msg[0], Arrays.copyOfRange(msg, 1, msg.length));
-
-			nextMsgSize = 0;
-			}
-			}*/
 		}
 	});
 }

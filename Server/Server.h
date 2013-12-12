@@ -8,6 +8,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include "ClientHandler.h"
 
 using namespace std;
 
@@ -16,27 +17,22 @@ class Server
 {
 	long rc;
 	SOCKET acceptSocket;
-	//SOCKET connectedSocket;
 	SOCKADDR_IN addr;
-	char buf[256];
-	char buf2[300];
-	// zusätzliche Variabeln
-	FD_SET fdSet;
-	int i;
 
 
-	void sendError(int errCode,string errMessage);
-	void sendNewMessage(short id,vector<char> data);
+	void sendError(ClientHandler* ch,int errCode,string errMessage);
 
 	thread* acceptThread;
 	bool runAccept;
+
+	vector<ClientHandler*> clientHandler;
 public:
 	Server();
 	~Server();
 
 	void startListening();
-	vector<void (*)(int errCode,string errMessage)> errorCallback;
-	vector<void (*)(short id,vector<char> data)> newMessageCallback;
+	vector<void (*)(ClientHandler* ch,int errCode,string errMessage)> errorCallback;
+	vector<void (*)(ClientHandler* ch,short id,vector<char> data)> newMessageCallback;
 };
 
 

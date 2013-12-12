@@ -23,13 +23,6 @@ class Client
 
 	thread* readThread;
 
-	struct statusThread
-	{
-		bool finished;
-		thread* t;
-		statusThread(thread* T):finished(false),t(T){}
-		statusThread():finished(false),t(NULL){}
-	};
 	vector<thread*> writeThreads;
 	mutex writeThreadsMutex;
 
