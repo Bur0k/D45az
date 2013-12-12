@@ -1,22 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Codes">
+      <UniqueIdentifier>{c8a519cc-bd3f-49d3-950a-3604945e1db8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\Graphic">
+      <UniqueIdentifier>{cbc0b04d-cb4c-408e-ba04-f15cb0c4f421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\Graphic\Source">
+      <UniqueIdentifier>{e2e1ed0b-5b4f-4ba7-9552-372e45c420c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\Network">
+      <UniqueIdentifier>{e5e3f10c-8f0a-4600-baaf-d932113eafe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DLLs">
+      <UniqueIdentifier>{b16b10b5-3498-4d58-90a4-f29065231f04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SplittedSprite.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Codes\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Codes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SplittedSprite.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libsndfile-1.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="openal32.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-audio-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-audio-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-graphics-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-graphics-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-network-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-network-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-system-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-system-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-window-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
+    <None Include="sfml-window-d-2.dll">
+      <Filter>DLLs</Filter>
+    </None>
   </ItemGroup>
 </Project>
