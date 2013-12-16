@@ -23,9 +23,6 @@
     <Filter Include="Codes\Network\Source">
       <UniqueIdentifier>{cb51fa42-70d9-4a1e-aa03-5874984ca19b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Codes\test_zeug">
-      <UniqueIdentifier>{b633aff4-b798-43ce-9517-719908ec4db3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -37,6 +34,7 @@
     <ClCompile Include="Client.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Jans_Abgeher_Shit.cpp" />
     <ClCompile Include="tinystr.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
@@ -52,8 +50,20 @@
     <ClCompile Include="Map.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Jans_Abgeher_Shit.cpp">
-      <Filter>Codes\test_zeug</Filter>
+    <ClCompile Include="Game.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Textbox.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UIelement.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +73,7 @@
     <ClInclude Include="Client.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Jans_Abgeher_Shit.h" />
     <ClInclude Include="tinystr.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
@@ -72,8 +83,20 @@
     <ClInclude Include="Map.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Jans_Abgeher_Shit.h">
-      <Filter>Codes\test_zeug</Filter>
+    <ClInclude Include="Game.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Textbox.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="UIelement.h">
+      <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
