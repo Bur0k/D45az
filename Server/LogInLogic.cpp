@@ -5,6 +5,12 @@ LogInLogic::LogInLogic()
 
 }
 
+LogInLogic::~LogInLogic()
+{
+	for(int i = 0; i < connectedUsers.size(); i++)
+		delete connectedUsers[i];
+}
+
 void LogInLogic::connect()
 {
 	bool userexists = false;
