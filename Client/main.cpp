@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Client.h"
+#include "Jans_Abgeher_Shit.h"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	jans_main();
+
 	cout << "Hallo D45az" << endl;
 
 	vector<char> blubb ;
