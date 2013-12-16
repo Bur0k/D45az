@@ -85,11 +85,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Jans_Abgeher_Shit.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SplittedSprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Jans_Abgeher_Shit.h" />
     <ClInclude Include="SplittedSprite.h" />
   </ItemGroup>
   <ItemGroup>

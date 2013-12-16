@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Client.h"
+#include "Jans_Abgeher_Shit.h"
 
 using namespace std;
 
@@ -40,4 +41,7 @@ int main()//Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das
 
 	getchar();
 	return 0;
+
+	
+	jans_main();
 }
