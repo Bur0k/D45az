@@ -10,7 +10,6 @@
 #include <vector>
 #include <thread>
 #include <mutex>
-#include "ClientHandler.h"
 
 using namespace std;
 
@@ -34,7 +33,7 @@ class Server
 	void startListening();
 	vector<void (*)(ClientHandler* ch,int errCode,string errMessage)> errorCallback;
 	vector<void (*)(ClientHandler* ch,short id,vector<char> data)> newMessageCallback;*/
-
+public:
 	typedef enum _OPERATION_INFO_
 	{
 		OP_NULL,
@@ -66,7 +65,7 @@ class Server
 	public:	
 		SOCKET sock;
 		SOCKADDR_IN addr;
-	}PERHANDLEDATA, *PPERHANDLEDATA;
+	}PERHANDLEDATA;
 
 	typedef struct _PER_IO_DTATA_
 	{
@@ -88,6 +87,8 @@ class Server
 			wsaBuf.buf = buf;
 			wsaBuf.len = 1024;
 			opType =  OP_NULL;
+			currPos = 0;
+			nextMsgSize = 0;
 		}
 	public:
 		WSAOVERLAPPED ol;
@@ -96,7 +97,10 @@ class Server
 		WSABUF wsaBuf;
 		char buf[1024];
 		OPERATIONINFO opType;
-	}PERIODATA, *PPERIODATA;
+
+		short currPos;
+		short nextMsgSize;
+	}PERIODATA;
 
 	HANDLE hThread[4];
 	PERIODATA* pAcceptData[100];
@@ -113,13 +117,23 @@ class Server
 	SOCKET sListen;
 	HANDLE hIOCP;
 
+	
+	void sendError(SOCKET s,int errCode,string errMessage);
+	void sendNewMessage(SOCKET s, short id,vector<char> data);
 
+      vector<thread*> writeThreads;
 public:
+	static Server* self;
+
 	Server();
 	~Server();
 
-	static Server* self;
 
 	void startListening();
+	void write(SOCKET s,short id,vector<char> data);
+
+	
+	vector<void (*)(SOCKET s,int errCode,string errMessage)> errorCallback;
+	vector<void (*)(SOCKET s,short id,vector<char> data)> newMessageCallback;
 };
 #endif

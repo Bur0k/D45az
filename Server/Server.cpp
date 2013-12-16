@@ -48,6 +48,14 @@ Server::~Server()
 	CloseHandle(hIOCP); // Close IOCP
 
 	WSACleanup();
+
+
+	for (unsigned int i = 0; i < writeThreads.size(); i++)
+	{
+		writeThreads[i]->join();
+		delete writeThreads[i];
+	}
+
 }
 
 void Server::startListening()
@@ -240,9 +248,6 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						PERHANDLEDATA* pPerHandle = new PERHANDLEDATA;
 						pPerHandle->sock = pPerIoData->sAccept;
 						PERIODATA* pPerIo = new PERIODATA;
-						pPerIo->opType = OP_WRITE;
-						strcpy_s(pPerIo->buf, 5, "test");
-						DWORD dwTrans = strlen(pPerIo->buf);
 						memcpy(&(pPerHandleData->addr), remote, sizeof(SOCKADDR_IN));
 						// Associate with IOCP
 						if(NULL == CreateIoCompletionPort((HANDLE)(pPerHandleData->sock), hIOCP, (ULONG_PTR)pPerHandleData, 0))
@@ -257,6 +262,30 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						memset(&(pPerIoData->ol), 0, sizeof(pPerIoData->ol));
 						Server::self->PostAccept(pPerIoData);
 
+
+
+						int id = 3;
+						vector<char> toSend;
+						toSend.push_back('t');
+						toSend.push_back('e');
+						toSend.push_back('s');
+						toSend.push_back('t');
+						short size = (short) toSend.size()+4;//2byte länge, 2byte id
+
+						toSend.insert(toSend.begin(),(char)id);
+						toSend.insert(toSend.begin(),(char)(id>>8));
+
+						toSend.insert(toSend.begin(),(char)size);
+						toSend.insert(toSend.begin(),(char)(size>>8));
+
+						char* buffer = new char[size];
+						for(int i=0;i<size;i++)
+							buffer[i]=toSend[i];
+
+						pPerIo->opType = OP_WRITE;
+						memcpy(pPerIo->buf,buffer,size*sizeof(char));
+						DWORD dwTrans = size;
+						pPerIo->wsaBuf.len = size;
 						// Post Receive						
 						DWORD dwFlags = 0;
 						if(SOCKET_ERROR == WSASend(pPerHandle->sock, &(pPerIo->wsaBuf), 1, 
@@ -271,22 +300,54 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 								continue;
 							}
 						}
+
+						delete[] buffer;
 					}
 					break;
 
 				case OP_READ: // Read
-					printf("recv client <%s : %d> data: %s\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port), pPerIoData->buf);
+					pPerIoData->currPos += (short)dwTrans;
+					
+					while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
+					{
+						if (pPerIoData->nextMsgSize == 0)
+							pPerIoData->nextMsgSize = (pPerIoData->buf[0]<<8)+pPerIoData->buf[1];
+						else
+						{
+							pPerIoData->currPos -= pPerIoData->nextMsgSize;
+							short id = (pPerIoData->buf[pPerIoData->currPos+2]>>8) + pPerIoData->buf[pPerIoData->currPos+3];
+
+							char* msg = new char[pPerIoData->nextMsgSize-4];
+							memcpy(msg,pPerIoData->buf+pPerIoData->currPos+4,sizeof(char)*(pPerIoData->nextMsgSize-4));
+							vector<char> message;
+							for(int i=0;i<pPerIoData->nextMsgSize-4;i++)
+								message.push_back(msg[i]);
+
+							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
+							//printf("recv. SOCKET: %d ID: %d Data:%s\n", pPerHandleData->sock, id, msg);
+
+							pPerIoData->nextMsgSize = 0;
+							delete[] msg;
+						}
+					}
+
+					WSARecv(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, &dwFlags, &(pPerIoData->ol), NULL);
+
+					pPerIoData->opType = OP_READ;
+					break;
+					//pPerIoData->opType = OP_WRITE;
+					/*printf("recv client <%s : %d> data: %s Length:%d\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port), pPerIoData->buf,dwTrans);
 					pPerIoData->opType = OP_WRITE;
 					memset(&(pPerIoData->ol), 0, sizeof(pPerIoData->ol));
 					if(SOCKET_ERROR == WSASend(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, dwFlags, &(pPerIoData->ol), NULL))
 					{
-						if(WSA_IO_PENDING != WSAGetLastError())
-						{
-							printf("WSASend failed with error code: %d.\n", WSAGetLastError());
-							continue;
-						}
+					if(WSA_IO_PENDING != WSAGetLastError())
+					{
+					printf("WSASend failed with error code: %d.\n", WSAGetLastError());
+					continue;
 					}
-					break;
+					}
+					break;*/
 
 				case OP_WRITE: // Write
 					{
@@ -315,6 +376,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 	}
 	return 0;
 }
+
 BOOL Server::PostAccept(PERIODATA* pIoData)
 {
 	if(INVALID_SOCKET == pIoData->sListen)
@@ -342,4 +404,43 @@ BOOL Server::PostAccept(PERIODATA* pIoData)
 		}
 	}
 	return TRUE;
+}
+
+
+void Server::sendError(SOCKET s,int errCode,string errMessage)
+{
+	for(unsigned int i=0;i<errorCallback.size();i++)
+		errorCallback[i](s,errCode,errMessage);
+}
+
+void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
+{
+	for(unsigned int i=0;i<newMessageCallback.size();i++)
+		newMessageCallback[i](s,id,data);
+}
+
+void Server::write(SOCKET s,short id,vector<char> data)
+{
+	thread* sendThread = new thread([=]()
+	{
+		vector<char> toSend(data);
+		short size = (short) data.size()+4;//2byte länge, 2byte id
+
+		toSend.insert(toSend.begin(),(char)id);
+		toSend.insert(toSend.begin(),(char)(id>>8));
+
+		toSend.insert(toSend.begin(),(char)size);
+		toSend.insert(toSend.begin(),(char)(size>>8));
+
+		char* buffer = new char[size];
+		for(int i=0;i<size;i++)
+			buffer[i]=toSend[i];
+
+
+		if (send(s,buffer,size,0) == SOCKET_ERROR)
+			sendError(s,-3,"Send failed with error: "+to_string(WSAGetLastError()));
+
+		delete[] buffer;
+	});
+	writeThreads.push_back(sendThread);
 }
