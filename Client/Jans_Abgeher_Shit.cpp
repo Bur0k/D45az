@@ -6,6 +6,6 @@ using namespace std;
 void jans_main()
 {
 	cout << "Hallo, " << "Ihr" 
-     << " " << 2 
+     << " " << ", sagt Jan" 
      << "!" << endl;
 }
