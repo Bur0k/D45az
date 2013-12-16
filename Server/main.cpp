@@ -24,8 +24,8 @@ void Error(ClientHandler* ch,int id, std::string s)
 int main()
 {
 	Server* s = new Server();
-	s->newMessageCallback.push_back(OnNewMessage);
-	s->errorCallback.push_back(Error);
+	/*s->newMessageCallback.push_back(OnNewMessage);
+	s->errorCallback.push_back(Error);*/
 	s->startListening();
 	
 	getchar();

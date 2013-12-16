@@ -2,94 +2,344 @@
 
 #include <vld.h>
 
+Server* Server::self;
+
 Server::Server()
 {
+	memset(hThread,0,sizeof(HANDLE));
+	memset(pAcceptData,0,sizeof(Server::PERIODATA*));
+	g_nThread = 0;
+	g_bExitThread = FALSE;
+	lpfnAcceptEx = NULL;
+	lpfnGetAcceptExSockAddrs = NULL;
+	GUID GuidAcceptEx2 = WSAID_ACCEPTEX;
+	memcpy(&GuidAcceptEx,&GuidAcceptEx2,sizeof(GUID));
+	GUID GuidGetAcceptExSockAddrs2 = WSAID_GETACCEPTEXSOCKADDRS;
+	memcpy(&GuidGetAcceptExSockAddrs,&GuidGetAcceptExSockAddrs2,sizeof(GUID));
+
+	self = this;
 }
 
 Server::~Server()
 {
-	runAccept = false;
-	if(acceptThread!=NULL)
+	g_bExitThread = TRUE;
+
+	PostQueuedCompletionStatus(hIOCP, 0, NULL, NULL);
+	WaitForMultipleObjects(g_nThread, hThread, TRUE, INFINITE);
+	for(int i = 0; i < g_nThread; i++)
 	{
-		acceptThread->join();
-		delete acceptThread;
+		CloseHandle(hThread[i]);
 	}
-	for(int i=0;i<clientHandler.size();i++)
-		delete clientHandler[i];
+
+	for(int i=0; i<100; i++)
+	{
+		if(pAcceptData[i])
+		{
+			delete pAcceptData[i];
+			pAcceptData[i] = NULL;
+		}
+	}
+
+	if(INVALID_SOCKET != sListen)
+	{
+		closesocket(sListen);
+		sListen = INVALID_SOCKET;
+	}
+	CloseHandle(hIOCP); // Close IOCP
+
+	WSACleanup();
 }
 
 void Server::startListening()
 {
-	WSADATA wsa;
-
-	if(WSAStartup(MAKEWORD(2,0),&wsa))
+	WORD wVersionRequested = MAKEWORD(2, 2);
+	WSADATA wsaData;
+	if(0 != WSAStartup(wVersionRequested, &wsaData))
 	{
-		sendError(NULL,-4,"WSAStartup failed: "+to_string(WSAGetLastError()));
-		return ;
+		printf("WSAStartup failed with error code: %d\n", GetLastError());
 	}
 
-	acceptSocket=socket(AF_INET,SOCK_STREAM,0);
-	if(acceptSocket==INVALID_SOCKET)
+	if(2 != HIBYTE(wsaData.wVersion) || 2 != LOBYTE(wsaData.wVersion))
 	{
-		sendError(NULL,-1,"Socket could not be created: "+to_string(WSAGetLastError()));
-		return ;
+		printf("Socket version not supported.\n");
+		WSACleanup();
 	}
 
-	memset(&addr,0,sizeof(SOCKADDR_IN));
-	addr.sin_family=AF_INET;
-	addr.sin_port=htons(4242);
-	addr.sin_addr.s_addr=INADDR_ANY; // gewisse compiler brauchen hier ADDR_ANY
-	rc=::bind(acceptSocket,(SOCKADDR*)&addr,sizeof(SOCKADDR_IN));
-	if(rc==SOCKET_ERROR)
+	// Create IOCP
+	hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
+	if(NULL == hIOCP)
 	{
-		sendError(NULL,-2,"Socket could not be bound to Port 424242: "+to_string(WSAGetLastError()));
-		return ;
+		printf("CreateIoCompletionPort failed with error code: %d\n", WSAGetLastError());
+		WSACleanup();
 	}
 
-	// In den listen Modus
-	rc=listen(acceptSocket,100);
-	if(rc==SOCKET_ERROR)
+	// Create worker thread
+	SYSTEM_INFO si = {0};
+	GetSystemInfo(&si);
+	for(int i = 0; i < 4; i++)
 	{
-		sendError(NULL,-3,"Socket could not Listen: "+to_string(WSAGetLastError()));
-		return ;
-	}
-
-	u_long nonBlockMode = 1;
-	rc = ioctlsocket(acceptSocket, FIONBIO, &nonBlockMode);
-	if (rc != NO_ERROR)
-	{
-		sendError(NULL,-5,"Could not set Non-Blocking mode: "+to_string(WSAGetLastError()));
-		return ;
-	}
-
-	runAccept = true;
-	acceptThread = new thread([&]
-	{
-		while(runAccept)
+		hThread[g_nThread] = (HANDLE)_beginthreadex(NULL, 0, ThreadProc, (LPVOID)hIOCP, 0, NULL);
+		if(NULL == hThread[g_nThread])
 		{
-			int size = sizeof(SOCKADDR_IN);
-			SOCKET s = accept(acceptSocket,(sockaddr*)&addr,&size);
-			if(s!=INVALID_SOCKET)
-			{
-				clientHandler.push_back(new ClientHandler(s,&newMessageCallback,&errorCallback));
-			}
-			for(unsigned int i=0;i<clientHandler.size();)
-			{
-				if(clientHandler[i]->readyToDelete == true)
-				{
-					delete clientHandler[i];
-					clientHandler.erase(clientHandler.begin()+i);
-				}
-				else
-					i++;
-			}
-			Sleep(1);
+			printf("_beginthreadex failed with error code: %d\n", GetLastError());
+			continue;
 		}
-	});
+		++g_nThread;
+	}
+
+	// Create listen SOCKET
+	sListen = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if(INVALID_SOCKET == sListen)
+	{
+		printf("WSASocket failed with error code: %d\n", WSAGetLastError());
+		return;
+	}
+
+	// Associate SOCKET with IOCP
+	if(NULL == CreateIoCompletionPort((HANDLE)sListen, hIOCP, NULL, 0))
+	{
+		printf("CreateIoCompletionPort failed with error code: %d\n", WSAGetLastError());
+		if(INVALID_SOCKET != sListen)
+		{
+			closesocket(sListen);
+			sListen = INVALID_SOCKET;
+		}
+		return;
+	}
+
+	// Bind SOCKET
+	SOCKADDR_IN addr;
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr=INADDR_ANY; 
+	addr.sin_port = htons(4242);
+	if(SOCKET_ERROR == ::bind(sListen, (LPSOCKADDR)&addr, sizeof(addr)))
+	{
+		printf("bind failed with error code: %d\n", WSAGetLastError());
+		if(INVALID_SOCKET != sListen)
+		{
+			closesocket(sListen);
+			sListen = INVALID_SOCKET;
+		}
+		return;
+	}
+
+	// Start Listen
+	if(SOCKET_ERROR == listen(sListen, 100))
+	{
+		printf("listen failed with error code: %d\n", WSAGetLastError());
+		if(INVALID_SOCKET != sListen)
+		{
+			closesocket(sListen);
+			sListen = INVALID_SOCKET;
+		}
+		return;
+	}
+
+	printf("Server start, wait for client to connect ...\n");
+
+	DWORD dwBytes = 0;
+	if(SOCKET_ERROR == WSAIoctl(sListen, SIO_GET_EXTENSION_FUNCTION_POINTER, &GuidAcceptEx, sizeof(GuidAcceptEx), &lpfnAcceptEx,
+		sizeof(lpfnAcceptEx), &dwBytes, NULL, NULL))
+	{
+		printf("WSAIoctl failed with error code: %d\n", WSAGetLastError());
+		if(INVALID_SOCKET != sListen)
+		{
+			closesocket(sListen);
+			sListen = INVALID_SOCKET;
+		}
+		return;
+	}
+
+	if(SOCKET_ERROR == WSAIoctl(sListen, SIO_GET_EXTENSION_FUNCTION_POINTER, &GuidGetAcceptExSockAddrs, 
+		sizeof(GuidGetAcceptExSockAddrs), &lpfnGetAcceptExSockAddrs, sizeof(lpfnGetAcceptExSockAddrs), 
+		&dwBytes, NULL, NULL))
+	{
+		printf("WSAIoctl failed with error code: %d\n", WSAGetLastError());
+		if(INVALID_SOCKET != sListen)
+		{
+			closesocket(sListen);
+			sListen = INVALID_SOCKET;
+		}
+		return;
+	}
+
+	// Post MAX_ACCEPT accept
+	for(int i=0; i<100; i++)
+	{
+		pAcceptData[i] = new PERIODATA;
+		pAcceptData[i]->sListen = sListen;
+		PostAccept(pAcceptData[i]);
+	}
 }
 
-void Server::sendError(ClientHandler* ch,int errCode,string errMessage)
+unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 {
-	for(unsigned int i=0;i<errorCallback.size();i++)
-		errorCallback[i](ch,errCode,errMessage);
+	HANDLE hIOCP = (HANDLE)lParam;
+
+	PERHANDLEDATA* pPerHandleData = NULL;
+	PERIODATA* pPerIoData = NULL;
+	WSAOVERLAPPED* lpOverlapped = NULL;
+	DWORD dwTrans = 0;
+	DWORD dwFlags = 0;
+	while(!Server::self->g_bExitThread)
+	{
+		BOOL bRet = GetQueuedCompletionStatus(hIOCP, &dwTrans, (PULONG_PTR)&pPerHandleData, &lpOverlapped, 1000);
+		if(!bRet)
+		{
+			// Timeout and exit thread
+			if(WAIT_TIMEOUT == GetLastError())
+			{
+				continue;
+			}
+			// Error
+			printf("GetQueuedCompletionStatus failed with error: %d\n", GetLastError());
+			continue;
+		}
+		else
+		{
+			pPerIoData = CONTAINING_RECORD(lpOverlapped, PERIODATA, ol);
+			if(NULL == pPerIoData)
+			{
+				// Exit thread
+				break;
+			}
+
+			if((0 == dwTrans) && (OP_READ == pPerIoData->opType || OP_WRITE == pPerIoData->opType))
+			{
+				// Client leave.
+				printf("Client: <%s : %d> leave.\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port));
+				closesocket(pPerHandleData->sock);
+				delete pPerHandleData;
+				delete pPerIoData;
+				continue;
+			}
+			else
+			{
+				switch(pPerIoData->opType)
+				{
+				case OP_ACCEPT: // Accept
+					{	
+						SOCKADDR_IN* remote = NULL;
+						SOCKADDR_IN* local = NULL;
+						int remoteLen = sizeof(SOCKADDR_IN);
+						int localLen = sizeof(SOCKADDR_IN);
+						Server::self->lpfnGetAcceptExSockAddrs(pPerIoData->wsaBuf.buf, pPerIoData->wsaBuf.len - ((sizeof(SOCKADDR_IN)+16)*2),
+							sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, (LPSOCKADDR*)&local, &localLen, (LPSOCKADDR*)&remote, &remoteLen);
+						printf("Client <%s : %d> come in.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port));
+						printf("Recv Data: <%s : %d> %s.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port), pPerIoData->wsaBuf.buf);
+
+						if(NULL != pPerHandleData)
+						{
+							delete pPerHandleData;
+							pPerHandleData = NULL;
+						}
+						pPerHandleData = new PERHANDLEDATA;
+						pPerHandleData->sock = pPerIoData->sAccept;
+
+						PERHANDLEDATA* pPerHandle = new PERHANDLEDATA;
+						pPerHandle->sock = pPerIoData->sAccept;
+						PERIODATA* pPerIo = new PERIODATA;
+						pPerIo->opType = OP_WRITE;
+						strcpy_s(pPerIo->buf, 5, "test");
+						DWORD dwTrans = strlen(pPerIo->buf);
+						memcpy(&(pPerHandleData->addr), remote, sizeof(SOCKADDR_IN));
+						// Associate with IOCP
+						if(NULL == CreateIoCompletionPort((HANDLE)(pPerHandleData->sock), hIOCP, (ULONG_PTR)pPerHandleData, 0))
+						{
+							printf("CreateIoCompletionPort failed with error code: %d\n", GetLastError());
+							closesocket(pPerHandleData->sock);
+							delete pPerHandleData;
+							continue;
+						}
+
+						// Post Accept
+						memset(&(pPerIoData->ol), 0, sizeof(pPerIoData->ol));
+						Server::self->PostAccept(pPerIoData);
+
+						// Post Receive						
+						DWORD dwFlags = 0;
+						if(SOCKET_ERROR == WSASend(pPerHandle->sock, &(pPerIo->wsaBuf), 1, 
+							&dwTrans, dwFlags, &(pPerIo->ol), NULL))
+						{
+							if(WSA_IO_PENDING != WSAGetLastError())
+							{
+								printf("WSASend failed with error code: %d\n", WSAGetLastError());
+								closesocket(pPerHandle->sock);
+								delete pPerHandle;
+								delete pPerIo;
+								continue;
+							}
+						}
+					}
+					break;
+
+				case OP_READ: // Read
+					printf("recv client <%s : %d> data: %s\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port), pPerIoData->buf);
+					pPerIoData->opType = OP_WRITE;
+					memset(&(pPerIoData->ol), 0, sizeof(pPerIoData->ol));
+					if(SOCKET_ERROR == WSASend(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, dwFlags, &(pPerIoData->ol), NULL))
+					{
+						if(WSA_IO_PENDING != WSAGetLastError())
+						{
+							printf("WSASend failed with error code: %d.\n", WSAGetLastError());
+							continue;
+						}
+					}
+					break;
+
+				case OP_WRITE: // Write
+					{
+						pPerIoData->opType = OP_READ;
+						dwFlags = 0;
+						memset(&(pPerIoData->ol), 0, sizeof(pPerIoData->ol));
+						memset(pPerIoData->buf, 0, sizeof(pPerIoData->buf));
+						pPerIoData->wsaBuf.buf = pPerIoData->buf;
+						dwTrans = pPerIoData->wsaBuf.len = 1024;
+						if(SOCKET_ERROR == WSARecv(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, &dwFlags, &(pPerIoData->ol), NULL))
+						{
+							if(WSA_IO_PENDING != WSAGetLastError())
+							{
+								printf("WSARecv failed with error code: %d.\n", WSAGetLastError());
+								continue;
+							}
+						}
+					}
+					break;
+
+				default:
+					break;
+				}
+			}
+		}
+	}
+	return 0;
+}
+BOOL Server::PostAccept(PERIODATA* pIoData)
+{
+	if(INVALID_SOCKET == pIoData->sListen)
+	{
+		return FALSE;
+	}
+
+	DWORD dwBytes = 0;
+	pIoData->opType = OP_ACCEPT;
+	pIoData->sAccept = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if(INVALID_SOCKET == pIoData->sAccept)
+	{
+		printf("WSASocket failed with error code: %d\n", WSAGetLastError());
+		return FALSE;
+	}
+
+	if(FALSE == lpfnAcceptEx(pIoData->sListen, pIoData->sAccept, pIoData->wsaBuf.buf, pIoData->wsaBuf.len - ((sizeof(SOCKADDR_IN)+16)*2), 
+		sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, &dwBytes, &(pIoData->ol)))
+	{
+		if(WSA_IO_PENDING != WSAGetLastError())
+		{
+			printf("lpfnAcceptEx failed with error code: %d\n", WSAGetLastError());
+
+			return FALSE;
+		}
+	}
+	return TRUE;
 }
