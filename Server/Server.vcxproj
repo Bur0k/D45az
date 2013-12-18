@@ -85,6 +85,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ClientHandler.cpp" />
+    <ClCompile Include="GameLobbyLogic.cpp" />
+    <ClCompile Include="LobbyLogic.cpp" />
     <ClCompile Include="LogInLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
@@ -92,6 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientHandler.h" />
+    <ClInclude Include="GameLobbyLogic.h" />
+    <ClInclude Include="LobbyLogic.h" />
     <ClInclude Include="LogInLogic.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="User.h" />

@@ -118,10 +118,10 @@ void ClientHandler::write(short id, vector<char>data)
 	writeThreads.push_back(sendThread);
 }
 
-void ClientHandler::sendError(ClientHandler* ch,int errCode,string errMessage)
+void ClientHandler::sendError(SOCKET s,int errCode,string errMessage)
 {
 	for(unsigned int i=0;i<errorCallback->size();i++)
-		(*errorCallback)[i](ch,errCode,errMessage);
+		(*errorCallback)[i](s,errCode,errMessage);
 	if(errCode == -1)
 		readyToDelete=true;
 }
