@@ -1,7 +1,8 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "Client.h"
-#include "Jans_Abgeher_Shit.h"
+//#include "Jans_Abgeher_Shit.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -34,26 +35,19 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	//window.setSize(sf::Vector2u (900,900));
 	window.setPosition(sf::Vector2i(400,0));
 
-	sf::Font font = sf::Font();
-	if(!font.loadFromFile("Data/Fonts/arial.ttf"))
-	{
-		cout << "font load failed!" << endl;
-	}
-	else
-		cout << "font load successful!" << endl;
-
-	sf::Text t = sf::Text();
-	t.setString("Hallo Welt \n D45az finezt.");
-	t.setPosition(sf::Vector2f(200,200));
-	t.setFont(font);
-	t.setColor(sf::Color::White);
-
-	sf::RectangleShape r = sf::RectangleShape();
-	r.setPosition(sf::Vector2f(200,400));
-	r.setSize(sf::Vector2f(50,50));
-	r.setFillColor(sf::Color::Blue);
 	
+
+	//testausgabe
+	/*
+	
+	*/
+	
+	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
+
 	jans_test_karre();
+
+
+
 
 	while (window.isOpen())
     {
@@ -80,8 +74,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		
 		
 
-		window.draw(t);
-		window.draw(r);
+		g.Draw();
 
 
 		

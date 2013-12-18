@@ -1,8 +1,17 @@
 #include "Game.h"
 
-Game::Game()
+Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
-	
+	m_RW = rw;
+	m_Screen = sm;
+	m_size = windowSize;
+
+	//Lade font
+	m_stdFont = sf::Font();
+	if(!m_stdFont.loadFromFile("Data/Fonts/arial.ttf"))
+		std::cout << "font load failed!" << std::endl;
+	else
+		std::cout << "font load successful!" << std::endl;
 }
 
 Game::~Game()
@@ -30,6 +39,8 @@ void Game::Draw()
 		DrawGame();
 		DrawIngameMenu();
 		break;
+	case Testscreen:
+		DrawTest();
 	default:
 		break;
 	}
@@ -60,7 +71,22 @@ void Game::DrawIngameMenu()
 
 }
 
+void Game::DrawTest()
+{
+	sf::Text t = sf::Text();
+	t.setString("Hallo Welt\nD45az finezt.");
+	t.setPosition(sf::Vector2f(200,200));
+	t.setFont(m_stdFont);
+	t.setColor(sf::Color::White);
 
+	sf::RectangleShape r = sf::RectangleShape();
+	r.setPosition(sf::Vector2f(200,400));
+	r.setSize(sf::Vector2f(50,50));
+	r.setFillColor(sf::Color::Blue);
+
+	m_RW->draw(t);
+	m_RW->draw(r);
+}
 
 void Game::Input()
 {

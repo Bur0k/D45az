@@ -141,4 +141,7 @@
       <Filter>Codes\Graphic\Source</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="Data\Fonts\arial.ttf" />
+  </ItemGroup>
 </Project>
