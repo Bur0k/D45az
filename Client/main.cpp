@@ -15,6 +15,11 @@ void OnNewMessage(short id,vector<char> data)
 
 }
 
+
+void jans_test_karre()
+{
+}
+
 #ifndef _DEBUG
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine,int iCmdShow ) //Release Mode verwenden wir Windows als SubSystem
 #else
@@ -48,8 +53,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	r.setSize(sf::Vector2f(50,50));
 	r.setFillColor(sf::Color::Blue);
 	
-	window.draw(t);
-
+	jans_test_karre();
 
 	while (window.isOpen())
     {
