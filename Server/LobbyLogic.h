@@ -7,6 +7,10 @@
 #include "Server.h"
 #include "GameLobbyLogic.h"
 
+
+// MUSS MAL IRGENDWO ANGELEGT WERDEN
+
+
 class LobbyLogic
 {
 private:
@@ -15,6 +19,8 @@ private:
 public:
 	LobbyLogic();
 	~LobbyLogic();
+
+	void LobbyLogicMessageCallback(ClientHandler* ch,short id,vector<char> data);
 };
 
 #endif
