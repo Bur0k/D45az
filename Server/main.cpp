@@ -26,7 +26,7 @@ void Error(SOCKET s,int id, std::string msg)
 
 int main()
 {
-	server = new Server();
+	server = Server::get();
 	server->newMessageCallback.push_back(OnNewMessage);
 	server->errorCallback.push_back(Error);
 	server->startListening();

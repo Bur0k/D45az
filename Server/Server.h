@@ -1,5 +1,5 @@
-#ifndef CLIENT_H
-#define Server_H
+#ifndef SERVER_H
+#define SERVER_H
 
 #include <WinSock2.h>
 #include <MSWSock.h>
@@ -121,11 +121,16 @@ public:
 	void sendError(SOCKET s,int errCode,string errMessage);
 	void sendNewMessage(SOCKET s, short id,vector<char> data);
 
-      vector<thread*> writeThreads;
-public:
+    vector<thread*> writeThreads;
 	static Server* self;
-
 	Server();
+public:
+
+	static Server* get()
+	{
+		return self;
+	}
+
 	~Server();
 
 

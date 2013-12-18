@@ -2,7 +2,7 @@
 
 #include <vld.h>
 
-Server* Server::self;
+Server* Server::self = new Server();
 
 Server::Server()
 {
@@ -264,28 +264,17 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 
 
-						int id = 3;
-						vector<char> toSend;
-						toSend.push_back('t');
-						toSend.push_back('e');
-						toSend.push_back('s');
-						toSend.push_back('t');
-						short size = (short) toSend.size()+4;//2byte länge, 2byte id
 
-						toSend.insert(toSend.begin(),(char)id);
-						toSend.insert(toSend.begin(),(char)(id>>8));
-
-						toSend.insert(toSend.begin(),(char)size);
-						toSend.insert(toSend.begin(),(char)(size>>8));
-
-						char* buffer = new char[size];
-						for(int i=0;i<size;i++)
-							buffer[i]=toSend[i];
+						char* buffer = new char[4];//"Leermessage muss gesendet werden, damit sich WSASend sich initialisieren kann
+						buffer[0]=0;
+						buffer[1]=4;//Länge 4
+						buffer[2]=0;
+						buffer[3]=0;//Keine Daten
 
 						pPerIo->opType = OP_WRITE;
-						memcpy(pPerIo->buf,buffer,size*sizeof(char));
-						DWORD dwTrans = size;
-						pPerIo->wsaBuf.len = size;
+						memcpy(pPerIo->buf,buffer,4*sizeof(char));
+						DWORD dwTrans = 4;
+						pPerIo->wsaBuf.len = 4;
 						// Post Receive						
 						DWORD dwFlags = 0;
 						if(SOCKET_ERROR == WSASend(pPerHandle->sock, &(pPerIo->wsaBuf), 1, 
@@ -302,6 +291,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						}
 
 						delete[] buffer;
+						delete pPerHandle;
 					}
 					break;
 
@@ -324,8 +314,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 								message.push_back(msg[i]);
 
 							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
-							//printf("recv. SOCKET: %d ID: %d Data:%s\n", pPerHandleData->sock, id, msg);
-
+						
 							pPerIoData->nextMsgSize = 0;
 							delete[] msg;
 						}
@@ -335,19 +324,6 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 					pPerIoData->opType = OP_READ;
 					break;
-					//pPerIoData->opType = OP_WRITE;
-					/*printf("recv client <%s : %d> data: %s Length:%d\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port), pPerIoData->buf,dwTrans);
-					pPerIoData->opType = OP_WRITE;
-					memset(&(pPerIoData->ol), 0, sizeof(pPerIoData->ol));
-					if(SOCKET_ERROR == WSASend(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, dwFlags, &(pPerIoData->ol), NULL))
-					{
-					if(WSA_IO_PENDING != WSAGetLastError())
-					{
-					printf("WSASend failed with error code: %d.\n", WSAGetLastError());
-					continue;
-					}
-					}
-					break;*/
 
 				case OP_WRITE: // Write
 					{
