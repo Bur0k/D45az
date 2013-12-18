@@ -14,10 +14,43 @@
     <Filter Include="Codes\Network\Source">
       <UniqueIdentifier>{9700d15e-702c-48b1-bb5b-f94943dd9d39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\LogInLogic">
+      <UniqueIdentifier>{62d903f1-0754-44be-9060-72fa93882855}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\LogInLogic\Source">
+      <UniqueIdentifier>{5985eacf-93c4-4068-9252-cdddc53531d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\LobbyLogic">
+      <UniqueIdentifier>{06769def-5102-47b8-8d04-7e35c4f59f5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\LobbyLogic\Source">
+      <UniqueIdentifier>{22a9272a-cd94-4456-aa17-f45bf515f70e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLobbyLogic">
+      <UniqueIdentifier>{cfd90096-6a0d-449c-82ae-9591694a0e48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLobbyLogic\Source">
+      <UniqueIdentifier>{137f1cc3-66fb-4da5-b28c-975aaf6d10a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
       <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientHandler.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="LogInLogic.h">
+      <Filter>Codes\LogInLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Codes\LogInLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyLogic.h">
+      <Filter>Codes\LobbyLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLobbyLogic.h">
+      <Filter>Codes\GameLobbyLogic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -26,6 +59,21 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Codes</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientHandler.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="LogInLogic.cpp">
+      <Filter>Codes\LogInLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="User.cpp">
+      <Filter>Codes\LogInLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyLogic.cpp">
+      <Filter>Codes\LobbyLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLobbyLogic.cpp">
+      <Filter>Codes\GameLobbyLogic\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
