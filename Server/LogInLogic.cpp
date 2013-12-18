@@ -2,7 +2,10 @@
 
 LogInLogic::LogInLogic()
 {
-	//Message Callback Anmelden nicht vergessen!
+	self = this;
+	this->server = Server::get();
+
+	server->newMessageCallback.push_back(LogicMessageCallback);
 }
 
 LogInLogic::~LogInLogic()
@@ -11,7 +14,7 @@ LogInLogic::~LogInLogic()
 		delete connectedUsers[i];
 }
 
-void LogInLogic::LogicMessageCallback(ClientHandler* ch,short id,vector<char> data)
+void LogInLogic::LogicMessageCallback(SOCKET s,short id,vector<char> data)
 {
 	switch(id)
 	{
@@ -24,14 +27,14 @@ void LogInLogic::LogicMessageCallback(ClientHandler* ch,short id,vector<char> da
 			for (int i = 0; i < data.size(); i++) 
 				name += data[i];
 
-			for (int i = 0; i < connectedUsers.size(); i++)
+			for (int i = 0; i < LogInLogic::self->connectedUsers.size(); i++)
 			{
-				if (connectedUsers[i]->getName()  == name)
+				if (LogInLogic::self->connectedUsers[i]->getName()  == name)
 				{
 					// send 0101 nachricht 0
 					std::vector<char> erfg;
 					erfg.push_back(0);
-					ch->write(0x0101,erfg);
+					LogInLogic::self->server->write(s,0x0101,erfg);
 
 					userexists = true;
 					break;
@@ -41,12 +44,12 @@ void LogInLogic::LogicMessageCallback(ClientHandler* ch,short id,vector<char> da
 			if (!userexists)
 			{
 				User* u = new User(name);
-				connectedUsers.push_back(u);
+				LogInLogic::self->connectedUsers.push_back(u);
 
 				//send 0101 nachricht 1
 				std::vector<char> erfg;
 					erfg.push_back(1);
-					ch->write(0x0101,erfg);
+					LogInLogic::self->server->write(s,0x0101,erfg);
 			}
 		}break;
 	}

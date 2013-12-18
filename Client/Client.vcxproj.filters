@@ -136,4 +136,9 @@
     </None>
     <None Include="Projektplanung.doc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="client_Grafik.txt">
+      <Filter>Codes\Graphic\Source</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
