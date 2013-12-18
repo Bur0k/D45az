@@ -6,23 +6,23 @@
 #include "Server.h"
 #include "GameLobbyLogic.h"
 #include <string>
-
+#include "NetworkParticipant.h"
 
 // MUSS MAL IRGENDWO ANGELEGT WERDEN
 
 
-class LobbyLogic
+class LobbyLogic : public NetworkParticipant
 {
 private:
 	map<short, GameLobbyLogic*> gamesCreated;
-	static LobbyLogic* self;
 	Server* server;
 
 public:
 	LobbyLogic();
 	~LobbyLogic();
 
-	static void LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data);
+	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 
 #endif

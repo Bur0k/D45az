@@ -95,6 +95,7 @@
     <ClInclude Include="GameLobbyLogic.h" />
     <ClInclude Include="LobbyLogic.h" />
     <ClInclude Include="LogInLogic.h" />
+    <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>

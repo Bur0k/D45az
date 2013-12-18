@@ -387,7 +387,7 @@ void Server::sendError(SOCKET s,int errCode,string errMessage)
 {
 	errorCallbackMutex.lock();
 	for(unsigned int i=0;i<errorCallback.size();i++)
-		errorCallback[i](s,errCode,errMessage);
+		errorCallback[i]->processNetworkError(s,errCode,errMessage);
 	errorCallbackMutex.unlock();
 }
 
@@ -395,7 +395,7 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
 	newMessageCallbackMutex.lock();
 	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		newMessageCallback[i](s,id,data);
+		newMessageCallback[i]->processNewMessage(s,id,data);
 	newMessageCallbackMutex.unlock();
 }
 
@@ -425,18 +425,18 @@ void Server::write(SOCKET s,short id,vector<char> data)
 	writeThreads.push_back(sendThread);
 }
 
-void Server::addToNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data))
+void Server::addToNewMessageCallback(NetworkParticipant* np)
 {
 	newMessageCallbackMutex.lock();
-	newMessageCallback.push_back(function);
+	newMessageCallback.push_back(np);
 	newMessageCallbackMutex.unlock();
 }
 
-void Server::deleteFromNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data))
+void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 {
 	newMessageCallbackMutex.lock();
-	for(int i=0;i<newMessageCallback.size();i++)
-		if(newMessageCallback[i]==function)
+	for(unsigned int i=0;i<newMessageCallback.size();i++)
+		if(newMessageCallback[i]==np)
 		{
 			newMessageCallback.erase(newMessageCallback.begin()+i);
 			break;
@@ -444,18 +444,18 @@ void Server::deleteFromNewMessageCallback(void (*function)(SOCKET s,short id,vec
 	newMessageCallbackMutex.unlock();
 }
 
-void Server::addToErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage))
+void Server::addToErrorCallback(NetworkParticipant* np)
 {
 	errorCallbackMutex.lock();
-	errorCallback.push_back(function);
+	errorCallback.push_back(np);
 	errorCallbackMutex.unlock();
 }
 
-void Server::deleteFromErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage))
+void Server::deleteFromErrorCallback(NetworkParticipant* np)
 {
 	errorCallbackMutex.lock();
-	for(int i=0;i<errorCallback.size();i++)
-		if(errorCallback[i]==function)
+	for(unsigned int i=0;i<errorCallback.size();i++)
+		if(errorCallback[i]==np)
 		{
 			errorCallback.erase(errorCallback.begin()+i);
 			break;
