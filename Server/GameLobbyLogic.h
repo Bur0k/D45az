@@ -3,12 +3,14 @@
 
 #include <vector>
 #include "User.h"
+#include "Server.h"
 
 using namespace std;
 
 class GameLobbyLogic
 {
 private:
+	Server* server;
 	short id;
 	vector<User*> players;
 	short playerlimit;
@@ -29,6 +31,10 @@ public:
 	User* getGamemaster();
 	/*void setMap(Map map);*/
 	/*Map getMap();*/
+
+	/*Kommunikation*/
+
+	static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
 };
 
 #endif

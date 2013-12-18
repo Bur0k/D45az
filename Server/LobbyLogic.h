@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <map>
-#include "ClientHandler.h"
 #include "Server.h"
 #include "GameLobbyLogic.h"
 
@@ -20,7 +19,7 @@ public:
 	LobbyLogic();
 	~LobbyLogic();
 
-	void LobbyLogicMessageCallback(ClientHandler* ch,short id,vector<char> data);
+	void LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data);
 };
 
 #endif
