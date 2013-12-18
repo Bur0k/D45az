@@ -34,7 +34,6 @@
     <ClCompile Include="Client.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Jans_Abgeher_Shit.cpp" />
     <ClCompile Include="tinystr.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
@@ -73,7 +72,6 @@
     <ClInclude Include="Client.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Jans_Abgeher_Shit.h" />
     <ClInclude Include="tinystr.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
