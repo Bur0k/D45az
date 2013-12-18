@@ -37,9 +37,6 @@
     <ClInclude Include="Server.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
-    <ClInclude Include="ClientHandler.h">
-      <Filter>Codes\Network</Filter>
-    </ClInclude>
     <ClInclude Include="LogInLogic.h">
       <Filter>Codes\LogInLogic</Filter>
     </ClInclude>
@@ -59,9 +56,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Codes</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientHandler.cpp">
-      <Filter>Codes\Network\Source</Filter>
     </ClCompile>
     <ClCompile Include="LogInLogic.cpp">
       <Filter>Codes\LogInLogic\Source</Filter>
