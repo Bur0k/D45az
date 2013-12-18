@@ -28,6 +28,7 @@ int main()
 {
 	server = Server::get();
 	server->newMessageCallback.push_back(OnNewMessage);
+	server->newMessageCallback.push_back(OnNewMessage2);
 	server->errorCallback.push_back(Error);
 	server->startListening();
 	

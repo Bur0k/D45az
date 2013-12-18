@@ -10,23 +10,28 @@
 
 LobbyLogic::LobbyLogic()
 {
-	//Message Callback Anmelden nicht vergessen!
+	self = this;
+	this->server = Server::get();
+
+	server->newMessageCallback.push_back(LobbyLogicMessageCallback);
 }
 
 LobbyLogic::~LobbyLogic()
 {
 }
 
-void LobbyLogic::LobbyLogicMessageCallback(ClientHandler* ch,short id,vector<char> data)
+void LobbyLogic::LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data)
 {
+	std::vector<char> erfg;
+
 	switch (id)
 	{
 		//	00: 	Server -> Client (sendet Lobby-Daten)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
 		case 0x0201:
 			{
-				std::vector<char> erfg;
-				for (map<short, GameLobbyLogic*>::iterator it = this->gamesCreated.begin(); it != this->gamesCreated.end; it++)
+				
+				for (map<short, GameLobbyLogic*>::iterator it = self->gamesCreated.begin(); it != self->gamesCreated.end; it++)
 				{
 					erfg.push_back(it->first);
 					erfg.push_back(it->second->getID);
@@ -39,7 +44,7 @@ void LobbyLogic::LobbyLogicMessageCallback(ClientHandler* ch,short id,vector<cha
 					//noch die spieler vom game pushen
 				}
 							
-				ch->write(0x0200,erfg);
+				self->server->write(s, 0x0200,erfg);
 
 				break;
 			}
@@ -47,12 +52,19 @@ void LobbyLogic::LobbyLogicMessageCallback(ClientHandler* ch,short id,vector<cha
 		//	03: 	Server -> Client (connect Bestätigung)
 		case 0x0202:
 			{
+				// gameid aus daten lesen, den user da reinschreiben
+
+				erfg.push_back(1);
+				self->server->write(s, 0x0203, erfg);
 				break;
 			}
 		//	04:		Client -> Server (will Spiellobby erstellen)
 		//	05: 	Server -> Client (erstellen Bestätigung)
 		case 0x0204:
 			{
+
+				erfg.push_back(1);
+				self->server->write(s, 0x0205, erfg);
 				break;
 			}
 	}
