@@ -385,14 +385,18 @@ BOOL Server::PostAccept(PERIODATA* pIoData)
 
 void Server::sendError(SOCKET s,int errCode,string errMessage)
 {
+	errorCallbackMutex.lock();
 	for(unsigned int i=0;i<errorCallback.size();i++)
 		errorCallback[i](s,errCode,errMessage);
+	errorCallbackMutex.unlock();
 }
 
 void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
+	newMessageCallbackMutex.lock();
 	for(unsigned int i=0;i<newMessageCallback.size();i++)
 		newMessageCallback[i](s,id,data);
+	newMessageCallbackMutex.unlock();
 }
 
 void Server::write(SOCKET s,short id,vector<char> data)
@@ -419,4 +423,42 @@ void Server::write(SOCKET s,short id,vector<char> data)
 		delete[] buffer;
 	});
 	writeThreads.push_back(sendThread);
+}
+
+void Server::addToNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data))
+{
+	newMessageCallbackMutex.lock();
+	newMessageCallback.push_back(function);
+	newMessageCallbackMutex.unlock();
+}
+
+void Server::deleteFromNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data))
+{
+	newMessageCallbackMutex.lock();
+	for(int i=0;i<newMessageCallback.size();i++)
+		if(newMessageCallback[i]==function)
+		{
+			newMessageCallback.erase(newMessageCallback.begin()+i);
+			break;
+		}
+	newMessageCallbackMutex.unlock();
+}
+
+void Server::addToErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage))
+{
+	errorCallbackMutex.lock();
+	errorCallback.push_back(function);
+	errorCallbackMutex.unlock();
+}
+
+void Server::deleteFromErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage))
+{
+	errorCallbackMutex.lock();
+	for(int i=0;i<errorCallback.size();i++)
+		if(errorCallback[i]==function)
+		{
+			errorCallback.erase(errorCallback.begin()+i);
+			break;
+		}
+	errorCallbackMutex.unlock();
 }

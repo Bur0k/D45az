@@ -4,6 +4,9 @@
 //#include "Jans_Abgeher_Shit.h"
 #include "Game.h"
 
+#include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
+
 using namespace std;
 
 
@@ -16,9 +19,22 @@ void OnNewMessage(short id,vector<char> data)
 
 }
 
-
 void jans_test_karre()
 {
+	sf::Music music;
+	string status;
+
+	if (music.openFromFile("test.ogg"))
+	{
+		cout << "passt" << endl << endl;
+		music.play();
+	}
+
+	music.setVolume(90);
+
+	status = music.getStatus() ;
+
+	cout << music.getStatus() << endl;
 }
 
 #ifndef _DEBUG
