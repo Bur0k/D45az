@@ -120,6 +120,10 @@ public:
 	
 	void sendError(SOCKET s,int errCode,string errMessage);
 	void sendNewMessage(SOCKET s, short id,vector<char> data);
+	vector<void (*)(SOCKET s,int errCode,string errMessage)> errorCallback;
+	vector<void (*)(SOCKET s,short id,vector<char> data)> newMessageCallback;
+	mutex newMessageCallbackMutex;
+	mutex errorCallbackMutex;
 
     vector<thread*> writeThreads;
 	static Server* self;
@@ -137,8 +141,9 @@ public:
 	void startListening();
 	void write(SOCKET s,short id,vector<char> data);
 
-	
-	vector<void (*)(SOCKET s,int errCode,string errMessage)> errorCallback;
-	vector<void (*)(SOCKET s,short id,vector<char> data)> newMessageCallback;
+	void addToNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data));
+	void deleteFromNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data));
+	void addToErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage));
+	void deleteFromErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage));
 };
 #endif
