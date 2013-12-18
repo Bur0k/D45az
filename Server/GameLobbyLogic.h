@@ -34,7 +34,7 @@ public:
 
 	/*Kommunikation*/
 
-	static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
+	void LogicMessageCallback(SOCKET s,short id,vector<char> data);
 };
 
 #endif

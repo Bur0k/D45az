@@ -61,7 +61,19 @@ void GameLobbyLogic::LogicMessageCallback(SOCKET s,short id,vector<char> data)
 	{
 	case 0x0300:
 		{
-			
+			string name = "";
+
+			//testen
+			for (int i = 0; i < data.size(); i++) 
+				name += data[i];
+
+			for(int i = 0; i < this->players.size(); i++)
+				if(this->players[i]->getName() == name)
+					this->players.erase(this->players.begin + i, this->players.begin + i);
+				
+			std::vector<char> erfg;
+
+			this->server->write(s, 0x0301, erfg);	
 		}break;
 	case 0x0303:
 		{
