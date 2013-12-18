@@ -1,0 +1,68 @@
+===============TODO======================
+
+ - fenster aufmachen
+ - game routine
+ - funktionspointer für buttton
+
+
+
+ - MACH NEN BUTTON
+
+
+
+
+
+
+==============Client Aufbau:=================
+
+RenderWindow sfml:shape Klassen
+
+
+zu zeichnende ebenen
+ unten -> oben
+
+INGAME
+- Spielfeld
+	- burak xml parser
+	- tiled
+	- spritesheet
+	- mouse hover
+	- figuren (evtl städte)
+	- grenzen
+	- fow
+					
+- interface
+	- basic elemente 
+		- textbox eingabe
+		- slider
+		- checkbox
+		- einheit
+	- interface hauptbox (reiter)
+		- baumenü
+		- einheiten
+		- 
+	- statusbar
+		- menubutton
+		- truppen
+		- gebiete
+		- recourcen
+	- spielfeld overlay
+		- städte info
+		
+- popups
+	- info blasen
+	- ...
+- chat
+	- textbox (unten mitte)
+		- begrenzung characters ~120
+	- 4-6 zeilen chat
+- mouse level
+	- markierfläche
+	- mouse grafik	
+
+jede ebene ein array zum zeichnen in game.draw(...)
+
+IClickable
+{
+	ishit(vector2f);
+}

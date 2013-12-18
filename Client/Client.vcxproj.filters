@@ -137,4 +137,9 @@
       <Filter>DLLs</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="client_Grafik.txt">
+      <Filter>Codes\Graphic\Source</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

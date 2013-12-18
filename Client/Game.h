@@ -1,3 +1,6 @@
+#ifndef GAME_H
+#define GAME_H
+
 #include <SFML/Graphics.hpp>
 
 enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu };
@@ -31,4 +34,4 @@ private:
 	
 };
 
-
+#endif

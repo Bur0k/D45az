@@ -35,6 +35,33 @@ void Game::Draw()
 	}
 }
 
+void Game::DrawGame()
+{
+
+}
+
+void Game::DrawLogin()
+{
+
+}
+
+void Game::DrawMainMenu()
+{
+
+}
+
+void Game::DrawLobby()
+{
+
+}
+
+void Game::DrawIngameMenu()
+{
+
+}
+
+
+
 void Game::Input()
 {
 
