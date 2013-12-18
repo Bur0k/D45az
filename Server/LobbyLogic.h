@@ -15,12 +15,14 @@ class LobbyLogic
 {
 private:
 	map<short, GameLobbyLogic*> gamesCreated;
+	static LobbyLogic* self;
+	Server* server;
 
 public:
 	LobbyLogic();
 	~LobbyLogic();
 
-	void LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data);
+	static void LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data);
 };
 
 #endif
