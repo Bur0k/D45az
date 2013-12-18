@@ -435,12 +435,7 @@ void Server::addToNewMessageCallback(NetworkParticipant* np)
 void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 {
 	newMessageCallbackMutex.lock();
-	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		if(newMessageCallback[i]==np)
-		{
-			newMessageCallback.erase(newMessageCallback.begin()+i);
-			break;
-		}
+	newMessageCallback.remove(np);
 	newMessageCallbackMutex.unlock();
 }
 
@@ -454,11 +449,6 @@ void Server::addToErrorCallback(NetworkParticipant* np)
 void Server::deleteFromErrorCallback(NetworkParticipant* np)
 {
 	errorCallbackMutex.lock();
-	for(unsigned int i=0;i<errorCallback.size();i++)
-		if(errorCallback[i]==np)
-		{
-			errorCallback.erase(errorCallback.begin()+i);
-			break;
-		}
+	errorCallback.remove(np);
 	errorCallbackMutex.unlock();
 }

@@ -103,8 +103,8 @@ class Server
 
 	void sendError(SOCKET s,int errCode,string errMessage);
 	void sendNewMessage(SOCKET s, short id,vector<char> data);
-	vector<NetworkParticipant*> errorCallback;
-	vector<NetworkParticipant*> newMessageCallback;
+	list<NetworkParticipant*> errorCallback;
+	list<NetworkParticipant*> newMessageCallback;
 	mutex newMessageCallbackMutex;
 	mutex errorCallbackMutex;
 
