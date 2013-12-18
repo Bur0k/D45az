@@ -1,3 +1,6 @@
+#ifndef UIELEMENT_H
+#define UIELEMENT_H
+
 #include <SFML\Graphics.hpp>
 using namespace sf;
 
@@ -9,3 +12,6 @@ protected:
 
 
 };
+
+
+#endif
