@@ -99,7 +99,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 
 	while (window.isOpen())
-	{
+	{ 
 		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -107,6 +107,11 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
+			else if(event.type == sf::Event::Resized)
+			{
+				g.resize();
+				//window.setView(sf::View(sf::FloatRect(window.getPosition().x, window.getPosition().y, window.getSize().x, window.getSize().y)));
+			}
 
 			//closes the window on escape
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -121,14 +126,12 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// draw everything here...
 		// window.draw(...);
 
-
+		
 
 		g.Draw();
 
 
-
-
-
+		window.setSize(window.getSize());
 
 		// end the current frame
 		window.display();

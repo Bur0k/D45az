@@ -33,6 +33,7 @@ public:
 	void Input();
 	void timer();
 
+	void resize();
 
 private:
 	void DrawGame();

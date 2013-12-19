@@ -81,11 +81,22 @@ void Game::DrawTest()
 
 	sf::RectangleShape r = sf::RectangleShape();
 	r.setPosition(sf::Vector2f(200,400));
-	r.setSize(sf::Vector2f(50,50));
+	r.setSize(sf::Vector2f(250,250));
 	r.setFillColor(sf::Color::Blue);
 
 	m_RW->draw(t);
 	m_RW->draw(r);
+}
+
+void Game::resize()
+{
+	View v = m_RW->getView();
+	m_RW->setSize(sf::Vector2u(m_RW->getSize().x, m_RW->getSize().y));
+	v.setSize(sf::Vector2f(m_RW->getSize().x , m_RW->getSize().y));
+	v.setCenter(sf::Vector2f(m_RW->getSize().x / 2 , m_RW->getSize().y / 2));
+	m_RW->setView(v);
+	std::cout << "Changing View on Resize :  " << "x" << m_RW->getSize().x << " x " << m_RW->getSize().y << std::endl;
+				
 }
 
 void Game::Input()
