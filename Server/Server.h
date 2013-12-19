@@ -6,7 +6,6 @@
 #include <Windows.h>
 #include <process.h>
 #include <string>
-#include <list>
 #include <vector>
 #include <thread>
 #include <mutex>
@@ -103,8 +102,8 @@ class Server
 
 	void sendError(SOCKET s,int errCode,string errMessage);
 	void sendNewMessage(SOCKET s, short id,vector<char> data);
-	list<NetworkParticipant*> errorCallback;
-	list<NetworkParticipant*> newMessageCallback;
+	vector<NetworkParticipant*> errorCallback;
+	vector<NetworkParticipant*> newMessageCallback;
 	mutex newMessageCallbackMutex;
 	mutex errorCallbackMutex;
 
