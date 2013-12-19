@@ -234,8 +234,8 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						int localLen = sizeof(SOCKADDR_IN);
 						Server::self->lpfnGetAcceptExSockAddrs(pPerIoData->wsaBuf.buf, pPerIoData->wsaBuf.len - ((sizeof(SOCKADDR_IN)+16)*2),
 							sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, (LPSOCKADDR*)&local, &localLen, (LPSOCKADDR*)&remote, &remoteLen);
-						printf("Client <%s : %d> come in.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port));
-						printf("Recv Data: <%s : %d> %s.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port), pPerIoData->wsaBuf.buf);
+						//printf("Client <%s : %d> come in.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port));
+						//printf("Recv Data: <%s : %d> %s.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port), pPerIoData->wsaBuf.buf);
 
 						if(NULL != pPerHandleData)
 						{
@@ -265,11 +265,12 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 
 
-						char* buffer = new char[4];//"Leermessage muss gesendet werden, damit sich WSASend sich initialisieren kann
+						char* buffer = new char[4];//Leermessage muss gesendet werden, damit sich WSASend sich initialisieren kann
 						buffer[0]=0;
 						buffer[1]=4;//Länge 4
 						buffer[2]=0;
-						buffer[3]=0;//Keine Daten
+						buffer[3]=0;//MSGID 0
+						//Keine Daten
 
 						pPerIo->opType = OP_WRITE;
 						memcpy(pPerIo->buf,buffer,4*sizeof(char));
@@ -297,7 +298,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 				case OP_READ: // Read
 					pPerIoData->currPos += (short)dwTrans;
-					
+
 					while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
 					{
 						if (pPerIoData->nextMsgSize == 0)
@@ -314,7 +315,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 								message.push_back(msg[i]);
 
 							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
-						
+
 							pPerIoData->nextMsgSize = 0;
 							delete[] msg;
 						}
@@ -441,7 +442,7 @@ void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 			newMessageCallback.erase(newMessageCallback.begin()+i);
 			break;
 		}
-	newMessageCallbackMutex.unlock();
+		newMessageCallbackMutex.unlock();
 }
 
 void Server::addToErrorCallback(NetworkParticipant* np)
@@ -460,5 +461,5 @@ void Server::deleteFromErrorCallback(NetworkParticipant* np)
 			errorCallback.erase(errorCallback.begin()+i);
 			break;
 		}
-	errorCallbackMutex.unlock();
+		errorCallbackMutex.unlock();
 }

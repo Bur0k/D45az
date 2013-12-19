@@ -15,8 +15,7 @@ class testServer : public NetworkParticipant
 		std::cout<<"\nEnde Packet\n\n";
 
 		if(id>=0)
-			if(id == 42)
-				server->write(s,2,data);
+			server->write(s,2,data);
 	}
 
 	void processNetworkError(SOCKET s,int id, std::string msg)
@@ -31,7 +30,7 @@ class testServer : public NetworkParticipant
 
 int main()
 {
-	testServer* ts= new testServer();
+	testServer* ts = new testServer();
 
 	server = Server::get();
 	server->addToNewMessageCallback(ts);
@@ -40,5 +39,6 @@ int main()
 
 	getchar();
 
+	delete ts;
 	delete server;
 }

@@ -6,9 +6,26 @@
 
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
+#include "NetworkParticipant.h"
 
 using namespace std;
 
+class testClient : public NetworkParticipant
+{
+	void processNewMessage(short id,vector<char> data)
+	{
+		std::cout<<"Server hat folgendes gesendet:\nID:"<<id<<"\nData:\n";
+		for(unsigned int i=0;i<data.size();i++)
+			std::cout<<data[i];
+		std::cout<<"\nEnde Packet\n\n";
+
+	}
+
+	void processNetworkError(int id, std::string msg)
+	{
+		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
+	}
+} tc;
 
 void OnNewMessage(short id,vector<char> data)
 {
@@ -43,21 +60,37 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	//********** BURAKS CLIENT TEST SHIT
+	Client* c = Client::get();
+	c->addToErrorCallback(&tc);
+	c->addToNewMessageCallback(&tc);
+	c->connectToServer("localhost",4242);
+	c->beginRead();std::vector<char> testData;
+	Client::get()->write(0,testData);
+	testData.push_back('H');
+	testData.push_back('i');
+	testData.push_back('!');
+	testData.push_back('\0');
+	Client::get()->write(42,testData);
+	Client::get()->write(42,testData);
+	//********** BURAKS CLIENT TEST SHIT END
+
+
 	cout << "Hallo D45az" << endl;
 	cout << "oeffne Fenster" << endl;
-	 // create the window
-    sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
-	
+	// create the window
+	sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
+
 	//window.setSize(sf::Vector2u (900,900));
 	window.setPosition(sf::Vector2i(400,0));
 
-	
+
 
 	//testausgabe
 	/*
-	
+
 	*/
-	
+
 	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
 
 	jans_test_karre();
@@ -66,42 +99,42 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 
 	while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
+	{
+		// check all the window's events that were triggered since the last iteration of the loop
 		sf::Event event;
 		while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
+		{
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed)
+				window.close();
 
 			//closes the window on escape
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
-        }
-		
+		}
 
 
-        // clear the window with black color
+
+		// clear the window with black color
 		window.clear(sf::Color::Black);
 
-        // draw everything here...
-        // window.draw(...);
-		
-		
+		// draw everything here...
+		// window.draw(...);
+
+
 
 		g.Draw();
 
 
-		
-		
-	
-
-        // end the current frame
-        window.display();
-    }
 
 
-	
+
+
+		// end the current frame
+		window.display();
+	}
+
+
+	delete c;
 	return 0;
 }
