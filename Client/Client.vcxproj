@@ -103,6 +103,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SplittedSprite.h" />
     <ClInclude Include="Textbox.h" />

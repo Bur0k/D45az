@@ -2,6 +2,8 @@
 
 #include <vld.h>
 
+Client* Client::self = new Client();
+
 Client::Client()
 {
 	readThread = NULL;
@@ -68,14 +70,18 @@ void Client::connectToServer(string ip, int port)
 
 void Client::sendError(int errCode,string errMessage)
 {
+	errorCallbackMutex.lock();
 	for(unsigned int i=0;i<errorCallback.size();i++)
-		errorCallback[i](errCode,errMessage);
+		errorCallback[i]->processNetworkError(errCode,errMessage);
+	errorCallbackMutex.unlock();
 }
 
 void Client::sendNewMessage(short id,vector<char> data)
 {
+	newMessageCallbackMutex.lock();
 	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		newMessageCallback[i](id,data);
+		newMessageCallback[i]->processNewMessage(id,data);
+	newMessageCallbackMutex.unlock();
 }
 
 void Client::write(short id, vector<char>data)
@@ -165,4 +171,42 @@ void Client::beginRead()
 void Client::endRead()
 {
 	runRead=false;
+}
+
+void Client::addToNewMessageCallback(NetworkParticipant* np)
+{
+	newMessageCallbackMutex.lock();
+	newMessageCallback.push_back(np);
+	newMessageCallbackMutex.unlock();
+}
+
+void Client::deleteFromNewMessageCallback(NetworkParticipant* np)
+{
+	newMessageCallbackMutex.lock();
+	for(unsigned int i=0;i<newMessageCallback.size();i++)
+		if(newMessageCallback[i] == np)
+		{
+			newMessageCallback.erase(newMessageCallback.begin()+i);
+			break;
+		}
+	newMessageCallbackMutex.unlock();
+}
+
+void Client::addToErrorCallback(NetworkParticipant* np)
+{
+	errorCallbackMutex.lock();
+	errorCallback.push_back(np);
+	errorCallbackMutex.unlock();
+}
+
+void Client::deleteFromErrorCallback(NetworkParticipant* np)
+{
+	errorCallbackMutex.lock();
+	for(unsigned int i=0;i<errorCallback.size();i++)
+		if(errorCallback[i] == np)
+		{
+			errorCallback.erase(errorCallback.begin()+i);
+			break;
+		}
+	errorCallbackMutex.unlock();
 }

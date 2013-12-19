@@ -23,6 +23,9 @@
     <Filter Include="Codes\Network\Source">
       <UniqueIdentifier>{03984393-cb27-44f8-89e4-adb660d41769}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{b2fed3ae-b37c-41c2-9515-b2948dd6aa8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -96,6 +99,9 @@
     <ClInclude Include="UIelement.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkParticipant.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -142,6 +148,8 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Data\Fonts\arial.ttf" />
+    <Font Include="Data\Fonts\arial.ttf">
+      <Filter>Data</Filter>
+    </Font>
   </ItemGroup>
 </Project>
