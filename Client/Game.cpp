@@ -2,7 +2,7 @@
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
-	m_RW = rw;
+	m_pWindow = rw;
 	m_Screen = sm;
 	m_size = windowSize;
 
@@ -84,24 +84,41 @@ void Game::DrawTest()
 	r.setSize(sf::Vector2f(250,250));
 	r.setFillColor(sf::Color::Blue);
 
-	m_RW->draw(t);
-	m_RW->draw(r);
+	m_pWindow->draw(t);
+	m_pWindow->draw(r);
 }
 
 void Game::resize()
 {
-	View v = m_RW->getView();
-	m_RW->setSize(sf::Vector2u(m_RW->getSize().x, m_RW->getSize().y));
-	v.setSize(sf::Vector2f(m_RW->getSize().x , m_RW->getSize().y));
-	v.setCenter(sf::Vector2f(m_RW->getSize().x / 2 , m_RW->getSize().y / 2));
-	m_RW->setView(v);
-	std::cout << "Changing View on Resize :  " << "x" << m_RW->getSize().x << " x " << m_RW->getSize().y << std::endl;
+	View v = m_pWindow->getView();
+	m_pWindow->setSize(sf::Vector2u(m_pWindow->getSize().x, m_pWindow->getSize().y));
+	v.setSize(sf::Vector2f((float)m_pWindow->getSize().x , (float)m_pWindow->getSize().y));
+	v.setCenter(sf::Vector2f(m_pWindow->getSize().x / 2 , m_pWindow->getSize().y / 2));
+	m_pWindow->setView(v);
+	std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
 }
 
 void Game::Input()
 {
+	// CHECK EVENTS //
 
+	sf::Event event;
+	//works through the event stack
+	while (m_pWindow->pollEvent(event))
+	{
+		// "close requested" event: we close the window
+		if (event.type == sf::Event::Closed)
+			m_pWindow->close();
+		else if(event.type == sf::Event::Resized)
+			resize();
+	}
+
+	// CHECK KEYBOARD INPUT //
+
+	//closes the window on escape
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		m_pWindow->close();
 }
 
 void Game::timer()
