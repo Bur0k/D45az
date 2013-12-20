@@ -88,20 +88,26 @@ void Game::DrawTest()
 	m_RW->draw(r);
 }
 
-void Game::resize()
+void Game::onResize()
 {
 	View v = m_RW->getView();
 	m_RW->setSize(sf::Vector2u(m_RW->getSize().x, m_RW->getSize().y));
 	v.setSize(sf::Vector2f(m_RW->getSize().x , m_RW->getSize().y));
 	v.setCenter(sf::Vector2f(m_RW->getSize().x / 2 , m_RW->getSize().y / 2));
 	m_RW->setView(v);
+
+#ifdef _DEBUG
 	std::cout << "Changing View on Resize :  " << "x" << m_RW->getSize().x << " x " << m_RW->getSize().y << std::endl;
-				
+#endif				
 }
 
-void Game::Input()
+void Game::Input(Event e)
 {
-
+	if(e.type == sf::Event::Resized)
+	{
+		onResize();
+		//window.setView(sf::View(sf::FloatRect(window.getPosition().x, window.getPosition().y, window.getSize().x, window.getSize().y)));
+	}
 }
 
 void Game::timer()

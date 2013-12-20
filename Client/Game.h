@@ -30,10 +30,10 @@ public:
 	//displays drawn image in the window
 	void Display();
 	//manages the user input
-	void Input();
+	void Input(Event e);
 	void timer();
 
-	void resize();
+	
 
 private:
 	void DrawGame();
@@ -43,6 +43,8 @@ private:
 	void DrawIngameMenu();
 
 	void DrawTest();
+
+	void onResize();
 
 	void Render();
 	void Update();

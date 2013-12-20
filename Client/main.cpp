@@ -107,18 +107,14 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else if(event.type == sf::Event::Resized)
-			{
-				g.resize();
-				//window.setView(sf::View(sf::FloatRect(window.getPosition().x, window.getPosition().y, window.getSize().x, window.getSize().y)));
-			}
+			
 
 			//closes the window on escape
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 		}
 
-
+		g.Input(event);
 
 		// clear the window with black color
 		window.clear(sf::Color::Black);
