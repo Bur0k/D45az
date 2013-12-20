@@ -12,6 +12,9 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 		std::cout << "font load failed!" << std::endl;
 	else
 		std::cout << "font load successful!" << std::endl;
+
+	m_animationTimer.restart();
+	
 }
 
 Game::~Game()
@@ -123,5 +126,9 @@ void Game::Input()
 
 void Game::timer()
 {
-
+	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
+	{
+		m_animationTimer.restart();
+		//... code
+	}
 }

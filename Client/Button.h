@@ -14,12 +14,14 @@ typedef std::vector<void (*) (void)> FuncPointerVect;
 class Button : public IDrawable
 {
 protected:
-	Button(Vector2f pos, Vector2f size);
+	//TODO standadconstructor
+	Button(Vector2f pos, Vector2f size, sf::String S);
 	Button(const Button & b);
 	~Button();
 
 	FuncPointerVect m_attachedFunctions;
 	RectangleShape m_backgroundRect;
+	Text m_buttonText;
 	int m_animation;
 	bool m_isEnabled;
 	//to avoid spamming attached functions

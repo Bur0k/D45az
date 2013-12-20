@@ -16,6 +16,7 @@ enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu, Testscreen};
 class Game 
 {
 private:
+	Clock m_animationTimer;
 	RenderWindow* m_pWindow;
 	ScreenMode m_Screen;
 	Vector2f m_size;
