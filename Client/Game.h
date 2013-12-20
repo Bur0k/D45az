@@ -16,7 +16,7 @@ enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu, Testscreen};
 class Game 
 {
 private:
-	RenderWindow* m_RW;
+	RenderWindow* m_pWindow;
 	ScreenMode m_Screen;
 	Vector2f m_size;
 	Font m_stdFont;
@@ -30,7 +30,7 @@ public:
 	//displays drawn image in the window
 	void Display();
 	//manages the user input
-	void Input(Event e);
+	void Input();
 	void timer();
 
 	

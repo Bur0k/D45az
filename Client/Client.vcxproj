@@ -109,7 +109,7 @@
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />
-    <ClInclude Include="UIelement.h" />
+    <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll" />

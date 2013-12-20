@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "Client.h"
-//#include "Jans_Abgeher_Shit.h"
+#include "Jans_Abgeher_Shit.h"
 #include "Game.h"
 
 #include <SFML/Audio.hpp>
@@ -100,22 +100,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	while (window.isOpen())
 	{ 
-		// check all the window's events that were triggered since the last iteration of the loop
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			// "close requested" event: we close the window
-			if (event.type == sf::Event::Closed)
-				window.close();
-			
-
-			//closes the window on escape
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				window.close();
-		}
-
-		g.Input(event);
-
+		g.Input();
 		// clear the window with black color
 		window.clear(sf::Color::Black);
 
