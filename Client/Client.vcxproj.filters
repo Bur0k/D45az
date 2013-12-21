@@ -102,6 +102,9 @@
     <ClInclude Include="IDrawable.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="IClickable.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">

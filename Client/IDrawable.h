@@ -1,5 +1,6 @@
 #ifndef IDRAWABLE_H
 #define IDRAWABLE_H
+
 #include <vector>
 #include <SFML\Graphics.hpp>
 

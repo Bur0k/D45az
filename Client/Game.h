@@ -4,11 +4,12 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
-
+#include "Button.h"
+#include "IClickable.h"
 
 using namespace sf;
 
-typedef 
+typedef std::vector<IClickable*> ClickList;
 
 enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu, Testscreen};
 
@@ -16,11 +17,17 @@ enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu, Testscreen};
 class Game 
 {
 private:
+	//debug 
+
+	Button* b;
+
+	///endDebug
 	Clock m_animationTimer;
 	RenderWindow* m_pWindow;
 	ScreenMode m_Screen;
 	Vector2f m_size;
 	Font m_stdFont;
+	ClickList clickL;
 
 public:
 	Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize);
@@ -43,12 +50,20 @@ private:
 	void DrawLobby();
 	void DrawIngameMenu();
 
+
 	void DrawTest();
 
 	void onResize();
 
 	void Render();
 	void Update();
+
+	void onMouseMove();
+
+	void onMouseDownLeft();
+	void onMouseDownRight();
+	void onMouseUpLeft();
+	void onMouseUpRight();
 	
 };
 

@@ -1,5 +1,13 @@
 #include "Game.h"
 
+void foo(void)
+{
+	static int blubb = 0;
+	blubb ++;
+	std::cout << "button click accepted " << blubb << std::endl;
+}
+
+
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
 	m_pWindow = rw;
@@ -14,12 +22,17 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 		std::cout << "font load successful!" << std::endl;
 
 	m_animationTimer.restart();
+
+	b = new Button(Vector2f(500,100),Vector2f(200,100),"hello world2");
+	
+	b->attachFunction(foo);
+	clickL.push_back(b);
 	
 }
 
 Game::~Game()
 {
-
+	delete b;
 }
 
 void Game::Draw()
@@ -61,7 +74,7 @@ void Game::DrawLogin()
 
 void Game::DrawMainMenu()
 {
-
+	
 }
 
 void Game::DrawLobby()
@@ -89,6 +102,8 @@ void Game::DrawTest()
 
 	m_pWindow->draw(t);
 	m_pWindow->draw(r);
+
+	b->draw(m_pWindow);
 }
 
 void Game::onResize()
@@ -102,6 +117,40 @@ void Game::onResize()
 				
 }
 
+void Game::onMouseMove()
+{
+	Vector2i mousePos = Mouse::getPosition(*m_pWindow);
+
+	for(unsigned int i = 0; i < clickL.size(); i++)
+		clickL[i]->isHit(mousePos);
+}
+
+void Game::onMouseDownLeft()
+{
+	std::cout << "mDL"<<std::endl;
+	for(unsigned int i = 0; i < clickL.size(); i++)
+		clickL[i]->PressedLeft();
+}
+
+void Game::onMouseDownRight()
+{
+	for(unsigned int i = 0; i < clickL.size(); i++)
+		clickL[i]->PressedRight();
+}
+
+void Game::onMouseUpLeft()
+{
+	std::cout << "mUL"<<std::endl;
+	for(unsigned int i = 0; i < clickL.size(); i++)
+		clickL[i]->ReleasedLeft();
+}
+
+void Game::onMouseUpRight()
+{
+	for(unsigned int i = 0; i < clickL.size(); i++)
+		clickL[i]->ReleasedRight();
+}
+
 void Game::Input()
 {
 	// CHECK EVENTS //
@@ -113,8 +162,29 @@ void Game::Input()
 		// "close requested" event: we close the window
 		if (event.type == sf::Event::Closed)
 			m_pWindow->close();
+		
+		//resize
 		else if(event.type == sf::Event::Resized)
 			onResize();
+		
+		//mouse move
+		else if(event.type == sf::Event::MouseMoved)
+			onMouseMove();
+
+		//mouse down
+		else if(event.type == sf::Event::MouseButtonPressed)
+			if(event.mouseButton.button == sf::Mouse::Left)
+				onMouseDownLeft();
+			else
+				onMouseDownRight();
+
+		//mouse up
+		else if(event.type == sf::Event::MouseButtonReleased)
+			if(event.mouseButton.button == sf::Mouse::Left)
+				onMouseUpLeft();
+			else
+				onMouseUpRight();
+
 	}
 
 	// CHECK KEYBOARD INPUT //
@@ -122,6 +192,8 @@ void Game::Input()
 	//closes the window on escape
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		m_pWindow->close();
+
+
 }
 
 void Game::timer()
@@ -129,6 +201,8 @@ void Game::timer()
 	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
 	{
 		m_animationTimer.restart();
+		b->animationTick();
 		//... code
 	}
 }
+

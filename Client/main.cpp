@@ -107,7 +107,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// draw everything here...
 		// window.draw(...);
 
-		
+		g.timer();
 
 		g.Draw();
 
