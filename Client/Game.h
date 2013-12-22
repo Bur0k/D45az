@@ -4,8 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <math.h>
+
 #include "Button.h"
 #include "IClickable.h"
+#include "graphic_globals.h"
 
 using namespace sf;
 
@@ -38,7 +41,7 @@ public:
 	//displays drawn image in the window
 	void Display();
 	//manages the user input
-	void Input();
+	bool Input();
 	void timer();
 
 	

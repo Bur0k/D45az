@@ -19,20 +19,22 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S)
 	setSize(size);
 	setPosition(pos);
 	
-	//TODO auslagern!!!!
-	Font f;
-	f.loadFromFile("Data/Fonts/arial.ttf");
-
-	m_buttonText.setFont(f);
+	
+	m_buttonText = Text();
+	m_buttonText.setFont(MyFonts.Arial);
 	m_buttonText.setString(S);
+	m_buttonText.setColor(MyColors.Black);
 	m_buttonText.setPosition(getPosition());
 
+	sf::Rect<float> textsize = m_buttonText.getLocalBounds();
+	m_buttonText.move(  (getSize().x - textsize.width) / 2,
+						(getSize().y - textsize.height) / 2);
 
-	m_color = Color(0xFF, 0xFF, 0xFF, 0xFF);
+	m_color = Color::White;
 	setFillColor(m_color);
-	m_color_clicked = Color(0xFF, 0xA2, 0x00, 0xFF);
-	m_color_mouseOver = Color(0x00, 0xFF, 0x6A, 0xFF);
-	m_color_disabled = Color(0x80, 0x80, 0x80, 0xFF);
+	m_color_clicked = MyColors.Orange;
+	m_color_mouseOver = MyColors.Azure;
+	m_color_disabled = MyColors.Orange;
 
 }
 
@@ -43,13 +45,28 @@ Button::~Button()
 
 Button::Button(const Button & b)
 {
+	*this = b;
+}
+
+void Button::operator=(const Button & b)
+{
 	//TODO complete
 	setSize(b.getSize());
 	setPosition(b.getPosition());
 	m_animation = b.m_animation;
 	m_isEnabled = b.m_isEnabled;
 	m_isClicked = b.m_isClicked;
+	m_staysClicked = b.m_staysClicked;
 	m_buttonText = b.m_buttonText;
+
+	m_color = b.m_color;
+	m_color_mouseOver = b.m_color_mouseOver;
+	m_color_clicked = b.m_color_clicked;
+	m_color_disabled = b.m_color_disabled;
+
+
+	Color m_color;
+
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
 		m_attachedFunctions.push_back(m_attachedFunctions[i]);
 }
@@ -78,6 +95,7 @@ bool Button::isHit(Vector2i & mouse)
 	else 
 	{
 		m_mouseOver = false;
+		m_isClicked = false;
 		return false;
 	}
 }
@@ -108,7 +126,7 @@ void Button::ReleasedRight(){}
 void Button::draw(RenderWindow* rw)
 {
 	rw->draw(*this);
-	//rw->draw(m_buttonText);
+	rw->draw(m_buttonText);
 }
 
 void Button::animationTick()
@@ -133,7 +151,7 @@ void Button::animation_upadate()
 {
 	Color c = m_color_mouseOver;
 
-	double ratio1 =  (double)(m_animation * m_animation)/ (double)(m_animationLength *m_animationLength); 
+	double ratio1 =  sqrt((double)m_animation) / sqrt((double)m_animationLength); 
 	double ratio2 = 1 - ratio1;
 	setFillColor(Color( (Uint8)(c.r * ratio1 + m_color.r * ratio2),
 						(Uint8)(c.g * ratio1 + m_color.g * ratio2),

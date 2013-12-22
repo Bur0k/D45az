@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <vld.h>
 
 void foo(void)
 {
@@ -15,15 +16,11 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_size = windowSize;
 
 	//Lade font
-	m_stdFont = sf::Font();
-	if(!m_stdFont.loadFromFile("Data/Fonts/arial.ttf"))
-		std::cout << "font load failed!" << std::endl;
-	else
-		std::cout << "font load successful!" << std::endl;
+	m_stdFont = MyFonts.Arial;
 
 	m_animationTimer.restart();
 
-	b = new Button(Vector2f(500,100),Vector2f(200,100),"hello world2");
+	b = new Button(Vector2f(500,100),Vector2f(200,60),String("Hello"));
 	
 	b->attachFunction(foo);
 	clickL.push_back(b);
@@ -113,21 +110,20 @@ void Game::onResize()
 	v.setSize(sf::Vector2f((float)m_pWindow->getSize().x , (float)m_pWindow->getSize().y));
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
-	std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
+	
+	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
 }
 
 void Game::onMouseMove()
 {
 	Vector2i mousePos = Mouse::getPosition(*m_pWindow);
-
 	for(unsigned int i = 0; i < clickL.size(); i++)
 		clickL[i]->isHit(mousePos);
 }
 
 void Game::onMouseDownLeft()
 {
-	std::cout << "mDL"<<std::endl;
 	for(unsigned int i = 0; i < clickL.size(); i++)
 		clickL[i]->PressedLeft();
 }
@@ -140,7 +136,6 @@ void Game::onMouseDownRight()
 
 void Game::onMouseUpLeft()
 {
-	std::cout << "mUL"<<std::endl;
 	for(unsigned int i = 0; i < clickL.size(); i++)
 		clickL[i]->ReleasedLeft();
 }
@@ -151,7 +146,7 @@ void Game::onMouseUpRight()
 		clickL[i]->ReleasedRight();
 }
 
-void Game::Input()
+bool Game::Input()
 {
 	// CHECK EVENTS //
 
@@ -161,8 +156,10 @@ void Game::Input()
 	{
 		// "close requested" event: we close the window
 		if (event.type == sf::Event::Closed)
+		{
 			m_pWindow->close();
-		
+			return false;
+		}
 		//resize
 		else if(event.type == sf::Event::Resized)
 			onResize();
@@ -193,7 +190,7 @@ void Game::Input()
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		m_pWindow->close();
 
-
+	return true;
 }
 
 void Game::timer()
