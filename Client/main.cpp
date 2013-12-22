@@ -77,15 +77,14 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	cout << "Hallo D45az" << endl;
 	cout << "oeffne Fenster" << endl;
+
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(1280, 850), "45azFinezt");
-
-	//window.setSize(sf::Vector2u (900,900));
 	window.setPosition(sf::Vector2i(400,0));
 
 
 
-	Game g(&window, Testscreen, sf::Vector2f(1280, 850));
+	Game g(& window, Testscreen, sf::Vector2f(1280, 850));
 
 	jans_test_karre();
 

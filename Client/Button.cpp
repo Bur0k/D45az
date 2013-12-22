@@ -40,12 +40,13 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S)
 
 Button::~Button()
 {
-	
+	m_attachedFunctions.clear();
 }
 
 Button::Button(const Button & b)
 {
 	*this = b;
+	m_attachedFunctions.clear();
 }
 
 void Button::operator=(const Button & b)
