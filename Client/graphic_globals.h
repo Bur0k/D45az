@@ -13,6 +13,7 @@ public:
 	Color Azure;
 	Color Gray;
 	Color White;
+	Color Red;
 
 	_MyColors() {
 		Orange = Color(0xFF, 0xA2, 0x00, 0xFF);
@@ -20,6 +21,7 @@ public:
 		Gray = Color(0x80, 0x80, 0x80, 0xFF);
 		Black = Color::Black;
 		White = Color::White;
+		Red = Color::Red;
 	}
 } static MyColors;
 

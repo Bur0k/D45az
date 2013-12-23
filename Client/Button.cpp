@@ -31,7 +31,7 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S)
 	m_color = MyColors.White;
 	setFillColor(m_color);
 	m_color_clicked = MyColors.Orange;
-	m_color_mouseOver = MyColors.Azure;
+	m_color_mouseOver = MyColors.Red;
 	m_color_disabled = MyColors.Gray;
 	
 
@@ -39,7 +39,7 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S)
 
 Button::~Button()
 {
-	
+	m_attachedFunctions.clear();
 }
 
 Button::Button(const Button & b)
@@ -135,6 +135,7 @@ void Button::animationTick()
 {
 	if(m_isEnabled && !m_isClicked)
 	{
+		//std::cout << "Animation Count : " << m_animation << std::endl;
 		if(m_mouseOver && m_animation < m_animationLength)
 		{
 			m_animation++; 
