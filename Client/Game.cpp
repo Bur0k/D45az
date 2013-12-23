@@ -15,11 +15,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_size = windowSize;
 
 	//Lade font
-	m_stdFont = sf::Font();
-	if(!m_stdFont.loadFromFile("Data/Fonts/arial.ttf"))
-		std::cout << "font load failed!" << std::endl;
-	else
-		std::cout << "font load successful!" << std::endl;
+	m_stdFont = MyFonts.Arial;
 
 	m_animationTimer.restart();
 
@@ -113,7 +109,8 @@ void Game::onResize()
 	v.setSize(sf::Vector2f((float)m_pWindow->getSize().x , (float)m_pWindow->getSize().y));
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
-	std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
+	
+	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
 }
 
@@ -127,7 +124,6 @@ void Game::onMouseMove()
 
 void Game::onMouseDownLeft()
 {
-	std::cout << "mDL"<<std::endl;
 	for(unsigned int i = 0; i < clickL.size(); i++)
 		clickL[i]->PressedLeft();
 }
@@ -140,7 +136,6 @@ void Game::onMouseDownRight()
 
 void Game::onMouseUpLeft()
 {
-	std::cout << "mUL"<<std::endl;
 	for(unsigned int i = 0; i < clickL.size(); i++)
 		clickL[i]->ReleasedLeft();
 }

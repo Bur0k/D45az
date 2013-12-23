@@ -3,9 +3,13 @@
 
 #include <SFML\Graphics.hpp>
 #include <vector>
+#include <iostream>
+#include <math.h>
+
 #include "IDrawable.h"
 #include "IClickable.h"
-#include <iostream>
+#include "graphic_globals.h"
+
 using namespace sf;
 
 typedef void (*callback_func)(void);
@@ -21,6 +25,7 @@ public:
 	Button(Vector2f pos, Vector2f size, sf::String S);
 	Button(const Button & b);
 	~Button();
+	void operator=(const Button & b);
 protected:
 	FuncPointerVect m_attachedFunctions;
 	Text m_buttonText;

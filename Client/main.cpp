@@ -101,18 +101,13 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	while (window.isOpen())
 	{ 
 		g.Input();
-		// clear the window with black color
-		window.clear(sf::Color::Black);
-
-		// draw everything here...
-		// window.draw(...);
 
 		g.timer();
 
+		// clear the window with black 
+		window.clear(sf::Color::Black);
+
 		g.Draw();
-
-
-		window.setSize(window.getSize());
 
 		// end the current frame
 		window.display();
