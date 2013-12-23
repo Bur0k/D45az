@@ -4,8 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
+
 #include "Button.h"
 #include "IClickable.h"
+#include "graphic_globals.h"
 
 using namespace sf;
 

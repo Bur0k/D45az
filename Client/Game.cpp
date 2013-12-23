@@ -15,11 +15,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_size = windowSize;
 
 	//Lade font
-	m_stdFont = sf::Font();
-	if(!m_stdFont.loadFromFile("Data/Fonts/arial.ttf"))
-		std::cout << "font load failed!" << std::endl;
-	else
-		std::cout << "font load successful!" << std::endl;
+	m_stdFont = MyFonts.Arial;
 
 	m_animationTimer.restart();
 
