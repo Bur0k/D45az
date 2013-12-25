@@ -2,6 +2,7 @@
 #define ICLICKABLE_H
 
 #include <SFML\Graphics.hpp>
+#include <vector>
 
 class IClickable
 {
@@ -12,5 +13,7 @@ public:
 	virtual void  ReleasedRight()=0;
 	virtual void  ReleasedLeft()=0;
 };
+
+typedef std::vector<IClickable*> ClickList;
 
 #endif

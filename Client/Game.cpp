@@ -1,12 +1,23 @@
 #include "Game.h"
 
-void foo(void)
+void Game::onButtonClick(int index)
 {
 	static int blubb = 0;
-	blubb ++;
-	std::cout << "button click accepted " << blubb << std::endl;
+	switch(index)
+	{
+	case 1:
+		
+		blubb ++;
+		std::cout << "button click accepted " << blubb << std::endl;
+		break;
+	case 2:
+		std::cout << "other button click :)" << std::endl;
+		break;
+	default:
+		std::cout << "undefined button click :(" << std::endl;
+		break;
+	}
 }
-
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
@@ -14,21 +25,47 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_Screen = sm;
 	m_size = windowSize;
 
+	m_inFocus = true;
+	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
+
 	//Lade font
 	m_stdFont = MyFonts.Arial;
 
 	m_animationTimer.restart();
 
-	b = new Button(Vector2f(500,100),Vector2f(200,100),"hello world2");
+	b = new Button(Vector2f(500,100),Vector2f(200,60),"hello",1);
 	
-	b->attachFunction(foo);
-	clickL.push_back(b);
+	b->attachFunction((IButtonfunction*)this);
 	
+	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "FU", 2);
+
+	b1->attachFunction((IButtonfunction*)this);
+
+	m_clickL.push_back(b);
+	m_clickL.push_back(b1);
+	m_drawL.push_back(b);
+	m_drawL.push_back(b1);
+	m_animateL.push_back(b);
+	m_animateL.push_back(b1);
+
+	m_Screen = Testscreen;
+
 }
 
 Game::~Game()
 {
 	delete b;
+	delete b1;
+}
+
+void Game::setScreen(ScreenMode sm)
+{
+	m_Screen = sm;
+}
+
+ScreenMode Game::getScreen()
+{
+	return m_Screen;
 }
 
 void Game::Draw()
@@ -99,7 +136,8 @@ void Game::DrawTest()
 	m_pWindow->draw(t);
 	m_pWindow->draw(r);
 
-	b->draw(m_pWindow);
+	for(unsigned int i = 0; i < m_drawL.size(); i++)
+		m_drawL[i]->draw(m_pWindow);
 }
 
 void Game::onResize()
@@ -118,77 +156,112 @@ void Game::onMouseMove()
 {
 	Vector2i mousePos = Mouse::getPosition(*m_pWindow);
 
-	for(unsigned int i = 0; i < clickL.size(); i++)
-		clickL[i]->isHit(mousePos);
+	///TODO Mouse grab
+
+	for(unsigned int i = 0; i < m_clickL.size(); i++)
+		m_clickL[i]->isHit(mousePos);
+
+	m_lastMousePosition = mousePos;
 }
 
 void Game::onMouseDownLeft()
 {
-	for(unsigned int i = 0; i < clickL.size(); i++)
-		clickL[i]->PressedLeft();
+	for(unsigned int i = 0; i < m_clickL.size(); i++)
+		m_clickL[i]->PressedLeft();
 }
 
 void Game::onMouseDownRight()
 {
-	for(unsigned int i = 0; i < clickL.size(); i++)
-		clickL[i]->PressedRight();
+	for(unsigned int i = 0; i < m_clickL.size(); i++)
+		m_clickL[i]->PressedRight();
 }
 
 void Game::onMouseUpLeft()
 {
-	for(unsigned int i = 0; i < clickL.size(); i++)
-		clickL[i]->ReleasedLeft();
+	for(unsigned int i = 0; i < m_clickL.size(); i++)
+		m_clickL[i]->ReleasedLeft();
 }
 
 void Game::onMouseUpRight()
 {
-	for(unsigned int i = 0; i < clickL.size(); i++)
-		clickL[i]->ReleasedRight();
+	for(unsigned int i = 0; i < m_clickL.size(); i++)
+		m_clickL[i]->ReleasedRight();
+}
+
+void Game::onKeyDown(sf::Event e)
+{
+
+}
+
+void Game::onKeyUp(sf::Event e)
+{
+#ifdef _DEBUG
+	if(e.key.code == sf::Keyboard::Escape) 
+		m_pWindow->close();
+#endif
 }
 
 void Game::Input()
 {
-	// CHECK EVENTS //
-
+	//CHECK EVENTS//
 	sf::Event event;
-	//works through the event stack
+
+	//works through the event stack	
 	while (m_pWindow->pollEvent(event))
 	{
-		// "close requested" event: we close the window
-		if (event.type == sf::Event::Closed)
+		switch (event.type)
+		{
+			/////WINDOW EVENTS/////
+		case sf::Event::Closed:
 			m_pWindow->close();
-		
-		//resize
-		else if(event.type == sf::Event::Resized)
+			break;
+
+		case sf::Event::GainedFocus:
+			m_inFocus = true;
+			break;
+
+		case sf::Event::LostFocus:
+			m_inFocus = false;
+			break;
+
+		case sf::Event::Resized:
 			onResize();
-		
-		//mouse move
-		else if(event.type == sf::Event::MouseMoved)
+			break;
+
+			/////MOUSE EVENTS/////
+		case sf::Event::MouseMoved:
 			onMouseMove();
+			break;
 
-		//mouse down
-		else if(event.type == sf::Event::MouseButtonPressed)
-			if(event.mouseButton.button == sf::Mouse::Left)
+		case sf::Event::MouseButtonPressed:
+			if(event.mouseButton.button == sf::Mouse::Left && m_inFocus)
 				onMouseDownLeft();
-			else
+			else if (m_inFocus)
 				onMouseDownRight();
+			break;
 
-		//mouse up
-		else if(event.type == sf::Event::MouseButtonReleased)
-			if(event.mouseButton.button == sf::Mouse::Left)
+		case sf::Event::MouseButtonReleased:
+			if(event.mouseButton.button == sf::Mouse::Left && m_inFocus)
 				onMouseUpLeft();
-			else
+			else if (m_inFocus)
 				onMouseUpRight();
+			break;
 
+			/////KEYBOARD EVENTS/////
+		case sf::Event::KeyPressed:
+			if(m_inFocus)
+				onKeyDown(event);
+			break;
+
+		case sf::Event::KeyReleased:
+			if(m_inFocus)
+				onKeyUp(event);
+			break;
+
+		default:
+			break;
+		}
 	}
-
-	// CHECK KEYBOARD INPUT //
-
-	//closes the window on escape
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		m_pWindow->close();
-
-
 }
 
 void Game::timer()
@@ -196,8 +269,10 @@ void Game::timer()
 	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
 	{
 		m_animationTimer.restart();
-		b->animationTick();
-		//... code
+		for(unsigned int i = 0; i < m_animateL.size(); i++)
+			m_animateL[i]->animationTick();
 	}
+
+	//more timers ...
 }
 

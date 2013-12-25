@@ -7,10 +7,11 @@ Button::Button()
 	//TODO
 }
 
-Button::Button(Vector2f pos, Vector2f size, sf::String S)
+Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID)
 {
 	m_animation = 0;
 	m_animationLength = 15;
+	m_ID = ID;
 
 	m_isEnabled = true;
 	m_isClicked = false;
@@ -23,10 +24,13 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S)
 	m_buttonText.setString(S);
 	m_buttonText.setPosition(getPosition());
 	m_buttonText.setColor(MyColors.Black);
-
+	
 	sf::Rect<float> textsize = m_buttonText.getLocalBounds();
-	m_buttonText.move(	(getSize().x - textsize.width) / 2,
-						(getSize().y - textsize.height) / 2);
+	
+	//std::cout << "textsize x " << textsize.width << " y " << textsize.height << std::endl;
+	
+	m_buttonText.move(	(getSize().x - textsize.width) / 2.0f,
+						(getSize().y - textsize.height * 1.5f) / 2.0f);
 
 	m_color = MyColors.White;
 	setFillColor(m_color);
@@ -56,6 +60,7 @@ void Button::operator=(const Button & b)
 
 	m_animation = b.m_animation;
 	m_animationLength = b.m_animationLength;
+	m_ID = b.m_ID;
 
 	m_isEnabled = b.m_isEnabled;
 	m_isClicked = b.m_isClicked;
@@ -174,17 +179,17 @@ void Button::unclicked()
 		animation_upadate();
 }
 
-bool Button::attachFunction(callback_func pfunc)
+bool Button::attachFunction(IButtonfunction* pCallback)
 {
 	//TODO no double attachments
-	m_attachedFunctions.push_back(pfunc);
+	m_attachedFunctions.push_back(pCallback);
 	return true;
 }
 
-bool Button::detachFunction(callback_func pfunc)
+bool Button::detachFunction(IButtonfunction* pCallback)
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
-		if(m_attachedFunctions[i] == pfunc)
+		if(m_attachedFunctions[i] == pCallback)
 		{
 			m_attachedFunctions.erase(m_attachedFunctions.begin() + i);
 			return true;
@@ -195,6 +200,8 @@ bool Button::detachFunction(callback_func pfunc)
 void Button::notify()
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
-		m_attachedFunctions[i]();
+	{
+		m_attachedFunctions[i]->onButtonClick(m_ID);
+	}
 }
 

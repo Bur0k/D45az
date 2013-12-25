@@ -12,6 +12,6 @@ public:
 };
 
 
-typedef std::vector<IDrawable*> DrawStack;
+typedef std::vector<IDrawable*> DrawVect;
 
 #endif

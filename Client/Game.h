@@ -6,22 +6,25 @@
 #include <SFML/Graphics.hpp>
 
 #include "Button.h"
+#include "IDrawable.h"
 #include "IClickable.h"
 #include "graphic_globals.h"
+#include "IButtonfunction.h"
+#include "IAnimatable.h"
+#include "IView.h"
 
 using namespace sf;
 
-typedef std::vector<IClickable*> ClickList;
-
-enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu, Testscreen};
 
 
-class Game 
+// manages gui views and timers
+class Game : private IButtonfunction
 {
 private:
-	//debug 
+	//debug
 
 	Button* b;
+	Button* b1;
 
 	///endDebug
 	Clock m_animationTimer;
@@ -29,7 +32,14 @@ private:
 	ScreenMode m_Screen;
 	Vector2f m_size;
 	Font m_stdFont;
-	ClickList clickL;
+	ClickList m_clickL;
+	DrawVect m_drawL;
+	AnimateVect m_animateL;
+
+	bool m_inFocus;
+
+	Vector2i m_lastMousePosition;
+
 
 public:
 	Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize);
@@ -43,9 +53,16 @@ public:
 	void Input();
 	void timer();
 
+	void setScreen(ScreenMode sm);
+	ScreenMode getScreen();
+
+
+
 	
 
 private:
+	void onButtonClick(int);
+
 	void DrawGame();
 	void DrawMainMenu();
 	void DrawLogin();
@@ -66,6 +83,8 @@ private:
 	void onMouseDownRight();
 	void onMouseUpLeft();
 	void onMouseUpRight();
+	void onKeyDown(sf::Event e);
+	void onKeyUp(sf::Event e);
 	
 };
 

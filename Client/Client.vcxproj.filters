@@ -67,6 +67,9 @@
     <ClCompile Include="UIelement.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="StandardButton.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -106,6 +109,21 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="graphic_globals.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IButtonfunction.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IAnimatable.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardButton.h">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="IView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IKeyboardInput.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>

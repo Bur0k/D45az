@@ -91,12 +91,10 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	*/
 
-	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
-
 	jans_test_karre();
-
-
-
+	
+	
+	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
 
 	while (window.isOpen())
 	{ 
