@@ -76,13 +76,13 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	//********** BURAKS CLIENT TEST SHIT END
 
 
-	cout << "Hallo D45az" << endl;
-	cout << "oeffne Fenster" << endl;
+	cout << endl << " -=<#[| Hallo D45az |]#>=-" << endl;
+	cout  << "      oeffne Fenster" << endl;
+
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
-
-	//window.setSize(sf::Vector2u (900,900));
 	window.setPosition(sf::Vector2i(400,0));
+	window.setMouseCursorVisible(true);
 
 
 

@@ -44,6 +44,8 @@ protected:
 
 	bool m_mouseOver;
 
+	Font m_Font;
+
 	Color m_color;
 	Color m_color_mouseOver;
 	Color m_color_clicked;
@@ -56,6 +58,9 @@ protected:
 
 	//is called by animatioTick() to update the button color
 	virtual void animation_upadate();
+
+	//for derived classes to update their visuals
+	virtual void updateVisuals(bool colorChange);
 
 public:
 	void setIsEnabled(bool enable);

@@ -140,6 +140,9 @@
   <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Images\Button.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

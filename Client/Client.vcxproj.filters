@@ -117,13 +117,13 @@
     <ClInclude Include="IAnimatable.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="StandardButton.h">
-      <Filter>Codes\Graphic\Source</Filter>
-    </ClInclude>
     <ClInclude Include="IView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="IKeyboardInput.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardButton.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -172,8 +172,13 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Data\Images\Button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf">
-      <Filter>Data</Filter>
+      <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
 </Project>

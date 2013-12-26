@@ -33,20 +33,29 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	m_animationTimer.restart();
 
-	b = new Button(Vector2f(500,100),Vector2f(200,60),"hello",1);
+	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1);
 	
 	b->attachFunction((IButtonfunction*)this);
 	
-	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "FU", 2);
+	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "Basisklasse \n Button \n automatische \n grössenanpassung", 2);
 
 	b1->attachFunction((IButtonfunction*)this);
 
+	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Standard Button", 3);
+
+	b2->attachFunction((IButtonfunction*)this);
+
 	m_clickL.push_back(b);
 	m_clickL.push_back(b1);
+	m_clickL.push_back(b2);
+	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
+	m_drawL.push_back(b2);
+	
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
+	m_animateL.push_back(b2);
 
 	m_Screen = Testscreen;
 
@@ -56,6 +65,7 @@ Game::~Game()
 {
 	delete b;
 	delete b1;
+	delete b2;
 }
 
 void Game::setScreen(ScreenMode sm)
@@ -155,8 +165,9 @@ void Game::onResize()
 void Game::onMouseMove()
 {
 	Vector2i mousePos = Mouse::getPosition(*m_pWindow);
+	Vector2i mpm = Mouse::getPosition();
 
-	///TODO Mouse grab
+	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
 	for(unsigned int i = 0; i < m_clickL.size(); i++)
 		m_clickL[i]->isHit(mousePos);
@@ -174,6 +185,16 @@ void Game::onMouseDownRight()
 {
 	for(unsigned int i = 0; i < m_clickL.size(); i++)
 		m_clickL[i]->PressedRight();
+}
+
+void Game::onMouseLeave()
+{
+
+	//TODO	this mouse grab hack does work if the scaling would be disabled
+	//		though it results in massive mouse jitterling along the edge of the window which is not acceptable
+	std::cout << " Mouse Left the Window " << std::endl;
+	Mouse::setPosition(m_lastMousePosition, *m_pWindow);
+
 }
 
 void Game::onMouseUpLeft()
@@ -230,7 +251,8 @@ void Game::Input()
 
 			/////MOUSE EVENTS/////
 		case sf::Event::MouseMoved:
-			onMouseMove();
+			if (m_inFocus) 
+				onMouseMove();
 			break;
 
 		case sf::Event::MouseButtonPressed:
@@ -245,6 +267,12 @@ void Game::Input()
 				onMouseUpLeft();
 			else if (m_inFocus)
 				onMouseUpRight();
+			break;
+
+		case sf::Event::MouseLeft:	//TODO doesn't work on scalable boarders
+			//TODO mouse grab only when in game mode not in menues or lobby
+			if (m_inFocus)
+				onMouseLeave();
 			break;
 
 			/////KEYBOARD EVENTS/////

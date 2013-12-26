@@ -18,6 +18,7 @@ class IView
 	: public IDrawable, public IClickable, public IAnimatable, public IKeyboardinput
 {
 protected:
+	changeView_func m_callbackFunc;
 	virtual void cangeView()=0;
 };
 

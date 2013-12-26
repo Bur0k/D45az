@@ -19,18 +19,31 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID)
 	
 	setSize(size);
 	setPosition(pos);
-
-	m_buttonText.setFont(MyFonts.Arial);
+	m_Font = Font(MyFonts.Arial);
+	m_buttonText.setFont(m_Font);
 	m_buttonText.setString(S);
 	m_buttonText.setPosition(getPosition());
 	m_buttonText.setColor(MyColors.Black);
+
+	sf::Rect<float> textsize;
 	
-	sf::Rect<float> textsize = m_buttonText.getLocalBounds();
-	
+	//TODO if font too large set another font
+	while(true)
+	{
+		textsize = m_buttonText.getLocalBounds();
+		float scale = m_buttonText.getScale().x;
+		if(textsize.width * scale > size.x)
+		{
+			scale *= 0.8f;
+			m_buttonText.setScale(scale, scale);
+		}
+		else 
+			break;
+	}
 	//std::cout << "textsize x " << textsize.width << " y " << textsize.height << std::endl;
 	
-	m_buttonText.move(	(getSize().x - textsize.width) / 2.0f,
-						(getSize().y - textsize.height * 1.5f) / 2.0f);
+	m_buttonText.move(	(getSize().x - textsize.width * m_buttonText.getScale().x) / 2.0f,
+						(getSize().y - textsize.height * 1.5f * m_buttonText.getScale().y) / 2.0f);
 
 	m_color = MyColors.White;
 	setFillColor(m_color);
@@ -165,12 +178,22 @@ void Button::animation_upadate()
 						(Uint8)(c.g * ratio1 + m_color.g * ratio2),
 						(Uint8)(c.b * ratio1 + m_color.b * ratio2),
 						(Uint8)(c.a * ratio1 + m_color.a * ratio2)));
+	
+	updateVisuals(true);
+}
+
+void Button::updateVisuals(bool colorChange)
+{
+	//implementation in derived classes
 }
 
 void Button::clicked()
 {
 	if(m_isClicked)
+	{
 		setFillColor(m_color_clicked);
+		updateVisuals(true);
+	}
 }
 
 void Button::unclicked()

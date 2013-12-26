@@ -12,10 +12,11 @@
 #include "IButtonfunction.h"
 #include "IAnimatable.h"
 #include "IView.h"
+#include "StandardButton.h"
 
 using namespace sf;
 
-
+// TODO derive game from renderWindow
 
 // manages gui views and timers
 class Game : private IButtonfunction
@@ -25,6 +26,7 @@ private:
 
 	Button* b;
 	Button* b1;
+	Button* b2;
 
 	///endDebug
 	Clock m_animationTimer;
@@ -56,10 +58,6 @@ public:
 	void setScreen(ScreenMode sm);
 	ScreenMode getScreen();
 
-
-
-	
-
 private:
 	void onButtonClick(int);
 
@@ -72,17 +70,16 @@ private:
 
 	void DrawTest();
 
-	void onResize();
-
-	void Render();
 	void Update();
 
 	void onMouseMove();
-
+	void onResize();
 	void onMouseDownLeft();
 	void onMouseDownRight();
 	void onMouseUpLeft();
 	void onMouseUpRight();
+	void onMouseLeave();
+
 	void onKeyDown(sf::Event e);
 	void onKeyUp(sf::Event e);
 	
