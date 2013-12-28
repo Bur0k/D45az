@@ -7,7 +7,7 @@ Button::Button()
 	//TODO
 }
 
-Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID)
+Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
 {
 	m_animation = 0;
 	m_animationLength = 15;
@@ -16,6 +16,8 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID)
 	m_isEnabled = true;
 	m_isClicked = false;
 	m_mouseOver = false;
+	m_staysClicked = lock;
+	m_lockedIn = false;
 	
 	setSize(size);
 	setPosition(pos);
@@ -27,12 +29,12 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID)
 
 	sf::Rect<float> textsize;
 	
-	//TODO if font too large set another font
+	//TODO durch formel ersetzen, TODO offset zum rand einbauen
 	while(true)
 	{
 		textsize = m_buttonText.getLocalBounds();
 		float scale = m_buttonText.getScale().x;
-		if(textsize.width * scale > size.x)
+		if(textsize.width * scale > size.x || textsize.height * scale > size.y)
 		{
 			scale *= 0.8f;
 			m_buttonText.setScale(scale, scale);
@@ -78,6 +80,7 @@ void Button::operator=(const Button & b)
 	m_isEnabled = b.m_isEnabled;
 	m_isClicked = b.m_isClicked;
 	m_staysClicked = b.m_staysClicked;
+	m_lockedIn = b.m_lockedIn;
 	m_mouseOver = b.m_mouseOver;
 
 	m_color = b.m_color;
@@ -115,7 +118,9 @@ bool Button::isHit(Vector2i & mouse)
 	else 
 	{
 		m_mouseOver = false;
-		m_isClicked = false;
+		if(!m_lockedIn)			
+			m_isClicked = false;
+		
 		return false;
 	}
 }
@@ -127,6 +132,8 @@ void Button::PressedLeft()
 		m_animation = m_animationLength;
 		m_isClicked = true;
 		clicked();
+		if(m_staysClicked)
+			m_lockedIn = (m_lockedIn)? false : true;
 	}
 }
 
@@ -134,9 +141,12 @@ void Button::ReleasedLeft()
 {
 	if(m_isClicked)
 	{
-		m_isClicked = false;
 		notify();
-		unclicked();
+		if(!m_lockedIn)
+		{
+			m_isClicked = false;
+			unclicked();
+		}
 	}
 }
 

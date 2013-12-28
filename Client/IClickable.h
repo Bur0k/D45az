@@ -4,6 +4,8 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 
+
+//interface for all mouse related functions
 class IClickable
 {
 public:

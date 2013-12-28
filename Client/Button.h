@@ -23,7 +23,7 @@ class Button : public IDrawable, public RectangleShape, public IClickable, publi
 public:
 	//TODO standadconstructor
 	Button();
-	Button(Vector2f pos, Vector2f size, sf::String S, int ID);
+	Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock);
 	Button(const Button & b);
 	~Button();
 	void operator=(const Button & b);
@@ -41,6 +41,7 @@ protected:
 	bool m_isClicked;
 	//if true button stays activated till clicked again or click somewhere else
 	bool m_staysClicked;
+	bool m_lockedIn;
 
 	bool m_mouseOver;
 

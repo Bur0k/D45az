@@ -3,6 +3,7 @@
 void Game::onButtonClick(int index)
 {
 	static int blubb = 0;
+	static bool lock = false;
 	switch(index)
 	{
 	case 1:
@@ -12,6 +13,10 @@ void Game::onButtonClick(int index)
 		break;
 	case 2:
 		std::cout << "other button click :)" << std::endl;
+		break;
+	case 3:
+		lock = (lock)? false : true;
+		std::cout << "this button locks in and out  current status" << lock << std::endl;
 		break;
 	default:
 		std::cout << "undefined button click :(" << std::endl;
@@ -28,37 +33,42 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_inFocus = true;
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
-	//Lade font
 	m_stdFont = MyFonts.Arial;
 
 	m_animationTimer.restart();
 
-	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1);
+	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
 	b->attachFunction((IButtonfunction*)this);
 	
-	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "Basisklasse \n Button \n automatische \n grössenanpassung", 2);
+	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
 
 	b1->attachFunction((IButtonfunction*)this);
 
-	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Standard Button", 3);
+	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Standard Button", 4, false);
 
 	b2->attachFunction((IButtonfunction*)this);
+
+	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"buttons können auch\nein und aus schalten" , 3, true);
+
+	b3->attachFunction(this);
 
 	m_clickL.push_back(b);
 	m_clickL.push_back(b1);
 	m_clickL.push_back(b2);
+	m_clickL.push_back(b3);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
 	m_drawL.push_back(b2);
+	m_drawL.push_back(b3);
 	
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
+	m_animateL.push_back(b3);
 
 	m_Screen = Testscreen;
-
 }
 
 Game::~Game()
@@ -66,6 +76,7 @@ Game::~Game()
 	delete b;
 	delete b1;
 	delete b2;
+	delete b3;
 }
 
 void Game::setScreen(ScreenMode sm)

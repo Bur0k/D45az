@@ -5,8 +5,8 @@ StandardButton::StandardButton()
 	//TODO
 }
 
-StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID) 
-	: Button(pos, size, S, ID)
+StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock) 
+	: Button(pos, size, S, ID, lock)
 {
 	m_pST = new SpriteTex[8];
 

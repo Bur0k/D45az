@@ -36,7 +36,7 @@ private:
 public:
 	StandardButton();
 	///@param Size x or y should be bigger than 10 px
-	StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID);
+	StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock);
 	~StandardButton();
 
 	void draw(RenderWindow* rw);

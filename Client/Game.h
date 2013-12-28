@@ -27,8 +27,10 @@ private:
 	Button* b;
 	Button* b1;
 	Button* b2;
+	Button* b3;
 
-	///endDebug
+	///end debug
+
 	Clock m_animationTimer;
 	RenderWindow* m_pWindow;
 	ScreenMode m_Screen;
@@ -49,8 +51,6 @@ public:
 	
 	//draws the current screen
 	void Draw();
-	//displays drawn image in the window
-	void Display();
 	//manages the user input
 	void Input();
 	void timer();
