@@ -1,8 +1,8 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "Client.h"
-#include "Game.h"
 #include "Jans_Abgeher_Shit.h"
+#include "Game.h"
 
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
@@ -18,6 +18,7 @@ class testClient : public NetworkParticipant
 		for(unsigned int i=0;i<data.size();i++)
 			std::cout<<data[i];
 		std::cout<<"\nEnde Packet\n\n";
+
 	}
 
 	void processNetworkError(int id, std::string msg)
@@ -37,7 +38,7 @@ void OnNewMessage(short id,vector<char> data)
 
 void jans_test_karre()
 {
-	Music music;
+	sf::Music music;
 	string status;
 
 	if (music.openFromFile("test.ogg"))
@@ -75,39 +76,36 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	//********** BURAKS CLIENT TEST SHIT END
 
 
-	cout << "Hallo D45az" << endl;
-	cout << "oeffne Fenster" << endl;
+	cout << endl << " -=<#[| Hallo D45az |]#>=-" << endl;
+	cout  << "      oeffne Fenster" << endl;
 
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(1280, 850), "45azFinezt");
+	sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
 	window.setPosition(sf::Vector2i(400,0));
+	window.setMouseCursorVisible(true);
 
 
 
-	Game g(& window, Testscreen, sf::Vector2f(1280, 850));
+	//testausgabe
+	/*
+
+	*/
 
 	jans_test_karre();
-
-
-
+	
+	
+	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
 
 	while (window.isOpen())
 	{ 
-
-		if(!g.Input())
-			break;
+		g.Input();
 
 		g.timer();
 
-
-		// clear the window with black color
+		// clear the window with black 
 		window.clear(sf::Color::Black);
 
-		// draw everything here...
-		// window.draw(...);
-
 		g.Draw();
-
 
 		// end the current frame
 		window.display();
