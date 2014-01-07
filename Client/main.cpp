@@ -7,6 +7,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include "NetworkParticipant.h"
+#include "NetworkLogin.h"
 
 using namespace std;
 
@@ -67,12 +68,19 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	c->connectToServer("localhost",4242);
 	c->beginRead();std::vector<char> testData;
 	Client::get()->write(0,testData);
-	testData.push_back('H');
-	testData.push_back('i');
-	testData.push_back('!');
-	testData.push_back('\0');
-	Client::get()->write(42,testData);
-	Client::get()->write(42,testData);
+
+	
+	NetworkLogin NL1("Burak");
+	NetworkLogin NL2("Burak");
+	while(NL1.getState() == 0)
+	{
+	}
+	while(NL2.getState() == 0)
+	{
+	}
+	cout << "NL1:" << NL1.getState() << endl;
+	cout << "NL2:" << NL2.getState() << endl;
+
 	//********** BURAKS CLIENT TEST SHIT END
 
 
@@ -114,6 +122,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 
 
-	delete c;
+	//delete c;
 	return 0;
 }

@@ -25,11 +25,15 @@ class Client
 	mutex newMessageCallbackMutex;
 	mutex errorCallbackMutex;
 
-	bool runRead;
+	bool running;
 
 	thread* readThread;
 
-	vector<thread*> writeThreads;
+	thread* writeThread;
+	list<vector<char>> toWrite;
+	mutex toWriteMutex;
+
+
 	mutex writeThreadsMutex;
 
 	mutex writeMutex;
@@ -47,7 +51,6 @@ public:
 	void connectToServer(string ip, int port);
 	void write(short id, vector<char>data);
 	void beginRead();
-	void endRead();
 
 	
 	void addToNewMessageCallback(NetworkParticipant* np);
