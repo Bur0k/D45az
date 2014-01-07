@@ -15,7 +15,7 @@ private:
 	vector<User*> players;
 	short playerlimit;
 	User* gameMaster;
-	Map currentMap;
+	/*Map currentMap;*/
 
 public:
 	GameLobbyLogic(short id, User* master);

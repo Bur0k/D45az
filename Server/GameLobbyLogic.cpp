@@ -5,8 +5,6 @@ GameLobbyLogic::GameLobbyLogic(short id, User* master)
 	this->server = Server::get();
 	this->id = id;
 	this->gameMaster = master;
-
-	server->newMessageCallback.push_back(LogicMessageCallback);
 }
 
 GameLobbyLogic::~GameLobbyLogic()
