@@ -234,8 +234,8 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						int localLen = sizeof(SOCKADDR_IN);
 						Server::self->lpfnGetAcceptExSockAddrs(pPerIoData->wsaBuf.buf, pPerIoData->wsaBuf.len - ((sizeof(SOCKADDR_IN)+16)*2),
 							sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, (LPSOCKADDR*)&local, &localLen, (LPSOCKADDR*)&remote, &remoteLen);
-						printf("Client <%s : %d> come in.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port));
-						printf("Recv Data: <%s : %d> %s.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port), pPerIoData->wsaBuf.buf);
+						//printf("Client <%s : %d> come in.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port));
+						//printf("Recv Data: <%s : %d> %s.\n", inet_ntoa(remote->sin_addr), ntohs(remote->sin_port), pPerIoData->wsaBuf.buf);
 
 						if(NULL != pPerHandleData)
 						{
@@ -265,11 +265,12 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 
 
-						char* buffer = new char[4];//"Leermessage muss gesendet werden, damit sich WSASend sich initialisieren kann
+						char* buffer = new char[4];//Leermessage muss gesendet werden, damit sich WSASend sich initialisieren kann
 						buffer[0]=0;
 						buffer[1]=4;//Länge 4
 						buffer[2]=0;
-						buffer[3]=0;//Keine Daten
+						buffer[3]=0;//MSGID 0
+						//Keine Daten
 
 						pPerIo->opType = OP_WRITE;
 						memcpy(pPerIo->buf,buffer,4*sizeof(char));
@@ -297,7 +298,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 				case OP_READ: // Read
 					pPerIoData->currPos += (short)dwTrans;
-					
+
 					while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
 					{
 						if (pPerIoData->nextMsgSize == 0)
@@ -314,7 +315,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 								message.push_back(msg[i]);
 
 							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
-						
+
 							pPerIoData->nextMsgSize = 0;
 							delete[] msg;
 						}
@@ -387,7 +388,7 @@ void Server::sendError(SOCKET s,int errCode,string errMessage)
 {
 	errorCallbackMutex.lock();
 	for(unsigned int i=0;i<errorCallback.size();i++)
-		errorCallback[i](s,errCode,errMessage);
+		errorCallback[i]->processNetworkError(s,errCode,errMessage);
 	errorCallbackMutex.unlock();
 }
 
@@ -395,7 +396,7 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
 	newMessageCallbackMutex.lock();
 	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		newMessageCallback[i](s,id,data);
+		newMessageCallback[i]->processNewMessage(s,id,data);
 	newMessageCallbackMutex.unlock();
 }
 
@@ -425,40 +426,40 @@ void Server::write(SOCKET s,short id,vector<char> data)
 	writeThreads.push_back(sendThread);
 }
 
-void Server::addToNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data))
+void Server::addToNewMessageCallback(NetworkParticipant* np)
 {
 	newMessageCallbackMutex.lock();
-	newMessageCallback.push_back(function);
+	newMessageCallback.push_back(np);
 	newMessageCallbackMutex.unlock();
 }
 
-void Server::deleteFromNewMessageCallback(void (*function)(SOCKET s,short id,vector<char> data))
+void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 {
 	newMessageCallbackMutex.lock();
-	for(int i=0;i<newMessageCallback.size();i++)
-		if(newMessageCallback[i]==function)
+	for(unsigned int i=0;i<newMessageCallback.size();i++)
+		if(newMessageCallback[i] == np)
 		{
 			newMessageCallback.erase(newMessageCallback.begin()+i);
 			break;
 		}
-	newMessageCallbackMutex.unlock();
+		newMessageCallbackMutex.unlock();
 }
 
-void Server::addToErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage))
+void Server::addToErrorCallback(NetworkParticipant* np)
 {
 	errorCallbackMutex.lock();
-	errorCallback.push_back(function);
+	errorCallback.push_back(np);
 	errorCallbackMutex.unlock();
 }
 
-void Server::deleteFromErrorCallback(void (*function)(SOCKET s,int errCode,string errMessage))
+void Server::deleteFromErrorCallback(NetworkParticipant* np)
 {
 	errorCallbackMutex.lock();
-	for(int i=0;i<errorCallback.size();i++)
-		if(errorCallback[i]==function)
+	for(unsigned int i=0;i<errorCallback.size();i++)
+		if(errorCallback[i] == np)
 		{
 			errorCallback.erase(errorCallback.begin()+i);
 			break;
 		}
-	errorCallbackMutex.unlock();
+		errorCallbackMutex.unlock();
 }

@@ -2,9 +2,30 @@
 #include <SFML\Graphics.hpp>
 #include "Client.h"
 #include "Jans_Abgeher_Shit.h"
+#include "Game.h"
+
+#include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
+#include "NetworkParticipant.h"
 
 using namespace std;
 
+class testClient : public NetworkParticipant
+{
+	void processNewMessage(short id,vector<char> data)
+	{
+		std::cout<<"Server hat folgendes gesendet:\nID:"<<id<<"\nData:\n";
+		for(unsigned int i=0;i<data.size();i++)
+			std::cout<<data[i];
+		std::cout<<"\nEnde Packet\n\n";
+
+	}
+
+	void processNetworkError(int id, std::string msg)
+	{
+		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
+	}
+} tc;
 
 void OnNewMessage(short id,vector<char> data)
 {
@@ -15,9 +36,22 @@ void OnNewMessage(short id,vector<char> data)
 
 }
 
-
 void jans_test_karre()
 {
+	sf::Music music;
+	string status;
+
+	if (music.openFromFile("test.ogg"))
+	{
+		cout << "passt" << endl << endl;
+		music.play();
+	}
+
+	music.setVolume(90);
+
+	status = music.getStatus() ;
+
+	cout << music.getStatus() << endl;
 }
 
 #ifndef _DEBUG
@@ -26,73 +60,60 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	//********** BURAKS CLIENT TEST SHIT
+	Client* c = Client::get();
+	c->addToErrorCallback(&tc);
+	c->addToNewMessageCallback(&tc);
+	c->connectToServer("localhost",4242);
+	c->beginRead();std::vector<char> testData;
+	Client::get()->write(0,testData);
+	testData.push_back('H');
+	testData.push_back('i');
+	testData.push_back('!');
+	testData.push_back('\0');
+	Client::get()->write(42,testData);
+	Client::get()->write(42,testData);
+	//********** BURAKS CLIENT TEST SHIT END
+
+
 	cout << "Hallo D45az" << endl;
 	cout << "oeffne Fenster" << endl;
-	 // create the window
-    sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
-	
+	// create the window
+	sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
+
 	//window.setSize(sf::Vector2u (900,900));
 	window.setPosition(sf::Vector2i(400,0));
 
-	sf::Font font = sf::Font();
-	if(!font.loadFromFile("Data/Fonts/arial.ttf"))
-	{
-		cout << "font load failed!" << endl;
-	}
-	else
-		cout << "font load successful!" << endl;
 
-	sf::Text t = sf::Text();
-	t.setString("Hallo Welt \n D45az finezt.");
-	t.setPosition(sf::Vector2f(200,200));
-	t.setFont(font);
-	t.setColor(sf::Color::White);
 
-	sf::RectangleShape r = sf::RectangleShape();
-	r.setPosition(sf::Vector2f(200,400));
-	r.setSize(sf::Vector2f(50,50));
-	r.setFillColor(sf::Color::Blue);
-	
+	//testausgabe
+	/*
+
+	*/
+
+	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
+
 	jans_test_karre();
 
+
+
+
 	while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-		sf::Event event;
-		while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
+	{ 
+		g.Input();
 
-			//closes the window on escape
-			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				window.close();
-        }
-		
+		g.timer();
 
-
-        // clear the window with black color
+		// clear the window with black 
 		window.clear(sf::Color::Black);
 
-        // draw everything here...
-        // window.draw(...);
-		
-		
+		g.Draw();
 
-		window.draw(t);
-		window.draw(r);
+		// end the current frame
+		window.display();
+	}
 
 
-		
-		
-	
-
-        // end the current frame
-        window.display();
-    }
-
-
-	
+	delete c;
 	return 0;
 }

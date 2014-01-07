@@ -23,6 +23,9 @@
     <Filter Include="Codes\Network\Source">
       <UniqueIdentifier>{03984393-cb27-44f8-89e4-adb660d41769}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{b2fed3ae-b37c-41c2-9515-b2948dd6aa8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -93,7 +96,16 @@
     <ClInclude Include="Slider.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="UIelement.h">
+    <ClInclude Include="NetworkParticipant.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IDrawable.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IClickable.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="graphic_globals.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,5 +152,10 @@
     <Text Include="client_Grafik.txt">
       <Filter>Codes\Graphic\Source</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Data\Fonts\arial.ttf">
+      <Filter>Data</Filter>
+    </Font>
   </ItemGroup>
 </Project>
