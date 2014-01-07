@@ -49,6 +49,9 @@
     <ClInclude Include="GameLobbyLogic.h">
       <Filter>Codes\GameLobbyLogic</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkParticipant.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">

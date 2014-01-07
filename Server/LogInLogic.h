@@ -5,22 +5,25 @@
 #include "User.h"
 #include <string>
 #include "Server.h"
+#include "NetworkParticipant.h"
 
 using namespace std;
 
-class LogInLogic
+class LogInLogic : public NetworkParticipant
 {
-	private:
-		vector<User*> connectedUsers;		//getter
-		Server* server;
+private:
+	vector<User*> connectedUsers;
+	Server* server;
 
-		static LogInLogic* self;
 
-	public:
-		LogInLogic(); // anmelden
-		~LogInLogic();
+public:
+	LogInLogic(); // anmelden
+	~LogInLogic();
 
-		static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
+	static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
+
+	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 
 #endif

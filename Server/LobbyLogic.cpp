@@ -10,31 +10,16 @@
 
 LobbyLogic::LobbyLogic()
 {
-	self = this;
 	this->server = Server::get();
-
-	server->newMessageCallback.push_back(LobbyLogicMessageCallback);
-}
-
-LobbyLogic::LobbyLogic(LogInLogic* l)
-{
-	self = this;
-	this->server = Server::get();
-
-	this->LogIn = l;
-
-	server->newMessageCallback.push_back(LobbyLogicMessageCallback);
+	server->addToNewMessageCallback(this);
 }
 
 LobbyLogic::~LobbyLogic()
 {
-	for (map<short, GameLobbyLogic*>::iterator it = self->gamesCreated.begin(); it != self->gamesCreated.end; it++)
-	{
-		delete(it->second);
-	}
+	server->deleteFromNewMessageCallback(this);
 }
 
-void LobbyLogic::LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data)
+void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	std::vector<char> erfg;
 
@@ -42,57 +27,49 @@ void LobbyLogic::LobbyLogicMessageCallback(SOCKET s,short id,vector<char> data)
 	{
 		//	00: 	Server -> Client (sendet Lobby-Daten)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
-		case 0x0201:
+	case 0x0201:
+		{
+
+			for (map<short, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
 			{
-				
-				for (map<short, GameLobbyLogic*>::iterator it = self->gamesCreated.begin(); it != self->gamesCreated.end; it++)
-				{
-					erfg.push_back(it->first);
-					erfg.push_back(it->second->getID);
-					erfg.push_back(it->second->getPlayerlimit);
-					
-					string master = it->second->getGamemaster;
-					for (int i = 0; i < master.length; i++)
-						erfg.push_back(master[i]);
+				//Zudem müsste ihr hier mal die Größe dieser Datei mit schicken. Der Client hat keine Ahnung wie lang so ne Lobby is
+				erfg.push_back(it->first);//ToDo wieso habt ihr eine map<short   wenn ihr das sowieso später zu nem char macht?
+				erfg.push_back(it->second->getID());
+				erfg.push_back(it->second->getPlayerlimit());
 
-					//noch die spieler vom game pushen
-				}
-							
-				self->server->write(s, 0x0200,erfg);
+				string master = it->second->getGamemaster()->getName();
+				for (unsigned int i = 0; i < master.length(); i++)
+					erfg.push_back(master[i]);
 
-				break;
+				//noch die spieler vom game pushen
 			}
+
+			server->write(s, 0x0200,erfg);
+
+			break;
+		}
 		//	02:		Client -> Server (will zu Spiellobby connecten)
 		//	03: 	Server -> Client (connect Bestätigung)
-		case 0x0202:
-			{
-				// gameid aus daten lesen, den user da reinschreiben
+	case 0x0202:
+		{
+			// gameid aus daten lesen, den user da reinschreiben
 
-				erfg.push_back(1);
-				self->server->write(s, 0x0203, erfg);
-				break;
-			}
+			erfg.push_back(1);
+			server->write(s, 0x0203, erfg);
+			break;
+		}
 		//	04:		Client -> Server (will Spiellobby erstellen)
 		//	05: 	Server -> Client (erstellen Bestätigung)
-		case 0x0204:
-			{
-				//data: string username
-				short id = 0;
-				string name = "";
-				
-				while (self->gamesCreated.count(id) == 1)
-					id++;
+	case 0x0204:
+		{
 
-				for (int i = 0; i < data.size(); i++) 
-					name += data[i];
-
-				//LogIn->connectedUsers
-
-				//GameLobbyLogic GameLobby = new GameLobbyLogic(id, );
-
-				erfg.push_back(1);
-				self->server->write(s, 0x0205, erfg);
-				break;
-			}
+			erfg.push_back(1);
+			server->write(s, 0x0205, erfg);
+			break;
+		}
 	}
+}
+
+void LobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
+{
 }

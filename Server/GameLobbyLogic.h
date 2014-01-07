@@ -4,10 +4,11 @@
 #include <vector>
 #include "User.h"
 #include "Server.h"
+#include "NetworkParticipant.h"
 
 using namespace std;
 
-class GameLobbyLogic
+class GameLobbyLogic : public NetworkParticipant
 {
 private:
 	Server* server;
@@ -15,7 +16,7 @@ private:
 	vector<User*> players;
 	short playerlimit;
 	User* gameMaster;
-	/*Map currentMap;*/
+	//Map currentMap;
 
 public:
 	GameLobbyLogic(short id, User* master);
@@ -34,7 +35,8 @@ public:
 
 	/*Kommunikation*/
 
-	static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
+	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 
 #endif

@@ -6,34 +6,16 @@
 #include <Windows.h>
 #include <process.h>
 #include <string>
-#include <list>
 #include <vector>
 #include <thread>
 #include <mutex>
+
+#include "NetworkParticipant.h"
 
 using namespace std;
 
 class Server
 {
-	/*long rc;
-	SOCKET acceptSocket;
-	SOCKADDR_IN addr;
-
-
-	void sendError(ClientHandler* ch,int errCode,string errMessage);
-
-	thread* acceptThread;
-	bool runAccept;
-
-	vector<ClientHandler*> clientHandler;
-	public:
-	Server();
-	~Server();
-
-	void startListening();
-	vector<void (*)(ClientHandler* ch,int errCode,string errMessage)> errorCallback;
-	vector<void (*)(ClientHandler* ch,short id,vector<char> data)> newMessageCallback;*/
-public:
 	typedef enum _OPERATION_INFO_
 	{
 		OP_NULL,
@@ -117,11 +99,15 @@ public:
 	SOCKET sListen;
 	HANDLE hIOCP;
 
-	
+
 	void sendError(SOCKET s,int errCode,string errMessage);
 	void sendNewMessage(SOCKET s, short id,vector<char> data);
+	vector<NetworkParticipant*> errorCallback;
+	vector<NetworkParticipant*> newMessageCallback;
+	mutex newMessageCallbackMutex;
+	mutex errorCallbackMutex;
 
-    vector<thread*> writeThreads;
+	vector<thread*> writeThreads;
 	static Server* self;
 	Server();
 public:
@@ -137,8 +123,9 @@ public:
 	void startListening();
 	void write(SOCKET s,short id,vector<char> data);
 
-	
-	vector<void (*)(SOCKET s,int errCode,string errMessage)> errorCallback;
-	vector<void (*)(SOCKET s,short id,vector<char> data)> newMessageCallback;
+	void addToNewMessageCallback(NetworkParticipant* np);
+	void deleteFromNewMessageCallback(NetworkParticipant* np);
+	void addToErrorCallback(NetworkParticipant* np);
+	void deleteFromErrorCallback(NetworkParticipant* np);
 };
 #endif

@@ -102,13 +102,16 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="graphic_globals.h" />
+    <ClInclude Include="IClickable.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SplittedSprite.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />
-    <ClInclude Include="UIelement.h" />
+    <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll" />
@@ -127,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

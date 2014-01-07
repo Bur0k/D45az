@@ -1,8 +1,6 @@
 ===============TODO======================
 
- - fenster aufmachen
- - game routine
- - funktionspointer für buttton
+
 
 
 

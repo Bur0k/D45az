@@ -6,11 +6,12 @@ GameLobbyLogic::GameLobbyLogic(short id, User* master)
 	this->id = id;
 	this->gameMaster = master;
 
-	server->newMessageCallback.push_back(LogicMessageCallback);
+	server->addToNewMessageCallback(this);
 }
 
 GameLobbyLogic::~GameLobbyLogic()
 {
+	server->deleteFromNewMessageCallback(this);
 }
 
 void GameLobbyLogic::setID(short id)
@@ -55,13 +56,25 @@ Map GameLobbyLogic::getMap()
 }
 */
 
-void GameLobbyLogic::LogicMessageCallback(SOCKET s,short id,vector<char> data)
+void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	switch(id)
 	{
 	case 0x0300:
 		{
-			
+			string name = "";
+
+			//testen
+			for (unsigned int i = 0; i < data.size(); i++) 
+				name += data[i];
+
+			for(unsigned int i = 0; i < this->players.size(); i++)
+				if(this->players[i]->getName() == name)
+					this->players.erase(this->players.begin() + i, this->players.begin() + i);
+				
+			std::vector<char> erfg;
+
+			this->server->write(s, 0x0301, erfg);	
 		}break;
 	case 0x0303:
 		{
@@ -88,3 +101,10 @@ void GameLobbyLogic::LogicMessageCallback(SOCKET s,short id,vector<char> data)
 //	11:	Client -> Server (max. Anzahl Spieler change)
 //	20:	Server -> Client (ack 10)
 //	21:	Server -> Client (ack 11)
+
+
+
+
+void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
+{
+}
