@@ -11,7 +11,7 @@ using namespace std;
 class LogInLogic
 {
 	private:
-		vector<User*> connectedUsers;
+		vector<User*> connectedUsers;		//getter
 		Server* server;
 
 		static LogInLogic* self;

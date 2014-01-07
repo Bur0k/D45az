@@ -48,8 +48,9 @@ void LogInLogic::LogicMessageCallback(SOCKET s,short id,vector<char> data)
 
 				//send 0101 nachricht 1
 				std::vector<char> erfg;
-					erfg.push_back(1);
-					LogInLogic::self->server->write(s,0x0101,erfg);
+				erfg.push_back(1);
+				LogInLogic::self->server->write(s,0x0101,erfg);
+
 			}
 		}break;
 	}
