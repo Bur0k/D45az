@@ -5,6 +5,7 @@
 #include <map>
 #include "Server.h"
 #include "GameLobbyLogic.h"
+#include "LogInLogic.h"
 #include <string>
 #include "NetworkParticipant.h"
 
@@ -14,11 +15,13 @@
 class LobbyLogic : public NetworkParticipant
 {
 private:
-	map<short, GameLobbyLogic*> gamesCreated;
+	map<char, GameLobbyLogic*> gamesCreated;
 	Server* server;
+	LogInLogic* LogIn;
 
 public:
 	LobbyLogic();
+	LobbyLogic(LogInLogic* l);
 	~LobbyLogic();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);

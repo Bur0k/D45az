@@ -89,6 +89,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="NetworkLogin.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="SplittedSprite.cpp" />
     <ClCompile Include="StandardButton.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="IKeyboardInput.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="NetworkLogin.h" />
     <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SplittedSprite.h" />

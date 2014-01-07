@@ -9,6 +9,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <list>
 
 #include "NetworkParticipant.h"
 
@@ -107,7 +108,25 @@ class Server
 	mutex newMessageCallbackMutex;
 	mutex errorCallbackMutex;
 
-	vector<thread*> writeThreads;
+	class writeData
+	{
+	public:
+		SOCKET s;
+		vector<char> data;
+		writeData(SOCKET S,vector<char> Data)
+		{
+			s=S;
+			data=Data;
+		}
+		writeData()
+		{
+		}
+	};
+	thread* writeThread;
+	list<writeData> toWrite;
+	mutex toWriteMutex;
+
+	bool running;
 	static Server* self;
 	Server();
 public:
