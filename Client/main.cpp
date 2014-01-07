@@ -62,6 +62,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 #endif
 {
 	//********** BURAKS CLIENT TEST SHIT
+	
 	Client* c = Client::get();
 	c->addToErrorCallback(&tc);
 	c->addToNewMessageCallback(&tc);
@@ -80,15 +81,14 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 	cout << "NL1:" << NL1.getState() << endl;
 	cout << "NL2:" << NL2.getState() << endl;
-
+	
 	//********** BURAKS CLIENT TEST SHIT END
 
 
-	cout << endl << " -=<#[| Hallo D45az |]#>=-" << endl;
-	cout  << "      oeffne Fenster" << endl;
+	cout << endl << "Hallo D45az" << endl << "oeffne Fenster" << endl;
 
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(1280, 850), "primePatterns");
+	sf::RenderWindow window(sf::VideoMode(1280, 850), "D45az finezt");
 	window.setPosition(sf::Vector2i(400,0));
 	window.setMouseCursorVisible(true);
 
