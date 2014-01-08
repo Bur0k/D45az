@@ -420,6 +420,19 @@ void Server::sendError(SOCKET s,int errCode,string errMessage)
 
 void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
+	bool socketIsConnected = false;
+	for(int i=0;i<connectedPlayers.size();i++)
+	{
+		if(connectedPlayers[i].s==s)
+		{
+			socketIsConnected = true;
+			break;
+		}
+	}
+
+	if(!socketIsConnected && id != 0x0100)
+		return;
+
 	newMessageCallbackMutex.lock();
 	for(unsigned int i=0;i<newMessageCallback.size();i++)
 		newMessageCallback[i]->processNewMessage(s,id,data);

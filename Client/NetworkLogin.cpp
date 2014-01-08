@@ -26,7 +26,7 @@ NetworkLogin::NetworkLogin(string Name)
 	c->addToNewMessageCallback(this);
 
 	vector<char> charName;
-	for(int i=0;i<Name.size();i++)
+	for(unsigned int i=0;i<Name.size();i++)
 		charName.push_back(Name.at(i));
 
 	c->write(0x0100,charName);

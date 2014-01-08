@@ -13,7 +13,7 @@
 //DEBUG DEFINES IF DEFINED ENABLED
 
 //#define BURAKTESTSHIT
-#define MOUSEGRAB
+//#define MOUSEGRAB
 
 
 
@@ -35,24 +35,6 @@ class testClient : public NetworkParticipant
 		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
 	}
 } tc;
-
-void OnNewMessage(short id,vector<char> data)
-{
-	std::cout<<"ID:"<<id<<"\nData:\n";
-	for(unsigned int i=0;i<data.size();i++)
-		std::cout<<data[i];
-	std::cout<<"\nEnde Packet\n\n";
-
-}
-
-void OnNewMessage(short id,vector<char> data)
-{
-	std::cout<<"ID:"<<id<<"\nData:\n";
-	for(unsigned int i=0;i<data.size();i++)
-		std::cout<<data[i];
-	std::cout<<"\nEnde Packet\n\n";
-
-}
 
 void jans_test_karre()
 {
