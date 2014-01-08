@@ -40,7 +40,6 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
 	m_color_mouseOver = MyColors.Red;
 	m_color_disabled = MyColors.Gray;
 	
-
 }
 
 Button::~Button()
@@ -168,6 +167,9 @@ void Button::ReleasedLeft()
 	}
 }
 
+
+void Button::setScale(Vector2f){}
+void Button::setScale(float x, float y){}
 void Button::PressedRight(){}
 void Button::ReleasedRight(){}
 

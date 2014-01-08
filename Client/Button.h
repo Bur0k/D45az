@@ -66,6 +66,9 @@ protected:
 	//for derived classes to update their visuals
 	virtual void updateVisuals();
 
+	void setScale(Vector2f);
+	void setScale(float x, float y);
+
 public:
 	void setIsEnabled(bool enable);
 	bool getIsEnabled();
