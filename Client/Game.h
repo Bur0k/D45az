@@ -30,7 +30,7 @@ private:
 	Button* b3;
 
 	///end debug
-
+	Clock m_fpsCounter;
 	Clock m_animationTimer;
 	RenderWindow* m_pWindow;
 	ScreenMode m_Screen;
@@ -39,6 +39,8 @@ private:
 	ClickList m_clickL;
 	DrawVect m_drawL;
 	AnimateVect m_animateL;
+
+	Text m_fpsText;
 
 	bool m_inFocus;
 

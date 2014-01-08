@@ -7,7 +7,6 @@ void Game::onButtonClick(int index)
 	switch(index)
 	{
 	case 1:
-		
 		blubb ++;
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
@@ -26,6 +25,8 @@ void Game::onButtonClick(int index)
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
+	
+
 	m_pWindow = rw;
 	m_Screen = sm;
 	m_size = windowSize;
@@ -36,6 +37,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_stdFont = MyFonts.Arial;
 
 	m_animationTimer.restart();
+	m_fpsCounter.restart();
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -52,6 +54,11 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"buttons können auch\nein und aus schalten" , 3, true);
 
 	b3->attachFunction(this);
+
+	m_fpsText.setFont(m_stdFont);
+	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setColor(MyColors.Red);
+
 
 	m_clickL.push_back(b);
 	m_clickL.push_back(b1);
@@ -114,6 +121,8 @@ void Game::Draw()
 	default:
 		break;
 	}
+
+	m_pWindow->draw(m_fpsText);
 }
 
 void Game::DrawGame()
@@ -143,7 +152,7 @@ void Game::DrawIngameMenu()
 
 void Game::DrawTest()
 {
-	sf::Text t = sf::Text();
+	/*sf::Text t = sf::Text();
 	t.setString("Hallo Welt\nD45az finezt.");
 	t.setPosition(sf::Vector2f(200,200));
 	t.setFont(m_stdFont);
@@ -152,10 +161,10 @@ void Game::DrawTest()
 	sf::RectangleShape r = sf::RectangleShape();
 	r.setPosition(sf::Vector2f(200,400));
 	r.setSize(sf::Vector2f(250,250));
-	r.setFillColor(sf::Color::Blue);
+	r.setFillColor(sf::Color::Blue);*/
 
-	m_pWindow->draw(t);
-	m_pWindow->draw(r);
+	//m_pWindow->draw(t);
+	//m_pWindow->draw(r);
 
 	for(unsigned int i = 0; i < m_drawL.size(); i++)
 		m_drawL[i]->draw(m_pWindow);
@@ -169,6 +178,8 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 	
+	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+
 	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
 }
@@ -305,6 +316,9 @@ void Game::Input()
 
 void Game::timer()
 {
+	static int fpsCount = 0;
+
+	//std::cout<<m_animationTimer.getElapsedTime().asMilliseconds()<<std::endl;
 	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
 	{
 		m_animationTimer.restart();
@@ -312,6 +326,14 @@ void Game::timer()
 			m_animateL[i]->animationTick();
 	}
 
+	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
+	{
+		m_fpsCounter.restart();
+		m_fpsText.setString(std::to_string(fpsCount));
+		fpsCount = 0;
+	}
+
+	fpsCount++;
 	//more timers ...
 }
 

@@ -44,6 +44,11 @@ User* GameLobbyLogic::getGamemaster()
 	return this->gameMaster;
 }
 
+vector<User*>& GameLobbyLogic::getPlayers()
+{
+	return this->players;
+}
+
 /*
 void GameLobbyLogic::setMap(Map map)
 {
@@ -78,15 +83,43 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		}break;
 	case 0x0303:
 		{
-			
+			string name = "";
+
+			//testen
+			for (unsigned int i = 0; i < data.size(); i++) 
+				name += data[i];
+
+			if(name == this->gameMaster->getName())
+			{
+				// Spielstart
+
+				std::vector<char> erfg;
+
+				this->server->write(s, 0x0304, erfg);
+			}
 		}break;
 	case 0x0310:
 		{
-			
+			short map = data[0] - 48;
+
+			// Mapchange
+
+			std::vector<char> erfg;
+
+			this->server->write(s, 0x0320, erfg);
 		}break;
 	case 0x0311:
 		{
-			
+			short anz = data[0] - 48;
+
+			if(anz > 4)
+				anz = 4;
+
+			this->setPlayerlimit(anz);
+
+			std::vector<char> erfg;
+
+			this->server->write(s, 0x0321, erfg);
 		}break;
 	}
 

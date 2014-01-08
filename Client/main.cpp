@@ -52,8 +52,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	#define BURAKTESTSHIT
 	//********** BURAKS CLIENT TEST SHIT
-	
+#ifdef BURAKTESTSHIT
 	Client* c = Client::get();
 	c->addToErrorCallback(&tc);
 	c->addToNewMessageCallback(&tc);
@@ -67,7 +68,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
-	
+#endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
 
