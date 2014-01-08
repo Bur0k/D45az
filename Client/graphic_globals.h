@@ -26,15 +26,19 @@ public:
 } static MyColors;
 
 
+
 class _MyFonts
 {
 public:
 	sf::Font Arial;
-
-	_MyFonts() {
+	_MyFonts() 
+	{
+		std::cout << " LOADING FONTS " << std::endl;
 		if(!Arial.loadFromFile("Data/Fonts/arial.ttf"))
 			std::cout << "font arial load failed!!" << std::endl;
-	}
+	};
+	void loadFonts();
+	
 } static MyFonts;
 
 #endif
