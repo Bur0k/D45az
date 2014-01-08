@@ -3,7 +3,7 @@
 void Game::onButtonClick(int index)
 {
 	static int blubb = 0;
-	static bool lock = false;
+
 	switch(index)
 	{
 	case 1:
@@ -11,14 +11,13 @@ void Game::onButtonClick(int index)
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
-		std::cout << "other button click :)" << std::endl;
+		std::cout << "other button click" << std::endl;
 		break;
 	case 3:
-		lock = (lock)? false : true;
-		std::cout << "this button locks in and out  current status" << lock << std::endl;
+		std::cout << "this button locks in and out  current status" << b3->getIsPressed() << std::endl;
 		break;
 	default:
-		std::cout << "undefined button click :(" << std::endl;
+		std::cout << "!! undefined button click !!" << std::endl;
 		break;
 	}
 }
@@ -211,12 +210,12 @@ void Game::onMouseDownRight()
 
 void Game::onMouseLeave()
 {
-
+#ifdef MOUSEGRAB
 	//TODO	this mouse grab hack does work if the scaling would be disabled
 	//		though it results in massive mouse jitterling along the edge of the window which is not acceptable
 	std::cout << " Mouse Left the Window " << std::endl;
 	Mouse::setPosition(m_lastMousePosition, *m_pWindow);
-
+#endif //MOUSEGRAB
 }
 
 void Game::onMouseUpLeft()

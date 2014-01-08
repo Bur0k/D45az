@@ -9,6 +9,14 @@
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
 
+
+//DEBUG DEFINES IF DEFINED ENABLED
+
+//#define BURAKTESTSHIT
+#define MOUSEGRAB
+
+
+
 using namespace std;
 
 class testClient : public NetworkParticipant
@@ -27,6 +35,24 @@ class testClient : public NetworkParticipant
 		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
 	}
 } tc;
+
+void OnNewMessage(short id,vector<char> data)
+{
+	std::cout<<"ID:"<<id<<"\nData:\n";
+	for(unsigned int i=0;i<data.size();i++)
+		std::cout<<data[i];
+	std::cout<<"\nEnde Packet\n\n";
+
+}
+
+void OnNewMessage(short id,vector<char> data)
+{
+	std::cout<<"ID:"<<id<<"\nData:\n";
+	for(unsigned int i=0;i<data.size();i++)
+		std::cout<<data[i];
+	std::cout<<"\nEnde Packet\n\n";
+
+}
 
 void jans_test_karre()
 {
@@ -52,7 +78,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
-	#define BURAKTESTSHIT
+
+
 	//********** BURAKS CLIENT TEST SHIT
 #ifdef BURAKTESTSHIT
 	Client* c = Client::get();
@@ -68,6 +95,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
+
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 

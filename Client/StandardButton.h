@@ -31,7 +31,10 @@ private:
 	*/
 
 	//gets called by parent class
-	void updateVisuals(bool colorCange);
+	void updateVisuals();
+
+	//if position of parent rectangle changes adjust current graphics
+	void updatePosition();
 
 public:
 	StandardButton();
