@@ -3,7 +3,7 @@
 void Game::onButtonClick(int index)
 {
 	static int blubb = 0;
-	static bool lock = false;
+
 	switch(index)
 	{
 	case 1:
@@ -11,14 +11,13 @@ void Game::onButtonClick(int index)
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
-		std::cout << "other button click :)" << std::endl;
+		std::cout << "other button click" << std::endl;
 		break;
 	case 3:
-		lock = (lock)? false : true;
-		std::cout << "this button locks in and out  current status" << lock << std::endl;
+		std::cout << "this button locks in and out  current status" << b3->getIsPressed() << std::endl;
 		break;
 	default:
-		std::cout << "undefined button click :(" << std::endl;
+		std::cout << "!! undefined button click !!" << std::endl;
 		break;
 	}
 }
@@ -233,7 +232,8 @@ void Game::onMouseUpRight()
 
 void Game::onKeyDown(sf::Event e)
 {
-
+	if(e.key.code == Keyboard::F)
+		b->move(-6,0);
 }
 
 void Game::onKeyUp(sf::Event e)

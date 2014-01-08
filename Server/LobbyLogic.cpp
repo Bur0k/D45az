@@ -37,26 +37,38 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
 		case 0x0201:
 			{
-				
+		
 			for (map<char, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
 				{
 				//Zudem müsste ihr hier mal die Größe dieser Datei mit schicken. Der Client hat keine Ahnung wie lang so ne Lobby is
-				erfg.push_back(it->first);
-				erfg.push_back(it->second->getID());
-				erfg.push_back(it->second->getPlayerlimit());
-					
-				string master = it->second->getGamemaster()->getName();
+				
+				erfg.push_back(it->first >> 8);
+				erfg.push_back(it->first &0xFF);
+
+				erfg.push_back(it->second->getID() << 8);
+				erfg.push_back(it->second->getID() & 0xFF);
+
+				erfg.push_back(it->second->getPlayerlimit() << 8);
+				erfg.push_back(it->second->getPlayerlimit() & 0xFF);
+				
+				
+				string master = it->second->getGamemaster()->Name;
+				short len = master.length();
+				erfg.push_back(len << 8);
+				erfg.push_back(len & 0xFF);
 				for (unsigned int i = 0; i < master.length(); i++)
 						erfg.push_back(master[i]);
 
-				//noch die spieler vom game schicken, auf die momentan leider nicht zugegriffen werden kann
-				/*
-				for (unsigned int i = 0; i < it->second->players.size(); i++)
+				
+				for (unsigned int i = 0; i < it->second->getPlayers().size(); i++)
 				{
-					string name = it->second->players[i]->getName();
+					string name = it->second->getPlayers().at(i)->Name;
+					len = name.length();
+					erfg.push_back(len << 8);
+					erfg.push_back(len & 0xFF);
 					for (unsigned int i = 0; i < name.length(); i++)
 						erfg.push_back(name[i]);
-				}*/
+				}
 			}
 							
 			server->write(s, 0x0200,erfg);
@@ -70,6 +82,16 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0202:
 			{
 				// gameid aus daten lesen, den user da reinschreiben
+				char mapid = data[0];
+
+				for (unsigned int i = 0; i < connectedPlayers.size(); i++)
+					if (connectedPlayers[i].s == s)
+						//add player von stefan
+						//gamesCreated[mapid]->addPlayer;
+							//break;
+				
+
+				
 
 				erfg.push_back(1);
 				server->write(s, 0x0203, erfg);
@@ -83,22 +105,24 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				short id = 0;
 				string name = "";
 				
-				while (gamesCreated.count(id) == 1)
-					id++;
+				//while (gamesCreated.count(id) == 1)
+				//	id++;
+
+				id = gamesCreated.size();
 
 				for (unsigned int i = 0; i < data.size(); i++) 
 					name += data[i];
 
-				/*User* requester;
-				for (unsigned int i = 0; i < LogIn->connectedUsers.size(); i++)
-					if (LogIn->connectedUsers[i]->getName == name)
+				PlayerData requester;
+				for (unsigned int i = 0; i < connectedPlayers.size(); i++)
+					if (connectedPlayers[i].Name == name)
 					{
-						requester = LogIn->connectedUsers[i];
+						requester = connectedPlayers[i];
 						break;
 					}
 				
-				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester);
-				*/
+				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, &requester);
+				
 				erfg.push_back(1);
 				server->write(s, 0x0205, erfg);
 				break;

@@ -29,6 +29,42 @@ StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID
 	
 	//load texture to sf::RectangleShapes
 
+	//updatePosition();
+
+
+	// positioning
+	
+	updatePosition();
+	
+
+	//define backgroundrect
+
+	m_Rect.setFillColor(m_color);
+	m_Rect.setSize(Vector2f(size.x - BUTTONTILESIZE, size.y - BUTTONTILESIZE));
+	m_Rect.setPosition(pos.x + BUTTONTILESIZE / 2, pos.y + BUTTONTILESIZE / 2);
+}
+
+StandardButton::~StandardButton()
+{
+	delete[] m_pST;
+}
+
+void StandardButton::updateVisuals()
+{
+
+	m_Rect.setFillColor(getFillColor());
+}
+
+void StandardButton::updatePosition()
+{
+	
+
+
+	m_Rect.setPosition(getPosition().x + BUTTONTILESIZE / 2,
+						getPosition().y + BUTTONTILESIZE / 2);
+	m_Rect.setSize(Vector2f(getSize().x - BUTTONTILESIZE,
+							getSize().y - BUTTONTILESIZE));
+
 	for(int i = 0; i < 8; i++)
 	{
 		m_pST[i].t.setSmooth(false);
@@ -37,7 +73,9 @@ StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID
 		m_pST[i].s.setPosition(getPosition());
 	}
 
-	//move sprites to position and scale it appropriately
+	//move sprites to position and scale them appropriately
+	Vector2f size = this->getSize();
+
 
 	m_pST[0].s.setSize(Vector2f(BUTTONTILESIZE, BUTTONTILESIZE));
 	m_pST[1].s.move(BUTTONTILESIZE, 0);
@@ -54,42 +92,18 @@ StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID
 	m_pST[6].s.setSize(Vector2f(size.x - BUTTONTILESIZE * 2, BUTTONTILESIZE));
 	m_pST[7].s.move(size.x - BUTTONTILESIZE, size.y - BUTTONTILESIZE);
 	m_pST[7].s.setSize(Vector2f(BUTTONTILESIZE, BUTTONTILESIZE));
-	
-	// positioning
-	
-	updateVisuals(false);
 
-	//define backgroundrect
-
-	m_Rect.setFillColor(m_color);
-	m_Rect.setSize(Vector2f(size.x - BUTTONTILESIZE, size.y - BUTTONTILESIZE));
-	m_Rect.setPosition(pos.x + BUTTONTILESIZE / 2, pos.y + BUTTONTILESIZE / 2);
-}
-
-StandardButton::~StandardButton()
-{
-	delete[] m_pST;
-}
-
-void StandardButton::updateVisuals(bool colorCange)
-{
-
-	m_Rect.setFillColor(getFillColor());
-
-	if(!colorCange)
-	{
-		m_Rect.setPosition(getPosition().x + BUTTONTILESIZE,
-						   getPosition().y + BUTTONTILESIZE);
-		m_Rect.setSize(Vector2f(getSize().x - BUTTONTILESIZE * 2,
-								getSize().y - BUTTONTILESIZE * 2));
-	}
-
-
+	fitText(BUTTONTILESIZE);
 }
 
 void StandardButton::draw(RenderWindow* rw)
 {
-	//TODO move button visuals when parent position changed
+	// move button visuals when parent position changed
+	if( this->getPosition().x != m_Rect.getPosition().x - BUTTONTILESIZE / 2 ||
+		this->getPosition().y != m_Rect.getPosition().y - BUTTONTILESIZE / 2 ||
+		this->getSize().x != m_Rect.getSize().x - BUTTONTILESIZE * 2 ||
+		this->getSize().y != m_Rect.getSize().y - BUTTONTILESIZE * 2)
+		updatePosition();
 
 	rw->draw(m_Rect);
 

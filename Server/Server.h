@@ -10,6 +10,7 @@
 #include <thread>
 #include <mutex>
 #include <list>
+#include "PlayerData.h"
 
 #include "NetworkParticipant.h"
 
