@@ -37,7 +37,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
 		case 0x0201:
 			{
-				
+		
 			for (map<char, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
 				{
 				//Zudem müsste ihr hier mal die Größe dieser Datei mit schicken. Der Client hat keine Ahnung wie lang so ne Lobby is
@@ -64,6 +64,9 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				for (unsigned int i = 0; i < it->second->players.size(); i++)
 				{
 					string name = it->second->players[i]->getName();
+					len = name.length();
+					erfg.push_back(len << 8);
+					erfg.push_back(len & 0xFF);
 					for (unsigned int i = 0; i < name.length(); i++)
 						erfg.push_back(name[i]);
 				}*/
@@ -80,6 +83,8 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0202:
 			{
 				// gameid aus daten lesen, den user da reinschreiben
+				char mapid = data[0];
+
 
 				erfg.push_back(1);
 				server->write(s, 0x0203, erfg);
