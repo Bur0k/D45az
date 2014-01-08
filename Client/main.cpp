@@ -28,15 +28,6 @@ class testClient : public NetworkParticipant
 	}
 } tc;
 
-void OnNewMessage(short id,vector<char> data)
-{
-	std::cout<<"ID:"<<id<<"\nData:\n";
-	for(unsigned int i=0;i<data.size();i++)
-		std::cout<<data[i];
-	std::cout<<"\nEnde Packet\n\n";
-
-}
-
 void jans_test_karre()
 {
 	sf::Music music;
@@ -72,15 +63,10 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	
 	NetworkLogin NL1("Burak");
-	NetworkLogin NL2("Burak");
 	while(NL1.getState() == 0)
 	{
 	}
-	while(NL2.getState() == 0)
-	{
-	}
 	cout << "NL1:" << NL1.getState() << endl;
-	cout << "NL2:" << NL2.getState() << endl;
 	
 	//********** BURAKS CLIENT TEST SHIT END
 
