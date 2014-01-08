@@ -70,7 +70,9 @@
     <ClCompile Include="NetworkLogin.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
-    <ClCompile Include="StandardButton.cpp" />
+    <ClCompile Include="StandardButton.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -115,7 +117,6 @@
     <ClInclude Include="NetworkLogin.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
-    <ClInclude Include="StandardButton.h" />
     <ClInclude Include="IView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
@@ -126,6 +127,9 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="IButtonfunction.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardButton.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>

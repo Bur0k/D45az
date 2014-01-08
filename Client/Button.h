@@ -57,15 +57,20 @@ protected:
 	virtual void clicked();
 	virtual void unclicked();
 
+	//fits text to button
+	virtual void fitText(int border);
+
 	//is called by animatioTick() to update the button color
 	virtual void animation_upadate();
 
 	//for derived classes to update their visuals
-	virtual void updateVisuals(bool colorChange);
+	virtual void updateVisuals();
 
 public:
 	void setIsEnabled(bool enable);
 	bool getIsEnabled();
+
+	bool getIsPressed();
 
 	//changes color of the background Rectangle
 	//@param dir true if mouse is over the button

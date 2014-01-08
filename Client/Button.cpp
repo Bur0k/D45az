@@ -24,29 +24,16 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
 	m_Font = Font(MyFonts.Arial);
 	m_buttonText.setFont(m_Font);
 	m_buttonText.setString(S);
-	m_buttonText.setPosition(getPosition());
+	
 	m_buttonText.setColor(MyColors.Black);
 
-	sf::Rect<float> textsize;
 	
-	//TODO durch formel ersetzen, TODO offset zum rand einbauen
-	while(true)
-	{
-		textsize = m_buttonText.getLocalBounds();
-		float scale = m_buttonText.getScale().x;
-		if(textsize.width * scale > size.x || textsize.height * scale > size.y)
-		{
-			scale *= 0.8f;
-			m_buttonText.setScale(scale, scale);
-		}
-		else 
-			break;
-	}
+	
+	//fit the text into the button
+	fitText(0);
+	
 	//std::cout << "textsize x " << textsize.width << " y " << textsize.height << std::endl;
 	
-	m_buttonText.move(	(getSize().x - textsize.width * m_buttonText.getScale().x) / 2.0f,
-						(getSize().y - textsize.height * 1.5f * m_buttonText.getScale().y) / 2.0f);
-
 	m_color = MyColors.White;
 	setFillColor(m_color);
 	m_color_clicked = MyColors.Orange;
@@ -94,6 +81,31 @@ void Button::operator=(const Button & b)
 		m_attachedFunctions.push_back(m_attachedFunctions[i]);
 }
 
+void Button::fitText(int border)
+{
+	m_buttonText.setPosition(getPosition());
+
+	sf::Rect<float> textsize;
+	Vector2f size = this->getSize();
+
+	textsize = m_buttonText.getLocalBounds();
+	float scale = m_buttonText.getScale().x;
+	if(textsize.width * scale > size.x - border * 2)
+	{
+		scale = (float)(size.x - border * 2) / textsize.width;
+		m_buttonText.setScale(scale, scale);
+	}
+
+	textsize = m_buttonText.getLocalBounds();
+	if(textsize.height * scale > size.y - border * 2)
+	{
+		scale = (float)(size.y - border * 2) / textsize.height;
+	}
+
+	m_buttonText.move(	(getSize().x - textsize.width * m_buttonText.getScale().x) / 2.0f,
+						(getSize().y - textsize.height * 1.5f * m_buttonText.getScale().y) / 2.0f);
+}
+
 void Button::setIsEnabled(bool enable)
 {
 	m_isEnabled = enable;
@@ -104,6 +116,12 @@ void Button::setIsEnabled(bool enable)
 bool Button::getIsEnabled()
 {
 	return m_isEnabled;
+}
+
+bool Button::getIsPressed()
+{
+
+	return m_isClicked;
 }
 
 bool Button::isHit(Vector2i & mouse)
@@ -140,13 +158,13 @@ void Button::PressedLeft()
 void Button::ReleasedLeft()
 {
 	if(m_isClicked)
-	{
-		notify();
+	{	
 		if(!m_lockedIn)
 		{
 			m_isClicked = false;
 			unclicked();
 		}
+		notify();
 	}
 }
 
@@ -189,10 +207,10 @@ void Button::animation_upadate()
 						(Uint8)(c.b * ratio1 + m_color.b * ratio2),
 						(Uint8)(c.a * ratio1 + m_color.a * ratio2)));
 	
-	updateVisuals(true);
+	updateVisuals();
 }
 
-void Button::updateVisuals(bool colorChange)
+void Button::updateVisuals()
 {
 	//implementation in derived classes
 }
@@ -202,7 +220,7 @@ void Button::clicked()
 	if(m_isClicked)
 	{
 		setFillColor(m_color_clicked);
-		updateVisuals(true);
+		updateVisuals();
 	}
 }
 
