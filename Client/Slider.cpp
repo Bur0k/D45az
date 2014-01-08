@@ -19,5 +19,5 @@ void Slider::Attach(ISliderFunction*)
 
 bool Slider::Detach(ISliderFunction*)
 {
-
+	return 1;
 }
