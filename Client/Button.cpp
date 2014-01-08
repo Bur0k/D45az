@@ -163,7 +163,8 @@ void Button::ReleasedLeft()
 			m_isClicked = false;
 			unclicked();
 		}
-		notify();
+		if(m_mouseOver)
+			notify();
 	}
 }
 

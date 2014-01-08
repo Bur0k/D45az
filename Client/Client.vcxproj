@@ -98,7 +98,6 @@
     <ClCompile Include="tinyxml.cpp" />
     <ClCompile Include="tinyxmlerror.cpp" />
     <ClCompile Include="tinyxmlparser.cpp" />
-    <ClCompile Include="UIelement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />

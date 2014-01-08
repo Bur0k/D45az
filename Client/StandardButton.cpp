@@ -29,37 +29,13 @@ StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID
 	
 	//load texture to sf::RectangleShapes
 
-	updatePosition();
+	//updatePosition();
 
-	for(int i = 0; i < 8; i++)
-	{
-		m_pST[i].t.setSmooth(false);
-		m_pST[i].t.setRepeated(true);
-		m_pST[i].s.setTexture(&m_pST[i].t, true);
-		m_pST[i].s.setPosition(getPosition());
-	}
 
-	//move sprites to position and scale them appropriately
-
-	m_pST[0].s.setSize(Vector2f(BUTTONTILESIZE, BUTTONTILESIZE));
-	m_pST[1].s.move(BUTTONTILESIZE, 0);
-	m_pST[1].s.setSize(Vector2f(size.x - BUTTONTILESIZE * 2, BUTTONTILESIZE));
-	m_pST[2].s.move(size.x - BUTTONTILESIZE, 0);
-	m_pST[2].s.setSize(Vector2f(BUTTONTILESIZE, BUTTONTILESIZE));
-	m_pST[3].s.move(0, BUTTONTILESIZE);
-	m_pST[3].s.setSize(Vector2f(BUTTONTILESIZE, size.y - BUTTONTILESIZE * 2));
-	m_pST[4].s.move(size.x - BUTTONTILESIZE, BUTTONTILESIZE);
-	m_pST[4].s.setSize(Vector2f(BUTTONTILESIZE, size.y - BUTTONTILESIZE * 2));
-	m_pST[5].s.move(0, size.y - BUTTONTILESIZE);
-	m_pST[5].s.setSize(Vector2f(BUTTONTILESIZE, BUTTONTILESIZE));
-	m_pST[6].s.move( BUTTONTILESIZE,size.y - BUTTONTILESIZE);
-	m_pST[6].s.setSize(Vector2f(size.x - BUTTONTILESIZE * 2, BUTTONTILESIZE));
-	m_pST[7].s.move(size.x - BUTTONTILESIZE, size.y - BUTTONTILESIZE);
-	m_pST[7].s.setSize(Vector2f(BUTTONTILESIZE, BUTTONTILESIZE));
-	
 	// positioning
 	
-	updateVisuals();
+	updatePosition();
+	
 
 	//define backgroundrect
 
@@ -81,11 +57,13 @@ void StandardButton::updateVisuals()
 
 void StandardButton::updatePosition()
 {
+	
 
-	m_Rect.setPosition(getPosition().x + BUTTONTILESIZE,
-						getPosition().y + BUTTONTILESIZE);
-	m_Rect.setSize(Vector2f(getSize().x - BUTTONTILESIZE * 2,
-							getSize().y - BUTTONTILESIZE * 2));
+
+	m_Rect.setPosition(getPosition().x + BUTTONTILESIZE / 2,
+						getPosition().y + BUTTONTILESIZE / 2);
+	m_Rect.setSize(Vector2f(getSize().x - BUTTONTILESIZE,
+							getSize().y - BUTTONTILESIZE));
 
 	for(int i = 0; i < 8; i++)
 	{
@@ -121,11 +99,11 @@ void StandardButton::updatePosition()
 void StandardButton::draw(RenderWindow* rw)
 {
 	// move button visuals when parent position changed
-	//if( this->getPosition().x != m_Rect.getSize().x - BUTTONTILESIZE / 2 &&
-	//	this->getPosition().y != m_Rect.getSize().y - BUTTONTILESIZE / 2 &&
-	//	this->getSize().x != m_Rect.getSize().x - BUTTONTILESIZE * 2 &&
-	//	this->getSize().y != m_Rect.getSize().y - BUTTONTILESIZE * 2)
-	//	updatePosition();
+	if( this->getPosition().x != m_Rect.getPosition().x - BUTTONTILESIZE / 2 ||
+		this->getPosition().y != m_Rect.getPosition().y - BUTTONTILESIZE / 2 ||
+		this->getSize().x != m_Rect.getSize().x - BUTTONTILESIZE * 2 ||
+		this->getSize().y != m_Rect.getSize().y - BUTTONTILESIZE * 2)
+		updatePosition();
 
 	rw->draw(m_Rect);
 

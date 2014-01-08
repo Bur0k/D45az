@@ -232,7 +232,8 @@ void Game::onMouseUpRight()
 
 void Game::onKeyDown(sf::Event e)
 {
-
+	if(e.key.code == Keyboard::F)
+		b->move(-6,0);
 }
 
 void Game::onKeyUp(sf::Event e)

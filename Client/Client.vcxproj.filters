@@ -64,9 +64,6 @@
     <ClCompile Include="Textbox.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="UIelement.cpp">
-      <Filter>Codes\Graphic\Source</Filter>
-    </ClCompile>
     <ClCompile Include="NetworkLogin.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
