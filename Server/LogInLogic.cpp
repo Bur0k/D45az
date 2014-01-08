@@ -8,8 +8,8 @@ LogInLogic::LogInLogic()
 
 LogInLogic::~LogInLogic()
 {
-	for(unsigned int i = 0; i < connectedUsers.size(); i++)
-		delete connectedUsers[i];
+	//for(unsigned int i = 0; i < connectedUsers.size(); i++)
+	//	delete connectedUsers[i];
 	server->deleteFromNewMessageCallback(this);
 }
 
@@ -26,9 +26,9 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			for (unsigned int i = 0; i < data.size(); i++) 
 				name += data[i];
 
-			for (unsigned int i = 0; i < connectedUsers.size(); i++)
+			for (unsigned int i = 0; i < connectedPlayers.size(); i++)
 			{
-				if (connectedUsers[i]->getName()  == name)
+				if (connectedPlayers[i].Name == name)
 				{
 					std::vector<char> erfg;
 					erfg.push_back(0);
@@ -41,8 +41,10 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 			if (!userexists)
 			{
-				User* u = new User(name);
-				connectedUsers.push_back(u);
+				PlayerData newPlayer;
+				newPlayer.Name=name;
+				newPlayer.s=s;
+				connectedPlayers.push_back(newPlayer);
 
 				//send 0101 nachricht 1
 				std::vector<char> erfg;

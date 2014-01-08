@@ -96,8 +96,8 @@
     <ClInclude Include="LobbyLogic.h" />
     <ClInclude Include="LogInLogic.h" />
     <ClInclude Include="NetworkParticipant.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="Server.h" />
-    <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

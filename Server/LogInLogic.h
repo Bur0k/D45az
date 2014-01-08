@@ -2,7 +2,7 @@
 #define LOGINLOGIC_H
 
 #include <vector>
-#include "User.h"
+#include "PlayerData.h"
 #include <string>
 #include "Server.h"
 #include "NetworkParticipant.h"
@@ -12,7 +12,6 @@ using namespace std;
 class LogInLogic : public NetworkParticipant
 {
 private:
-	vector<User*> connectedUsers;
 	Server* server;
 
 

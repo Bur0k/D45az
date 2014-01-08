@@ -32,15 +32,18 @@
     <Filter Include="Codes\GameLobbyLogic\Source">
       <UniqueIdentifier>{137f1cc3-66fb-4da5-b28c-975aaf6d10a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\PlayerData">
+      <UniqueIdentifier>{e2dbe0d4-e057-4814-b308-61481638f2ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\PlayerData\Source">
+      <UniqueIdentifier>{5609a465-bc33-43ab-b28e-852d70972987}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
     <ClInclude Include="LogInLogic.h">
-      <Filter>Codes\LogInLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="User.h">
       <Filter>Codes\LogInLogic</Filter>
     </ClInclude>
     <ClInclude Include="LobbyLogic.h">
@@ -51,6 +54,9 @@
     </ClInclude>
     <ClInclude Include="NetworkParticipant.h">
       <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Codes\PlayerData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
