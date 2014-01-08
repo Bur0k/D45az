@@ -19,8 +19,6 @@ public:
 	LogInLogic(); // anmelden
 	~LogInLogic();
 
-	vector<User*>& getconnectedUsers();
-
 	static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);

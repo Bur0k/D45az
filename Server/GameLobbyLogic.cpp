@@ -1,6 +1,6 @@
 #include "GameLobbyLogic.h"
 
-GameLobbyLogic::GameLobbyLogic(short id, User* master)
+GameLobbyLogic::GameLobbyLogic(short id, PlayerData* master)
 {
 	this->server = Server::get();
 	this->id = id;
@@ -34,17 +34,17 @@ short GameLobbyLogic::getPlayerlimit()
 	return this->playerlimit;
 }
 
-void GameLobbyLogic::setGamemaster(User* player)
+void GameLobbyLogic::setGamemaster(PlayerData* player)
 {
 	this->gameMaster = player;
 }
 
-User* GameLobbyLogic::getGamemaster()
+PlayerData* GameLobbyLogic::getGamemaster()
 {
 	return this->gameMaster;
 }
 
-vector<User*>& GameLobbyLogic::getPlayers()
+vector<PlayerData*>& GameLobbyLogic::getPlayers()
 {
 	return this->players;
 }
@@ -67,14 +67,8 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 	{
 	case 0x0300:
 		{
-			string name = "";
-
-			//testen
-			for (unsigned int i = 0; i < data.size(); i++) 
-				name += data[i];
-
 			for(unsigned int i = 0; i < this->players.size(); i++)
-				if(this->players[i]->getName() == name)
+				if(this->players[i]->s == s)
 					this->players.erase(this->players.begin() + i, this->players.begin() + i);
 				
 			std::vector<char> erfg;
@@ -83,13 +77,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		}break;
 	case 0x0303:
 		{
-			string name = "";
-
-			//testen
-			for (unsigned int i = 0; i < data.size(); i++) 
-				name += data[i];
-
-			if(name == this->gameMaster->getName())
+			if(this->gameMaster->s == s)
 			{
 				// Spielstart
 

@@ -13,11 +13,6 @@ LogInLogic::~LogInLogic()
 	server->deleteFromNewMessageCallback(this);
 }
 
-vector<User*>& LogInLogic::getconnectedUsers()
-{
-	return this->connectedUsers;
-}
-
 void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	switch(id)

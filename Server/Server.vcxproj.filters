@@ -69,9 +69,6 @@
     <ClCompile Include="LogInLogic.cpp">
       <Filter>Codes\LogInLogic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="User.cpp">
-      <Filter>Codes\LogInLogic\Source</Filter>
-    </ClCompile>
     <ClCompile Include="LobbyLogic.cpp">
       <Filter>Codes\LobbyLogic\Source</Filter>
     </ClCompile>

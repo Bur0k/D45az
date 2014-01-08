@@ -89,7 +89,6 @@
     <ClCompile Include="LogInLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
-    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameLobbyLogic.h" />
