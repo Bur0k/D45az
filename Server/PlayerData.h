@@ -13,6 +13,6 @@ public:
 	std::string Name;
 };
 
-concurrency::concurrent_vector<PlayerData> connectedPlayers;
+static concurrency::concurrent_vector<PlayerData> connectedPlayers;
 
 #endif
