@@ -30,7 +30,6 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			{
 				if (connectedUsers[i]->getName()  == name)
 				{
-					// send 0101 nachricht 0
 					std::vector<char> erfg;
 					erfg.push_back(0);
 					server->write(s,0x0101,erfg);
