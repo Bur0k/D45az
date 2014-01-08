@@ -6,17 +6,14 @@ Client* Client::self = new Client();
 
 Client::Client()
 {
+	running=true;
 	readThread = NULL;
+
 }
 
 Client::~Client()
 {
-	runRead = false;
-	for (unsigned int i = 0; i < writeThreads.size(); i++)
-	{
-		writeThreads[i]->join();
-		delete writeThreads[i];
-	}
+	running = false;
 
 	if(readThread!=NULL)
 	{
@@ -65,6 +62,36 @@ void Client::connectToServer(string ip, int port)
 		sendError(-5,"Could not set Non-Blocking mode: "+to_string(WSAGetLastError()));
 		return ;
 	}
+
+
+	
+	writeThread = new thread([=]()
+	{
+		while(running)
+		{
+			vector<char> dataToSend;
+			toWriteMutex.lock();
+			if(toWrite.size()>0)
+			{
+				dataToSend=toWrite.front();
+				toWrite.pop_front();
+			}
+			toWriteMutex.unlock();
+
+			if(dataToSend.size() == 0)
+				continue;
+
+			char* buffer = new char[dataToSend.size()];
+			for(unsigned int i=0;i<dataToSend.size();i++)
+				buffer[i]=dataToSend[i];
+
+
+			if (send(s,buffer,dataToSend.size(),0) == SOCKET_ERROR)
+				sendError(-3,"Send failed with error: "+to_string(WSAGetLastError()));
+
+			delete[] buffer;
+		}
+	});
 }
 
 
@@ -86,39 +113,28 @@ void Client::sendNewMessage(short id,vector<char> data)
 
 void Client::write(short id, vector<char>data)
 {
-	thread* sendThread = new thread([=]()
-	{
-		vector<char> toSend(data);
-		short size = (short) data.size()+4;//2byte länge, 2byte id
+	vector<char> toSend(data);
+	short size = (short) data.size()+4;//2byte länge, 2byte id
 
-		toSend.insert(toSend.begin(),(char)id);
-		toSend.insert(toSend.begin(),(char)(id>>8));
+	toSend.insert(toSend.begin(),(char)id);
+	toSend.insert(toSend.begin(),(char)(id>>8));
 
-		toSend.insert(toSend.begin(),(char)size);
-		toSend.insert(toSend.begin(),(char)(size>>8));
+	toSend.insert(toSend.begin(),(char)size);
+	toSend.insert(toSend.begin(),(char)(size>>8));
 
-		char* buffer = new char[size];
-		for(int i=0;i<size;i++)
-			buffer[i]=toSend[i];
 
-		writeMutex.lock();
-		if (send(s,buffer,size,0) == SOCKET_ERROR)
-			sendError(-3,"Send failed with error: "+to_string(WSAGetLastError()));
-		writeMutex.unlock();
-
-		delete[] buffer;
-	});
-	writeThreads.push_back(sendThread);
+	toWriteMutex.lock();
+	toWrite.push_back(toSend);
+	toWriteMutex.unlock();
 }
 
 void Client::beginRead()
 {
-	runRead=true;
 	if(readThread)
 		return;
 	readThread = new thread([=]()
 	{
-		while(runRead)
+		while(running)
 		{
 			static char buffer[1024];
 			static short currPos = 0;
@@ -135,7 +151,7 @@ void Client::beginRead()
 					continue;
 				else//Anderer ECHTER Fehler
 				{
-					runRead = false;
+					running = false;
 					sendNewMessage(-1,vector<char>());
 					break;
 				}
@@ -149,7 +165,7 @@ void Client::beginRead()
 				else
 				{
 					currPos -= nextMsgSize;
-					short id = (buffer[currPos+2]>>8) + buffer[currPos+3];
+					short id = (buffer[currPos+2]<<8) + buffer[currPos+3];
 
 					char* msg = new char[nextMsgSize-4];
 					memcpy(msg,buffer+currPos+4,sizeof(char)*(nextMsgSize-4));
@@ -166,11 +182,6 @@ void Client::beginRead()
 			}
 		}
 	});
-}
-
-void Client::endRead()
-{
-	runRead=false;
 }
 
 void Client::addToNewMessageCallback(NetworkParticipant* np)

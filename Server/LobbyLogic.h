@@ -15,9 +15,9 @@
 class LobbyLogic : public NetworkParticipant
 {
 private:
-	map<short, GameLobbyLogic*> gamesCreated;
+	map<char, GameLobbyLogic*> gamesCreated;
 	Server* server;
-	static LogInLogic* LogIn;
+	LogInLogic* LogIn;
 
 public:
 	LobbyLogic();

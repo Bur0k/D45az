@@ -7,26 +7,45 @@ Button::Button()
 	//TODO
 }
 
-Button::Button(Vector2f pos, Vector2f size, sf::String S)
+Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
 {
 	m_animation = 0;
 	m_animationLength = 15;
+	m_ID = ID;
 
 	m_isEnabled = true;
 	m_isClicked = false;
 	m_mouseOver = false;
+	m_staysClicked = lock;
+	m_lockedIn = false;
 	
 	setSize(size);
 	setPosition(pos);
-
-	m_buttonText.setFont(MyFonts.Arial);
+	m_Font = Font(MyFonts.Arial);
+	m_buttonText.setFont(m_Font);
 	m_buttonText.setString(S);
 	m_buttonText.setPosition(getPosition());
 	m_buttonText.setColor(MyColors.Black);
 
-	sf::Rect<float> textsize = m_buttonText.getLocalBounds();
-	m_buttonText.move(	(getSize().x - textsize.width) / 2,
-						(getSize().y - textsize.height) / 2);
+	sf::Rect<float> textsize;
+	
+	//TODO durch formel ersetzen, TODO offset zum rand einbauen
+	while(true)
+	{
+		textsize = m_buttonText.getLocalBounds();
+		float scale = m_buttonText.getScale().x;
+		if(textsize.width * scale > size.x || textsize.height * scale > size.y)
+		{
+			scale *= 0.8f;
+			m_buttonText.setScale(scale, scale);
+		}
+		else 
+			break;
+	}
+	//std::cout << "textsize x " << textsize.width << " y " << textsize.height << std::endl;
+	
+	m_buttonText.move(	(getSize().x - textsize.width * m_buttonText.getScale().x) / 2.0f,
+						(getSize().y - textsize.height * 1.5f * m_buttonText.getScale().y) / 2.0f);
 
 	m_color = MyColors.White;
 	setFillColor(m_color);
@@ -56,10 +75,12 @@ void Button::operator=(const Button & b)
 
 	m_animation = b.m_animation;
 	m_animationLength = b.m_animationLength;
+	m_ID = b.m_ID;
 
 	m_isEnabled = b.m_isEnabled;
 	m_isClicked = b.m_isClicked;
 	m_staysClicked = b.m_staysClicked;
+	m_lockedIn = b.m_lockedIn;
 	m_mouseOver = b.m_mouseOver;
 
 	m_color = b.m_color;
@@ -97,7 +118,9 @@ bool Button::isHit(Vector2i & mouse)
 	else 
 	{
 		m_mouseOver = false;
-		m_isClicked = false;
+		if(!m_lockedIn)			
+			m_isClicked = false;
+		
 		return false;
 	}
 }
@@ -109,6 +132,8 @@ void Button::PressedLeft()
 		m_animation = m_animationLength;
 		m_isClicked = true;
 		clicked();
+		if(m_staysClicked)
+			m_lockedIn = (m_lockedIn)? false : true;
 	}
 }
 
@@ -116,9 +141,12 @@ void Button::ReleasedLeft()
 {
 	if(m_isClicked)
 	{
-		m_isClicked = false;
 		notify();
-		unclicked();
+		if(!m_lockedIn)
+		{
+			m_isClicked = false;
+			unclicked();
+		}
 	}
 }
 
@@ -160,12 +188,22 @@ void Button::animation_upadate()
 						(Uint8)(c.g * ratio1 + m_color.g * ratio2),
 						(Uint8)(c.b * ratio1 + m_color.b * ratio2),
 						(Uint8)(c.a * ratio1 + m_color.a * ratio2)));
+	
+	updateVisuals(true);
+}
+
+void Button::updateVisuals(bool colorChange)
+{
+	//implementation in derived classes
 }
 
 void Button::clicked()
 {
 	if(m_isClicked)
+	{
 		setFillColor(m_color_clicked);
+		updateVisuals(true);
+	}
 }
 
 void Button::unclicked()
@@ -174,17 +212,17 @@ void Button::unclicked()
 		animation_upadate();
 }
 
-bool Button::attachFunction(callback_func pfunc)
+bool Button::attachFunction(IButtonfunction* pCallback)
 {
 	//TODO no double attachments
-	m_attachedFunctions.push_back(pfunc);
+	m_attachedFunctions.push_back(pCallback);
 	return true;
 }
 
-bool Button::detachFunction(callback_func pfunc)
+bool Button::detachFunction(IButtonfunction* pCallback)
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
-		if(m_attachedFunctions[i] == pfunc)
+		if(m_attachedFunctions[i] == pCallback)
 		{
 			m_attachedFunctions.erase(m_attachedFunctions.begin() + i);
 			return true;
@@ -195,6 +233,8 @@ bool Button::detachFunction(callback_func pfunc)
 void Button::notify()
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
-		m_attachedFunctions[i]();
+	{
+		m_attachedFunctions[i]->onButtonClick(m_ID);
+	}
 }
 

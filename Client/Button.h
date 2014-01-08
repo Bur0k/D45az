@@ -9,20 +9,21 @@
 #include "IDrawable.h"
 #include "IClickable.h"
 #include "graphic_globals.h"
+#include "IButtonfunction.h"
+#include "IAnimatable.h"
 
 using namespace sf;
 
-typedef void (*callback_func)(void);
-typedef std::vector<callback_func> FuncPointerVect;
+typedef std::vector<IButtonfunction*> FuncPointerVect;
 
 // implements basic button functionality
 // derived classes should implement visuals
-class Button : public IDrawable, public RectangleShape, public IClickable
+class Button : public IDrawable, public RectangleShape, public IClickable, public IAnimatable
 {
 public:
 	//TODO standadconstructor
 	Button();
-	Button(Vector2f pos, Vector2f size, sf::String S);
+	Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock);
 	Button(const Button & b);
 	~Button();
 	void operator=(const Button & b);
@@ -30,6 +31,8 @@ protected:
 	FuncPointerVect m_attachedFunctions;
 	Text m_buttonText;
 	
+	//gets returned in the notify function
+	int m_ID;
 	int m_animation;
 	int m_animationLength;
 
@@ -38,8 +41,11 @@ protected:
 	bool m_isClicked;
 	//if true button stays activated till clicked again or click somewhere else
 	bool m_staysClicked;
+	bool m_lockedIn;
 
 	bool m_mouseOver;
+
+	Font m_Font;
 
 	Color m_color;
 	Color m_color_mouseOver;
@@ -53,6 +59,9 @@ protected:
 
 	//is called by animatioTick() to update the button color
 	virtual void animation_upadate();
+
+	//for derived classes to update their visuals
+	virtual void updateVisuals(bool colorChange);
 
 public:
 	void setIsEnabled(bool enable);
@@ -75,9 +84,9 @@ public:
 	void  ReleasedLeft();
 
 	//attaching a function pointer 
-	bool attachFunction(callback_func pfunc);
+	bool attachFunction(IButtonfunction* pCallback);
 	//detaching a function pointer
-	bool detachFunction(callback_func pfunc);
+	bool detachFunction(IButtonfunction* pCallback);
 	//
 	void notify();
 

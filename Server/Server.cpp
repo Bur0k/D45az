@@ -6,6 +6,8 @@ Server* Server::self = new Server();
 
 Server::Server()
 {
+	running = true;
+
 	memset(hThread,0,sizeof(HANDLE));
 	memset(pAcceptData,0,sizeof(Server::PERIODATA*));
 	g_nThread = 0;
@@ -17,12 +19,41 @@ Server::Server()
 	GUID GuidGetAcceptExSockAddrs2 = WSAID_GETACCEPTEXSOCKADDRS;
 	memcpy(&GuidGetAcceptExSockAddrs,&GuidGetAcceptExSockAddrs2,sizeof(GUID));
 
+	writeThread = new thread([=]()
+	{
+		while(running)
+		{
+			writeData dataToSend;
+			toWriteMutex.lock();
+			if(toWrite.size()>0)
+			{
+				dataToSend=toWrite.front();
+				toWrite.pop_front();
+			}
+			toWriteMutex.unlock();
+
+			if(dataToSend.data.size() == 0)
+				continue;
+
+			char* buffer = new char[dataToSend.data.size()];
+			for(unsigned int i=0;i<dataToSend.data.size();i++)
+				buffer[i]=dataToSend.data[i];
+
+
+			if (send(dataToSend.s,buffer,dataToSend.data.size(),0) == SOCKET_ERROR)
+				sendError(dataToSend.s,-3,"Send failed with error: "+to_string(WSAGetLastError()));
+
+			delete[] buffer;
+		}
+	});
+
 	self = this;
 }
 
 Server::~Server()
 {
 	g_bExitThread = TRUE;
+	running = false;
 
 	PostQueuedCompletionStatus(hIOCP, 0, NULL, NULL);
 	WaitForMultipleObjects(g_nThread, hThread, TRUE, INFINITE);
@@ -49,13 +80,8 @@ Server::~Server()
 
 	WSACleanup();
 
-
-	for (unsigned int i = 0; i < writeThreads.size(); i++)
-	{
-		writeThreads[i]->join();
-		delete writeThreads[i];
-	}
-
+	writeThread->join();
+	delete writeThread;
 }
 
 void Server::startListening()
@@ -306,7 +332,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						else
 						{
 							pPerIoData->currPos -= pPerIoData->nextMsgSize;
-							short id = (pPerIoData->buf[pPerIoData->currPos+2]>>8) + pPerIoData->buf[pPerIoData->currPos+3];
+							short id = (pPerIoData->buf[pPerIoData->currPos+2]<<8) + pPerIoData->buf[pPerIoData->currPos+3];
 
 							char* msg = new char[pPerIoData->nextMsgSize-4];
 							memcpy(msg,pPerIoData->buf+pPerIoData->currPos+4,sizeof(char)*(pPerIoData->nextMsgSize-4));
@@ -402,28 +428,24 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 
 void Server::write(SOCKET s,short id,vector<char> data)
 {
-	thread* sendThread = new thread([=]()
-	{
-		vector<char> toSend(data);
-		short size = (short) data.size()+4;//2byte länge, 2byte id
+	vector<char> toSend(data);
+	short size = (short) data.size()+4;//2byte länge, 2byte id
 
-		toSend.insert(toSend.begin(),(char)id);
-		toSend.insert(toSend.begin(),(char)(id>>8));
+	toSend.insert(toSend.begin(),(char)id);
+	toSend.insert(toSend.begin(),(char)(id>>8));
 
-		toSend.insert(toSend.begin(),(char)size);
-		toSend.insert(toSend.begin(),(char)(size>>8));
+	toSend.insert(toSend.begin(),(char)size);
+	toSend.insert(toSend.begin(),(char)(size>>8));
 
-		char* buffer = new char[size];
-		for(int i=0;i<size;i++)
-			buffer[i]=toSend[i];
+	
+	writeData newData;
+	newData.s=s;
+	newData.data=toSend;
 
 
-		if (send(s,buffer,size,0) == SOCKET_ERROR)
-			sendError(s,-3,"Send failed with error: "+to_string(WSAGetLastError()));
-
-		delete[] buffer;
-	});
-	writeThreads.push_back(sendThread);
+	toWriteMutex.lock();
+	toWrite.push_back(newData);
+	toWriteMutex.unlock();
 }
 
 void Server::addToNewMessageCallback(NetworkParticipant* np)
