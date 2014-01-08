@@ -9,8 +9,8 @@ void NetworkLogin::processNewMessage(short id,vector<char> data)
 			state = 1;
 		}
 		else
-		{
-			state = 0;
+		{ 
+			state = -1;
 		}
 	}
 }
