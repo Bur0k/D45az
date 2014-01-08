@@ -26,6 +26,12 @@
     <Filter Include="Data">
       <UniqueIdentifier>{b2fed3ae-b37c-41c2-9515-b2948dd6aa8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\Musik">
+      <UniqueIdentifier>{4fd5eeb5-bc0b-4bf7-a2aa-123fa9b71a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\Musik\Source">
+      <UniqueIdentifier>{9c319a38-7eb2-4763-b91d-19d238c227c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -71,6 +77,9 @@
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
     <ClCompile Include="StandardButton.cpp" />
+    <ClCompile Include="MusikSampler.cpp">
+      <Filter>Codes\Musik\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -127,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="IButtonfunction.h">
       <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MusikSampler.h">
+      <Filter>Codes\Musik</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
