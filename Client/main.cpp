@@ -9,6 +9,14 @@
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
 
+
+//DEBUG DEFINES IF DEFINED ENABLED
+
+//#define BURAKTESTSHIT
+#define MOUSEGRAB
+
+
+
 using namespace std;
 
 class testClient : public NetworkParticipant
@@ -62,7 +70,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 #endif
 {
 
-#define BURAKTESTSHIT
+
 	//********** BURAKS CLIENT TEST SHIT
 #ifdef BURAKTESTSHIT
 	Client* c = Client::get();

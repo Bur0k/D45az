@@ -211,12 +211,12 @@ void Game::onMouseDownRight()
 
 void Game::onMouseLeave()
 {
-
+#ifdef MOUSEGRAB
 	//TODO	this mouse grab hack does work if the scaling would be disabled
 	//		though it results in massive mouse jitterling along the edge of the window which is not acceptable
 	std::cout << " Mouse Left the Window " << std::endl;
 	Mouse::setPosition(m_lastMousePosition, *m_pWindow);
-
+#endif //MOUSEGRAB
 }
 
 void Game::onMouseUpLeft()
