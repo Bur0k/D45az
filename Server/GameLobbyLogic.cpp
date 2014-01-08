@@ -88,26 +88,33 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		}break;
 	case 0x0310:
 		{
-			short map = data[0] - 48;
+			if(this->gameMaster->s == s)
+			{
+				short map = data[0] - 48;
 
-			// Mapchange
+				// Mapchange
 
-			std::vector<char> erfg;
+				std::vector<char> erfg;
 
-			this->server->write(s, 0x0320, erfg);
+				this->server->write(s, 0x0320, erfg);
+			}
 		}break;
 	case 0x0311:
 		{
-			short anz = data[0] - 48;
+			if(this->gameMaster->s == s)
+			{
+				short anz = data[0] - 48;
 
-			if(anz > 4)
-				anz = 4;
+				if(anz > 4)
+					anz = 4;
 
-			this->setPlayerlimit(anz);
+				this->setPlayerlimit(anz);
 
-			std::vector<char> erfg;
-
-			this->server->write(s, 0x0321, erfg);
+				std::vector<char> erfg;
+				char mapNr = anz + 48;
+				erfg.push_back(mapNr);
+				this->server->write(s, 0x0321, erfg);
+			}
 		}break;
 	}
 
