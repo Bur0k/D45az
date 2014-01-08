@@ -86,11 +86,13 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	window.setMouseCursorVisible(true);
 
 	// Musik Test Zeug
-
+	/*
 	MusikSampler* MS = new MusikSampler();
 	
 	MS->load_music(0);
 	MS->play_music();
+	*/
+
 
 	//testausgabe
 	/*
