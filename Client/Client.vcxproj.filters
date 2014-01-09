@@ -70,6 +70,12 @@
     <ClCompile Include="NetworkLogin.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
+    <ClCompile Include="StandardButton.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Textblock.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -113,6 +119,16 @@
     </ClInclude>
     <ClInclude Include="NetworkLogin.h">
       <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IAnimatable.h" />
+    <ClInclude Include="IButtonfunction.h" />
+    <ClInclude Include="IKeyboardInput.h" />
+    <ClInclude Include="IView.h" />
+    <ClInclude Include="StandardButton.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Textblock.h">
+      <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -163,5 +179,10 @@
     <Font Include="Data\Fonts\arial.ttf">
       <Filter>Data</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Images\Button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

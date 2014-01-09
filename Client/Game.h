@@ -13,6 +13,7 @@
 #include "IAnimatable.h"
 #include "IView.h"
 #include "StandardButton.h"
+#include "Textblock.h"
 
 using namespace sf;
 
@@ -28,6 +29,8 @@ private:
 	Button* b1;
 	Button* b2;
 	Button* b3;
+
+	Textblock* tblock;
 
 	///end debug
 	Clock m_fpsCounter;

@@ -25,8 +25,6 @@ void Game::onButtonClick(int index)
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
-	
-
 	m_pWindow = rw;
 	m_Screen = sm;
 	m_size = windowSize;
@@ -38,6 +36,12 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
+
+
+
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asdlkdjngsöljfngsäklnsdggllkjf", 5);
+	m_drawL.push_back(tblock);
+
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -84,6 +88,8 @@ Game::~Game()
 	delete b1;
 	delete b2;
 	delete b3;
+
+	delete tblock;
 }
 
 void Game::setScreen(ScreenMode sm)
