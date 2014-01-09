@@ -165,10 +165,10 @@
     <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Textblock.h" />
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
