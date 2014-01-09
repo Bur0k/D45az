@@ -14,6 +14,8 @@ GameLobbyLogic::~GameLobbyLogic()
 	server->deleteFromNewMessageCallback(this);
 }
 
+/* GETTER - SETTER */
+
 void GameLobbyLogic::setID(short id)
 {
 	this->id = id;
@@ -60,6 +62,15 @@ Map GameLobbyLogic::getMap()
 	return this->currentMap;
 }
 */
+
+/* Funktionen */
+
+void GameLobbyLogic::addPlayer(PlayerData* player)
+{
+	this->players.push_back(player);
+}
+
+/* Kommunikation */
 
 void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
@@ -111,8 +122,8 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				this->setPlayerlimit(anz);
 
 				std::vector<char> erfg;
-				char mapNr = anz + 48;
-				erfg.push_back(mapNr);
+				char playerCount = anz + 48;
+				erfg.push_back(playerCount);
 				this->server->write(s, 0x0321, erfg);
 			}
 		}break;

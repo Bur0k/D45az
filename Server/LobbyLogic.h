@@ -17,11 +17,10 @@ class LobbyLogic : public NetworkParticipant
 private:
 	map<char, GameLobbyLogic*> gamesCreated;
 	Server* server;
-	LogInLogic* LogIn;
+
 
 public:
 	LobbyLogic();
-	LobbyLogic(LogInLogic* l);
 	~LobbyLogic();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);

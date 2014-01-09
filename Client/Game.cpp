@@ -8,6 +8,8 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
+		m_pMS->load_music(0);
+		m_pMS->play_music();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -18,14 +20,13 @@ void Game::onButtonClick(int index)
 		break;
 	default:
 		std::cout << "!! undefined button click !!" << std::endl;
+		m_pMS->pause();
 		break;
 	}
 }
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
-	
-
 	m_pWindow = rw;
 	m_Screen = sm;
 	m_size = windowSize;
@@ -38,6 +39,12 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
 
+
+
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asdlkdjngsöljfngsäklnsdggllkjf", 5);
+	m_drawL.push_back(tblock);
+
+
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
 	b->attachFunction((IButtonfunction*)this);
@@ -46,14 +53,14 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	b1->attachFunction((IButtonfunction*)this);
 
-	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Standard Button", 4, false);
+	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Musik stoppen", 4, false);
 
 	b2->attachFunction((IButtonfunction*)this);
 
 	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"buttons können auch\nein und aus schalten" , 3, true);
 
 	b3->attachFunction(this);
-	
+
 	s = new Slider(true, Vector2f(200,50), 0.5, Vector2f(30, 500), 1);
 	
 
@@ -73,13 +80,22 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_drawL.push_back(b2);
 	m_drawL.push_back(b3);
 	m_drawL.push_back(s);
-
+	
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
 
 	m_Screen = Testscreen;
+
+
+	// Musik Test Zeug
+
+	m_pMS = new MusikSampler();
+	/*
+	MS->load_music(0);
+	MS->play_music();
+	*/
 }
 
 Game::~Game()
@@ -92,6 +108,8 @@ Game::~Game()
 	delete b1;
 	delete b2;
 	delete b3;
+
+	delete tblock;
 }
 
 void Game::setScreen(ScreenMode sm)

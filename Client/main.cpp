@@ -1,7 +1,6 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "Client.h"
-#include "Jans_Abgeher_Shit.h"
 #include "Game.h"
 
 #include <SFML/Audio.hpp>
@@ -9,11 +8,13 @@
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
 
+#include "MusikSampler.h"
+
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
 //#define BURAKTESTSHIT
-//#define MOUSEGRAB
+#define MOUSEGRAB
 
 
 
@@ -36,32 +37,12 @@ class testClient : public NetworkParticipant
 	}
 } tc;
 
-void jans_test_karre()
-{
-	sf::Music music;
-	string status;
-
-	if (music.openFromFile("test.ogg"))
-	{
-		cout << "passt" << endl << endl;
-		music.play();
-	}
-
-	music.setVolume(90);
-
-	status = music.getStatus() ;
-
-	cout << music.getStatus() << endl;
-}
-
 #ifndef _DEBUG
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine,int iCmdShow ) //Release Mode verwenden wir Windows als SubSystem
 #else
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
-
-
 	//********** BURAKS CLIENT TEST SHIT
 #ifdef BURAKTESTSHIT
 	Client* c = Client::get();
@@ -77,7 +58,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
-
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
@@ -89,14 +69,19 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	window.setPosition(sf::Vector2i(400,0));
 	window.setMouseCursorVisible(true);
 
+	// Musik Test Zeug
+	/*
+	MusikSampler* MS = new MusikSampler();
+	
+	MS->load_music(0);
+	MS->play_music();
+	*/
 
 
 	//testausgabe
 	/*
 
 	*/
-
-	jans_test_karre();
 	
 	
 	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
@@ -116,7 +101,9 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		window.display();
 	}
 
-
-	//delete c;
+	
+#ifdef BURAKTESTSHIT
+	delete c;
+#endif	
 	return 0;
 }

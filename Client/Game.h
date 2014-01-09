@@ -13,7 +13,10 @@
 #include "IAnimatable.h"
 #include "IView.h"
 #include "StandardButton.h"
+#include "Textblock.h"
 #include "Slider.h"
+
+#include "MusikSampler.h"
 
 using namespace sf;
 
@@ -31,6 +34,10 @@ private:
 	Button* b1;
 	Button* b2;
 	Button* b3;
+
+	Textblock* tblock;
+
+	MusikSampler* m_pMS;
 
 	Slider* s;
 
