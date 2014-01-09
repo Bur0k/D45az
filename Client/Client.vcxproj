@@ -87,8 +87,11 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLobby.cpp" />
+    <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MusikSampler.cpp" />
     <ClCompile Include="NetworkLogin.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="SplittedSprite.cpp" />
@@ -99,19 +102,21 @@
     <ClCompile Include="tinyxml.cpp" />
     <ClCompile Include="tinyxmlerror.cpp" />
     <ClCompile Include="tinyxmlparser.cpp" />
-    <ClCompile Include="UIelement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLobby.h" />
     <ClInclude Include="graphic_globals.h" />
     <ClInclude Include="IAnimatable.h" />
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
     <ClInclude Include="IView.h" />
+    <ClInclude Include="Lobby.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MusikSampler.h" />
     <ClInclude Include="NetworkLogin.h" />
     <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="Slider.h" />
@@ -124,6 +129,7 @@
     <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Songs\test.ogg" />
     <None Include="libsndfile-1.dll" />
     <None Include="openal32.dll" />
     <None Include="Projektplanung.doc" />

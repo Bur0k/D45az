@@ -1,6 +1,6 @@
 #include "GameLobbyLogic.h"
 
-GameLobbyLogic::GameLobbyLogic(short id, User* master)
+GameLobbyLogic::GameLobbyLogic(short id, PlayerData* master)
 {
 	this->server = Server::get();
 	this->id = id;
@@ -13,6 +13,8 @@ GameLobbyLogic::~GameLobbyLogic()
 {
 	server->deleteFromNewMessageCallback(this);
 }
+
+/* GETTER - SETTER */
 
 void GameLobbyLogic::setID(short id)
 {
@@ -34,14 +36,19 @@ short GameLobbyLogic::getPlayerlimit()
 	return this->playerlimit;
 }
 
-void GameLobbyLogic::setGamemaster(User* player)
+void GameLobbyLogic::setGamemaster(PlayerData* player)
 {
 	this->gameMaster = player;
 }
 
-User* GameLobbyLogic::getGamemaster()
+PlayerData* GameLobbyLogic::getGamemaster()
 {
 	return this->gameMaster;
+}
+
+vector<PlayerData*>& GameLobbyLogic::getPlayers()
+{
+	return this->players;
 }
 
 /*
@@ -56,20 +63,23 @@ Map GameLobbyLogic::getMap()
 }
 */
 
+/* Funktionen */
+
+void GameLobbyLogic::addPlayer(PlayerData* player)
+{
+	this->players.push_back(player);
+}
+
+/* Kommunikation */
+
 void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	switch(id)
 	{
 	case 0x0300:
 		{
-			string name = "";
-
-			//testen
-			for (unsigned int i = 0; i < data.size(); i++) 
-				name += data[i];
-
 			for(unsigned int i = 0; i < this->players.size(); i++)
-				if(this->players[i]->getName() == name)
+				if(this->players[i]->s == s)
 					this->players.erase(this->players.begin() + i, this->players.begin() + i);
 				
 			std::vector<char> erfg;
@@ -78,15 +88,44 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		}break;
 	case 0x0303:
 		{
-			
+			if(this->gameMaster->s == s)
+			{
+				// Spielstart
+
+				std::vector<char> erfg;
+
+				this->server->write(s, 0x0304, erfg);
+			}
 		}break;
 	case 0x0310:
 		{
-			
+			if(this->gameMaster->s == s)
+			{
+				short map = data[0] - 48;
+
+				// Mapchange
+
+				std::vector<char> erfg;
+
+				this->server->write(s, 0x0320, erfg);
+			}
 		}break;
 	case 0x0311:
 		{
-			
+			if(this->gameMaster->s == s)
+			{
+				short anz = data[0] - 48;
+
+				if(anz > 4)
+					anz = 4;
+
+				this->setPlayerlimit(anz);
+
+				std::vector<char> erfg;
+				char playerCount = anz + 48;
+				erfg.push_back(playerCount);
+				this->server->write(s, 0x0321, erfg);
+			}
 		}break;
 	}
 

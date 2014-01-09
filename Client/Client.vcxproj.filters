@@ -26,6 +26,12 @@
     <Filter Include="Data">
       <UniqueIdentifier>{b2fed3ae-b37c-41c2-9515-b2948dd6aa8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\Musik">
+      <UniqueIdentifier>{679ae32b-f2db-4395-b894-625a2c0c6491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\Musik\Source">
+      <UniqueIdentifier>{b3b5025c-245d-4671-b5e6-d1cc9931d8a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -64,10 +70,22 @@
     <ClCompile Include="Textbox.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="UIelement.cpp">
+    <ClCompile Include="NetworkLogin.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkLogin.cpp">
+    <ClCompile Include="Lobby.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MusikSampler.cpp">
+      <Filter>Codes\Musik\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLobby.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lobby.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
     <ClCompile Include="StandardButton.cpp">
@@ -120,15 +138,29 @@
     <ClInclude Include="NetworkLogin.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
-    <ClInclude Include="IAnimatable.h" />
-    <ClInclude Include="IButtonfunction.h" />
-    <ClInclude Include="IKeyboardInput.h" />
-    <ClInclude Include="IView.h" />
+    <ClInclude Include="IView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IAnimatable.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IKeyboardInput.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IButtonfunction.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
     <ClInclude Include="StandardButton.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h">
-      <Filter>Codes\Graphic</Filter>
+    <ClInclude Include="MusikSampler.h">
+      <Filter>Codes\Musik</Filter>
+    </ClInclude>
+    <ClInclude Include="Lobby.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLobby.h">
+      <Filter>Codes\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +201,9 @@
       <Filter>DLLs</Filter>
     </None>
     <None Include="Projektplanung.doc" />
+    <None Include="Data\Songs\test.ogg">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">

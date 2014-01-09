@@ -3,22 +3,24 @@
 void Game::onButtonClick(int index)
 {
 	static int blubb = 0;
-	static bool lock = false;
+
 	switch(index)
 	{
 	case 1:
 		blubb ++;
+		m_pMS->load_music(0);
+		m_pMS->play_music();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
-		std::cout << "other button click :)" << std::endl;
+		std::cout << "other button click" << std::endl;
 		break;
 	case 3:
-		lock = (lock)? false : true;
-		std::cout << "this button locks in and out  current status" << lock << std::endl;
+		std::cout << "this button locks in and out  current status" << b3->getIsPressed() << std::endl;
 		break;
 	default:
-		std::cout << "undefined button click :(" << std::endl;
+		std::cout << "!! undefined button click !!" << std::endl;
+		m_pMS->pause();
 		break;
 	}
 }
@@ -51,7 +53,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	b1->attachFunction((IButtonfunction*)this);
 
-	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Standard Button", 4, false);
+	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Musik stoppen", 4, false);
 
 	b2->attachFunction((IButtonfunction*)this);
 
@@ -80,10 +82,20 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animateL.push_back(b3);
 
 	m_Screen = Testscreen;
+
+
+	// Musik Test Zeug
+
+	m_pMS = new MusikSampler();
+	/*
+	MS->load_music(0);
+	MS->play_music();
+	*/
 }
 
 Game::~Game()
 {
+	delete m_pMS;
 	delete b;
 	delete b1;
 	delete b2;
@@ -217,12 +229,12 @@ void Game::onMouseDownRight()
 
 void Game::onMouseLeave()
 {
-
+#ifdef MOUSEGRAB
 	//TODO	this mouse grab hack does work if the scaling would be disabled
 	//		though it results in massive mouse jitterling along the edge of the window which is not acceptable
 	std::cout << " Mouse Left the Window " << std::endl;
 	Mouse::setPosition(m_lastMousePosition, *m_pWindow);
-
+#endif //MOUSEGRAB
 }
 
 void Game::onMouseUpLeft()
@@ -239,7 +251,8 @@ void Game::onMouseUpRight()
 
 void Game::onKeyDown(sf::Event e)
 {
-
+	if(e.key.code == Keyboard::F)
+		b->move(-6,0);
 }
 
 void Game::onKeyUp(sf::Event e)

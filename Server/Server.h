@@ -10,10 +10,20 @@
 #include <thread>
 #include <mutex>
 #include <list>
+#include "PlayerData.h"
+#include <algorithm>
 
 #include "NetworkParticipant.h"
 
 using namespace std;
+
+//Lowbyte zuerst
+std::vector<char> code(short s);
+std::vector<char> code(int i);
+std::vector<char> code(const std::string s);
+short decodeShort(const std::vector<char>& v, int from);
+int decodeInt(const std::vector<char>& v, int from);
+std::string decodeString(const std::vector<char>& v, int from, int len);
 
 class Server
 {

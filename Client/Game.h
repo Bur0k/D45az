@@ -15,7 +15,11 @@
 #include "StandardButton.h"
 #include "Textblock.h"
 
+#include "MusikSampler.h"
+
 using namespace sf;
+
+//#define MOUSEGRAB
 
 // TODO derive game from renderWindow
 
@@ -31,6 +35,8 @@ private:
 	Button* b3;
 
 	Textblock* tblock;
+
+	MusikSampler* m_pMS;
 
 	///end debug
 	Clock m_fpsCounter;

@@ -2,7 +2,7 @@
 #define GAMELOBBYLOGIC_H
 
 #include <vector>
-#include "User.h"
+#include "PlayerData.h"
 #include "Server.h"
 #include "NetworkParticipant.h"
 
@@ -13,13 +13,13 @@ class GameLobbyLogic : public NetworkParticipant
 private:
 	Server* server;
 	short id;
-	vector<User*> players;
+	vector<PlayerData*> players;
 	short playerlimit;
-	User* gameMaster;
+	PlayerData* gameMaster;
 	//Map currentMap;
 
 public:
-	GameLobbyLogic(short id, User* master);
+	GameLobbyLogic(short id, PlayerData* master);
 	~GameLobbyLogic();
 
 	/*GETTER - SETTER*/
@@ -28,10 +28,15 @@ public:
 	short getID();
 	void setPlayerlimit(short limit);
 	short getPlayerlimit();
-	void setGamemaster(User* player);
-	User* getGamemaster();
+	void setGamemaster(PlayerData* player);
+	PlayerData* getGamemaster();
+	vector<PlayerData*>& getPlayers(); 
 	/*void setMap(Map map);*/
 	/*Map getMap();*/
+
+	/*Funktionen*/
+
+	void addPlayer(PlayerData* player);
 
 	/*Kommunikation*/
 
