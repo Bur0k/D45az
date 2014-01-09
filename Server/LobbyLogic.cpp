@@ -14,14 +14,7 @@ LobbyLogic::LobbyLogic()
 	server->addToNewMessageCallback(this);
 }
 
-LobbyLogic::LobbyLogic(LogInLogic* l)
-{
-	this->server = Server::get();
 
-	this->LogIn = l;
-
-	server->addToNewMessageCallback(this);
-}
 
 LobbyLogic::~LobbyLogic()
 {
@@ -41,7 +34,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			for (map<char, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
 				{
 				//Zudem müsste ihr hier mal die Größe dieser Datei mit schicken. Der Client hat keine Ahnung wie lang so ne Lobby is
-				
+				//muss ich net
 				erfg.push_back(it->first >> 8);
 				erfg.push_back(it->first &0xFF);
 
@@ -73,7 +66,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 							
 			server->write(s, 0x0200,erfg);
 
-				break;
+			break;
 			}
 
 
@@ -86,10 +79,10 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 				for (unsigned int i = 0; i < connectedPlayers.size(); i++)
 					if (connectedPlayers[i].s == s)
-						//add player von stefan
-						//gamesCreated[mapid]->addPlayer;
-							//break;
-				
+					{
+							gamesCreated[mapid]->addPlayer(&connectedPlayers[i]);
+							break;
+					}
 
 				
 
@@ -104,6 +97,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				//data: string username, auslesen
 				short id = 0;
 				string name = "";
+
 				
 				//while (gamesCreated.count(id) == 1)
 				//	id++;

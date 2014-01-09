@@ -79,6 +79,9 @@
     <ClCompile Include="MusikSampler.cpp">
       <Filter>Codes\Musik\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -141,6 +144,9 @@
     <ClInclude Include="MusikSampler.h">
       <Filter>Codes\Musik</Filter>
     </ClInclude>
+    <ClInclude Include="Lobby.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -180,6 +186,9 @@
       <Filter>DLLs</Filter>
     </None>
     <None Include="Projektplanung.doc" />
+    <None Include="Data\Songs\test.ogg">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">
