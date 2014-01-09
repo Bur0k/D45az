@@ -8,8 +8,8 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		this->MS->load_music(0);
-		this->MS->play_music();
+		m_pMS->load_music(0);
+		m_pMS->play_music();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -20,7 +20,7 @@ void Game::onButtonClick(int index)
 		break;
 	default:
 		std::cout << "!! undefined button click !!" << std::endl;
-		this->MS->pause();
+		m_pMS->pause();
 		break;
 	}
 }
@@ -82,7 +82,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	// Musik Test Zeug
 
-	this->MS = new MusikSampler();
+	m_pMS = new MusikSampler();
 	/*
 	MS->load_music(0);
 	MS->play_music();
@@ -91,6 +91,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 Game::~Game()
 {
+	delete m_pMS;
 	delete b;
 	delete b1;
 	delete b2;

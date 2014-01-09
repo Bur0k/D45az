@@ -33,7 +33,7 @@ private:
 	Button* b2;
 	Button* b3;
 
-	MusikSampler* MS;
+	MusikSampler* m_pMS;
 
 	///end debug
 	Clock m_fpsCounter;
