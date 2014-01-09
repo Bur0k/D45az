@@ -53,6 +53,9 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"buttons können auch\nein und aus schalten" , 3, true);
 
 	b3->attachFunction(this);
+	
+	s = new Slider(true, Vector2f(200,50), 0.5, Vector2f(30, 500), 1);
+	
 
 	m_fpsText.setFont(m_stdFont);
 	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
@@ -63,12 +66,14 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_clickL.push_back(b1);
 	m_clickL.push_back(b2);
 	m_clickL.push_back(b3);
+	m_clickL.push_back(s);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
 	m_drawL.push_back(b2);
 	m_drawL.push_back(b3);
-	
+	m_drawL.push_back(s);
+
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
@@ -79,6 +84,10 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 Game::~Game()
 {
+	m_clickL.clear();
+	m_drawL.clear();
+	m_animateL.clear();
+
 	delete b;
 	delete b1;
 	delete b2;

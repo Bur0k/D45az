@@ -13,6 +13,7 @@
 #include "IAnimatable.h"
 #include "IView.h"
 #include "StandardButton.h"
+#include "Slider.h"
 
 using namespace sf;
 
@@ -30,6 +31,8 @@ private:
 	Button* b1;
 	Button* b2;
 	Button* b3;
+
+	Slider* s;
 
 	///end debug
 	Clock m_fpsCounter;
