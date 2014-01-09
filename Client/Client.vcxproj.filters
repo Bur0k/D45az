@@ -97,6 +97,12 @@
     <ClCompile Include="Textblock.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="TileSets.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLayer.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -168,6 +174,13 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
+    <ClInclude Include="Textblock.h" />
+    <ClInclude Include="TileSets.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLayer.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -210,6 +223,9 @@
     <None Include="Data\Songs\test.ogg">
       <Filter>Data</Filter>
     </None>
+    <None Include="Data\Maps\test.tmx">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">
@@ -224,6 +240,9 @@
   <ItemGroup>
     <Image Include="Data\Images\Button.png">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Data\Maps\TileSheets\test.png">
+      <Filter>Data</Filter>
     </Image>
   </ItemGroup>
 </Project>
