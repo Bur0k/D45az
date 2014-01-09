@@ -32,6 +32,9 @@
     <Filter Include="Codes\Musik\Source">
       <UniqueIdentifier>{b3b5025c-245d-4671-b5e6-d1cc9931d8a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\PlayerData">
+      <UniqueIdentifier>{0e668548-644a-442e-9c31-c2d9ad6c59eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -155,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>Codes\PlayerData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
