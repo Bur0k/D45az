@@ -25,7 +25,7 @@ using namespace sf;
 // TODO derive game from renderWindow
 
 // manages gui views and timers
-class Game : private IButtonfunction
+class Game : private IButtonfunction, private ISliderFunction
 {
 private:
 	//debug
@@ -96,6 +96,9 @@ private:
 
 	void onKeyDown(sf::Event e);
 	void onKeyUp(sf::Event e);
+
+	void onSliderValueChange(int ID, double position);
+	void onSliderReleased(int ID, double position);
 	
 };
 

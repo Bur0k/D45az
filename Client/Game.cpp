@@ -26,6 +26,17 @@ void Game::onButtonClick(int index)
 	}
 }
 
+void Game::onSliderValueChange(int ID, double position)
+{
+	std::cout << "Slider CHANGED ID: " << ID << " Value: " << position << std::endl;
+}
+
+void Game::onSliderReleased(int ID, double position)
+{
+	std::cout << "Slider RELEASED ID: " << ID << " Value: " << position << std::endl;
+}
+
+
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
 	m_pWindow = rw;
@@ -62,8 +73,9 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	b3->attachFunction(this);
 
-	s = new Slider(true, Vector2f(200,50), 0.5, Vector2f(30, 500), 1);
+	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
 	
+	s->Attach(this);
 
 	m_fpsText.setFont(m_stdFont);
 	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
