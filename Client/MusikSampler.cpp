@@ -6,15 +6,20 @@ MusikSampler::MusikSampler(void)
 	this->loaded_music = false;
 
 	this->full_songs.push_back("test.ogg");
+	this->path_full_song = "Data/Songs/";
 }
 
 bool MusikSampler::load_music(int index)
 {
 	//if(this->full_songs[index].length == 0) // liste hat hier kein element
 		//return 0;
+	string full_path = this->path_full_song + this->full_songs[index];
 
-	if(!this->music.openFromFile(this->full_songs[index])) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
+	if(!this->music.openFromFile(full_path)) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
+	{
+		cout<<"kein lied da gefunden" << endl;
 		return 0;
+	}
 
 	this->loaded_music = 1;
 	return 1;
@@ -22,7 +27,7 @@ bool MusikSampler::load_music(int index)
 
 bool MusikSampler::play_music()
 {
-	if (!this->loaded_music)
+	if (!this->loaded_music) // keine musik geladen
     {
         return 0;
     }
@@ -32,18 +37,12 @@ bool MusikSampler::play_music()
 }
 
 
-
-/*
 void MusikSampler::pause()
 {
-    if (!loaded)
-    {
-        return;
-    }
-
-    samples.Pause();
+    this->music.pause();
 }
 
+/*
 void MusikSampler::stop()
 {
     if (!loaded)

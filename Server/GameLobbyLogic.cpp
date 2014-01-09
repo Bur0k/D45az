@@ -122,8 +122,8 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				this->setPlayerlimit(anz);
 
 				std::vector<char> erfg;
-				char mapNr = anz + 48;
-				erfg.push_back(mapNr);
+				char playerCount = anz + 48;
+				erfg.push_back(playerCount);
 				this->server->write(s, 0x0321, erfg);
 			}
 		}break;

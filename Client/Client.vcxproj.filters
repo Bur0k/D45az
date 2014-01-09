@@ -76,8 +76,14 @@
     <ClCompile Include="StandardButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
     <ClCompile Include="MusikSampler.cpp">
       <Filter>Codes\Musik\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLobby.cpp">
+      <Filter>Codes\Network\Source</Filter>
     </ClCompile>
     <ClCompile Include="Lobby.cpp">
       <Filter>Codes\Network\Source</Filter>
@@ -145,6 +151,9 @@
       <Filter>Codes\Musik</Filter>
     </ClInclude>
     <ClInclude Include="Lobby.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
   </ItemGroup>

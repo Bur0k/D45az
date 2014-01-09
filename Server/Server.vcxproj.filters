@@ -49,14 +49,14 @@
     <ClInclude Include="LobbyLogic.h">
       <Filter>Codes\LobbyLogic</Filter>
     </ClInclude>
-    <ClInclude Include="GameLobbyLogic.h">
-      <Filter>Codes\GameLobbyLogic</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkParticipant.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLobbyLogic.h">
+      <Filter>Codes\GameLobbyLogic\Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

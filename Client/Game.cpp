@@ -8,6 +8,8 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
+		this->MS->load_music(0);
+		this->MS->play_music();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -18,6 +20,7 @@ void Game::onButtonClick(int index)
 		break;
 	default:
 		std::cout << "!! undefined button click !!" << std::endl;
+		this->MS->pause();
 		break;
 	}
 }
@@ -38,7 +41,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
 
-	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
+	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"MUSIK LADEN UND STARTEN",1,false);
 	
 	b->attachFunction((IButtonfunction*)this);
 	
@@ -46,7 +49,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	b1->attachFunction((IButtonfunction*)this);
 
-	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Standard Button", 4, false);
+	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Musik stoppen", 4, false);
 
 	b2->attachFunction((IButtonfunction*)this);
 
@@ -75,6 +78,15 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animateL.push_back(b3);
 
 	m_Screen = Testscreen;
+
+
+	// Musik Test Zeug
+
+	this->MS = new MusikSampler();
+	/*
+	MS->load_music(0);
+	MS->play_music();
+	*/
 }
 
 Game::~Game()

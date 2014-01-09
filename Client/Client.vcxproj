@@ -87,6 +87,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLobby.h" />
     <ClInclude Include="graphic_globals.h" />
     <ClInclude Include="IAnimatable.h" />
     <ClInclude Include="IButtonfunction.h" />
