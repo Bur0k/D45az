@@ -76,11 +76,11 @@
     <ClCompile Include="StandardButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="MusikSampler.cpp">
-      <Filter>Codes\Musik\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Lobby.cpp">
       <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MusikSampler.cpp">
+      <Filter>Codes\Musik\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
