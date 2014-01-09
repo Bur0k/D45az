@@ -9,13 +9,35 @@
 
 #include "Lobby.h"
 
+void Lobby::connectToGameLobby(char mapid)
+{
+	vector<char> msg;
+	msg.push_back(mapid);
+
+	c->write(0x0202, msg);
+}
+void Lobby::createNewGameLobby()
+{
+	vector<char> leer;
+
+	c->write(0x0204, leer);
+}
+
+
+void Lobby::askforLobbyData()
+{
+		vector<char> leer;
+
+		c->write(0x0201,leer);
+}
+
 void Lobby::processNewMessage(short id,vector<char> data)
 {
 	switch (id)
 	{
 		//	00: 	Server -> Client (sendet Lobby-Daten)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
-	case 0x0201:
+	case 0x0200:
 		{
 			break;
 		}

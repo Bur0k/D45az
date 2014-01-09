@@ -96,7 +96,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			{
 				//data: string username, auslesen
 				short id = 0;
-				string name = "";
+				//string name = "";
 
 				
 				//while (gamesCreated.count(id) == 1)
@@ -104,12 +104,12 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 				id = gamesCreated.size();
 
-				for (unsigned int i = 0; i < data.size(); i++) 
-					name += data[i];
+				//for (unsigned int i = 0; i < data.size(); i++) 
+				//	name += data[i];
 
 				PlayerData requester;
 				for (unsigned int i = 0; i < connectedPlayers.size(); i++)
-					if (connectedPlayers[i].Name == name)
+					if (connectedPlayers[i].s == s)
 					{
 						requester = connectedPlayers[i];
 						break;
