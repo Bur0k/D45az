@@ -125,6 +125,7 @@
     <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Songs\test.ogg" />
     <None Include="libsndfile-1.dll" />
     <None Include="openal32.dll" />
     <None Include="Projektplanung.doc" />
