@@ -34,6 +34,10 @@ public:
 	/*void setMap(Map map);*/
 	/*Map getMap();*/
 
+	/*Funktionen*/
+
+	void addPlayer(PlayerData* player);
+
 	/*Kommunikation*/
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
