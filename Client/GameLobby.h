@@ -2,13 +2,18 @@
 #define _GAMELOBBY_H
 
 #include "Client.h"
+#include "NetworkParticipant.h"
 
-class GameLobby
+class GameLobby : public NetworkParticipant
 {
 private:
 
 	Client* c;
 	short id;
+	vector<string> players;
+	short playerLimit;
+	string gameMaster;
+	//Map current Map;
 
 public:
 	GameLobby(void);
