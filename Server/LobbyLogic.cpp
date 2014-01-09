@@ -35,21 +35,18 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				{
 				//Zudem müsste ihr hier mal die Größe dieser Datei mit schicken. Der Client hat keine Ahnung wie lang so ne Lobby is
 				//muss ich net
-				//erfg.push_back(it->first >> 8);
-				//erfg.push_back(it->first &0xFF);
+
 				std::vector<char> tmp;
 				tmp = code(it->first);
 				erfg.push_back(tmp[0]);
 				erfg.push_back(tmp[1]);
 
-				//erfg.push_back(it->second->getID() << 8);
-				//erfg.push_back(it->second->getID() & 0xFF);
+
 				tmp = code(it->second->getID());
 				erfg.push_back(tmp[0]);
 				erfg.push_back(tmp[1]);
 
-				//erfg.push_back(it->second->getPlayerlimit() << 8);
-				//erfg.push_back(it->second->getPlayerlimit() & 0xFF);
+
 				tmp = code(it->second->getPlayerlimit());
 				erfg.push_back(tmp[0]);
 				erfg.push_back(tmp[1]);
@@ -59,8 +56,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				tmp = code(len);
 				erfg.push_back(tmp[0]);
 				erfg.push_back(tmp[1]);
-				//erfg.push_back(len << 8);
-				//erfg.push_back(len & 0xFF);
+
 				tmp = code(master);
 				for (unsigned int i = 0; i < tmp.size(); i++)
 						erfg.push_back(tmp[i]);
@@ -73,8 +69,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					tmp = code(len);
 					erfg.push_back(tmp[0]);
 					erfg.push_back(tmp[1]);
-					//erfg.push_back(len << 8);
-					//erfg.push_back(len & 0xFF);
+
 					tmp = code(name);
 					for (unsigned int i = 0; i < tmp.size(); i++)
 						erfg.push_back(tmp[i]);
@@ -111,16 +106,9 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			{
 				//data: string username, auslesen
 				short id = 0;
-				//string name = "";
 
-				
-				//while (gamesCreated.count(id) == 1)
-				//	id++;
 
 				id = gamesCreated.size();
-
-				//for (unsigned int i = 0; i < data.size(); i++) 
-				//	name += data[i];
 
 				PlayerData requester;
 				for (unsigned int i = 0; i < connectedPlayers.size(); i++)
