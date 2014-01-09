@@ -9,17 +9,18 @@ using namespace std;
 class MusikSampler
 {
 private:
-	sf::Music music;	// nur OGG
-	sf::Sound sound;	// nur WAV
-	bool loaded_music;
-	bool loaded_sound;
+	sf::Music m_Music;	// nur OGG
+	sf::Sound m_Sound;	// nur WAV
+	bool m_Loaded_music;
+	bool m_Loaded_sound;
 
-	string path_full_song;
-	string path_sounds;
-	vector<string> full_songs;
-	vector<string> short_sounds;
+	string m_Path_full_song;
+	string m_Path_sounds;
+	vector<string> m_vFull_songs;
+	vector<string> m_vShort_sounds;
 public:
-	MusikSampler(void); // loaded = 0
+	MusikSampler(void); 
+	~MusikSampler(void);
 
     bool load_music(int index);
     bool play_music();

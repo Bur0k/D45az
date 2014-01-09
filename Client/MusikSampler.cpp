@@ -3,43 +3,48 @@
 
 MusikSampler::MusikSampler(void)
 {
-	this->loaded_music = false;
+	this->m_Loaded_music = false;
 
-	this->full_songs.push_back("test.ogg");
-	this->path_full_song = "Data/Songs/";
+	this->m_vFull_songs.push_back("test.ogg");
+	this->m_Path_full_song = "Data/Songs/";
 }
 
+MusikSampler::~MusikSampler(void)
+{
+	m_vFull_songs.clear();
+	m_vShort_sounds.clear();
+}
 bool MusikSampler::load_music(int index)
 {
 	//if(this->full_songs[index].length == 0) // liste hat hier kein element
 		//return 0;
-	string full_path = this->path_full_song + this->full_songs[index];
+	string full_path = m_Path_full_song + m_vFull_songs[index];
 
-	if(!this->music.openFromFile(full_path)) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
+	if(!m_Music.openFromFile(full_path)) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
 	{
 		cout<<"kein lied da gefunden" << endl;
 		return 0;
 	}
 
-	this->loaded_music = 1;
+	m_Loaded_music = 1;
 	return 1;
 }
 
 bool MusikSampler::play_music()
 {
-	if (!this->loaded_music) // keine musik geladen
+	if (!m_Loaded_music) // keine musik geladen
     {
         return 0;
     }
 
-   this-> music.play();
+   m_Music.play();
    return 1;
 }
 
 
 void MusikSampler::pause()
 {
-    this->music.pause();
+    m_Music.pause();
 }
 
 /*
