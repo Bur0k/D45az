@@ -86,10 +86,10 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 				for (unsigned int i = 0; i < connectedPlayers.size(); i++)
 					if (connectedPlayers[i].s == s)
-						//add player von stefan
-						//gamesCreated[mapid]->addPlayer;
-							//break;
-				
+					{
+							gamesCreated[mapid]->addPlayer(&connectedPlayers[i]);
+							break;
+					}
 
 				
 
