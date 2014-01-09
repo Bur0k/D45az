@@ -45,7 +45,14 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 	}
 	else
 	{
-		//TODO
+		m_pBar[0].s.setSize(Vector2f(SLIDERENDBLOCKWIDTH, size.y));	//left knob
+		m_pBar[0].s.setPosition(pos.x,pos.y);
+		m_pBar[1].s.setSize(Vector2f(SLIDERENDBLOCKWIDTH, size.y)); //right knob
+		m_pBar[1].s.setPosition(pos.x + size.x -  SLIDERENDBLOCKWIDTH * 2, pos.y);
+		m_pBar[2].s.setSize(Vector2f(size.x - SLIDERENDBLOCKWIDTH * 2, size.y / 3)); //slider Bar
+		m_pBar[2].s.setPosition(pos.x + SLIDERENDBLOCKWIDTH, pos.y + size.y / 3); 
+		m_pBar[3].s.setSize(Vector2f(size.y, size.y)); //slider
+		m_pBar[3].s.setPosition(pos.x + SLIDERENDBLOCKWIDTH + startsliderposition * (size.x - SLIDERENDBLOCKWIDTH * 2 - size.y), pos.y);
 	}
 
 	for(unsigned int i = 0; i < 4; i++)
@@ -62,7 +69,7 @@ double Slider::getValue()
 {
 	double result = 0;
 	if(m_horizontal)
-		result = (double)(m_pBar[3].s.getPosition().x - m_dimensions.left - SLIDERENDBLOCKWIDTH) / (double)(m_dimensions.width - SLIDERENDBLOCKWIDTH * 2);
+		result = (double)(m_pBar[3].s.getPosition().x - m_dimensions.left - SLIDERENDBLOCKWIDTH) / (double)(m_dimensions.width - SLIDERENDBLOCKWIDTH * 3 - m_dimensions.height);
 	//TODO HORIZONTAL
 
 	return result;
