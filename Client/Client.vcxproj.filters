@@ -180,6 +180,9 @@
       <Filter>DLLs</Filter>
     </None>
     <None Include="Projektplanung.doc" />
+    <None Include="Data\Songs\test.ogg">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">
