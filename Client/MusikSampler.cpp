@@ -16,7 +16,9 @@ MusikSampler::MusikSampler(void)
 
 MusikSampler::~MusikSampler(void)
 {
-	m_vFull_songs.clear();	// Adresslisten leeren
+		// Adresslisten freigeben
+
+
 	m_vShort_sounds.clear();
 
 	for (int i = 0; i < m_vSound.size() ; i++)	// noch abspielende Sounds löschen

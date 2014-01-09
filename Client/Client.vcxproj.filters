@@ -168,6 +168,7 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
+    <ClInclude Include="Textblock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -225,5 +226,13 @@
     <Image Include="Data\Images\Button.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Data\Sounds\sound1.wav">
+      <Filter>Data</Filter>
+    </Media>
+    <Media Include="Data\Sounds\sound2.wav">
+      <Filter>Data</Filter>
+    </Media>
   </ItemGroup>
 </Project>

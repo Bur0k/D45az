@@ -154,6 +154,10 @@
   <ItemGroup>
     <Image Include="Data\Images\Button.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="Data\Sounds\sound1.wav" />
+    <Media Include="Data\Sounds\sound2.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
