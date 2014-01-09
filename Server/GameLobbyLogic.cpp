@@ -70,65 +70,119 @@ void GameLobbyLogic::addPlayer(PlayerData* player)
 	this->players.push_back(player);
 }
 
+void GameLobbyLogic::sendPlayerNames(SOCKET s)
+{
+	std::vector<char> erfg;
+
+	for(int i = 0; i > this->players.size(); i++)
+	{
+		string name = this->players[i]->Name;
+		vector<char> tmp = code(name);
+
+		erfg.insert(erfg.end(), tmp.begin(), tmp.end());
+		
+		if( i == (this->players.size() - 1))
+			erfg.push_back('/');
+	}
+
+	this->server->write(s, 0x0302, erfg);
+}
+
+void GameLobbyLogic::sendMaxPlayers(SOCKET s)
+{
+	vector<char> erfg = code(this->playerlimit);
+	this->server->write(s, 0x0305, erfg);
+}
+
+void GameLobbyLogic::sendGameMaster(SOCKET s)
+{
+	vector<char> erfg = code(this->gameMaster->Name);
+	this->server->write(s, 0x0306, erfg);
+}
+
+//void GameLobbyLogic::sendCurrentMap(SOCKET s)
+//{
+//	vector<char> erfg = code(this->currentMap->id);
+//	this->server->write(s, 0x0306, erfg);
+//}
+
 /* Kommunikation */
 
 void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
-	switch(id)
+	bool socketAvailable = false;
+
+	for(int i = 0; i > this->players.size(); i++)
 	{
-	case 0x0300:
-		{
-			for(unsigned int i = 0; i < this->players.size(); i++)
-				if(this->players[i]->s == s)
-					this->players.erase(this->players.begin() + i, this->players.begin() + i);
-				
-			std::vector<char> erfg;
-
-			this->server->write(s, 0x0301, erfg);	
-		}break;
-	case 0x0303:
-		{
-			if(this->gameMaster->s == s)
-			{
-				// Spielstart
-
-				std::vector<char> erfg;
-
-				this->server->write(s, 0x0304, erfg);
-			}
-		}break;
-	case 0x0310:
-		{
-			if(this->gameMaster->s == s)
-			{
-				short map = data[0] - 48;
-
-				// Mapchange
-
-				std::vector<char> erfg;
-
-				this->server->write(s, 0x0320, erfg);
-			}
-		}break;
-	case 0x0311:
-		{
-			if(this->gameMaster->s == s)
-			{
-				short anz = data[0] - 48;
-
-				if(anz > 4)
-					anz = 4;
-
-				this->setPlayerlimit(anz);
-
-				std::vector<char> erfg;
-				char playerCount = anz + 48;
-				erfg.push_back(playerCount);
-				this->server->write(s, 0x0321, erfg);
-			}
-		}break;
+		if(s == this->players[i]->s)
+			socketAvailable = true;
 	}
 
+	if(socketAvailable)
+	{
+		switch(id)
+		{
+		case 0x0300:
+			{
+				for(unsigned int i = 0; i < this->players.size(); i++)
+					if(this->players[i]->s == s)
+						this->players.erase(this->players.begin() + i, this->players.begin() + i);
+				
+				std::vector<char> erfg;
+
+				this->server->write(s, 0x0301, erfg);	
+			}break;
+		case 0x0303:
+			{
+				if(this->gameMaster->s == s)
+				{
+					// Spielstart
+
+					std::vector<char> erfg;
+
+					this->server->write(s, 0x0304, erfg);
+				}
+			}break;
+		case 0x0310:
+			{
+				if(this->gameMaster->s == s)
+				{
+					short map = data[0] - 48;
+
+					// Mapchange
+
+					std::vector<char> erfg;
+
+					this->server->write(s, 0x0320, erfg);
+				}
+			}break;
+		case 0x0311:
+			{
+				if(this->gameMaster->s == s)
+				{
+					short anz = data[0] - 48;
+
+					if(anz > 4)
+						anz = 4;
+
+					this->setPlayerlimit(anz);
+
+					std::vector<char> erfg;
+					char playerCount = anz + 48;
+					erfg.push_back(playerCount);
+					this->server->write(s, 0x0321, erfg);
+				}
+		case 0x0330:
+
+			{
+				this->sendGameMaster(s);
+				this->sendMaxPlayers(s);
+				this->sendPlayerNames(s);
+				//this->sendCurrentMap(s);
+			}
+			}break;
+		}
+	}
 }
 
 //  00:	Client -> Server (disconnect request)

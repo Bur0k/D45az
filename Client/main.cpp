@@ -107,8 +107,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 
 	
-#ifdef BURAKTESTSHIT
-	delete c;
-#endif	
+	delete Client::get();
+
 	return 0;
 }

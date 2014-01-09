@@ -3,36 +3,67 @@
 
 MusikSampler::MusikSampler(void)
 {
-	this->m_Loaded_music = false;
+	m_Path_full_song = "Data/Songs/";
+	m_vFull_songs.push_back("test.ogg");
 
-	this->m_vFull_songs.push_back("test.ogg");
-	this->m_Path_full_song = "Data/Songs/";
+	m_Path_sounds = "Data/Sounds/";
+	m_vShort_sounds.push_back("sound1.wav");
+	m_vShort_sounds.push_back("sound2.wav");
+	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
+	for(int i = 0; i < m_vShort_sounds.size(); i++)
+		m_vBuffer.push_back(load_sound(i));
 }
 
 MusikSampler::~MusikSampler(void)
 {
-	m_vFull_songs.clear();
+		// Adresslisten freigeben
+
+
 	m_vShort_sounds.clear();
+
+	for (int i = 0; i < m_vSound.size() ; i++)	// noch abspielende Sounds löschen
+		delete m_vSound[i];
+
+	m_vBuffer.clear(); // bufferliste leeren
 }
+
 bool MusikSampler::load_music(int index)
 {
-	//if(this->full_songs[index].length == 0) // liste hat hier kein element
+	//if(m_vFull_songs[index].length == 0) // liste hat hier kein element
 		//return 0;
 	string full_path = m_Path_full_song + m_vFull_songs[index];
 
 	if(!m_Music.openFromFile(full_path)) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
 	{
-		cout<<"kein lied da gefunden" << endl;
+		cout<<"kein lied gefunden: "<< full_path << endl;
 		return 0;
 	}
 
-	m_Loaded_music = 1;
 	return 1;
 }
 
-bool MusikSampler::play_music()
+sf::SoundBuffer MusikSampler::load_sound(int index)
 {
-	if (!m_Loaded_music) // keine musik geladen
+	//if(m_vShort_sounds[index].length == 0) // liste hat hier kein element
+		//return 0;
+
+	sf::SoundBuffer tmp_buffer;
+
+	string full_path = m_Path_sounds + m_vShort_sounds[index];
+
+	if(!tmp_buffer.loadFromFile(full_path)) // kein sound an speicherstelle hinterlegt , asonsten song jetzt drin
+	{
+		cout<<"keinen sound gefunden:" << full_path << endl;
+		return tmp_buffer;
+	}
+
+	return tmp_buffer;
+}
+
+bool MusikSampler::play_music(int index)
+{
+
+	if (!load_music(index)) // keine musik geladen
     {
         return 0;
     }
@@ -41,6 +72,22 @@ bool MusikSampler::play_music()
    return 1;
 }
 
+bool MusikSampler::play_sound(int index)
+{
+	for (int i = 0; i < m_vSound.size() ; i++)
+		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
+			delete m_vSound[i];
+
+	sf::Sound* tmp_sound = new sf::Sound();
+
+	tmp_sound->setBuffer(m_vBuffer[index]);
+
+	tmp_sound->play();	
+
+	m_vSound.push_back(tmp_sound); // neu erzeugten Sound da rein, um speicherplatz zu freen, wenn fertig abgespielt
+
+   return 1;
+}
 
 void MusikSampler::pause()
 {

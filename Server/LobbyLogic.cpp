@@ -37,9 +37,8 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				//muss ich net
 
 				std::vector<char> tmp;
-				tmp = code(it->first);
-				erfg.push_back(tmp[0]);
-				erfg.push_back(tmp[1]);
+
+				erfg.push_back(it->first);
 
 
 				tmp = code(it->second->getID());
@@ -60,6 +59,11 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				tmp = code(master);
 				for (unsigned int i = 0; i < tmp.size(); i++)
 						erfg.push_back(tmp[i]);
+
+				short countplayers = it->second->getPlayers().size();
+				tmp = code(countplayers);
+				erfg.push_back(tmp[0]);
+				erfg.push_back(tmp[1]);
 
 				
 				for (unsigned int i = 0; i < it->second->getPlayers().size(); i++)

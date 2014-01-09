@@ -37,6 +37,10 @@ public:
 	/*Funktionen*/
 
 	void addPlayer(PlayerData* player);
+	void sendPlayerNames(SOCKET s);
+	void sendMaxPlayers(SOCKET s);
+	void sendGameMaster(SOCKET s);
+	void sendCurrentMap(SOCKET s);
 
 	/*Kommunikation*/
 

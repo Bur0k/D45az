@@ -171,6 +171,7 @@
     <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Textblock.h" />
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
@@ -244,5 +245,13 @@
     <Image Include="Data\Maps\TileSheets\test.png">
       <Filter>Data</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Data\Sounds\sound1.wav">
+      <Filter>Data</Filter>
+    </Media>
+    <Media Include="Data\Sounds\sound2.wav">
+      <Filter>Data</Filter>
+    </Media>
   </ItemGroup>
 </Project>
