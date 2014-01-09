@@ -111,6 +111,8 @@ Game::~Game()
 	delete b3;
 
 	delete tblock;
+
+	delete m_pMS;
 }
 
 void Game::setScreen(ScreenMode sm)
