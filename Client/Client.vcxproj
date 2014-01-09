@@ -96,6 +96,7 @@
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="SplittedSprite.cpp" />
     <ClCompile Include="StandardButton.cpp" />
+    <ClCompile Include="Textblock.cpp" />
     <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="tinystr.cpp" />
     <ClCompile Include="tinyxml.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SplittedSprite.h" />
     <ClInclude Include="StandardButton.h" />
+    <ClInclude Include="Textblock.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />

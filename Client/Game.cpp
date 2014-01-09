@@ -8,8 +8,8 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		this->MS->load_music(0);
-		this->MS->play_music();
+		m_pMS->load_music(0);
+		m_pMS->play_music();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -20,15 +20,13 @@ void Game::onButtonClick(int index)
 		break;
 	default:
 		std::cout << "!! undefined button click !!" << std::endl;
-		this->MS->pause();
+		m_pMS->pause();
 		break;
 	}
 }
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
-	
-
 	m_pWindow = rw;
 	m_Screen = sm;
 	m_size = windowSize;
@@ -41,7 +39,13 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
 
-	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"MUSIK LADEN UND STARTEN",1,false);
+
+
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asdlkdjngsöljfngsäklnsdggllkjf", 5);
+	m_drawL.push_back(tblock);
+
+
+	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
 	b->attachFunction((IButtonfunction*)this);
 	
@@ -82,7 +86,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	// Musik Test Zeug
 
-	this->MS = new MusikSampler();
+	m_pMS = new MusikSampler();
 	/*
 	MS->load_music(0);
 	MS->play_music();
@@ -91,10 +95,13 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 Game::~Game()
 {
+	delete m_pMS;
 	delete b;
 	delete b1;
 	delete b2;
 	delete b3;
+
+	delete tblock;
 }
 
 void Game::setScreen(ScreenMode sm)
