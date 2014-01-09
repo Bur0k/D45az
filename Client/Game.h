@@ -13,6 +13,8 @@
 #include "IAnimatable.h"
 #include "IView.h"
 #include "StandardButton.h"
+#include "Textblock.h"
+#include "Slider.h"
 
 #include "MusikSampler.h"
 
@@ -33,7 +35,11 @@ private:
 	Button* b2;
 	Button* b3;
 
+	Textblock* tblock;
+
 	MusikSampler* m_pMS;
+
+	Slider* s;
 
 	///end debug
 	Clock m_fpsCounter;

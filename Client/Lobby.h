@@ -3,12 +3,15 @@
 
 #include "NetworkParticipant.h"
 #include "Client.h"
+#include "PlayerData.h"
 #include <vector>
+#include <map>
 
 class Lobby : public NetworkParticipant
 {
 	Client* c;
 	string name;
+	map<char, GameData> gamesCreated;
 	
 
 public:
