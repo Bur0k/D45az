@@ -1,13 +1,14 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "Client.h"
-#include "Jans_Abgeher_Shit.h"
 #include "Game.h"
 
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
+
+#include "MusikSampler.h"
 
 
 //DEBUG DEFINES IF DEFINED ENABLED
@@ -45,33 +46,6 @@ void OnNewMessage(short id,vector<char> data)
 
 }
 
-void OnNewMessage(short id,vector<char> data)
-{
-	std::cout<<"ID:"<<id<<"\nData:\n";
-	for(unsigned int i=0;i<data.size();i++)
-		std::cout<<data[i];
-	std::cout<<"\nEnde Packet\n\n";
-
-}
-
-void jans_test_karre()
-{
-	sf::Music music;
-	string status;
-
-	if (music.openFromFile("test.ogg"))
-	{
-		cout << "passt" << endl << endl;
-		music.play();
-	}
-
-	music.setVolume(90);
-
-	status = music.getStatus() ;
-
-	cout << music.getStatus() << endl;
-}
-
 #ifndef _DEBUG
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine,int iCmdShow ) //Release Mode verwenden wir Windows als SubSystem
 #else
@@ -91,11 +65,15 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	
 	NetworkLogin NL1("Burak");
+	NetworkLogin NL2("Burak");
 	while(NL1.getState() == 0)
 	{
 	}
+	while(NL2.getState() == 0)
+	{
+	}
 	cout << "NL1:" << NL1.getState() << endl;
-
+	cout << "NL2:" << NL2.getState() << endl;
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
@@ -107,14 +85,19 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	window.setPosition(sf::Vector2i(400,0));
 	window.setMouseCursorVisible(true);
 
+	// Musik Test Zeug
+	/*
+	MusikSampler* MS = new MusikSampler();
+	
+	MS->load_music(0);
+	MS->play_music();
+	*/
 
 
 	//testausgabe
 	/*
 
 	*/
-
-	jans_test_karre();
 	
 	
 	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
