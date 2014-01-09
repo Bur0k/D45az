@@ -15,8 +15,8 @@ class MapLayer
 
 public:
 	bool isCollisionLayer;
-	const static int TileWidth=64;
-	const static int TileHeight=64;
+	const static int TileWidth=32;
+	const static int TileHeight=32;
 
 	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCollisionLayer=false);
 	~MapLayer();

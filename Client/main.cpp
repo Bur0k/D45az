@@ -99,7 +99,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 		// clear the window with black 
 		window.clear(sf::Color::Black);
-
+		
+		map.render(window, sf::IntRect(0,0,1280, 850));
 		g.Draw();
 
 		// end the current frame
