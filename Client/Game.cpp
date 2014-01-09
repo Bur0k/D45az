@@ -8,14 +8,15 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		m_pMS->load_music(0);
-		m_pMS->play_music();
+		m_pMS->play_music(0);
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
+		m_pMS->play_sound(0);
 		std::cout << "other button click" << std::endl;
 		break;
 	case 3:
+		m_pMS->play_sound(1);
 		std::cout << "this button locks in and out  current status" << b3->getIsPressed() << std::endl;
 		break;
 	default:
@@ -60,7 +61,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	
 	b->attachFunction((IButtonfunction*)this);
 	
-	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
+	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "|| SOUND 1 || \n Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
 
 	b1->attachFunction((IButtonfunction*)this);
 
@@ -68,7 +69,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	b2->attachFunction((IButtonfunction*)this);
 
-	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"buttons können auch\nein und aus schalten" , 3, true);
+	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"|| SOUND 2 || \n buttons können auch\nein und aus schalten" , 3, true);
 
 	b3->attachFunction(this);
 

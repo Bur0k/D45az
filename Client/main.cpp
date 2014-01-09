@@ -10,6 +10,8 @@
 
 #include "MusikSampler.h"
 
+#include "Map.h"
+
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
@@ -86,6 +88,9 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	
 	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
 
+	Map map;
+	map.load("Data/Maps/test.tmx");
+
 	while (window.isOpen())
 	{ 
 		g.Input();
@@ -102,8 +107,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 
 	
-#ifdef BURAKTESTSHIT
-	delete c;
-#endif	
+	delete Client::get();
+
 	return 0;
 }

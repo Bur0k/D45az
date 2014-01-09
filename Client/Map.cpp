@@ -1,5 +1,5 @@
 #include <vld.h>
-/*
+
 #include "Map.h"
 
 Map::Map()
@@ -67,5 +67,3 @@ sf::Vector2i Map::getLayerCount()
 {
 	return layers[0]->getLayerCount();
 }
-
-*/

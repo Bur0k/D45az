@@ -32,6 +32,9 @@
     <Filter Include="Codes\Musik\Source">
       <UniqueIdentifier>{b3b5025c-245d-4671-b5e6-d1cc9931d8a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\PlayerData">
+      <UniqueIdentifier>{0e668548-644a-442e-9c31-c2d9ad6c59eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -92,6 +95,12 @@
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
     <ClCompile Include="Textblock.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TileSets.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLayer.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,6 +171,17 @@
     <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Textblock.h" />
+    <ClInclude Include="PlayerData.h">
+      <Filter>Codes\PlayerData</Filter>
+    </ClInclude>
+    <ClInclude Include="Textblock.h" />
+    <ClInclude Include="TileSets.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLayer.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -204,6 +224,9 @@
     <None Include="Data\Songs\test.ogg">
       <Filter>Data</Filter>
     </None>
+    <None Include="Data\Maps\test.tmx">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">
@@ -219,5 +242,16 @@
     <Image Include="Data\Images\Button.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Data\Maps\TileSheets\test.png">
+      <Filter>Data</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Data\Sounds\sound1.wav">
+      <Filter>Data</Filter>
+    </Media>
+    <Media Include="Data\Sounds\sound2.wav">
+      <Filter>Data</Filter>
+    </Media>
   </ItemGroup>
 </Project>

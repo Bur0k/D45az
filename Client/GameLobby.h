@@ -9,11 +9,13 @@ class GameLobby : public NetworkParticipant
 private:
 
 	Client* c;
-	short id;
 	vector<string> players;
 	short playerLimit;
 	string gameMaster;
 	//Map current Map;
+
+	bool Ingame;
+	bool disconnected;
 
 public:
 	GameLobby(void);
