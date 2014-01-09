@@ -16,7 +16,9 @@ using namespace sf;
 
 class ISliderFunction
 {
+public:
 	virtual void onSliderValueChange(int ID, double position)=0;
+	virtual void onSliderReleased(int ID, double position)=0;
 };
 
 typedef std::vector<ISliderFunction*> SliderCallbackTarget;
@@ -26,7 +28,7 @@ class Slider : public IClickable, public IDrawable
 protected:
 	sf::Rect<float> m_dimensions;
 	int m_ID;
-	SliderCallbackTarget attachedfuncs;
+	SliderCallbackTarget m_attachedFunctions;
 	Vector2f m_position;
 	Vector2f m_size;
 	bool m_horizontal;
