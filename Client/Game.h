@@ -14,6 +14,8 @@
 #include "IView.h"
 #include "StandardButton.h"
 
+#include "MusikSampler.h"
+
 using namespace sf;
 
 //#define MOUSEGRAB
@@ -30,6 +32,8 @@ private:
 	Button* b1;
 	Button* b2;
 	Button* b3;
+
+	MusikSampler* MS;
 
 	///end debug
 	Clock m_fpsCounter;
