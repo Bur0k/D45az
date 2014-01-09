@@ -14,6 +14,7 @@
 #include "IView.h"
 #include "StandardButton.h"
 #include "Textblock.h"
+#include "Slider.h"
 
 #include "MusikSampler.h"
 
@@ -37,6 +38,8 @@ private:
 	Textblock* tblock;
 
 	MusikSampler* m_pMS;
+
+	Slider* s;
 
 	///end debug
 	Clock m_fpsCounter;

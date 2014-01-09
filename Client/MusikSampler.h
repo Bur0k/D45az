@@ -10,9 +10,8 @@ class MusikSampler
 {
 private:
 	sf::Music m_Music;	// nur OGG
-	sf::Sound m_Sound;	// nur WAV
-	bool m_Loaded_music;
-	bool m_Loaded_sound;
+	vector<sf::Sound*> m_vSound; // wird als Vector benötigt, um mehrere gleichzeitig zu starten	und anschließend zu deleten
+	vector<sf::SoundBuffer> m_vBuffer; // nur WAV
 
 	string m_Path_full_song;
 	string m_Path_sounds;
@@ -22,8 +21,10 @@ public:
 	MusikSampler(void); 
 	~MusikSampler(void);
 
-    bool load_music(int index);
-    bool play_music();
+    bool load_music(int index);		// im hintergrund ausgeführt
+	sf::SoundBuffer load_sound(int index); // schon am anfang ausgeführt
+    bool play_music(int index);
+	bool play_sound(int index);
 
     void pause();
     void stop();

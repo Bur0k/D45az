@@ -38,10 +38,11 @@ int main()
 
 	server->startListening();
 
-	LogInLogic LIL;
+	LogInLogic* LIL = new LogInLogic();
 
 	getchar();
 
+	delete LIL;
 	delete ts;
 	delete server;
 }
