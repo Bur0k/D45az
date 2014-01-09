@@ -91,6 +91,12 @@
     <ClCompile Include="Lobby.cpp">
       <Filter>Codes\Network\Source</Filter>
     </ClCompile>
+    <ClCompile Include="StandardButton.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Textblock.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
