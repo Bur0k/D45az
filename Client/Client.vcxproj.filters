@@ -79,6 +79,9 @@
     <ClCompile Include="MusikSampler.cpp">
       <Filter>Codes\Musik\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Lobby.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="MusikSampler.h">
       <Filter>Codes\Musik</Filter>
+    </ClInclude>
+    <ClInclude Include="Lobby.h">
+      <Filter>Codes\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

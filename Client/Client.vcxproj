@@ -87,6 +87,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MusikSampler.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
     <ClInclude Include="IView.h" />
+    <ClInclude Include="Lobby.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MusikSampler.h" />
     <ClInclude Include="NetworkLogin.h" />
