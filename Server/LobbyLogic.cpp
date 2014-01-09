@@ -14,14 +14,7 @@ LobbyLogic::LobbyLogic()
 	server->addToNewMessageCallback(this);
 }
 
-LobbyLogic::LobbyLogic(LogInLogic* l)
-{
-	this->server = Server::get();
 
-	this->LogIn = l;
-
-	server->addToNewMessageCallback(this);
-}
 
 LobbyLogic::~LobbyLogic()
 {
