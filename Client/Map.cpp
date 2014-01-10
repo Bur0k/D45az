@@ -40,8 +40,7 @@ void Map::load(std::string MapLocation)
 		for(TiXmlElement* element = root->FirstChildElement("tileset");element;element=element->NextSiblingElement("tileset"))
 		{
 			std::string Location=element->FirstChildElement()->Attribute("source");
-			Location=Location.substr(3,Location.size()-3);
-			Location="Data/"+Location;
+			Location="Data/Maps/"+Location;
 
 			tilesets->addTileSet(Location,std::atoi(element->Attribute("firstgid")),std::atoi(element->Attribute("tilewidth")),std::atoi(element->Attribute("tileheight")));
 		}
@@ -52,7 +51,10 @@ void Map::load(std::string MapLocation)
 			if(std::string::npos != isCollisionLayer.find("Collision"))
 				isCollision=true;
 
-			layers.push_back(new MapLayer(element->FirstChildElement()->GetText(),std::atoi(root->Attribute("width")),tilesets,isCollision));
+			const char* temptt = element->FirstChildElement()->GetText();
+			int tempii = std::atoi(root->Attribute("width"));
+
+			layers.push_back(new MapLayer(temptt,tempii,tilesets,isCollision));
 		}
 	}
 }
