@@ -9,14 +9,14 @@
 
 #include "Lobby.h"
 
-void CLobby::connectToGameLobby(char mapid)
+void Lobby::connectToGameLobby(char mapid)
 {
 	vector<char> msg;
 	msg.push_back(mapid);
 
 	c->write(0x0202, msg);
 }
-void CLobby::createNewGameLobby()
+void Lobby::createNewGameLobby()
 {
 	vector<char> leer;
 
@@ -24,14 +24,14 @@ void CLobby::createNewGameLobby()
 }
 
 
-void CLobby::askforLobbyData()
+void Lobby::askforLobbyData()
 {
 		vector<char> leer;
 
 		c->write(0x0201,leer);
 }
 
-void CLobby::processNewMessage(short id,vector<char> data)
+void Lobby::processNewMessage(short id,vector<char> data)
 {
 	switch (id)
 	{
@@ -100,11 +100,11 @@ void CLobby::processNewMessage(short id,vector<char> data)
 	}
 }
 
-void CLobby::processNetworkError(int id, std::string msg)
+void Lobby::processNetworkError(int id, std::string msg)
 {
 }
 
-CLobby::CLobby(string Name)
+Lobby::Lobby(string Name)
 {
 	c = Client::get();
 	c->addToNewMessageCallback(this);
@@ -112,7 +112,7 @@ CLobby::CLobby(string Name)
 	this->name = Name;
 }
 
-CLobby::~CLobby()
+Lobby::~Lobby()
 {
 	c->deleteFromNewMessageCallback(this);
 }
