@@ -239,10 +239,10 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Data\Images\Button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Data\Maps\TileSheets\test.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\Button.png">
       <Filter>Data</Filter>
     </Image>
   </ItemGroup>

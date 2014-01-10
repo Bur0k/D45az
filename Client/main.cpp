@@ -13,6 +13,8 @@
 
 #include "Map.h"
 
+#include "Lobby.h"
+
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
@@ -54,11 +56,17 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	Client::get()->write(0,testData);
 
 	
+	
 	NetworkLogin NL1("Burak");
 	while(NL1.getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
+
+
+
+	
+
 
 	Lobby lobby("Burak");
 

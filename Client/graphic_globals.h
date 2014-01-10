@@ -3,6 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 #include <iostream>
+#include <vector>
 using namespace sf;
 
 class _MyColors
@@ -41,4 +42,11 @@ public:
 	
 } static MyFonts;
 
+struct SpriteTex
+{
+	Texture t;
+	RectangleShape s;
+};
+
+typedef std::vector<SpriteTex>SpriteTexVect;
 #endif
