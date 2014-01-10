@@ -7,7 +7,7 @@
 #include <vector>
 #include <map>
 
-class Lobby : public NetworkParticipant
+class CLobby : public NetworkParticipant
 {
 	Client* c;
 	string name;
@@ -15,8 +15,8 @@ class Lobby : public NetworkParticipant
 	
 
 public:
-	Lobby(string name);
-	~Lobby();
+	CLobby(string name);
+	~CLobby();
 
 	void connectToGameLobby(char mapid);
 	void createNewGameLobby();

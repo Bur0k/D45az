@@ -12,10 +12,12 @@
 
 #include "Map.h"
 
+#include "Lobby.h"
+
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 
 
@@ -53,12 +55,21 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	c->beginRead();std::vector<char> testData;
 	Client::get()->write(0,testData);
 
+
 	
 	NetworkLogin NL1("Burak");
 	while(NL1.getState() == 0)
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
+
+	CLobby* l1 = new CLobby("Burak");
+	l1->askforLobbyData();
+	l1->createNewGameLobby();
+	l1->askforLobbyData();
+
+	
+
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
