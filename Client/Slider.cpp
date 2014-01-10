@@ -20,6 +20,7 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 
 	m_mouseOver = false;
 	m_mouseDown = false;
+	m_wasClicked = false;
 
 	m_dimensions.width = size.x;
 	m_dimensions.height = size.y;
@@ -139,29 +140,30 @@ bool Slider::isHit(sf::Vector2i & mouse)
 
 	if(m_mouseDown && m_mouseOver)
 	{
-			if(m_horizontal)
-			{
-				float delta = mouse.x - m_oldMouse.x;
-				//std::cout << "Slider Mouse Delta :  x  " << delta << std::endl;
-				m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x + delta , m_pBar[3].s.getPosition().y); 
+		m_wasClicked = true;
+		if(m_horizontal)
+		{
+			float delta = mouse.x - m_oldMouse.x;
+			//std::cout << "Slider Mouse Delta :  x  " << delta << std::endl;
+			m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x + delta , m_pBar[3].s.getPosition().y); 
 
-				// restrict movement
-				//x+
-				if(m_pBar[3].s.getPosition().x > m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height)
-					m_pBar[3].s.setPosition(m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height ,m_pBar[3].s.getPosition().y);
-				//x-
-				if(m_pBar[3].s.getPosition().x < m_dimensions.left + SLIDERENDBLOCKWIDTH)
-					m_pBar[3].s.setPosition( m_dimensions.left + SLIDERENDBLOCKWIDTH ,m_pBar[3].s.getPosition().y);
-			}
-			else
-			{
-				float delta = mouse.y - m_oldMouse.y;
-				//std::cout << "Slider Mouse Delta :  y  " << delta << std::endl;
-				m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x, m_pBar[3].s.getPosition().y + delta);
-			}
-
-			Notify();
+			// restrict movement
+			//x+
+			if(m_pBar[3].s.getPosition().x > m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height)
+				m_pBar[3].s.setPosition(m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height ,m_pBar[3].s.getPosition().y);
+			//x-
+			if(m_pBar[3].s.getPosition().x < m_dimensions.left + SLIDERENDBLOCKWIDTH)
+				m_pBar[3].s.setPosition( m_dimensions.left + SLIDERENDBLOCKWIDTH ,m_pBar[3].s.getPosition().y);
 		}
+		else
+		{
+			float delta = mouse.y - m_oldMouse.y;
+			//std::cout << "Slider Mouse Delta :  y  " << delta << std::endl;
+			m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x, m_pBar[3].s.getPosition().y + delta);
+		}
+
+		Notify();
+	}
 	
 	m_oldMouse = mouse;
 	return m_mouseOver;
@@ -184,7 +186,11 @@ void Slider::ReleasedLeft()
 {
 	//TODO notify
 	m_mouseDown = false;
-	Notify();
+	if(m_wasClicked)
+	{
+		Notify();
+		m_wasClicked = false;
+	}
 }
 
 void Slider::draw(RenderWindow* rw)

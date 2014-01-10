@@ -34,6 +34,7 @@ protected:
 	bool m_horizontal;
 	bool m_mouseOver;
 	bool m_mouseDown;
+	bool m_wasClicked;
 	
 	SpriteTex* m_pBar;
 
