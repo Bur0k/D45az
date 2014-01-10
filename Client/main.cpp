@@ -12,6 +12,8 @@
 
 #include "Map.h"
 
+#include "Lobby.h"
+
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
@@ -53,12 +55,18 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	c->beginRead();std::vector<char> testData;
 	Client::get()->write(0,testData);
 
+
 	
 	NetworkLogin NL1("Burak");
 	while(NL1.getState() == 0)
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
+
+
+
+	
+
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
