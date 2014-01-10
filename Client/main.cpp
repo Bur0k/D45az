@@ -17,7 +17,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-#define BURAKTESTSHIT
+//#define BURAKTESTSHIT
 
 
 
@@ -63,10 +63,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 	cout << "NL1:" << NL1.getState() << endl;
 
-	CLobby* l1 = new CLobby("Burak");
-	l1->askforLobbyData();
-	l1->createNewGameLobby();
-	l1->askforLobbyData();
+
 
 	
 
