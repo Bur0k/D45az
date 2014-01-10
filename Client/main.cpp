@@ -99,7 +99,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	*/
 	
 	
-	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
+	Game g = Game(&window, TESTSCREEN, sf::Vector2f(1280, 850));
 	
 	Map map;
 	map.load("Data/Maps/test.tmx");

@@ -36,7 +36,7 @@ protected:
 	bool m_mouseDown;
 	bool m_wasClicked;
 	
-	SpriteTexVect m_Bar;
+	SpriteTex* m_pBar;
 
 
 	Vector2i m_oldMouse;
