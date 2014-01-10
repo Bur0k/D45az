@@ -8,7 +8,7 @@
 #include "Game.h"
 
 
-enum ScreenMode {Ingame, Login, Menue, Lobby, IngameMenu, Testscreen};
+enum ScreenMode {INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
 
 
 typedef void (*changeView_func)(ScreenMode);

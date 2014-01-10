@@ -106,7 +106,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
 
-	m_Screen = Testscreen;
+	m_Screen = TESTSCREEN;
 
 
 	// Musik Test Zeug
@@ -150,23 +150,23 @@ void Game::Draw()
 {
 	switch (m_Screen)
 	{
-	case Ingame:
+	case INGAME:
 		DrawGame();
 		break;
-	case Login:
+	case LOGIN:
 		DrawLogin();
 		break;
-	case Menue:
+	case MENUE:
 		DrawMainMenu();
 		break;
-	case Lobby:
+	case LOBBY:
 		DrawLobby();
 		break;
-	case IngameMenu:
+	case INGAME_MENU:
 		DrawGame();
 		DrawIngameMenu();
 		break;
-	case Testscreen:
+	case TESTSCREEN:
 		DrawTest();
 	default:
 		break;
