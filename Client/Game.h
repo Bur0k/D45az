@@ -40,6 +40,7 @@ private:
 	MusikSampler* m_pMS;
 
 	Slider* s;
+	Slider* s1;
 
 	///end debug
 	Clock m_fpsCounter;

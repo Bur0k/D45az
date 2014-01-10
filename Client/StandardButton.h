@@ -5,14 +5,12 @@
 #include <SFML\System.hpp>
 #include "Button.h"
 #include "SplittedSprite.h"
+#include "graphic_globals.h"
+
 
 using namespace sf;
 
-struct SpriteTex
-{
-	Texture t;
-	RectangleShape s;
-};
+
 
 //adjust it to your sprite file
 const int BUTTONTILESIZE = 10;

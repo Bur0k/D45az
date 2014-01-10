@@ -77,6 +77,11 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	
 	s->Attach(this);
 
+	s1 = new Slider(false, Vector2f(30,200), 0.4, Vector2f(700,200), 2);
+
+	s1->Attach(this);
+
+
 	m_fpsText.setFont(m_stdFont);
 	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
 	m_fpsText.setColor(MyColors.Red);
@@ -87,12 +92,14 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_clickL.push_back(b2);
 	m_clickL.push_back(b3);
 	m_clickL.push_back(s);
+	m_clickL.push_back(s1);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
 	m_drawL.push_back(b2);
 	m_drawL.push_back(b3);
 	m_drawL.push_back(s);
+	m_drawL.push_back(s1);
 	
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
@@ -121,6 +128,8 @@ Game::~Game()
 	delete b1;
 	delete b2;
 	delete b3;
+	delete s;
+	delete s1;
 
 	delete tblock;
 
