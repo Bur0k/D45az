@@ -26,21 +26,21 @@ public:
 	}
 } static MyColors;
 
+enum GameFonts {ARIAL};
 
 
-class _MyFonts
+class MyFonts
 {
+private:
+		MyFonts();
 public:
-	sf::Font Arial;
-	_MyFonts() 
-	{
-		std::cout << " LOADING FONTS " << std::endl;
-		if(!Arial.loadFromFile("Data/Fonts/arial.ttf"))
-			std::cout << "font arial load failed!!" << std::endl;
-	};
-	void loadFonts();
+	static sf::Font* s_pArial;
 	
-} static MyFonts;
+	static void deleteFonts();
+	static sf::Font & getFont(GameFonts);
+	
+}; 
+
 
 struct SpriteTex
 {

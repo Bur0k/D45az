@@ -103,6 +103,9 @@
     <ClCompile Include="MapLayer.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="graphic_globals.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">

@@ -39,6 +39,8 @@ void Game::onSliderReleased(int ID, double position)
 
 Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 {
+
+
 	m_pWindow = rw;
 	m_Screen = sm;
 	m_size = windowSize;
@@ -46,7 +48,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_inFocus = true;
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
-	m_stdFont = MyFonts.Arial;
+	m_stdFont = MyFonts::getFont(GameFonts::ARIAL);
 
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
@@ -295,6 +297,14 @@ void Game::onKeyUp(sf::Event e)
 #endif
 }
 
+void Game::onWindowClose()
+{
+	m_pWindow->close();
+	
+	//singelton MyFont has to be delted as well
+	MyFonts::deleteFonts();
+}
+
 void Game::Input()
 {
 	//CHECK EVENTS//
@@ -307,7 +317,7 @@ void Game::Input()
 		{
 			/////WINDOW EVENTS/////
 		case sf::Event::Closed:
-			m_pWindow->close();
+			onWindowClose();	//TODO sollte auch aufgerufen werden wenn geclosed wird
 			break;
 
 		case sf::Event::GainedFocus:
@@ -368,15 +378,23 @@ void Game::Input()
 void Game::timer()
 {
 	static int fpsCount = 0;
-
+	static int animationtime = 0;
+	
 	//std::cout<<m_animationTimer.getElapsedTime().asMilliseconds()<<std::endl;
-	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
+	
+
+	//ANIMATION//
+	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
+	m_animationTimer.restart();
+	while(animationtime > 1000 / 33)
 	{
-		m_animationTimer.restart();
+		animationtime -= 1000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
 	}
 
+
+	//...//
 	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
 	{
 		m_fpsCounter.restart();

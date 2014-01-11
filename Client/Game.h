@@ -89,6 +89,7 @@ private:
 
 	void onMouseMove();
 	void onResize();
+	void onWindowClose();
 	void onMouseDownLeft();
 	void onMouseDownRight();
 	void onMouseUpLeft();
