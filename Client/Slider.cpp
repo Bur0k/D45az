@@ -41,7 +41,7 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 		m_pBar[2].s.setSize(Vector2f(size.x - SLIDERENDBLOCKWIDTH * 2, size.y / 3)); //slider Bar
 		m_pBar[2].s.setPosition(pos.x + SLIDERENDBLOCKWIDTH, pos.y + size.y / 3); 
 		m_pBar[3].s.setSize(Vector2f(size.y, size.y)); //slider
-		m_pBar[3].s.setPosition(pos.x + SLIDERENDBLOCKWIDTH + startsliderposition * (size.x - SLIDERENDBLOCKWIDTH * 2 - size.y), pos.y);
+		m_pBar[3].s.setPosition(pos.x + SLIDERENDBLOCKWIDTH + (float)startsliderposition * (size.x - SLIDERENDBLOCKWIDTH * 2 - size.y), pos.y);
 	}
 	else
 	{
@@ -52,7 +52,7 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 		m_pBar[2].s.setSize(Vector2f(size.x / 3,size.y - SLIDERENDBLOCKWIDTH * 2)); //slider Bar
 		m_pBar[2].s.setPosition(pos.x + size.x / 3, pos.y + SLIDERENDBLOCKWIDTH); 
 		m_pBar[3].s.setSize(Vector2f(size.x, size.x)); //slider
-		m_pBar[3].s.setPosition(pos.x, pos.y + SLIDERENDBLOCKWIDTH + startsliderposition * (size.y - SLIDERENDBLOCKWIDTH * 2 - size.x));
+		m_pBar[3].s.setPosition(pos.x, pos.y + SLIDERENDBLOCKWIDTH + (float)startsliderposition * (size.y - SLIDERENDBLOCKWIDTH * 2 - size.x));
 	}
 
 	for(unsigned int i = 0; i < 4; i++)
@@ -152,7 +152,7 @@ bool Slider::isHit(sf::Vector2i & mouse)
 		m_wasClicked = true;
 		if(m_horizontal)
 		{
-			float delta = mouse.x - m_oldMouse.x;
+			float delta = (float)mouse.x - m_oldMouse.x;
 			//std::cout << "Slider Mouse Delta :  x  " << delta << std::endl;
 			m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x + delta , m_pBar[3].s.getPosition().y); 
 
@@ -166,7 +166,7 @@ bool Slider::isHit(sf::Vector2i & mouse)
 		}
 		else
 		{
-			float delta = mouse.y - m_oldMouse.y;
+			float delta = (float)mouse.y - m_oldMouse.y;
 			//std::cout << "Slider Mouse Delta :  y  " << delta << std::endl;
 			m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x, m_pBar[3].s.getPosition().y + delta);
 

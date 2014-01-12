@@ -37,12 +37,12 @@ void Game::onSliderReleased(int ID, double position)
 }
 
 
-Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
+Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 {
 
 
 	m_pWindow = rw;
-	m_Screen = sm;
+	m_ViewMode = sm;
 	m_size = windowSize;
 
 	m_inFocus = true;
@@ -85,7 +85,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 
 	m_fpsText.setFont(m_stdFont);
-	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 	m_fpsText.setColor(MyColors.Red);
 
 
@@ -108,7 +108,6 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
 
-	m_Screen = TESTSCREEN;
 
 
 	// Musik Test Zeug
@@ -138,19 +137,19 @@ Game::~Game()
 	delete m_pMS;
 }
 
-void Game::setScreen(ScreenMode sm)
+void Game::setView(Views sm)
 {
-	m_Screen = sm;
+	m_ViewMode = sm;
 }
 
-ScreenMode Game::getScreen()
+Views Game::getView()
 {
-	return m_Screen;
+	return m_ViewMode;
 }
 
 void Game::Draw()
 {
-	switch (m_Screen)
+	switch (m_ViewMode)
 	{
 	case INGAME:
 		DrawGame();
@@ -230,7 +229,7 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 	
-	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 
 	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
@@ -285,24 +284,42 @@ void Game::onMouseUpRight()
 
 void Game::onKeyDown(sf::Event e)
 {
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyDown(e);
+	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
 }
 
 void Game::onKeyUp(sf::Event e)
 {
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyUp(e);
+
 #ifdef _DEBUG
 	if(e.key.code == sf::Keyboard::Escape) 
 		m_pWindow->close();
 #endif
 }
 
-void Game::onWindowClose()
+void Game::onTextEntered(sf::Event e)
 {
-	m_pWindow->close();
-	
-	//singelton MyFont has to be delted as well
+	Uint32 c = e.text.unicode;
+	if((c >= 32 && c <= 126) /* ... */)
+	{
+		std::string s;
+		s = c;
+		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+			m_keyInputL[i]->onTextInput(c);
+		std::cout << "TEXT ENTERED : " << (std::string)s << std::endl;
+	}
+}
+
+
+void Game::onClose()
+{
 	MyFonts::deleteFonts();
+
 }
 
 void Game::Input()
@@ -317,7 +334,7 @@ void Game::Input()
 		{
 			/////WINDOW EVENTS/////
 		case sf::Event::Closed:
-			onWindowClose();	//TODO sollte auch aufgerufen werden wenn geclosed wird
+			m_pWindow->close();
 			break;
 
 		case sf::Event::GainedFocus:
@@ -367,6 +384,11 @@ void Game::Input()
 		case sf::Event::KeyReleased:
 			if(m_inFocus)
 				onKeyUp(event);
+			break;
+
+		case sf::Event::TextEntered:
+			if(m_inFocus)
+				onTextEntered(event);
 			break;
 
 		default:

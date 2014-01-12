@@ -28,6 +28,8 @@ sf::Font & MyFonts::getFont(GameFonts f)
 		return *s_pArial;
 		break;
 	default:
+		//in case font is not yet implemented return arial
+		return MyFonts::getFont(GameFonts::ARIAL);
 		break;
 		
 	}	
@@ -37,4 +39,5 @@ void MyFonts::deleteFonts()
 {
 	if(s_pArial != NULL)
 		delete s_pArial;
+	s_pArial = NULL;
 }

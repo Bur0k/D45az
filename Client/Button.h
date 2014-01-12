@@ -28,6 +28,7 @@ public:
 	~Button();
 	void operator=(const Button & b);
 protected:
+
 	FuncPointerVect m_attachedFunctions;
 	Text m_buttonText;
 	

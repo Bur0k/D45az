@@ -8,18 +8,17 @@
 #include "Game.h"
 
 
-enum ScreenMode {INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
+enum Views {INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
 
-
-typedef void (*changeView_func)(ScreenMode);
 
 //unites all gui Interfaces for Model View Controller Implementation
 class IView 
 	: public IDrawable, public IClickable, public IAnimatable, public IKeyboardinput
 {
 protected:
-	changeView_func m_callbackFunc;
 	virtual void cangeView()=0;
+public:
+	virtual void onResize()=0;
 };
 
-#endif
+#endif //IVIEW_H
