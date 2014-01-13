@@ -18,14 +18,11 @@ MusikSampler::~MusikSampler(void)
 {
 		// Adresslisten freigeben
 	m_vFull_songs.clear();
-	m_vFull_songs.~vector();
 
 	m_vShort_sounds.clear();
-	m_vShort_sounds.~vector();
 
 		// Bufferliste freigeben
 	m_vBuffer.clear(); 
-	m_vBuffer.~vector();
 
 
 	for (int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
