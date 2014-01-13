@@ -14,8 +14,9 @@ class Lobby : public NetworkParticipant
 	string name;
 	map<char, GameData> gamesCreated;
 	
-
 public:
+	GameLobby* gameLobby;
+
 	Lobby(string name);
 	~Lobby();
 

@@ -92,7 +92,7 @@ void Lobby::processNewMessage(short id,vector<char> data)
 	case 0x0205:
 		{
 			if (data[0] == 1)
-				GameLobby globby();
+				this->gameLobby = new GameLobby();
 			else;
 				//erstellen nicht erfolgreich, tu was
 			break;

@@ -370,7 +370,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 				continue;
 			}
 			// Error
-			Server::get()->sendError(pPerHandleData->sock,0x0010,"Client lost Connection");
+			Server::get()->sendError(pPerHandleData->sock,0x0011,"Client lost Connection");
 			continue;
 		}
 		else

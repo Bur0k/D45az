@@ -12,13 +12,13 @@ LobbyLogic::LobbyLogic()
 {
 	this->server = Server::get();
 	server->addToNewMessageCallback(this);
+	server->addToErrorCallback(this);
 }
-
-
 
 LobbyLogic::~LobbyLogic()
 {
 	server->deleteFromNewMessageCallback(this);
+	server->deleteFromErrorCallback(this);
 	for (std::map<char,GameLobbyLogic*>::iterator it=this->gamesCreated.begin(); it!=this->gamesCreated.end(); ++it)
 		delete it->second;
 }
@@ -127,7 +127,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				
 				std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
 				this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',GameLobby));
-
+			
 				erfg.push_back(1);
 				server->write(s, 0x0205, erfg);
 
@@ -138,4 +138,23 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 void LobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
+	switch (errCode)
+	{
+		case 0x0010:
+			{
+				for(int i = 0; i < server->connectedPlayers.size(); i++)
+				{
+					if(s == server->connectedPlayers[i].s)
+						server->connectedPlayers.erase(server->connectedPlayers.begin() + i);
+				}
+			}break;
+		case 0x0011:
+			{
+				for(int i = 0; i < server->connectedPlayers.size(); i++)
+				{
+					if(s == server->connectedPlayers[i].s)
+						server->connectedPlayers.erase(server->connectedPlayers.begin() + i);
+				}
+			}break;
+	}
 }
