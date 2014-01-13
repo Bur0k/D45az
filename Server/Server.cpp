@@ -83,7 +83,10 @@ Server::Server()
 			toWriteMutex.unlock();
 
 			if(dataToSend.data.size() == 0)
+			{
+				Sleep(1);
 				continue;
+			}
 
 			char* buffer = new char[dataToSend.data.size()];
 			for(unsigned int i=0;i<dataToSend.data.size();i++)
@@ -94,6 +97,24 @@ Server::Server()
 				sendError(dataToSend.s,-3,"Send failed with error: "+to_string(WSAGetLastError()));
 
 			delete[] buffer;
+		}
+	});
+
+	addNewMessageCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			addNewMessageCallbackMutex.lock();
+			for(int i=0;i<addNewMessageCallbackList.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				newMessageCallback.push_back(addNewMessageCallbackList[i]);
+				newMessageCallbackMutex.unlock();
+			}
+			addNewMessageCallbackList.clear();
+			addNewMessageCallbackMutex.unlock();
+
+			Sleep(1);
 		}
 	});
 
@@ -514,9 +535,9 @@ void Server::write(SOCKET s,short id,vector<char> data)
 
 void Server::addToNewMessageCallback(NetworkParticipant* np)
 {
-	newMessageCallbackMutex.lock();
-	newMessageCallback.push_back(np);
-	newMessageCallbackMutex.unlock();
+	addNewMessageCallbackMutex.lock();
+	addNewMessageCallbackList.push_back(np);
+	addNewMessageCallbackMutex.unlock();
 }
 
 void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
@@ -528,7 +549,7 @@ void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 			newMessageCallback.erase(newMessageCallback.begin()+i);
 			break;
 		}
-		newMessageCallbackMutex.unlock();
+	newMessageCallbackMutex.unlock();
 }
 
 void Server::addToErrorCallback(NetworkParticipant* np)
@@ -547,5 +568,5 @@ void Server::deleteFromErrorCallback(NetworkParticipant* np)
 			errorCallback.erase(errorCallback.begin()+i);
 			break;
 		}
-		errorCallbackMutex.unlock();
+	errorCallbackMutex.unlock();
 }

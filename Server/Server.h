@@ -136,6 +136,10 @@ class Server
 	list<writeData> toWrite;
 	mutex toWriteMutex;
 
+	thread* addNewMessageCallbackThread;
+	list<NetworkParticipant*> addNewMessageCallbackList;
+	mutex addNewMessageCallbackMutex;
+
 	bool running;
 	static Server* self;
 	Server();
