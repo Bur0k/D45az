@@ -7,15 +7,18 @@
 #include <SFML/System.hpp>
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
+#include "Lobby.h"
 
 #include "MusikSampler.h"
 
 #include "Map.h"
 
+#include "Lobby.h"
+
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 
 
@@ -29,7 +32,6 @@ class testClient : public NetworkParticipant
 		for(unsigned int i=0;i<data.size();i++)
 			std::cout<<data[i];
 		std::cout<<"\nEnde Packet\n\n";
-
 	}
 
 	void processNetworkError(int id, std::string msg)
@@ -54,11 +56,18 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	Client::get()->write(0,testData);
 
 	
+	
 	NetworkLogin NL1("Burak");
-	while(NL1.getState() == 0)
+	while(NL1.getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
+
+	Lobby lobby("Burak");
+
+
+
+
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
@@ -85,7 +94,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	*/
 	
 	
-	Game g = Game(&window, Testscreen, sf::Vector2f(1280, 850));
+	Game g = Game(&window, TESTSCREEN, sf::Vector2f(1280, 850));
 	
 	Map map;
 	map.load("Data/Maps/test.tmx");
@@ -105,9 +114,10 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// end the current frame
 		window.display();
 	}
-
+	g.onClose();
 	
 	delete Client::get();
+	MyFonts::deleteFonts(); //TODO in game implementieren
 
 	return 0;
 }

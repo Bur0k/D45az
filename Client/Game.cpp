@@ -37,16 +37,18 @@ void Game::onSliderReleased(int ID, double position)
 }
 
 
-Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
+Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 {
+
+
 	m_pWindow = rw;
-	m_Screen = sm;
+	m_ViewMode = sm;
 	m_size = windowSize;
 
 	m_inFocus = true;
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
-	m_stdFont = MyFonts.Arial;
+	m_stdFont = MyFonts::getFont(GameFonts::ARIAL);
 
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
@@ -77,8 +79,13 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	
 	s->Attach(this);
 
+	s1 = new Slider(false, Vector2f(30,200), 0.4, Vector2f(700,200), 2);
+
+	s1->Attach(this);
+
+
 	m_fpsText.setFont(m_stdFont);
-	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 	m_fpsText.setColor(MyColors.Red);
 
 
@@ -87,19 +94,20 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_clickL.push_back(b2);
 	m_clickL.push_back(b3);
 	m_clickL.push_back(s);
+	m_clickL.push_back(s1);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
 	m_drawL.push_back(b2);
 	m_drawL.push_back(b3);
 	m_drawL.push_back(s);
+	m_drawL.push_back(s1);
 	
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
 
-	m_Screen = Testscreen;
 
 
 	// Musik Test Zeug
@@ -121,43 +129,45 @@ Game::~Game()
 	delete b1;
 	delete b2;
 	delete b3;
+	delete s;
+	delete s1;
 
 	delete tblock;
 
 	delete m_pMS;
 }
 
-void Game::setScreen(ScreenMode sm)
+void Game::setView(Views sm)
 {
-	m_Screen = sm;
+	m_ViewMode = sm;
 }
 
-ScreenMode Game::getScreen()
+Views Game::getView()
 {
-	return m_Screen;
+	return m_ViewMode;
 }
 
 void Game::Draw()
 {
-	switch (m_Screen)
+	switch (m_ViewMode)
 	{
-	case Ingame:
+	case INGAME:
 		DrawGame();
 		break;
-	case Login:
+	case LOGIN:
 		DrawLogin();
 		break;
-	case Menue:
+	case MENUE:
 		DrawMainMenu();
 		break;
-	case Lobby:
+	case LOBBY:
 		DrawLobby();
 		break;
-	case IngameMenu:
+	case INGAME_MENU:
 		DrawGame();
 		DrawIngameMenu();
 		break;
-	case Testscreen:
+	case TESTSCREEN:
 		DrawTest();
 	default:
 		break;
@@ -219,7 +229,7 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 	
-	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 
 	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
@@ -274,16 +284,42 @@ void Game::onMouseUpRight()
 
 void Game::onKeyDown(sf::Event e)
 {
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyDown(e);
+	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
 }
 
 void Game::onKeyUp(sf::Event e)
 {
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyUp(e);
+
 #ifdef _DEBUG
 	if(e.key.code == sf::Keyboard::Escape) 
 		m_pWindow->close();
 #endif
+}
+
+void Game::onTextEntered(sf::Event e)
+{
+	Uint32 c = e.text.unicode;
+	if((c >= 32 && c <= 126) /* ... */)
+	{
+		std::string s;
+		s = c;
+		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+			m_keyInputL[i]->onTextInput(c);
+		std::cout << "TEXT ENTERED : " << (std::string)s << std::endl;
+	}
+}
+
+
+void Game::onClose()
+{
+	MyFonts::deleteFonts();
+
 }
 
 void Game::Input()
@@ -350,6 +386,11 @@ void Game::Input()
 				onKeyUp(event);
 			break;
 
+		case sf::Event::TextEntered:
+			if(m_inFocus)
+				onTextEntered(event);
+			break;
+
 		default:
 			break;
 		}
@@ -359,15 +400,23 @@ void Game::Input()
 void Game::timer()
 {
 	static int fpsCount = 0;
-
+	static int animationtime = 0;
+	
 	//std::cout<<m_animationTimer.getElapsedTime().asMilliseconds()<<std::endl;
-	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
+	
+
+	//ANIMATION//
+	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
+	m_animationTimer.restart();
+	while(animationtime > 1000 / 33)
 	{
-		m_animationTimer.restart();
+		animationtime -= 1000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
 	}
 
+
+	//...//
 	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
 	{
 		m_fpsCounter.restart();

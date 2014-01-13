@@ -103,6 +103,9 @@
     <ClCompile Include="MapLayer.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="graphic_globals.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -239,10 +242,10 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Data\Images\Button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Data\Maps\TileSheets\test.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\Button.png">
       <Filter>Data</Filter>
     </Image>
   </ItemGroup>

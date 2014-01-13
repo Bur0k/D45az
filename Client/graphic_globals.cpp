@@ -1,8 +1,43 @@
 #include "graphic_globals.h"
 
-//void _MyFonts::loadFonts()
-//{
-//	std::cout << " LOADING FONTS " << std::endl;
-//	if(!Arial.loadFromFile("Data/Fonts/arial.ttf"))
-//		std::cout << "font arial load failed!!" << std::endl;
-//}
+
+sf::Font* MyFonts::s_pArial = NULL;
+
+
+MyFonts::MyFonts()
+{
+	
+}
+
+sf::Font & MyFonts::getFont(GameFonts f)
+{
+	switch (f)
+	{
+	case ARIAL:
+		if(s_pArial == NULL)
+		{
+			std::cout << " LOADING FONT ARIAL " << std::endl;
+			
+			s_pArial = new Font();
+			if(!s_pArial->loadFromFile("Data/Fonts/arial.ttf"))
+				std::cout << "font arial load failed!!" << std::endl;
+		}
+		else 
+			std::cout << " FONT ALREADY LOADED " << std::endl;
+		
+		return *s_pArial;
+		break;
+	default:
+		//in case font is not yet implemented return arial
+		return MyFonts::getFont(GameFonts::ARIAL);
+		break;
+		
+	}	
+}
+
+void MyFonts::deleteFonts()
+{
+	if(s_pArial != NULL)
+		delete s_pArial;
+	s_pArial = NULL;
+}

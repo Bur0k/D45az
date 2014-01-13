@@ -59,7 +59,7 @@ void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		{
 			string name;
 
-			for(int i = 0; i > data.size(); i++)
+			for(unsigned int i = 0; i > data.size(); i++)
 			{
 				while(data[i] != '/')
 					name += data[i];

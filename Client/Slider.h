@@ -7,7 +7,7 @@
 
 #include "IClickable.h"
 #include "IDrawable.h"
-#include "StandardButton.h"	//TODO struct in eigenes file
+#include "graphic_globals.h"	//TODO struct in eigenes file
 
 using namespace sf;
 
@@ -34,6 +34,7 @@ protected:
 	bool m_horizontal;
 	bool m_mouseOver;
 	bool m_mouseDown;
+	bool m_wasClicked;
 	
 	SpriteTex* m_pBar;
 

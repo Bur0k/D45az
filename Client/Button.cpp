@@ -21,7 +21,7 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
 	
 	setSize(size);
 	setPosition(pos);
-	m_Font = Font(MyFonts.Arial);
+	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_buttonText.setFont(m_Font);
 	m_buttonText.setString(S);
 	
