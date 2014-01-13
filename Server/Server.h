@@ -137,8 +137,18 @@ class Server
 	mutex toWriteMutex;
 
 	thread* addNewMessageCallbackThread;
-	list<NetworkParticipant*> addNewMessageCallbackList;
+	vector<NetworkParticipant*> addNewMessageCallbackList;
 	mutex addNewMessageCallbackMutex;
+	thread* deleteNewMessageCallbackThread;
+	vector<NetworkParticipant*> deleteNewMessageCallbackList;
+	mutex deleteNewMessageCallbackMutex;
+
+	thread* addErrorCallbackThread;
+	vector<NetworkParticipant*> addErrorCallbackList;
+	mutex addErrorCallbackMutex;
+	thread* deleteErrorCallbackThread;
+	vector<NetworkParticipant*> deleteErrorCallbackList;
+	mutex deleteErrorCallbackMutex;
 
 	bool running;
 	static Server* self;
