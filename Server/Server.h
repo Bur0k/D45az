@@ -148,6 +148,7 @@ public:
 
 	~Server();
 
+	D45vector<PlayerData> connectedPlayers;
 
 	void startListening();
 	void write(SOCKET s,short id,vector<char> data);
