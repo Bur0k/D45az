@@ -117,6 +117,68 @@ Server::Server()
 			Sleep(1);
 		}
 	});
+	deleteNewMessageCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			deleteNewMessageCallbackMutex.lock();
+			for(int i=0;i<deleteNewMessageCallbackList.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				for(unsigned int i=0;i<newMessageCallback.size();i++)
+					if(newMessageCallback[i] == deleteNewMessageCallbackList[i])
+					{
+						newMessageCallback.erase(newMessageCallback.begin()+i);
+						break;
+					}
+				newMessageCallbackMutex.unlock();
+			}
+			deleteNewMessageCallbackList.clear();
+			deleteNewMessageCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+
+	addErrorCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			addErrorCallbackMutex.lock();
+			for(int i=0;i<addErrorCallbackList.size();i++)
+			{
+				errorCallbackMutex.lock();
+				errorCallback.push_back(addErrorCallbackList[i]);
+				errorCallbackMutex.unlock();
+			}
+			addErrorCallbackList.clear();
+			addErrorCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+	deleteErrorCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			deleteErrorCallbackMutex.lock();
+			for(int i=0;i<deleteErrorCallbackList.size();i++)
+			{
+				errorCallbackMutex.lock();
+				for(unsigned int i=0;i<errorCallback.size();i++)
+					if(errorCallback[i] == deleteErrorCallbackList[i])
+					{
+						errorCallback.erase(errorCallback.begin()+i);
+						break;
+					}
+				errorCallbackMutex.unlock();
+			}
+			deleteErrorCallbackList.clear();
+			deleteErrorCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
 
 	self = this;
 }
@@ -153,6 +215,16 @@ Server::~Server()
 
 	writeThread->join();
 	delete writeThread;
+
+	addNewMessageCallbackThread->join();
+	delete addNewMessageCallbackThread;
+	deleteNewMessageCallbackThread->join();
+	delete deleteNewMessageCallbackThread;
+
+	addErrorCallbackThread->join();
+	delete addErrorCallbackThread;
+	deleteErrorCallbackThread->join();
+	delete deleteErrorCallbackThread;
 }
 
 void Server::startListening()
@@ -542,31 +614,21 @@ void Server::addToNewMessageCallback(NetworkParticipant* np)
 
 void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 {
-	newMessageCallbackMutex.lock();
-	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		if(newMessageCallback[i] == np)
-		{
-			newMessageCallback.erase(newMessageCallback.begin()+i);
-			break;
-		}
-	newMessageCallbackMutex.unlock();
+	deleteNewMessageCallbackMutex.lock();
+	deleteNewMessageCallbackList.push_back(np);
+	deleteNewMessageCallbackMutex.unlock();
 }
 
 void Server::addToErrorCallback(NetworkParticipant* np)
 {
-	errorCallbackMutex.lock();
-	errorCallback.push_back(np);
-	errorCallbackMutex.unlock();
+	addErrorCallbackMutex.lock();
+	addErrorCallbackList.push_back(np);
+	addErrorCallbackMutex.unlock();
 }
 
 void Server::deleteFromErrorCallback(NetworkParticipant* np)
 {
-	errorCallbackMutex.lock();
-	for(unsigned int i=0;i<errorCallback.size();i++)
-		if(errorCallback[i] == np)
-		{
-			errorCallback.erase(errorCallback.begin()+i);
-			break;
-		}
-	errorCallbackMutex.unlock();
+	deleteErrorCallbackMutex.lock();
+	deleteErrorCallbackList.push_back(np);
+	deleteErrorCallbackMutex.unlock();
 }
