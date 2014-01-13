@@ -128,6 +128,9 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
 				this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',GameLobby));
 
+				erfg.push_back(1);
+				server->write(s, 0x0205, erfg);
+
 				break;
 			}
 	}
