@@ -9,7 +9,7 @@ class IKeyboardinput
 public:
 	virtual void onKeyDown(sf::Event)=0;
 	virtual void onKeyUp(sf::Event)=0;
-	virtual void onTextInput(sf::String s)=0;
+	virtual void onTextInput(std::string s)=0;
 };
 
 typedef std::vector<IKeyboardinput*>KeyInputVect;

@@ -18,6 +18,7 @@ public:
 	Color DarkGray;
 	Color White;
 	Color Red;
+	Color Transparent;
 
 	MyColors() {
 		Orange = Color(0xFF, 0xA2, 0x00, 0xFF);
@@ -27,6 +28,7 @@ public:
 		Black = Color::Black;
 		White = Color::White;
 		Red = Color::Red;
+		Transparent = Color::Transparent;
 	}
 } static MyColors;
 
