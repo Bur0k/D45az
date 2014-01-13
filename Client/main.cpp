@@ -64,7 +64,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	cout << "NL1:" << NL1.getState() << endl;
 
 	Lobby lobby("Burak");
-
+	lobby.createNewGameLobby();
+	
 
 
 

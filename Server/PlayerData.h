@@ -5,6 +5,7 @@
 #include <string>
 #include <concurrent_vector.h>
 #include <mutex>
+#include <vector>
 
 struct PlayerData
 {
@@ -13,6 +14,5 @@ public:
 	std::string Name;
 };
 
-static concurrency::concurrent_vector<PlayerData> connectedPlayers;
 
 #endif

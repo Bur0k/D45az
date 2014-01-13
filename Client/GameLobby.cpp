@@ -1,6 +1,6 @@
 #include "GameLobby.h"
 
-GameLobby::GameLobby(void)
+GameLobby::GameLobby()
 {
 	c = Client::get();
 	c->addToNewMessageCallback(this);
@@ -47,7 +47,7 @@ void GameLobby::maxPlayerChange(short value)
 	this->c->write(0x0303, erfg);
 }
 
-void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void GameLobby::processNewMessage(short id,vector<char> data)
 {
 	switch(id)
 	{
@@ -88,4 +88,8 @@ void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			this->playerLimit = decodeShort(data, 0);
 		}break;
 	}
+}
+
+void GameLobby::processNetworkError(int id, std::string msg)
+{
 }

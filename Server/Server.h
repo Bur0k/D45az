@@ -149,6 +149,8 @@ public:
 	~Server();
 
 
+	std::vector<PlayerData> connectedPlayers;
+
 	void startListening();
 	void write(SOCKET s,short id,vector<char> data);
 
