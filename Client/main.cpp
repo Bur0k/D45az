@@ -18,7 +18,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-#define BURAKTESTSHIT
+//#define BURAKTESTSHIT
 
 
 
@@ -97,8 +97,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	
 	Game g = Game(&window, TESTSCREEN, sf::Vector2f(1280, 850));
 	
-	Map map;
-	map.load("Data/Maps/test.tmx");
 	
 	while (window.isOpen())
 	{ 
@@ -109,8 +107,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// clear the window with black 
 		window.clear(sf::Color::Black);
 		
-		sf::IntRect RenderRect(0,0,window.getSize().x,window.getSize().y);
-		map.render(window, RenderRect);
 		g.Draw();
 
 		// end the current frame
