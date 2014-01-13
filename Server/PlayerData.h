@@ -14,5 +14,17 @@ public:
 	std::string Name;
 };
 
+template<class T>
+class D45vector
+{
+private:
+	std::vector<T> v;
+	std::mutex m;
+public:
+	std::vector<T> getCopy();
+	int size();
+	void push_back(T newData);
+	void erase(T toDelete);
+};
 
 #endif

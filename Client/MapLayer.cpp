@@ -34,10 +34,10 @@ void MapLayer::render(sf::RenderTarget& RT,sf::IntRect OnScreen)
 	int firstY=OnScreen.top/TileHeight;*/
 
 	int width=OnScreen.width / TileWidth + 
-		((OnScreen.left % TileWidth  > 0)? 1 : 0);
+		((OnScreen.top+OnScreen.width % TileWidth  > 0)? 1 : 0);
 
 	int heigth=OnScreen.height / TileHeight + 
-		((OnScreen.top  % TileHeight > 0)? 1 : 0) ;
+		((OnScreen.left+OnScreen.height  % TileHeight > 0)? 1 : 0) ;
 
 	int firstY=OnScreen.top/TileHeight;
 	int firstX=OnScreen.left/TileWidth;

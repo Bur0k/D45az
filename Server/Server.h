@@ -148,6 +148,7 @@ public:
 
 	~Server();
 
+	D45vector<PlayerData> connectedPlayers;
 
 	std::vector<PlayerData> connectedPlayers;
 

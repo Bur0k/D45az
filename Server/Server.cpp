@@ -7,17 +7,17 @@
 std::vector<char> code(short s)
 {
 	std::vector<char> v;
-	v.push_back(s);
-	v.push_back(s>>8);
+	v.push_back((char)s);
+	v.push_back((char)(s>>8));
 	return v;
 }
 std::vector<char> code(int i)
 {
 	std::vector<char> v;
-	v.push_back(i);
-	v.push_back(i>>8);
-	v.push_back(i>>16);
-	v.push_back(i>>24);
+	v.push_back((char)i);
+	v.push_back((char)(i>>8));
+	v.push_back((char)(i>>16));
+	v.push_back((char)(i>>24));
 	return v;
 }
 std::vector<char> code(const std::string s)
@@ -471,9 +471,11 @@ void Server::sendError(SOCKET s,int errCode,string errMessage)
 void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
 	bool socketIsConnected = false;
-	for(int i=0;i<connectedPlayers.size();i++)
+
+	vector<PlayerData> v = connectedPlayers.getCopy();
+	for(int i=0;i<v.size();i++)
 	{
-		if(connectedPlayers[i].s==s)
+		if(v[i].s==s)
 		{
 			socketIsConnected = true;
 			break;
