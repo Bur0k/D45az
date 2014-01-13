@@ -22,7 +22,7 @@ MusikSampler::~MusikSampler(void)
 	m_vShort_sounds.clear();
 
 		// Bufferliste freigeben
-	m_vBuffer.clear(); 
+	m_vBuffer.clear();  
 
 
 	for (int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
