@@ -370,7 +370,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 				continue;
 			}
 			// Error
-			printf("GetQueuedCompletionStatus failed with error: %d\n", GetLastError());
+			Server::get()->sendError(pPerHandleData->sock,0x0010,"Client lost Connection");
 			continue;
 		}
 		else
@@ -385,11 +385,12 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 			if((0 == dwTrans) && (OP_READ == pPerIoData->opType || OP_WRITE == pPerIoData->opType))
 			{
 				// Client leave.
-				printf("Client: <%s : %d> leave.\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port));
+				Server::get()->sendError(pPerHandleData->sock,0x0010,"Client leave");
 				closesocket(pPerHandleData->sock);
 				delete pPerHandleData;
 				delete pPerIoData;
 				continue;
+
 			}
 			else
 			{
