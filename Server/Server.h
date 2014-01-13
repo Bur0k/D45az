@@ -152,8 +152,6 @@ public:
 
 	~Server();
 
-	vector<PlayerData> connectedPlayers;
-
 	std::vector<PlayerData> connectedPlayers;
 
 	void startListening();
