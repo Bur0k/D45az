@@ -128,6 +128,9 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	MS->load_music(0);
 	MS->play_music();
 	*/
+
+	map.load("Data/Maps/test.tmx");
+	xMap=yMap=0;
 }
 
 Game::~Game()
@@ -229,6 +232,10 @@ void Game::DrawTest()
 	//m_pWindow->draw(t);
 	//m_pWindow->draw(r);
 
+	
+	sf::IntRect RenderRect(xMap,yMap,m_pWindow->getSize().x,m_pWindow->getSize().y);
+	map.render(*m_pWindow, RenderRect);
+
 	for(unsigned int i = 0; i < m_drawL.size(); i++)
 		m_drawL[i]->draw(m_pWindow);
 }
@@ -301,6 +308,14 @@ void Game::onKeyDown(sf::Event e)
 	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
+	else if(e.key.code == Keyboard::Left)
+		xMap-=5;
+	else if(e.key.code == Keyboard::Right)
+		xMap+=5;
+	else if(e.key.code == Keyboard::Up)
+		yMap-=5;
+	else if(e.key.code == Keyboard::Down)
+		yMap+=5;
 }
 
 void Game::onKeyUp(sf::Event e)

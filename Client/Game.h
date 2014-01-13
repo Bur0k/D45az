@@ -15,6 +15,7 @@
 #include "StandardButton.h"
 #include "Textblock.h"
 #include "Slider.h"
+#include "Map.h"
 #include "Textbox.h"
 
 #include "MusikSampler.h"
@@ -42,6 +43,9 @@ private:
 
 	Slider* s;
 	Slider* s1;
+
+	Map map;
+	int xMap,yMap;
 
 	TextBox* tb;
 

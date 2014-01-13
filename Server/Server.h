@@ -136,6 +136,20 @@ class Server
 	list<writeData> toWrite;
 	mutex toWriteMutex;
 
+	thread* addNewMessageCallbackThread;
+	vector<NetworkParticipant*> addNewMessageCallbackList;
+	mutex addNewMessageCallbackMutex;
+	thread* deleteNewMessageCallbackThread;
+	vector<NetworkParticipant*> deleteNewMessageCallbackList;
+	mutex deleteNewMessageCallbackMutex;
+
+	thread* addErrorCallbackThread;
+	vector<NetworkParticipant*> addErrorCallbackList;
+	mutex addErrorCallbackMutex;
+	thread* deleteErrorCallbackThread;
+	vector<NetworkParticipant*> deleteErrorCallbackList;
+	mutex deleteErrorCallbackMutex;
+
 	bool running;
 	static Server* self;
 	Server();
@@ -148,6 +162,7 @@ public:
 
 	~Server();
 
+	std::vector<PlayerData> connectedPlayers;
 
 	void startListening();
 	void write(SOCKET s,short id,vector<char> data);
