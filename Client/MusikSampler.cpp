@@ -10,7 +10,7 @@ MusikSampler::MusikSampler(void)
 	m_vShort_sounds.push_back("sound1.wav");
 	m_vShort_sounds.push_back("sound2.wav");
 	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
-	for(unsigned int i = 0; i < m_vShort_sounds.size(); i++)
+	for(int i = 0; i < m_vShort_sounds.size(); i++)
 		m_vBuffer.push_back(load_sound(i));
 }
 
@@ -22,10 +22,10 @@ MusikSampler::~MusikSampler(void)
 	m_vShort_sounds.clear();
 
 		// Bufferliste freigeben
-	m_vBuffer.clear(); 
+	m_vBuffer.clear();  
 
 
-	for (unsigned int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
+	for (int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
 		delete m_vSound[i];
 }
 
@@ -82,7 +82,7 @@ bool MusikSampler::play_sound(int index)
 
 	tmp_sound->play();	
 
-	for (unsigned int i = 0; i < m_vSound.size() ; i++)
+	for (int i = 0; i < m_vSound.size() ; i++)
 		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
 			m_vSound[i] = tmp_sound; // neuen sound dahin, um speicher zu sparen
 		else
