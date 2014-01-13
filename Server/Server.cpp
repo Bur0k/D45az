@@ -472,10 +472,9 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
 	bool socketIsConnected = false;
 
-	vector<PlayerData> v = connectedPlayers.getCopy();
-	for(int i=0;i<v.size();i++)
+	for(int i=0;i<connectedPlayers.size();i++)
 	{
-		if(v[i].s==s)
+		if(connectedPlayers[i].s==s)
 		{
 			socketIsConnected = true;
 			break;
