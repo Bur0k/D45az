@@ -109,10 +109,8 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0204:
 			{
 				//data: string username, auslesen
-				short id = 0;
-
-
-				id = gamesCreated.size();
+				static short id = 0;
+				id++;
 
 				PlayerData requester;
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
@@ -122,10 +120,10 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 						break;
 					}
 				
-					GameLobbyLogic GameLobby(id, requester);
+				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester);
 				
-					std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
-					this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',&GameLobby));
+				std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
+				this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',GameLobby));
 
 				break;
 			}
