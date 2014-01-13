@@ -3,10 +3,13 @@
 GameLobbyLogic::GameLobbyLogic(short id, PlayerData master)
 {
 	this->server = Server::get();
-	//server->addToNewMessageCallback(this);
 
 	this->id = id;
 	this->gameMaster = master;
+	this->playerlimit = 4;
+	this->players.push_back(&this->gameMaster);
+
+	server->addToNewMessageCallback(this);
 }
 
 GameLobbyLogic::~GameLobbyLogic()

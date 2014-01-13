@@ -137,7 +137,7 @@ class Server
 	mutex toWriteMutex;
 
 	thread* addNewMessageCallbackThread;
-	list<NetworkParticipant*> addNewMessageCallbackList;
+	vector<NetworkParticipant*> addNewMessageCallbackList;
 	mutex addNewMessageCallbackMutex;
 
 	bool running;
