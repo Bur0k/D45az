@@ -4,6 +4,7 @@
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include "PlayerData.h"
+#include "GameLobby.h"
 #include <vector>
 #include <map>
 

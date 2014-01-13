@@ -1,12 +1,12 @@
 #include "GameLobbyLogic.h"
 
-GameLobbyLogic::GameLobbyLogic(short id, PlayerData* master)
+GameLobbyLogic::GameLobbyLogic(short id, PlayerData master)
 {
 	this->server = Server::get();
+	server->addToNewMessageCallback(this);
+
 	this->id = id;
 	this->gameMaster = master;
-
-	server->addToNewMessageCallback(this);
 }
 
 GameLobbyLogic::~GameLobbyLogic()
@@ -36,12 +36,12 @@ short GameLobbyLogic::getPlayerlimit()
 	return this->playerlimit;
 }
 
-void GameLobbyLogic::setGamemaster(PlayerData* player)
+void GameLobbyLogic::setGamemaster(PlayerData player)
 {
 	this->gameMaster = player;
 }
 
-PlayerData* GameLobbyLogic::getGamemaster()
+PlayerData GameLobbyLogic::getGamemaster()
 {
 	return this->gameMaster;
 }
@@ -96,7 +96,7 @@ void GameLobbyLogic::sendMaxPlayers(SOCKET s)
 
 void GameLobbyLogic::sendGameMaster(SOCKET s)
 {
-	vector<char> erfg = code(this->gameMaster->Name);
+	vector<char> erfg = code(this->gameMaster.Name);
 	this->server->write(s, 0x0306, erfg);
 }
 
@@ -134,7 +134,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			}break;
 		case 0x0303:
 			{
-				if(this->gameMaster->s == s)
+				if(this->gameMaster.s == s)
 				{
 					// Spielstart
 
@@ -145,7 +145,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			}break;
 		case 0x0310:
 			{
-				if(this->gameMaster->s == s)
+				if(this->gameMaster.s == s)
 				{
 					short map = data[0] - 48;
 
@@ -158,7 +158,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			}break;
 		case 0x0311:
 			{
-				if(this->gameMaster->s == s)
+				if(this->gameMaster.s == s)
 				{
 					short anz = data[0] - 48;
 

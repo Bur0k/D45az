@@ -26,9 +26,9 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			for (unsigned int i = 0; i < data.size(); i++) 
 				name += data[i];
 
-			for (unsigned int i = 0; i < connectedPlayers.size(); i++)
+			for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
 			{
-				if (connectedPlayers[i].Name == name)
+				if (server->connectedPlayers[i].Name == name)
 				{
 					std::vector<char> erfg;
 					erfg.push_back(0);
@@ -44,7 +44,7 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				PlayerData newPlayer;
 				newPlayer.Name=name;
 				newPlayer.s=s;
-				connectedPlayers.push_back(newPlayer);
+				server->connectedPlayers.push_back(newPlayer);
 
 				//send 0101 nachricht 1
 				std::vector<char> erfg;
