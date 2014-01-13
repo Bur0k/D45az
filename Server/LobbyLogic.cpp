@@ -18,6 +18,9 @@ LobbyLogic::LobbyLogic()
 
 LobbyLogic::~LobbyLogic()
 {
+	server->deleteFromNewMessageCallback(this);
+	for (std::map<char,GameLobbyLogic*>::iterator it=this->gamesCreated.begin(); it!=this->gamesCreated.end(); ++it)
+		delete it->second;
 }
 
 void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
