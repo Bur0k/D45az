@@ -15,6 +15,8 @@
 #include "StandardButton.h"
 #include "Textblock.h"
 #include "Slider.h"
+#include "Map.h"
+#include "Textbox.h"
 
 #include "MusikSampler.h"
 
@@ -25,7 +27,7 @@ using namespace sf;
 // TODO derive game from renderWindow
 
 // manages gui views and timers
-class Game : private IButtonfunction, private ISliderFunction
+class Game : private IButtonfunction, private ISliderFunction, public ITextBoxFunction
 {
 private:
 	//debug
@@ -41,6 +43,11 @@ private:
 
 	Slider* s;
 	Slider* s1;
+
+	Map map;
+	int xMap,yMap;
+
+	TextBox* tb;
 
 	///end debug
 
@@ -80,6 +87,8 @@ public:
 	Views getView();
 	void onClose();
 
+	
+
 private:
 	void onButtonClick(int);
 
@@ -108,6 +117,7 @@ private:
 
 	void onSliderValueChange(int ID, double position);
 	void onSliderReleased(int ID, double position);
+	virtual void onTextBoxSend(int ID, std::string s);
 	
 };
 

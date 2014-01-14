@@ -36,6 +36,10 @@ void Game::onSliderReleased(int ID, double position)
 	std::cout << "Slider RELEASED ID: " << ID << " Value: " << position << std::endl;
 }
 
+void Game::onTextBoxSend(int ID, std::string s)
+{
+	std::cout << "TEXTBOX ID " << ID << " text:   " << s << std::endl;
+}
 
 Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 {
@@ -83,6 +87,10 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 
 	s1->Attach(this);
 
+	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
+
+	tb->attach(this);
+
 
 	m_fpsText.setFont(m_stdFont);
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
@@ -95,6 +103,7 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	m_clickL.push_back(b3);
 	m_clickL.push_back(s);
 	m_clickL.push_back(s1);
+	m_clickL.push_back(tb);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
@@ -102,13 +111,15 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	m_drawL.push_back(b3);
 	m_drawL.push_back(s);
 	m_drawL.push_back(s1);
-	
+	m_drawL.push_back(tb);
+
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
+	m_animateL.push_back(tb);
 
-
+	m_keyInputL.push_back(tb);
 
 	// Musik Test Zeug
 
@@ -117,6 +128,9 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	MS->load_music(0);
 	MS->play_music();
 	*/
+
+	map.load("Data/Maps/test.tmx");
+	xMap=yMap=0;
 }
 
 Game::~Game()
@@ -131,6 +145,7 @@ Game::~Game()
 	delete b3;
 	delete s;
 	delete s1;
+	delete tb;
 
 	delete tblock;
 
@@ -217,6 +232,10 @@ void Game::DrawTest()
 	//m_pWindow->draw(t);
 	//m_pWindow->draw(r);
 
+	
+	sf::IntRect RenderRect(xMap,yMap,m_pWindow->getSize().x,m_pWindow->getSize().y);
+	map.render(*m_pWindow, RenderRect);
+
 	for(unsigned int i = 0; i < m_drawL.size(); i++)
 		m_drawL[i]->draw(m_pWindow);
 }
@@ -289,6 +308,14 @@ void Game::onKeyDown(sf::Event e)
 	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
+	else if(e.key.code == Keyboard::Left)
+		xMap-=5;
+	else if(e.key.code == Keyboard::Right)
+		xMap+=5;
+	else if(e.key.code == Keyboard::Up)
+		yMap-=5;
+	else if(e.key.code == Keyboard::Down)
+		yMap+=5;
 }
 
 void Game::onKeyUp(sf::Event e)
@@ -305,13 +332,12 @@ void Game::onKeyUp(sf::Event e)
 void Game::onTextEntered(sf::Event e)
 {
 	Uint32 c = e.text.unicode;
-	if((c >= 32 && c <= 126) /* ... */)
+	if(c >= 32 && c <= 126)
 	{
 		std::string s;
 		s = c;
 		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
-			m_keyInputL[i]->onTextInput(c);
-		std::cout << "TEXT ENTERED : " << (std::string)s << std::endl;
+			m_keyInputL[i]->onTextInput(s);
 	}
 }
 

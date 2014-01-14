@@ -18,11 +18,11 @@ private:
 	bool disconnected;
 
 public:
-	GameLobby(void);
-	~GameLobby(void);
+	GameLobby();
+	~GameLobby();
 
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
-	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
+	void processNewMessage(short id,vector<char> data);
+	void processNetworkError(int id, std::string msg);
 
 	// Funktionen
 

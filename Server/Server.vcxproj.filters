@@ -75,5 +75,8 @@
     <ClCompile Include="GameLobbyLogic.cpp">
       <Filter>Codes\GameLobbyLogic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerData.cpp">
+      <Filter>Codes\PlayerData\Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

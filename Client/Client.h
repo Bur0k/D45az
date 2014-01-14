@@ -42,6 +42,20 @@ class Client
 	list<vector<char>> toWrite;
 	mutex toWriteMutex;
 
+	thread* addNewMessageCallbackThread;
+	vector<NetworkParticipant*> addNewMessageCallbackList;
+	mutex addNewMessageCallbackMutex;
+	thread* deleteNewMessageCallbackThread;
+	vector<NetworkParticipant*> deleteNewMessageCallbackList;
+	mutex deleteNewMessageCallbackMutex;
+
+	thread* addErrorCallbackThread;
+	vector<NetworkParticipant*> addErrorCallbackList;
+	mutex addErrorCallbackMutex;
+	thread* deleteErrorCallbackThread;
+	vector<NetworkParticipant*> deleteErrorCallbackList;
+	mutex deleteErrorCallbackMutex;
+
 
 	mutex writeThreadsMutex;
 
