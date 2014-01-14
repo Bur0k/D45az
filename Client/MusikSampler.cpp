@@ -17,16 +17,18 @@ MusikSampler::MusikSampler(void)
 MusikSampler::~MusikSampler(void)
 {
 		// Adresslisten freigeben
-	m_vFull_songs.clear();
-
-	m_vShort_sounds.clear();
+	for ( int i = 0; i < m_vFull_songs.size(); i++)
+			m_vFull_songs[i].clear();
+	for( int i = 0; i < m_vShort_sounds.size(); i++)
+		m_vShort_sounds[i].clear();
 
 		// Bufferliste freigeben
-	m_vBuffer.clear(); 
-
+	for (int i = 0; i < m_vBuffer.size(); i++)
+		m_vBuffer.clear();
 
 	for (unsigned int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
-		delete m_vSound[i];
+		if(m_vSound[i] != NULL)
+			delete m_vSound[i];
 }
 
 bool MusikSampler::load_music(int index)

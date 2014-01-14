@@ -345,7 +345,6 @@ void Game::onTextEntered(sf::Event e)
 void Game::onClose()
 {
 	MyFonts::deleteFonts();
-	delete m_pMS;
 }
 
 void Game::Input()
