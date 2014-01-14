@@ -83,14 +83,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	window.setPosition(sf::Vector2i(400,0));
 	window.setMouseCursorVisible(true);
 
-	// Musik Test Zeug
-	/*
-	MusikSampler* MS = new MusikSampler();
-	
-	MS->load_music(0);
-	MS->play_music();
-	*/
-
 
 	//testausgabe
 	/*

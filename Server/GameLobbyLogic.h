@@ -41,6 +41,7 @@ public:
 	void sendMaxPlayers(SOCKET s);
 	void sendGameMaster(SOCKET s);
 	void sendCurrentMap(SOCKET s);
+	void sendGameLobbyData(SOCKET s);
 
 	/*Kommunikation*/
 
