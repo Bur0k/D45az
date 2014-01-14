@@ -87,10 +87,10 @@ public:
 
 	//implementing IClickable
 	bool isHit(Vector2i &);
-	void  PressedRight();
-	void  PressedLeft();
-	void  ReleasedRight();
-	void  ReleasedLeft();
+	bool  PressedRight();
+	bool  PressedLeft();
+	bool  ReleasedRight();
+	bool  ReleasedLeft();
 
 	//attaching a function pointer 
 	bool attachFunction(IButtonfunction* pCallback);

@@ -142,19 +142,22 @@ bool Button::isHit(Vector2i & mouse)
 	}
 }
 
-void Button::PressedLeft()
+bool Button::PressedLeft()
 {
-		if(m_mouseOver)
+	if(m_mouseOver)
 	{
 		m_animation = m_animationLength;
 		m_isClicked = true;
 		clicked();
 		if(m_staysClicked)
 			m_lockedIn = (m_lockedIn)? false : true;
+		return true;
 	}
+	else
+		return false;
 }
 
-void Button::ReleasedLeft()
+bool Button::ReleasedLeft()
 {
 	if(m_isClicked)
 	{	
@@ -166,13 +169,14 @@ void Button::ReleasedLeft()
 		if(m_mouseOver)
 			notify();
 	}
+	return false;
 }
 
 
 void Button::setScale(Vector2f){}
 void Button::setScale(float x, float y){}
-void Button::PressedRight(){}
-void Button::ReleasedRight(){}
+bool Button::PressedRight(){ return false; }
+bool Button::ReleasedRight(){ return false; }
 
 void Button::draw(RenderWindow* rw)
 {

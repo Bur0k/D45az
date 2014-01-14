@@ -95,10 +95,10 @@ public:
 
 	//implemnting Iclickable
 	virtual bool isHit(sf::Vector2i &);
-	virtual void PressedRight();
-	virtual void PressedLeft();
-	virtual void ReleasedRight();
-	virtual void ReleasedLeft();
+	virtual bool PressedRight();
+	virtual bool PressedLeft();
+	virtual bool ReleasedRight();
+	virtual bool ReleasedLeft();
 
 	//implementing IDrawable
 	virtual void draw(sf::RenderWindow* rw);
