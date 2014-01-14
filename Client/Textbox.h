@@ -25,7 +25,8 @@ typedef std::vector<ITextBoxFunction*>TextBoxFuncVect;
 #define TEXTBOXHEIGHT 40
 #define TEXTBOXBORDERSPACING 10
 #define TEXTBOXCURSORWIDTH 3
-#define TEXTBOXANIMATIONLENGTH 70
+#define TEXTBOXANIMATIONLENGTH 30
+#define TEXTBOXCURSORBLINKTIME 15 
 
 
 class TextBox : public IKeyboardinput, public IClickable, public IDrawable, public IAnimatable
@@ -35,11 +36,15 @@ protected:
 	bool m_returnIsSend;
 	bool m_mouseOver;
 	bool m_isStartStringDisplayed;
+	bool m_cursorRight;
 
 	int m_ID;
+	//cursor position on screen
 	int m_cursorPosition;
+	//amount of chars that the string is offset to the left (or amount of chars NOT displayed in the box)
 	int m_CharacterDisplayOffset;
 	int m_anmation;
+	int m_cursorAnimation;
 
 	Color m_focusCol;
 	Color m_nofocusCol;
@@ -57,7 +62,7 @@ protected:
 	
 	//decides which part of m_text will be displayed
 	void fitText();
-
+	void moveCursor(bool left);
 	
 public:
 	
@@ -79,6 +84,8 @@ public:
 
 	std::string getText();
 	void setText(std::string);
+	void clear();
+
 
 	//implementing Ikeyboardinput
 	virtual void onKeyDown(sf::Event);
