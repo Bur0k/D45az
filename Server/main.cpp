@@ -11,9 +11,9 @@ class testServer : public NetworkParticipant
 {
 	void processNewMessage(SOCKET s,short id,vector<char> data)
 	{
-		std::cout<<"Client mit ID "<<s<<" hat folgendes gesendet:\nID:"<<id<<"\nData:\n";
+		std::cout<<"Client mit ID "<<s<<" hat folgendes gesendet:\nID:"<<std::hex<<(int)id<<"\nData:\n";
 		for(unsigned int i=0;i<data.size();i++)
-			std::cout<<data[i];
+			std::cout<<std::hex<<(int)data[i]<<" ";
 		std::cout<<"\nEnde Packet\n\n";
 	}
 
@@ -23,7 +23,7 @@ class testServer : public NetworkParticipant
 			std::cout<<"SERVER-";
 		else
 			std::cout<<"CLIENT ID "<<s<<"-";
-		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
+		std::cout << "ERROR: "<<std::hex<<(int)id<<" Message: " << msg << "\n";
 	}
 };
 

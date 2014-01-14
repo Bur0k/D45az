@@ -87,7 +87,7 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 
 	s1->Attach(this);
 
-	tb = new TextBox(300, "das ist eine textbox", Vector2f(100,600), true, 1);
+	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
 
 	tb->attach(this);
 

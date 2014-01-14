@@ -73,17 +73,28 @@ Client::~Client()
 
 	closesocket(s);
 
+	if(addNewMessageCallbackThread!=NULL)
+	{
+		addNewMessageCallbackThread->join();
+		delete addNewMessageCallbackThread;
+	}
+	if(deleteNewMessageCallbackThread!=NULL)
+	{
+		deleteNewMessageCallbackThread->join();
+		delete deleteNewMessageCallbackThread;
+	}
 	
+	if(addErrorCallbackThread!=NULL)
+	{
+		addErrorCallbackThread->join();
+		delete addErrorCallbackThread;
+	}
+	if(deleteErrorCallbackThread!=NULL)
+	{
+		deleteErrorCallbackThread->join();
+		delete deleteErrorCallbackThread; 
+	}
 
-	addNewMessageCallbackThread->join();
-	delete addNewMessageCallbackThread;
-	deleteNewMessageCallbackThread->join();
-	delete deleteNewMessageCallbackThread;
-
-	addErrorCallbackThread->join();
-	delete addErrorCallbackThread;
-	deleteErrorCallbackThread->join();
-	delete deleteErrorCallbackThread;
 }
 
 void Client::connectToServer(string ip, int port)

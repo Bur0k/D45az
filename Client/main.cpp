@@ -28,15 +28,15 @@ class testClient : public NetworkParticipant
 {
 	void processNewMessage(short id,vector<char> data)
 	{
-		std::cout<<"Server hat folgendes gesendet:\nID:"<<id<<"\nData:\n";
+		std::cout<<"Server hat folgendes gesendet:\nID:"<<std::hex<<(int)id<<"\nData:\n";
 		for(unsigned int i=0;i<data.size();i++)
-			std::cout<<data[i];
+			std::cout<<std::hex<<(int)data[i]<<" ";
 		std::cout<<"\nEnde Packet\n\n";
 	}
 
 	void processNetworkError(int id, std::string msg)
 	{
-		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
+		std::cout << "ERROR: "<<std::hex<<(int)id<<" Message: " << msg << "\n";
 	}
 } tc;
 
@@ -46,6 +46,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	
 	//********** BURAKS CLIENT TEST SHIT
 #ifdef BURAKTESTSHIT
 	Client* c = Client::get();
@@ -116,7 +117,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 	g.onClose();
 	
-	delete Client::get();
+	//delete Client::get();
+
 	MyFonts::deleteFonts(); //TODO in game implementieren
 
 	return 0;
