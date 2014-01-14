@@ -18,7 +18,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-#define BURAKTESTSHIT
+//#define BURAKTESTSHIT
 
 
 
@@ -117,7 +117,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 	g.onClose();
 	
-	//delete Client::get();
+	delete Client::get();
 
 	MyFonts::deleteFonts(); //TODO in game implementieren
 
