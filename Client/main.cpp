@@ -58,18 +58,18 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	
 	
-	NetworkLogin NL1("Burak");
+	NetworkLogin NL1("Tim");
 	while(NL1.getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
 	{
 	}
 	cout << "NL1:" << NL1.getState() << endl;
 
-	Lobby lobby("Burak");
+	Lobby lobby("Tim");
 	lobby.askforLobbyData();
 	lobby.createNewGameLobby();
 	while(lobby.gameLobby==NULL)
 		;
-	lobby.gameLobby->disconnect();
+	lobby.askforLobbyData();
 
 
 #endif //BURAKTESTSHIT	

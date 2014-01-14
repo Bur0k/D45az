@@ -31,16 +31,16 @@ short decodeShort(const std::vector<char>& v, int from)
 {
 	short s;
 	s = v[from];
-	s += v[from]<<8;
+	s += v[from+1]<<8;
 	return s;
 }
 int decodeInt(const std::vector<char>& v, int from)
 {
 	short i;
 	i = v[from];
-	i += v[from]<<8;
-	i += v[from]<<16;
-	i += v[from]<<24;
+	i += v[from+1]<<8;
+	i += v[from+2]<<16;
+	i += v[from+3]<<24;
 	return i;
 }
 std::string decodeString(const std::vector<char>& v, int from, int len)
@@ -289,15 +289,16 @@ void Client::beginRead()
 	{
 		while(running)
 		{
-			static char buffer[1024];
+			static vector<char> buffer_;
+			static char buffer[512];
 			static short currPos = 0;
 			static short nextMsgSize = 0;
 			
 			Sleep(1);
 
-			int recievedBytes = recv(s,buffer+currPos,1024-currPos,0);
+			int recievedBytes = recv(s,buffer,512,0);
 			if(recievedBytes == 0)
-				;//Connection closed
+				break;//Connection closed
 			else if(recievedBytes <0)
 			{
 				if(WSAGetLastError() == 10035)//Would block
@@ -309,28 +310,26 @@ void Client::beginRead()
 					break;
 				}
 			}
+
+			for(int i=0;i<recievedBytes;i++)
+				buffer_.push_back(buffer[i]);
 			
 			currPos += recievedBytes;
 			while (currPos >= nextMsgSize && currPos != 0)
 			{
 				if (nextMsgSize == 0)
-					nextMsgSize = (buffer[0]<<8)+buffer[1];
+					nextMsgSize = (buffer_[0]<<8)+buffer_[1];
 				else
 				{
 					currPos -= nextMsgSize;
-					short id = (buffer[currPos+2]<<8) + buffer[currPos+3];
+					short id = (buffer_[2]<<8) + buffer_[3];
 
-					char* msg = new char[nextMsgSize-4];
-					memcpy(msg,buffer+currPos+4,sizeof(char)*(nextMsgSize-4));
-					vector<char> message;
-					for(int i=0;i<nextMsgSize-4;i++)
-						message.push_back(msg[i]);
+					vector<char> message(buffer_.begin()+4,buffer_.begin()+nextMsgSize-4);
+					buffer_.erase(buffer_.begin(),buffer_.begin()+nextMsgSize);
 
 					sendNewMessage(id,message);
 
-
 					nextMsgSize = 0;
-					delete[] msg;
 				}
 			}
 		}
