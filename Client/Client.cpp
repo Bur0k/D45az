@@ -289,7 +289,7 @@ void Client::beginRead()
 	{
 		while(running)
 		{
-			static vector<char> buffer_;
+			static vector<char> buffer_ = vector<char>();
 			static char buffer[512];
 			static short currPos = 0;
 			static short nextMsgSize = 0;
@@ -324,7 +324,10 @@ void Client::beginRead()
 					currPos -= nextMsgSize;
 					short id = (buffer_[2]<<8) + buffer_[3];
 
-					vector<char> message(buffer_.begin()+4,buffer_.begin()+nextMsgSize-4);
+					vector<char> message;//RECIEVE MAL MACHEN
+					if(nextMsgSize>4)
+						message.insert(message.end(),buffer_.begin()+4,buffer_.begin()+nextMsgSize);
+
 					buffer_.erase(buffer_.begin(),buffer_.begin()+nextMsgSize);
 
 					sendNewMessage(id,message);

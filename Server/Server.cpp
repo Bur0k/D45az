@@ -468,8 +468,30 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 				case OP_READ: // Read
 					pPerIoData->currPos += (short)dwTrans;
+					
+					for(int i=0;i<dwTrans;i++)
+						pPerIoData->buffer_.push_back(pPerIoData->buf[i]);
 
 					while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
+					{
+						if (pPerIoData->nextMsgSize == 0)
+							pPerIoData->nextMsgSize = (pPerIoData->buffer_[0]<<8)+pPerIoData->buffer_[1];
+						else
+						{
+							pPerIoData->currPos -= pPerIoData->nextMsgSize;
+							short id = (pPerIoData->buffer_[2]<<8) + pPerIoData->buffer_[3];
+
+							vector<char> message;//RECIEVE MAL MACHEN
+							if(pPerIoData->nextMsgSize>4)
+								message.insert(message.end(),pPerIoData->buffer_.begin()+4,pPerIoData->buffer_.begin()+pPerIoData->nextMsgSize);
+							pPerIoData->buffer_.erase(pPerIoData->buffer_.begin(),pPerIoData->buffer_.begin()+pPerIoData->nextMsgSize);
+							
+							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
+							
+							pPerIoData->nextMsgSize = 0;
+						}
+					}
+					/*while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
 					{
 						if (pPerIoData->nextMsgSize == 0)
 							pPerIoData->nextMsgSize = (pPerIoData->buf[0]<<8)+pPerIoData->buf[1];
@@ -489,7 +511,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 							pPerIoData->nextMsgSize = 0;
 							delete[] msg;
 						}
-					}
+					}*/
 
 					WSARecv(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, &dwFlags, &(pPerIoData->ol), NULL);
 

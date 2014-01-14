@@ -93,6 +93,7 @@ class Server
 
 		short currPos;
 		short nextMsgSize;
+		vector<char> buffer_;
 	}PERIODATA;
 
 	HANDLE hThread[4];
