@@ -22,7 +22,7 @@ public:
 typedef std::vector<ITextBoxFunction*>TextBoxFuncVect;
 
 
-#define TEXTBOXHEIGHT 40
+#define TEXTBOXHEIGHT 50
 #define TEXTBOXBORDERSPACING 10
 #define TEXTBOXCURSORWIDTH 3
 #define TEXTBOXANIMATIONLENGTH 30
@@ -68,7 +68,8 @@ public:
 	
 	///@param startText should be description of what the box does or an example of expected format
 	TextBox(float width, sf::String startText, Vector2f pos, bool sendOnReturn, int id);
-	
+	~TextBox();
+
 	std::ostream& operator<<(std::ostream&);
 
 	void Notify();

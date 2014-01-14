@@ -46,6 +46,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	
 	//********** BURAKS CLIENT TEST SHIT
 #ifdef BURAKTESTSHIT
 	Client* c = Client::get();
@@ -116,7 +117,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 	g.onClose();
 	
-	delete Client::get();
+	//delete Client::get();
+
 	MyFonts::deleteFonts(); //TODO in game implementieren
 
 	return 0;

@@ -23,6 +23,7 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_displayedText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_displayedText.setString(startText);
 	m_displayedText.setPosition(m_BaseRect.getPosition());
+	m_displayedText.move(TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING / 3);
 	m_displayedText.setCharacterSize(25);
 
 	m_dimensions.top = pos.y;
@@ -30,14 +31,18 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_dimensions.width = width;
 	m_dimensions.height = TEXTBOXHEIGHT;
 	
-	m_cursor.setPosition(m_dimensions.left + TEXTBOXBORDERSPACING, m_dimensions.top + TEXTBOXBORDERSPACING / 2);
-	m_cursor.setSize(Vector2f(TEXTBOXCURSORWIDTH, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING));
+	m_cursor.setPosition(m_dimensions.left + TEXTBOXBORDERSPACING, m_dimensions.top + TEXTBOXBORDERSPACING);
+	m_cursor.setSize(Vector2f(TEXTBOXCURSORWIDTH, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING * 2));
 
 	m_focusCol = MyColors.DarkGray;
 	m_nofocusCol = MyColors.Gray;
 
 }
 
+TextBox::~TextBox()
+{
+	m_attachedFunctions.clear();
+}
 
 void TextBox::onKeyDown(sf::Event e)
 {
@@ -49,7 +54,7 @@ void TextBox::onKeyDown(sf::Event e)
 	case Keyboard::BackSpace:
 		if(m_text.size() > 0 && m_cursorPosition + m_CharacterDisplayOffset > 0)
 		{
-			m_text.erase(m_text.begin() + m_cursorPosition - 1);
+			m_text.erase(m_text.begin() + m_cursorPosition + m_CharacterDisplayOffset - 1);
 			moveCursor(true);
 		}
 		break;
@@ -57,7 +62,7 @@ void TextBox::onKeyDown(sf::Event e)
 	case Keyboard::Delete:
 		if(m_text.size() > 0 && m_cursorPosition + m_CharacterDisplayOffset != m_text.size())
 		{
-			m_text.erase(m_text.begin() + m_cursorPosition - 1);
+			m_text.erase(m_text.begin() + m_cursorPosition + m_CharacterDisplayOffset);
 			fitText();
 		}
 		break;
@@ -111,8 +116,11 @@ void TextBox::moveCursor(bool left)
 
 void TextBox::onTextInput(std::string s)
 {
-	m_text.insert(m_cursorPosition + m_CharacterDisplayOffset,s);
-	moveCursor(false);
+	if(m_inFocus)
+	{
+		m_text.insert(m_cursorPosition + m_CharacterDisplayOffset,s);
+		moveCursor(false);
+	}
 }
 
 void TextBox::fitText()
@@ -153,6 +161,12 @@ void TextBox::fitText()
 		m_cursor.setPosition(m_displayedText.getPosition().x, m_cursor.getPosition().y);
 	if(m_text.size() == 0)
 		m_displayedText.setString("");
+	if(index < m_cursorPosition)
+	{
+		m_CharacterDisplayOffset++;
+		m_cursorPosition--;
+		fitText();
+	}
 }
 
 bool TextBox::isHit(sf::Vector2i & mouse)
