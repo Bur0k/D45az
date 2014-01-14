@@ -32,16 +32,16 @@ short decodeShort(const std::vector<char>& v, int from)
 {
 	short s;
 	s = v[from];
-	s += v[from]<<8;
+	s += v[from+1]<<8;
 	return s;
 }
 int decodeInt(const std::vector<char>& v, int from)
 {
 	short i;
 	i = v[from];
-	i += v[from]<<8;
-	i += v[from]<<16;
-	i += v[from]<<24;
+	i += v[from+1]<<8;
+	i += v[from+2]<<16;
+	i += v[from+3]<<24;
 	return i;
 }
 std::string decodeString(const std::vector<char>& v, int from, int len)
