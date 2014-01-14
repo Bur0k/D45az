@@ -81,6 +81,7 @@ void TextBox::onKeyDown(sf::Event e)
 		break;
 	}
 }
+
 void TextBox::onKeyUp(sf::Event){}
 
 void TextBox::moveCursor(bool left)
@@ -180,7 +181,7 @@ bool TextBox::isHit(sf::Vector2i & mouse)
 	return m_mouseOver;
 }
 
-void TextBox::PressedLeft()
+bool TextBox::PressedLeft()
 {
 	if(m_mouseOver && !m_inFocus)
 	{
@@ -191,15 +192,20 @@ void TextBox::PressedLeft()
 			m_isStartStringDisplayed = false;
 			fitText();
 		}
+		return true;
 	}
+	else if(m_inFocus && m_mouseOver)
+		return true;
 	//TODO set cursor with mouse
 	else if(!m_mouseOver)
 		m_inFocus = false;
+
+	return false;
 }
 
-void TextBox::ReleasedLeft(){}
-void TextBox::PressedRight(){}
-void TextBox::ReleasedRight(){}
+bool TextBox::ReleasedLeft(){ return false; }
+bool TextBox::PressedRight(){ return false; }
+bool TextBox::ReleasedRight(){ return false; }
 
 void TextBox::Notify()
 {

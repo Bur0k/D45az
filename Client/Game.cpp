@@ -217,22 +217,7 @@ void Game::DrawIngameMenu()
 }
 
 void Game::DrawTest()
-{
-	/*sf::Text t = sf::Text();
-	t.setString("Hallo Welt\nD45az finezt.");
-	t.setPosition(sf::Vector2f(200,200));
-	t.setFont(m_stdFont);
-	t.setColor(sf::Color::White);
-
-	sf::RectangleShape r = sf::RectangleShape();
-	r.setPosition(sf::Vector2f(200,400));
-	r.setSize(sf::Vector2f(250,250));
-	r.setFillColor(sf::Color::Blue);*/
-
-	//m_pWindow->draw(t);
-	//m_pWindow->draw(r);
-
-	
+{	
 	sf::IntRect RenderRect(xMap,yMap,m_pWindow->getSize().x,m_pWindow->getSize().y);
 	map.render(*m_pWindow, RenderRect);
 
@@ -261,7 +246,7 @@ void Game::onMouseMove()
 
 	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 		m_clickL[i]->isHit(mousePos);
 
 	m_lastMousePosition = mousePos;
@@ -269,14 +254,16 @@ void Game::onMouseMove()
 
 void Game::onMouseDownLeft()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->PressedLeft();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedLeft())
+			break;
 }
 
 void Game::onMouseDownRight()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->PressedRight();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedRight())
+			break;
 }
 
 void Game::onMouseLeave()
@@ -291,14 +278,16 @@ void Game::onMouseLeave()
 
 void Game::onMouseUpLeft()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->ReleasedLeft();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedLeft())
+			break;
 }
 
 void Game::onMouseUpRight()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->ReleasedRight();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedRight())
+			break;
 }
 
 void Game::onKeyDown(sf::Event e)
@@ -316,6 +305,9 @@ void Game::onKeyDown(sf::Event e)
 		yMap-=5;
 	else if(e.key.code == Keyboard::Down)
 		yMap+=5;
+
+	if(e.key.code == Keyboard::G)
+		s->move(Vector2f(1,1));
 }
 
 void Game::onKeyUp(sf::Event e)

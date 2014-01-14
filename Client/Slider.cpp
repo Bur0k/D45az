@@ -26,7 +26,7 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 	m_dimensions.left = pos.x;
 	m_dimensions.top = pos.y;
 
-
+	
 	//load textures...
 	//TODO
 
@@ -81,9 +81,7 @@ void Slider::setPosition(Vector2f pos)
 	Vector2f delta;
 	delta.x = m_dimensions.left - pos.x;
 	delta.y = m_dimensions.top - pos.y;
-	//now just call move
-
-
+	move(delta);
 }
 
 Vector2f Slider::getPosition()
@@ -96,7 +94,8 @@ void Slider::move(Vector2f delta)
 	m_dimensions.left += delta.x;
 	m_dimensions.top += delta.y;
 
-	//for(int i = 0; i < )
+	for(int i = 0; i < 4; i++)
+		m_pBar[i].s.move(delta);
 }
 
 void Slider::Notify()
@@ -187,20 +186,21 @@ bool Slider::isHit(sf::Vector2i & mouse)
 	return m_mouseOver;
 }
 
-void Slider::PressedRight(){}
-void Slider::ReleasedRight(){}
+bool Slider::PressedRight(){ return false; }
+bool Slider::ReleasedRight(){ return false; }
 
-void Slider::PressedLeft()
+bool Slider::PressedLeft()
 {
 	if(m_mouseOver)
+	{
 		m_mouseDown = true;
-	
-		
-
-	//TODO notify
+		return true;
+	}
+	else
+		return false;
 }
 
-void Slider::ReleasedLeft()
+bool Slider::ReleasedLeft()
 {
 	//TODO notify
 	m_mouseDown = false;
@@ -209,6 +209,7 @@ void Slider::ReleasedLeft()
 		Notify();
 		m_wasClicked = false;
 	}
+	return false;
 }
 
 void Slider::draw(RenderWindow* rw)
