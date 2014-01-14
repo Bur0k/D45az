@@ -79,7 +79,7 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 {
 	std::vector<char> erfg;
 
-	for(int i = 0; i > this->players.size(); i++)
+	for(int i = 0; i < this->players.size(); i++)
 	{
 		string name = this->players[i]->Name;
 		vector<char> tmp = code(name);
@@ -105,6 +105,10 @@ void GameLobbyLogic::sendGameMaster(SOCKET s)
 	this->server->write(s, 0x0306, erfg);
 }
 
+void GameLobbyLogic::sendGameLobbyData(SOCKET s)
+{
+
+}
 //void GameLobbyLogic::sendCurrentMap(SOCKET s)
 //{
 //	vector<char> erfg = code(this->currentMap->id);
@@ -117,7 +121,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	bool socketAvailable = false;
 
-	for(int i = 0; i > this->players.size(); i++)
+	for(int i = 0; i < this->players.size(); i++)
 	{
 		if(s == this->players[i]->s)
 			socketAvailable = true;
