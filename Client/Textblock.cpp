@@ -43,25 +43,37 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int ID)
 	//	break;
 	//}
 
-	textsize = m_textblockText.getLocalBounds();
-
 
 	for(int i = 0; i < S.getSize(); i++)
 	{
 		buffer += S[i];
-		m_textblockText.setString(buffer);
 		textsize = m_textblockText.getLocalBounds();
+		float scale = m_textblockText.getScale().x;
 
-		if(textsize.width > size.x)
+		if(textsize.height * scale > size.y)
 		{
-			buffer += '\n';
+			scale *= 0.8f;
+			m_textblockText.setScale(0, scale);
 		}
+
+		if(S[i] == ' ')
+		{
+			buffer[i] = '\n';
+		}
+
+		//if(textsize.width > size.x)
+		//{
+		//	buffer = '\n';
+		//}
+
+		m_textblockText.setString(buffer);
+
 	}
 
 	//TODO: getWord()
 
-	m_textblockText.move(	(getSize().x - textsize.width * m_textblockText.getScale().x) / 2.0f,
-							(getSize().y - textsize.height * 1.5f * m_textblockText.getScale().y) / 2.0f);
+	//m_textblockText.move(	(getSize().x - textsize.width * m_textblockText.getScale().x) / 2.0f,
+	//						(getSize().y - textsize.height * 1.5f * m_textblockText.getScale().y) / 2.0f);
 
 	m_color = MyColors.White;
 	setFillColor(m_color);
