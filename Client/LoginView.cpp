@@ -5,13 +5,14 @@ LoginView::LoginView()
 {
 
 	//create all the ui elements here
-	logintext.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	logintext.setPosition(100,100);
-	logintext.setString("LOGIN");
-	logintext.setCharacterSize(50);
 	
+	logintext = new Textblock(Vector2f(100,100),Vector2f(500,70),"LOGIN SCREEN", 50, 1);
+	logintext->setFillColor(MyColors.Red);
+	m_DrawV.push_back(logintext);
+
 	name = new TextBox(200,"enter name",sf::Vector2f(100,200),true,1);
 	name->attach(this);
+
 	m_DrawV.push_back(name);
 	m_AnimateV.push_back(name);
 	m_ClickV.push_back(name);
@@ -19,7 +20,8 @@ LoginView::LoginView()
 	
 	lgoinbutton = new StandardButton(Vector2f(100,300),Vector2f(100,70),"Login",1,false);
 	lgoinbutton->attachFunction(this);
-	m_DrawV.push_back(name);
+
+	m_DrawV.push_back(lgoinbutton);
 	m_AnimateV.push_back(lgoinbutton);
 	m_ClickV.push_back(lgoinbutton);
 }
@@ -28,6 +30,7 @@ LoginView::~LoginView()
 {
 	delete name;
 	delete lgoinbutton;
+	delete logintext;
 }
 
 void LoginView::onButtonClick(int)
