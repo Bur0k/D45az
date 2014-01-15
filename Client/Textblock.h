@@ -18,24 +18,19 @@ class Textblock : public IDrawable, public RectangleShape
 {
 public:
 	Textblock();
-	Textblock(Vector2f pos, Vector2f size, String S, int ID);
+	Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID);
 	~Textblock();
 	void operator=(const Textblock & tblock);
 
 protected:
 	Text m_textblockText;
-
 	int m_ID;
-
 	Font m_Font;
-
 	Color m_color;
-
-	virtual void fitText(int border);
 
 public:
 	virtual void draw(RenderWindow* rw);
-
+	
 };
 
 
