@@ -60,7 +60,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	LoadView(Viewmode);
 
 	//TESTSCREEN stuff
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5,19);
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5, 4);
 	m_drawL.push_back(tblock);
 
 
@@ -357,7 +357,7 @@ void Game::LoadView(Views v)
 	case MENUE:
 		break;
 	case LOBBY:
-		//BURAK: NewView = new LobbyView();
+		NewView = new LobbyView();
 		break;
 	case INGAME_MENU:
 		break;

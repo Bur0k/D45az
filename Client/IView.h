@@ -15,6 +15,7 @@ class IView
 	: public IDrawable, public IClickable, public IAnimatable, public IKeyboardinput
 {
 public:
+	virtual ~IView(){};
 	virtual Views nextState()=0;
 };
 

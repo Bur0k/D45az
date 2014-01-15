@@ -30,6 +30,7 @@ public:
 
 
 	//implementing a lot of interfaces
+	Views nextState();
 	void onTextBoxSend(int ID, std::string s);
 
 	void onButtonClick(int);
@@ -48,6 +49,8 @@ public:
 	void onKeyUp(sf::Event);
 	void onTextInput(std::string s);
 
+	void onSliderValueChange(int ID, double position);
+	void onSliderReleased(int ID, double position);
 };
 
 

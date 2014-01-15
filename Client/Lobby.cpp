@@ -83,8 +83,10 @@ void Lobby::processNewMessage(short id,vector<char> data)
 		{
 			if (data[0] == 1);
 				//connect erfolgreich, tu was
+			//gamelobbypointer auf das ausgewählte game setzen, den Spieler dort hinzufügen
 			else;
 				//connect nicht erfolgreich, tu was
+				//zu viele spieler oder so, anzeigen!
 			break;
 		}
 		//	04:		Client -> Server (will Spiellobby erstellen)
@@ -115,4 +117,6 @@ Lobby::Lobby(string Name)
 Lobby::~Lobby()
 {
 	c->deleteFromNewMessageCallback(this);
+	if (gameLobby != NULL)
+		delete gameLobby;
 }

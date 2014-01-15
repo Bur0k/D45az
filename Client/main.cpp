@@ -8,6 +8,7 @@
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
 #include "Lobby.h"
+#include "LobbyView.h"
 
 #include "MusikSampler.h"
 
@@ -89,9 +90,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	*/
 	
-	
-	Game g = Game(&window, TESTSCREEN, sf::Vector2f(1280, 850));
-	
+	Game g = Game(&window, LOBBY, sf::Vector2f(1280, 850));
 	
 	while (window.isOpen())
 	{ 
