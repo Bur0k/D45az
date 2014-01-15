@@ -17,6 +17,7 @@
 #include "Slider.h"
 #include "Map.h"
 #include "Textbox.h"
+#include "LoginView.h"
 
 #include "MusikSampler.h"
 
@@ -51,6 +52,7 @@ private:
 
 	///end debug
 
+	std::vector<IView*> m_ViewVect;
 	IView* m_pCurrentView;
 	Views m_ViewMode;
 
@@ -60,7 +62,6 @@ private:
 	RenderWindow* m_pWindow;
 	
 	Vector2f m_size;
-	Font m_stdFont;
 	ClickVect m_clickL;
 	DrawVect m_drawL;
 	AnimateVect m_animateL;
@@ -74,7 +75,7 @@ private:
 
 
 public:
-	Game(RenderWindow* rw, Views sm, Vector2f windowSize);
+	Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize);
 	~Game();
 	
 	//draws the current screen
@@ -90,6 +91,8 @@ public:
 	
 
 private:
+
+	void LoadView(Views);
 	void onButtonClick(int);
 
 	void DrawGame();
@@ -102,6 +105,10 @@ private:
 	void DrawTest();
 
 	void Update();
+
+	void LoadView();
+
+	//interfaces
 
 	void onMouseMove();
 	void onResize();

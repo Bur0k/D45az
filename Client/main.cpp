@@ -108,7 +108,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// end the current frame
 		window.display();
 	}
-	g.onClose();
 	
 	delete LV;
 	delete Client::get();
