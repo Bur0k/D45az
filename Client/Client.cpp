@@ -6,17 +6,17 @@
 std::vector<char> code(short s)
 {
 	std::vector<char> v;
-	v.push_back(s);
-	v.push_back(s>>8);
+	v.push_back(static_cast<char>(s));
+	v.push_back(static_cast<char>(s>>8));
 	return v;
 }
 std::vector<char> code(int i)
 {
 	std::vector<char> v;
-	v.push_back(i);
-	v.push_back(i>>8);
-	v.push_back(i>>16);
-	v.push_back(i>>24);
+	v.push_back(static_cast<char>(i));
+	v.push_back(static_cast<char>(i>>8));
+	v.push_back(static_cast<char>(i>>16));
+	v.push_back(static_cast<char>(i>>24));
 	return v;
 }
 std::vector<char> code(const std::string s)
