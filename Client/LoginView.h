@@ -1,7 +1,11 @@
 #ifndef LOGINVIEW_H
 #define LOGINVIEW_H
 
+#include <SFML\Graphics.hpp>
+
 #include "IView.h"
+#include "StandardButton.h"
+#include "Textbox.h"
 
 class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
@@ -9,10 +13,14 @@ public:
 	LoginView();
 	~LoginView();
 
-	DrawVect DrawV;
-	AnimateVect AnimateV;
-	ClickVect ClickV;
-	KeyInputVect KeyV;
+	DrawVect m_DrawV;
+	AnimateVect m_AnimateV;
+	ClickVect m_ClickV;
+	KeyInputVect m_KeyV;
+
+	Text logintext;
+	TextBox* name;
+	Button* lgoinbutton;
 
 
 
