@@ -21,7 +21,7 @@ LobbyView::~LobbyView()
 
 void LobbyView::draw(sf::RenderWindow* rw)
 {
-	for(int i=0;i<gameLobbys.size();i++)
+	for(unsigned int i=0;i<gameLobbys.size();i++)
 	{
 		gameLobbys[i]->lobbyName.draw(rw);
 		gameLobbys[i]->playerCount.draw(rw);

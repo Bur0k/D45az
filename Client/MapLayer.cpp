@@ -49,6 +49,8 @@ void MapLayer::render(sf::RenderTarget& RT,sf::IntRect OnScreen)
 		width-=firstX;
 		firstX=0;
 	}
+#pragma warning( push )
+#pragma warning( disable: 4018 )//Hier stimmt alles
 	while(firstX > layer[0].size())
 		firstX--;
 	while(firstX+width > layer[0].size())
@@ -63,6 +65,7 @@ void MapLayer::render(sf::RenderTarget& RT,sf::IntRect OnScreen)
 		firstY--;
 	while(firstY+height > layer.size())
 		height--;
+ #pragma warning( pop )
 
 	for(int y=firstY ; y!=firstY+height ; y++)
 	{

@@ -171,7 +171,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			addNewMessageCallbackMutex.lock();
-			for(int i=0;i<addNewMessageCallbackList.size();i++)
+			for(unsigned int i=0;i<addNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				newMessageCallback.push_back(addNewMessageCallbackList[i]);
@@ -188,7 +188,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			deleteNewMessageCallbackMutex.lock();
-			for(int i=0;i<deleteNewMessageCallbackList.size();i++)
+			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				for(unsigned int i=0;i<newMessageCallback.size();i++)
@@ -211,7 +211,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			addErrorCallbackMutex.lock();
-			for(int i=0;i<addErrorCallbackList.size();i++)
+			for(unsigned int i=0;i<addErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
 				errorCallback.push_back(addErrorCallbackList[i]);
@@ -228,7 +228,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			deleteErrorCallbackMutex.lock();
-			for(int i=0;i<deleteErrorCallbackList.size();i++)
+			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
 				for(unsigned int i=0;i<errorCallback.size();i++)
