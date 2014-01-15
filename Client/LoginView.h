@@ -6,6 +6,7 @@
 #include "IView.h"
 #include "StandardButton.h"
 #include "Textbox.h"
+#include "Textblock.h"
 
 class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
@@ -18,7 +19,7 @@ public:
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
-	Text logintext;
+	Textblock logintext;
 	TextBox* name;
 	Button* lgoinbutton;
 
