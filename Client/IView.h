@@ -8,7 +8,7 @@
 #include "Game.h"
 
 
-enum Views {INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
+enum Views {NOCHANGE, INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
 
 
 //unites all gui Interfaces for Model View Controller Implementation
@@ -18,7 +18,7 @@ class IView
 protected:
 	virtual void cangeView()=0;
 public:
-	virtual void onResize()=0;
+	virtual Views nextState()=0;
 };
 
 #endif //IVIEW_H
