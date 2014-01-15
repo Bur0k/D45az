@@ -85,9 +85,10 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 		vector<char> tmp = code(name);
 
 		erfg.insert(erfg.end(), tmp.begin(), tmp.end());
+		erfg.push_back('/');
 		
-		if( i == (this->players.size() - 1))
-			erfg.push_back('/');
+		//if( i == (this->players.size() - 1))
+		//	erfg.push_back('/');
 	}
 
 	this->server->write(s, 0x0302, erfg);
@@ -169,7 +170,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			{
 				if(this->gameMaster.s == s)
 				{
-					short anz = data[0] - 48;
+					short anz = data[0];
 
 					if(anz > 4)
 						anz = 4;
@@ -177,7 +178,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					this->setPlayerlimit(anz);
 
 					std::vector<char> erfg;
-					char playerCount = anz + 48;
+					char playerCount = anz;
 					erfg.push_back(playerCount);
 					this->server->write(s, 0x0321, erfg);
 				}

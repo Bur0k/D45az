@@ -128,7 +128,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					}
 				
 				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester);
-				
+
 				std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
 				this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',GameLobby));
 			
