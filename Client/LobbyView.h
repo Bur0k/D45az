@@ -4,6 +4,8 @@
 #include "IView.h"
 #include "Textblock.h"
 #include <vector>
+#include "StandardButton.h"
+#include "Slider.h"
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction
 {
@@ -14,7 +16,7 @@ public:
 	Textblock playerName;
 	Textblock mapName;
 	Textblock gameLobbyMaster;
-	Button* connect;
+	StandardButton* connect;
 
 	Slider* s;
 	struct GameLobbyData

@@ -5,7 +5,6 @@
 #include "IClickable.h"
 #include "IAnimatable.h"
 #include "IKeyboardInput.h"
-#include "Game.h"
 
 
 enum Views {NOCHANGE, INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
