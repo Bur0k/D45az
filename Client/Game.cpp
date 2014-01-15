@@ -370,6 +370,7 @@ void Game::LoadView(Views v)
 	case INGAME_MENU:
 		break;
 	case TESTSCREEN:
+		return;
 		break;
 	default:
 		break;
