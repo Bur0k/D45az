@@ -38,6 +38,8 @@ protected:
 	bool m_isStartStringDisplayed;
 	bool m_cursorRight;
 
+	SpriteTex* m_pBorder;
+
 	int m_ID;
 	//cursor position on screen
 	int m_cursorPosition;

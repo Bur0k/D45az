@@ -6,17 +6,17 @@
 std::vector<char> code(short s)
 {
 	std::vector<char> v;
-	v.push_back(s);
-	v.push_back(s>>8);
+	v.push_back(static_cast<char>(s));
+	v.push_back(static_cast<char>(s>>8));
 	return v;
 }
 std::vector<char> code(int i)
 {
 	std::vector<char> v;
-	v.push_back(i);
-	v.push_back(i>>8);
-	v.push_back(i>>16);
-	v.push_back(i>>24);
+	v.push_back(static_cast<char>(i));
+	v.push_back(static_cast<char>(i>>8));
+	v.push_back(static_cast<char>(i>>16));
+	v.push_back(static_cast<char>(i>>24));
 	return v;
 }
 std::vector<char> code(const std::string s)
@@ -171,7 +171,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			addNewMessageCallbackMutex.lock();
-			for(int i=0;i<addNewMessageCallbackList.size();i++)
+			for(unsigned int i=0;i<addNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				newMessageCallback.push_back(addNewMessageCallbackList[i]);
@@ -188,7 +188,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			deleteNewMessageCallbackMutex.lock();
-			for(int i=0;i<deleteNewMessageCallbackList.size();i++)
+			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				for(unsigned int i=0;i<newMessageCallback.size();i++)
@@ -211,7 +211,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			addErrorCallbackMutex.lock();
-			for(int i=0;i<addErrorCallbackList.size();i++)
+			for(unsigned int i=0;i<addErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
 				errorCallback.push_back(addErrorCallbackList[i]);
@@ -228,7 +228,7 @@ void Client::connectToServer(string ip, int port)
 		while(running)
 		{
 			deleteErrorCallbackMutex.lock();
-			for(int i=0;i<deleteErrorCallbackList.size();i++)
+			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
 				for(unsigned int i=0;i<errorCallback.size();i++)

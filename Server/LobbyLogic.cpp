@@ -128,7 +128,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					}
 				
 				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester);
-				
+
 				std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
 				this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',GameLobby));
 			
@@ -146,7 +146,7 @@ void LobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage
 	{
 		case 0x0010:
 			{
-				for(int i = 0; i < server->connectedPlayers.size(); i++)
+				for(int i = 0; i < (signed) server->connectedPlayers.size(); i++)
 				{
 					if(s == server->connectedPlayers[i].s)
 						server->connectedPlayers.erase(server->connectedPlayers.begin() + i);
@@ -154,7 +154,7 @@ void LobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage
 			}break;
 		case 0x0011:
 			{
-				for(int i = 0; i < server->connectedPlayers.size(); i++)
+				for(int i = 0; i < (signed) server->connectedPlayers.size(); i++)
 				{
 					if(s == server->connectedPlayers[i].s)
 						server->connectedPlayers.erase(server->connectedPlayers.begin() + i);

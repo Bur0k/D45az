@@ -8,7 +8,7 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		m_pMS->play_music(0);
+		m_pMS->next_song();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -324,7 +324,7 @@ void Game::onKeyUp(sf::Event e)
 void Game::onTextEntered(sf::Event e)
 {
 	Uint32 c = e.text.unicode;
-	if(c >= 32 && c <= 126)
+	if((c >= 32 && c <= 126) || c == 0x00F6 || c == 0x00FC || c == 0x00E4 || c == 0x00C4 || c == 0x00D6	|| c == 0x00DC || c == 0x00DF || c == 0x0FD6 )
 	{
 		std::string s;
 		s = c;
@@ -444,4 +444,3 @@ void Game::timer()
 	fpsCount++;
 	//more timers ...
 }
-
