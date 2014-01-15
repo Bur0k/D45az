@@ -20,6 +20,8 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	
 	//select tiles from button tilesheet
 	
+	m_pBorder = new SpriteTex[8];
+
 	m_pBorder[0].t.loadFromImage(img, IntRect(0, 0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
 	m_pBorder[1].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING, 0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
 	m_pBorder[2].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING * 2, 0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
@@ -57,6 +59,7 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 TextBox::~TextBox()
 {
 	m_attachedFunctions.clear();
+	delete[] m_pBorder;
 }
 
 void TextBox::onKeyDown(sf::Event e)
