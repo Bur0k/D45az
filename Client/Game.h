@@ -18,6 +18,7 @@
 #include "Map.h"
 #include "Textbox.h"
 #include "LoginView.h"
+#include "LobbyView.h"
 
 #include "MusikSampler.h"
 

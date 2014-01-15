@@ -54,6 +54,7 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 bool LobbyView::isHit(sf::Vector2i & v)
 {
 	s->isHit(v);
+	connect->isHit(v);
 	return false;
 }
 
@@ -65,6 +66,7 @@ bool LobbyView::PressedRight()
 bool LobbyView::PressedLeft()
 {
 	s->PressedLeft();
+	connect->PressedLeft();
 	return false;
 }
 
@@ -75,13 +77,14 @@ bool LobbyView::ReleasedRight()
 
 bool LobbyView::ReleasedLeft()
 {
-	s->PressedLeft();
+	s->ReleasedLeft();
+	connect->ReleasedLeft();
 	return false;
 }
 	
 void LobbyView::animationTick()
 {
-
+	connect->animationTick();
 }
 	
 void LobbyView::onKeyDown(sf::Event)
