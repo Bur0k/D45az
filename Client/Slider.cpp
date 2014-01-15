@@ -128,7 +128,7 @@ bool Slider::Detach(ISliderFunction* pCallback)
 	return false;
 }
 
-bool Slider::isHit(sf::Vector2i & mouse)
+bool Slider::MouseMooved(sf::Vector2i & mouse)
 {
 	//check if mouse is on slider
 	

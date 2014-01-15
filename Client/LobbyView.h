@@ -39,7 +39,7 @@ public:
 
 	void draw(sf::RenderWindow* rw);
 
-	bool isHit(sf::Vector2i &);
+	bool MouseMooved(sf::Vector2i &);
 	bool PressedRight();
 	bool PressedLeft();
 	bool ReleasedRight();
@@ -53,6 +53,8 @@ public:
 
 	void onSliderValueChange(int ID, double position);
 	void onSliderReleased(int ID, double position);
+
+	void onResize();
 };
 
 

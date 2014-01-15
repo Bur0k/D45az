@@ -41,10 +41,10 @@ void LoginView::onTextBoxSend(int ID, std::string s)
 }
 
 
-bool LoginView::isHit(sf::Vector2i & mouse)
+bool LoginView::MouseMooved(sf::Vector2i & mouse)
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		if(m_ClickV[i]->isHit(mouse))
+		if(m_ClickV[i]->MouseMooved(mouse))
 			return true;
 	return false;
 }
@@ -116,3 +116,5 @@ Views LoginView::nextState()
 
 	return Views::NOCHANGE;
 }
+
+void LoginView::onResize(){}
