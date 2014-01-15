@@ -10,73 +10,70 @@ Textblock::~Textblock()
 	//TODO
 }
 
-Textblock::Textblock(Vector2f pos, Vector2f size, String S, int ID)
+Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID)
 {
-
 	m_ID = ID;
-	
-	setSize(size);
 	setPosition(pos);
 	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_textblockText.setFont(m_Font);
-	//m_textblockText.setString(S);
 	m_textblockText.setPosition(getPosition());
 	m_textblockText.setColor(MyColors.Orange);
-	std::string buffer;
-
-	sf::Rect<float> textsize;
-
-	//while(true)
-	//{
-	//	textsize = m_textblockText.getLocalBounds();
-	//	float scale = m_textblockText.getScale().x;
-
-	//	fitText(0);
-
-	//	//if(textsize.width * scale > size.x || textsize.height * scale > size.y)
-	//	//{
-	//	//	scale *= 0.8f;
-	//	//	m_textblockText.setScale(scale, scale);
-	//	//}
-	//	//else
-
-	//	break;
-	//}
-
-
-	for(int i = 0; i < S.getSize(); i++)
-	{
-		buffer += S[i];
-		textsize = m_textblockText.getLocalBounds();
-		float scale = m_textblockText.getScale().x;
-
-		if(textsize.height * scale > size.y)
-		{
-			scale *= 0.8f;
-			m_textblockText.setScale(0, scale);
-		}
-
-		if(S[i] == ' ')
-		{
-			buffer[i] = '\n';
-		}
-
-		//if(textsize.width > size.x)
-		//{
-		//	buffer = '\n';
-		//}
-
-		m_textblockText.setString(buffer);
-
-	}
-
-	//TODO: getWord()
-
-	//m_textblockText.move(	(getSize().x - textsize.width * m_textblockText.getScale().x) / 2.0f,
-	//						(getSize().y - textsize.height * 1.5f * m_textblockText.getScale().y) / 2.0f);
+	m_textblockText.setCharacterSize(CharSize);
+	m_textblockText.setString(lineBreak(S, size));
+	textsize = m_textblockText.getLocalBounds();
+	this->setSize(Vector2f(textsize.width + 10, textsize.height + 10));
 
 	m_color = MyColors.White;
 	setFillColor(m_color);
+}
+
+void Textblock::setText(String text, Vector2f size)
+{
+	m_textblockText.setString(lineBreak(text, size));
+}
+
+std::string Textblock::lineBreak(String S, Vector2f size)
+{
+	std::string tmp_word;
+	std::string tmp_line;
+	int count = 0;
+	std::string biggest;
+	std::string tmp;
+	std::string output;
+
+	for(int i = 0; i < S.getSize(); i++)
+	{
+		while(S[i + count] != ' ' || S[i + count] == '\0')
+		{
+			tmp_word += S[i + count];
+			count++;
+
+			if(count + i == S.getSize())
+				break;
+		}
+		if(i + count != S.getSize())
+		{
+			tmp_word += ' ';
+		}
+		tmp_line += tmp_word;
+		m_textblockText.setString(tmp_line);
+		textsize = m_textblockText.getLocalBounds();
+
+		if(size.x < textsize.width)
+		{
+			output += '\n';
+			output += tmp_word;
+			tmp_line = tmp_word;
+			tmp_word.clear();
+		}
+		output += tmp_word;
+		tmp_word.clear();
+
+		i += count;
+		count = 0;
+	}
+
+	return output;
 }
 
 void Textblock::operator=(const Textblock & tblock)
@@ -95,29 +92,4 @@ void Textblock::draw(RenderWindow* rw)
 {
 	rw->draw(*this);
 	rw->draw(m_textblockText);
-}
-
-void Textblock::fitText(int border)
-{
-	m_textblockText.setPosition(getPosition());
-
-	sf::Rect<float> textsize;
-	Vector2f size = this->getSize();
-
-	textsize = m_textblockText.getLocalBounds();
-	float scale = m_textblockText.getScale().x;
-	if(textsize.width * scale > size.x - border * 2)
-	{
-		scale = (float)(size.x - border * 2) / textsize.width;
-		m_textblockText.setScale(scale, scale);
-	}
-
-	textsize = m_textblockText.getLocalBounds();
-	if(textsize.height * scale > size.y - border * 2)
-	{
-		scale = (float)(size.y - border * 2) / textsize.height;
-	}
-
-	m_textblockText.move(	(getSize().x - textsize.width * m_textblockText.getScale().x) / 2.0f,
-						(getSize().y - textsize.height * 1.5f * m_textblockText.getScale().y) / 2.0f);
 }

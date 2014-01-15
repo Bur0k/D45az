@@ -282,7 +282,7 @@ void Game::onKeyDown(sf::Event e)
 {
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyDown(e);
-
+	
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		m_ViewVect[i]->onKeyDown(e);
 	
@@ -335,7 +335,7 @@ void Game::LoadView(Views v)
 {
 
 	//unfinished implementation
-	
+
 	//todo not allways clear to allow stacked views or animation
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		delete m_ViewVect[i];
@@ -345,7 +345,7 @@ void Game::LoadView(Views v)
 
 	IView* NewView;
 	switch (v)
-	{
+{
 	case NOCHANGE:
 		return;
 		break;
