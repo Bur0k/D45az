@@ -2,7 +2,7 @@
 
 
 LobbyView::LobbyView():
-	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",20,0),
+	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",50,0),
 	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20,0),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20,0)
 {
@@ -121,6 +121,12 @@ void LobbyView::onSliderReleased(int ID, double position)
 
 }
 
-void LobbyView::onResize(){}
+void LobbyView::onResize()
+{
 
-void update(double elpasedMs){}
+}
+
+void LobbyView::update(double elpasedMs)
+{
+
+}
