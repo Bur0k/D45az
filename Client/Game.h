@@ -61,7 +61,7 @@ private:
 	
 	Vector2f m_size;
 	Font m_stdFont;
-	ClickList m_clickL;
+	ClickVect m_clickL;
 	DrawVect m_drawL;
 	AnimateVect m_animateL;
 	KeyInputVect m_keyInputL;
