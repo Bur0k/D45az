@@ -14,6 +14,9 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_anmation = 0;
 	m_cursorAnimation = 0;
 
+	m_focusCol = MyColors.DarkGray;
+	m_nofocusCol = MyColors.Gray;
+
 	Image img;
 	if(!img.loadFromFile("Data/Images/Button.png"))
 		std::cout << "textbox: Load Image Failed!" << std::endl;
@@ -37,6 +40,7 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_BaseRect.setSize(Vector2f(width - TEXTBOXBORDERSPACING, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING));
 	m_BaseRect.setFillColor(m_nofocusCol);
 
+
 	m_displayedText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_displayedText.setString(startText);
 	m_displayedText.setPosition(m_BaseRect.getPosition());
@@ -51,8 +55,7 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_cursor.setPosition(m_dimensions.left + TEXTBOXBORDERSPACING, m_dimensions.top + TEXTBOXBORDERSPACING);
 	m_cursor.setSize(Vector2f(TEXTBOXCURSORWIDTH, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING * 2));
 
-	m_focusCol = MyColors.DarkGray;
-	m_nofocusCol = MyColors.Gray;
+	
 
 }
 

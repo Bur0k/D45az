@@ -20,7 +20,7 @@ private:
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
-	Text logintext;
+	Textblock* logintext;
 	TextBox* name;
 	Button* lgoinbutton;
 
