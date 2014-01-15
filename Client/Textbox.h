@@ -96,7 +96,7 @@ public:
 	virtual void onTextInput(std::string s);
 
 	//implemnting Iclickable
-	virtual bool isHit(sf::Vector2i &);
+	virtual bool MouseMooved(sf::Vector2i &);
 	virtual bool PressedRight();
 	virtual bool PressedLeft();
 	virtual bool ReleasedRight();

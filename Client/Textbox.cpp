@@ -188,7 +188,7 @@ void TextBox::fitText()
 	}
 }
 
-bool TextBox::isHit(sf::Vector2i & mouse)
+bool TextBox::MouseMooved(sf::Vector2i & mouse)
 {
 	if( mouse.x >= m_dimensions.left && mouse.x <= m_dimensions.left + m_dimensions.width &&
 		mouse.y >= m_dimensions.top && mouse.y <= m_dimensions.top + m_dimensions.height)

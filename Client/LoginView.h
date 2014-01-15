@@ -34,7 +34,7 @@ public:
 
 	virtual void draw(sf::RenderWindow* rw);
 
-	virtual bool isHit(sf::Vector2i &);
+	virtual bool MouseMooved(sf::Vector2i &);
 	virtual bool PressedRight();
 	virtual bool PressedLeft();
 	virtual bool ReleasedRight();

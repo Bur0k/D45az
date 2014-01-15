@@ -44,7 +44,7 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 }
 
 
-bool LobbyView::isHit(sf::Vector2i &)
+bool LobbyView::MouseMooved(sf::Vector2i &)
 {
 	return true;
 }

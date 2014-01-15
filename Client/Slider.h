@@ -61,7 +61,7 @@ public:
 
 	//Implementation of IClickable
 
-	bool isHit(Vector2i &);
+	bool MouseMooved(Vector2i &);
 	bool PressedRight();
 	bool PressedLeft();
 	bool ReleasedRight();

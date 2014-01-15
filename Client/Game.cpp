@@ -60,7 +60,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	LoadView(Viewmode);
 
 	//TESTSCREEN stuff
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5);
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5,19);
 	m_drawL.push_back(tblock);
 
 
@@ -222,12 +222,12 @@ void Game::onMouseMove()
 	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		m_clickL[i]->isHit(mousePos);
+		m_clickL[i]->MouseMooved(mousePos);
 
 	m_lastMousePosition = mousePos;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-			m_ViewVect[i]->isHit(mousePos);
+			m_ViewVect[i]->MouseMooved(mousePos);
 }
 
 void Game::onMouseDownLeft()
