@@ -14,6 +14,21 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_anmation = 0;
 	m_cursorAnimation = 0;
 
+	Image img;
+	if(!img.loadFromFile("Data/Images/Button.png"))
+		std::cout << "textbox: Load Image Failed!" << std::endl;
+	
+	//select tiles from button tilesheet
+	
+	m_pBorder[0].t.loadFromImage(img, IntRect(0, 0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[1].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING, 0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[2].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING * 2, 0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[3].t.loadFromImage(img, IntRect(0, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[4].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[5].t.loadFromImage(img, IntRect(0, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[6].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
+	m_pBorder[7].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING));
+
 	
 
 	m_BaseRect.setPosition(pos.x + TEXTBOXBORDERSPACING / 2, pos.y + TEXTBOXBORDERSPACING / 2);
@@ -151,7 +166,7 @@ void TextBox::fitText()
 		else
 			cursorLast = false;
 
-		if(textDimensions.width >= m_BaseRect.getSize().x - TEXTBOXBORDERSPACING * 2) //stop if we run out of space
+		if(textDimensions.width >= m_BaseRect.getSize().x - TEXTBOXBORDERSPACING * 3.5) //stop if we run out of space
 		{
 			m_cursorRight = cursorLast;
 			break;
@@ -324,6 +339,9 @@ void TextBox::draw(sf::RenderWindow* rw)
 	rw->draw(m_displayedText);
 	if(m_inFocus) 
 		rw->draw(m_cursor);
+
+	for(int i = 0; i < 8; i++)
+		rw->draw(m_pBorder[i].s);
 
 	//TODO draw nice graphics around m_BaseRect
 }

@@ -16,6 +16,6 @@ public:
 	virtual bool ReleasedLeft()=0;
 };
 
-typedef std::vector<IClickable*> ClickList;
+typedef std::vector<IClickable*> ClickVect;
 
 #endif
