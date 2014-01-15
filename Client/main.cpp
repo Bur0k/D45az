@@ -8,6 +8,7 @@
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
 #include "Lobby.h"
+#include "LobbyView.h"
 
 #include "MusikSampler.h"
 
@@ -89,9 +90,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	*/
 	
-	
 	Game g = Game(&window, TESTSCREEN, sf::Vector2f(1280, 850));
-	
+	LobbyView* LV = new LobbyView();
 	
 	while (window.isOpen())
 	{ 
@@ -102,12 +102,14 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// clear the window with black 
 		window.clear(sf::Color::Black);
 		
-		g.Draw();
+		//g.Draw();
+		LV->draw(&window);
 
 		// end the current frame
 		window.display();
 	}
 	
+	delete LV;
 	delete Client::get();
 
 	MyFonts::deleteFonts(); //TODO in game implementieren

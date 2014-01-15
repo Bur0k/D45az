@@ -1,16 +1,23 @@
 #include "LobbyView.h"
 
 
-LobbyView::LobbyView()
+LobbyView::LobbyView():
+	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",20,0),
+	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20,0),
+	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20,0)
 {
 	playerName.setPosition(0,0);
 	mapName.setPosition(500,200);
 	gameLobbyMaster.setPosition(500,300);
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
-	s = new Slider(false,sf::Vector2f(50,400),0.0,sf::Vector2f(450,200),0);
+	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
 	connect->attachFunction(this);
 	s->Attach(this);
+
+	playerName.setText("Name",sf::Vector2f(300,100));
+	mapName.setText("Map Name",sf::Vector2f(300,100));
+	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
 }
 
 LobbyView::~LobbyView()
@@ -44,29 +51,32 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 }
 
 
-bool LobbyView::isHit(sf::Vector2i &)
+bool LobbyView::isHit(sf::Vector2i & v)
 {
-	return true;
+	s->isHit(v);
+	return false;
 }
 
 bool LobbyView::PressedRight()
 {
-	return true;
+	return false;
 }
 
 bool LobbyView::PressedLeft()
 {
-	return true;
+	s->PressedLeft();
+	return false;
 }
 
 bool LobbyView::ReleasedRight()
 {
-	return true;
+	return false;
 }
 
 bool LobbyView::ReleasedLeft()
 {
-	return true;
+	s->PressedLeft();
+	return false;
 }
 	
 void LobbyView::animationTick()
@@ -85,6 +95,20 @@ void LobbyView::onKeyUp(sf::Event)
 }
 
 void LobbyView::onTextInput(std::string s)
+{
+
+}
+
+Views LobbyView::nextState()
+{
+	return NOCHANGE;
+}
+
+void LobbyView::onSliderValueChange(int ID, double position)
+{
+
+}
+void LobbyView::onSliderReleased(int ID, double position)
 {
 
 }
