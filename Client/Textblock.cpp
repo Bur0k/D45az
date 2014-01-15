@@ -19,15 +19,31 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID
 	m_textblockText.setPosition(getPosition());
 	m_textblockText.setColor(MyColors.Orange);
 	m_textblockText.setCharacterSize(CharSize);
+	m_textblockText.setString(lineBreak(S, size));
+	textsize = m_textblockText.getLocalBounds();
+	this->setSize(Vector2f(textsize.width + 10, textsize.height + 10));
+
+	m_color = MyColors.White;
+	setFillColor(m_color);
+}
+
+void Textblock::setText(String text, Vector2f size)
+{
+	m_textblockText.setString(lineBreak(text, size));
+}
+
+std::string Textblock::lineBreak(String S, Vector2f size)
+{
 	std::string tmp_word;
 	std::string tmp_line;
-	std::string output;
-	sf::Rect<float> textsize;
 	int count = 0;
+	std::string biggest;
+	std::string tmp;
+	std::string output;
 
 	for(int i = 0; i < S.getSize(); i++)
 	{
-		while(S[i + count] != ' ' || S[i + count] == '/0')
+		while(S[i + count] != ' ' || S[i + count] == '\0')
 		{
 			tmp_word += S[i + count];
 			count++;
@@ -57,13 +73,7 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID
 		count = 0;
 	}
 
-	// + 2mal rand
-	m_textblockText.setString(output);
-	textsize = m_textblockText.getLocalBounds();
-	this->setSize(Vector2f(textsize.width + 10, textsize.height + 10));
-
-	m_color = MyColors.White;
-	setFillColor(m_color);
+	return output;
 }
 
 void Textblock::operator=(const Textblock & tblock)

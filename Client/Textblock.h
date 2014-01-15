@@ -27,9 +27,11 @@ protected:
 	int m_ID;
 	Font m_Font;
 	Color m_color;
-
+	sf::Rect<float> textsize;
 public:
 	virtual void draw(RenderWindow* rw);
+	std::string lineBreak(String S, Vector2f size);
+	void setText(String S, Vector2f size);
 	
 };
 
