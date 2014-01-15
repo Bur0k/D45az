@@ -11,6 +11,8 @@
 class Lobby : public NetworkParticipant
 {
 	Client* c;
+
+
 	map<char, GameData> gamesCreated;
 	
 public:

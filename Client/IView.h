@@ -17,6 +17,7 @@ class IView
 public:
 	virtual ~IView(){};
 	virtual void onResize()=0;
+	virtual void update()=0;
 	virtual Views nextState()=0;
 };
 
