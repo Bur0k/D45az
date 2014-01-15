@@ -49,6 +49,8 @@ void MapLayer::render(sf::RenderTarget& RT,sf::IntRect OnScreen)
 		width-=firstX;
 		firstX=0;
 	}
+	while(firstX > layer[0].size())
+		firstX--;
 	while(firstX+width > layer[0].size())
 		width--;
 
@@ -57,6 +59,8 @@ void MapLayer::render(sf::RenderTarget& RT,sf::IntRect OnScreen)
 		height-=firstY;
 		firstY=0;
 	}
+	while(firstY > layer.size())
+		firstY--;
 	while(firstY+height > layer.size())
 		height--;
 

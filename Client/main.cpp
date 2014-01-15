@@ -18,7 +18,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 
 
@@ -70,7 +70,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	while(lobby.gameLobby==NULL)
 		;
 	lobby.askforLobbyData();
-
+	lobby.gameLobby->maxPlayerChange(3);
 
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END

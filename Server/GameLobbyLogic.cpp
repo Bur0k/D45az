@@ -79,15 +79,16 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 {
 	std::vector<char> erfg;
 
-	for(int i = 0; i < this->players.size(); i++)
+	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		string name = this->players[i]->Name;
 		vector<char> tmp = code(name);
 
 		erfg.insert(erfg.end(), tmp.begin(), tmp.end());
+		erfg.push_back('/');
 		
-		if( i == (this->players.size() - 1))
-			erfg.push_back('/');
+		//if( i == (this->players.size() - 1))
+		//	erfg.push_back('/');
 	}
 
 	this->server->write(s, 0x0302, erfg);
@@ -121,7 +122,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	bool socketAvailable = false;
 
-	for(int i = 0; i < this->players.size(); i++)
+	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		if(s == this->players[i]->s)
 			socketAvailable = true;
@@ -169,7 +170,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			{
 				if(this->gameMaster.s == s)
 				{
-					short anz = data[0] - 48;
+					short anz = data[0];
 
 					if(anz > 4)
 						anz = 4;
@@ -177,7 +178,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					this->setPlayerlimit(anz);
 
 					std::vector<char> erfg;
-					char playerCount = anz + 48;
+					char playerCount = anz;
 					erfg.push_back(playerCount);
 					this->server->write(s, 0x0321, erfg);
 				}
@@ -213,7 +214,7 @@ void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMes
 	{
 		case 0x0010:
 			{
-				for(int i = 0; i < this->players.size(); i++)
+				for(int i = 0; i < (signed) this->players.size(); i++)
 				{
 					if(s == this->players[i]->s)
 					{
@@ -229,7 +230,7 @@ void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMes
 			}break;
 		case 0x0011:
 			{
-				for(int i = 0; i < this->players.size(); i++)
+				for(int i = 0; i < (signed) this->players.size(); i++)
 				{
 					if(s == this->players[i]->s)
 					{

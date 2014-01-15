@@ -90,6 +90,7 @@
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
     <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="LoginView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLayer.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="IKeyboardInput.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />
+    <ClInclude Include="LoginView.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLayer.h" />
     <ClInclude Include="MusikSampler.h" />
