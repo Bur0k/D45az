@@ -106,12 +106,10 @@ void Lobby::processNetworkError(int id, std::string msg)
 {
 }
 
-Lobby::Lobby(string Name)
+Lobby::Lobby()
 {
 	c = Client::get();
 	c->addToNewMessageCallback(this);
-
-	this->name = Name;
 }
 
 Lobby::~Lobby()

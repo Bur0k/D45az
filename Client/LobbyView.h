@@ -6,6 +6,7 @@
 #include <vector>
 #include "StandardButton.h"
 #include "Slider.h"
+#include "Lobby.h"
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction
 {
@@ -22,12 +23,13 @@ public:
 	struct GameLobbyData
 	{
 	public:
+		int id;
 		Textblock lobbyName;
 		Textblock playerCount;
 	};
 	std::vector<GameLobbyData*> gameLobbys;
 
-
+	Lobby* lobby;
 
 	//implementing a lot of interfaces
 	Views nextState();
