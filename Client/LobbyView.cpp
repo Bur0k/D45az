@@ -18,10 +18,15 @@ LobbyView::LobbyView():
 	playerName.setText("Name",sf::Vector2f(300,100));
 	mapName.setText("Map Name",sf::Vector2f(300,100));
 	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
+
+
+	lobby = new Lobby();
+	lobby->askforLobbyData();
 }
 
 LobbyView::~LobbyView()
 {
+	delete lobby;
 	delete connect;
 	delete s;
 }
