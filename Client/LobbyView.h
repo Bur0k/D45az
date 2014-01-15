@@ -56,7 +56,7 @@ public:
 
 	void onResize();
 
-	void update();
+	void update(double elpasedMs);
 };
 
 

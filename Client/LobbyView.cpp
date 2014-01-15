@@ -122,3 +122,5 @@ void LobbyView::onSliderReleased(int ID, double position)
 }
 
 void LobbyView::onResize(){}
+
+void update(double elpasedMs){}
