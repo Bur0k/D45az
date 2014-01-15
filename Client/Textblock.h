@@ -31,6 +31,8 @@ protected:
 
 	Color m_color;
 
+	virtual void fitText(int border);
+
 public:
 	virtual void draw(RenderWindow* rw);
 
