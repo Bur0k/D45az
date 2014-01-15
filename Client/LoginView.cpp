@@ -117,7 +117,7 @@ Views LoginView::nextState()
 	return Views::NOCHANGE;
 }
 
-void update(double elpasedMs)
+void LoginView::update(double elpasedMs)
 {
 
 }
