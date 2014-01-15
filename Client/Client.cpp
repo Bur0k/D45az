@@ -70,8 +70,14 @@ Client::~Client()
 		readThread->join();
 		delete readThread;
 	}
+	if(writeThread!=NULL)
+	{
+		writeThread->join();
+		delete writeThread;
+	}
 
 	closesocket(s);
+	Sleep(1000);
 
 	if(addNewMessageCallbackThread!=NULL)
 	{
@@ -191,10 +197,10 @@ void Client::connectToServer(string ip, int port)
 			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
-				for(unsigned int i=0;i<newMessageCallback.size();i++)
-					if(newMessageCallback[i] == deleteNewMessageCallbackList[i])
+				for(unsigned int j=0;j<newMessageCallback.size();j++)
+					if(newMessageCallback[j] == deleteNewMessageCallbackList[i])
 					{
-						newMessageCallback.erase(newMessageCallback.begin()+i);
+						newMessageCallback.erase(newMessageCallback.begin()+j);
 						break;
 					}
 				newMessageCallbackMutex.unlock();
@@ -204,6 +210,7 @@ void Client::connectToServer(string ip, int port)
 
 			Sleep(1);
 		}
+		Sleep(1);
 	});
 
 	addErrorCallbackThread = new thread([=]()
@@ -231,10 +238,10 @@ void Client::connectToServer(string ip, int port)
 			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
-				for(unsigned int i=0;i<errorCallback.size();i++)
-					if(errorCallback[i] == deleteErrorCallbackList[i])
+				for(unsigned int j=0;j<errorCallback.size();j++)
+					if(errorCallback[j] == deleteErrorCallbackList[i])
 					{
-						errorCallback.erase(errorCallback.begin()+i);
+						errorCallback.erase(errorCallback.begin()+j);
 						break;
 					}
 				errorCallbackMutex.unlock();

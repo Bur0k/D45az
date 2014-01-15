@@ -469,6 +469,8 @@ void Game::timer()
 	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
 	m_animationTimer.restart();
 
+	m_ViewVect[0]->update(animationtime);
+
 	while(animationtime > 1000 / 33)
 	{
 		animationtime -= 1000 / 33;

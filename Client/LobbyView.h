@@ -20,14 +20,15 @@ public:
 	StandardButton* connect;
 
 	Slider* s;
-	struct GameLobbyData
+	class GameLobbyData
 	{
 	public:
-		int id;
 		Textblock lobbyName;
 		Textblock playerCount;
+		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(200,30),"",20,0){}
 	};
-	std::vector<GameLobbyData*> gameLobbys;
+
+	std::map<short,GameLobbyData*> gameLobbys;
 
 	Lobby* lobby;
 

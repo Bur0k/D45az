@@ -16,7 +16,6 @@ public:
 
 struct GameData
 {
-	short id;
 	std::vector<PlayerData> players;
 	short playerlimit;
 	PlayerData* gameMaster;
