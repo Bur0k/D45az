@@ -19,6 +19,20 @@ LobbyView::~LobbyView()
 	delete s;
 }
 
+void LobbyView::draw(sf::RenderWindow* rw)
+{
+	for(int i=0;i<gameLobbys.size();i++)
+	{
+		gameLobbys[i]->lobbyName.draw(rw);
+		gameLobbys[i]->playerCount.draw(rw);
+	}
+	playerName.draw(rw);
+	mapName.draw(rw);
+	gameLobbyMaster.draw(rw);
+	connect->draw(rw);
+	s->draw(rw);
+}
+
 void LobbyView::onButtonClick(int)
 {
 	//handle incoming clicks here
@@ -32,27 +46,27 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 
 bool LobbyView::isHit(sf::Vector2i &)
 {
-	
+	return true;
 }
 
 bool LobbyView::PressedRight()
 {
-
+	return true;
 }
 
 bool LobbyView::PressedLeft()
 {
-
+	return true;
 }
 
 bool LobbyView::ReleasedRight()
 {
-
+	return true;
 }
 
 bool LobbyView::ReleasedLeft()
 {
-
+	return true;
 }
 	
 void LobbyView::animationTick()
@@ -69,12 +83,8 @@ void LobbyView::onKeyUp(sf::Event)
 {
 
 }
+
 void LobbyView::onTextInput(std::string s)
-{
-
-}
-
-void LobbyView::draw(sf::RenderWindow* rw)
 {
 
 }
