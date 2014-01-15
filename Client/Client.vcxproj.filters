@@ -109,6 +109,9 @@
     <ClCompile Include="LoginView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="LobbyView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -189,6 +192,9 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="LoginView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
