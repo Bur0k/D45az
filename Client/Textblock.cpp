@@ -12,11 +12,12 @@ Textblock::~Textblock()
 
 Textblock::Textblock(Vector2f pos, Vector2f size, String S, int ID)
 {
+
 	m_ID = ID;
 	
 	setSize(size);
 	setPosition(pos);
-	m_Font = Font(MyFonts.Arial);
+	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_textblockText.setFont(m_Font);
 	//m_textblockText.setString(S);
 	m_textblockText.setPosition(getPosition());

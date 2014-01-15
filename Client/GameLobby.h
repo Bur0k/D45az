@@ -9,18 +9,20 @@ class GameLobby : public NetworkParticipant
 private:
 
 	Client* c;
-	short id;
 	vector<string> players;
 	short playerLimit;
 	string gameMaster;
 	//Map current Map;
 
-public:
-	GameLobby(void);
-	~GameLobby(void);
+	bool Ingame;
+	bool disconnected;
 
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
-	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
+public:
+	GameLobby();
+	~GameLobby();
+
+	void processNewMessage(short id,vector<char> data);
+	void processNetworkError(int id, std::string msg);
 
 	// Funktionen
 

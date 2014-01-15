@@ -8,14 +8,15 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		m_pMS->load_music(0);
-		m_pMS->play_music();
+		m_pMS->play_music(0);
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
+		m_pMS->play_sound(0);
 		std::cout << "other button click" << std::endl;
 		break;
 	case 3:
+		m_pMS->play_sound(1);
 		std::cout << "this button locks in and out  current status" << b3->getIsPressed() << std::endl;
 		break;
 	default:
@@ -25,16 +26,33 @@ void Game::onButtonClick(int index)
 	}
 }
 
-Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
+void Game::onSliderValueChange(int ID, double position)
 {
+	std::cout << "Slider CHANGED ID: " << ID << " Value: " << position << std::endl;
+}
+
+void Game::onSliderReleased(int ID, double position)
+{
+	std::cout << "Slider RELEASED ID: " << ID << " Value: " << position << std::endl;
+}
+
+void Game::onTextBoxSend(int ID, std::string s)
+{
+	std::cout << "TEXTBOX ID " << ID << " text:   " << s << std::endl;
+}
+
+Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
+{
+
+
 	m_pWindow = rw;
-	m_Screen = sm;
+	m_ViewMode = sm;
 	m_size = windowSize;
 
 	m_inFocus = true;
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
-	m_stdFont = MyFonts.Arial;
+	m_stdFont = MyFonts::getFont(GameFonts::ARIAL);
 
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
@@ -49,7 +67,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	
 	b->attachFunction((IButtonfunction*)this);
 	
-	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
+	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "|| SOUND 1 || \n Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
 
 	b1->attachFunction((IButtonfunction*)this);
 
@@ -57,12 +75,25 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 	b2->attachFunction((IButtonfunction*)this);
 
-	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"buttons können auch\nein und aus schalten" , 3, true);
+	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"|| SOUND 2 || \n buttons können auch\nein und aus schalten" , 3, true);
 
 	b3->attachFunction(this);
 
+	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
+	
+	s->Attach(this);
+
+	s1 = new Slider(false, Vector2f(30,200), 0.4, Vector2f(700,200), 2);
+
+	s1->Attach(this);
+
+	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
+
+	tb->attach(this);
+
+
 	m_fpsText.setFont(m_stdFont);
-	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 	m_fpsText.setColor(MyColors.Red);
 
 
@@ -70,19 +101,25 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	m_clickL.push_back(b1);
 	m_clickL.push_back(b2);
 	m_clickL.push_back(b3);
+	m_clickL.push_back(s);
+	m_clickL.push_back(s1);
+	m_clickL.push_back(tb);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
 	m_drawL.push_back(b2);
 	m_drawL.push_back(b3);
-	
+	m_drawL.push_back(s);
+	m_drawL.push_back(s1);
+	m_drawL.push_back(tb);
+
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
+	m_animateL.push_back(tb);
 
-	m_Screen = Testscreen;
-
+	m_keyInputL.push_back(tb);
 
 	// Musik Test Zeug
 
@@ -91,50 +128,61 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 	MS->load_music(0);
 	MS->play_music();
 	*/
+
+	map.load("Data/Maps/test.tmx");
+	xMap=yMap=0;
 }
 
 Game::~Game()
 {
-	delete m_pMS;
+	m_clickL.clear();
+	m_drawL.clear();
+	m_animateL.clear();
+
 	delete b;
 	delete b1;
 	delete b2;
 	delete b3;
+	delete s;
+	delete s1;
+	delete tb;
 
 	delete tblock;
+
+	delete m_pMS;
 }
 
-void Game::setScreen(ScreenMode sm)
+void Game::setView(Views sm)
 {
-	m_Screen = sm;
+	m_ViewMode = sm;
 }
 
-ScreenMode Game::getScreen()
+Views Game::getView()
 {
-	return m_Screen;
+	return m_ViewMode;
 }
 
 void Game::Draw()
 {
-	switch (m_Screen)
+	switch (m_ViewMode)
 	{
-	case Ingame:
+	case INGAME:
 		DrawGame();
 		break;
-	case Login:
+	case LOGIN:
 		DrawLogin();
 		break;
-	case Menue:
+	case MENUE:
 		DrawMainMenu();
 		break;
-	case Lobby:
+	case LOBBY:
 		DrawLobby();
 		break;
-	case IngameMenu:
+	case INGAME_MENU:
 		DrawGame();
 		DrawIngameMenu();
 		break;
-	case Testscreen:
+	case TESTSCREEN:
 		DrawTest();
 	default:
 		break;
@@ -169,20 +217,9 @@ void Game::DrawIngameMenu()
 }
 
 void Game::DrawTest()
-{
-	/*sf::Text t = sf::Text();
-	t.setString("Hallo Welt\nD45az finezt.");
-	t.setPosition(sf::Vector2f(200,200));
-	t.setFont(m_stdFont);
-	t.setColor(sf::Color::White);
-
-	sf::RectangleShape r = sf::RectangleShape();
-	r.setPosition(sf::Vector2f(200,400));
-	r.setSize(sf::Vector2f(250,250));
-	r.setFillColor(sf::Color::Blue);*/
-
-	//m_pWindow->draw(t);
-	//m_pWindow->draw(r);
+{	
+	sf::IntRect RenderRect(xMap,yMap,m_pWindow->getSize().x,m_pWindow->getSize().y);
+	map.render(*m_pWindow, RenderRect);
 
 	for(unsigned int i = 0; i < m_drawL.size(); i++)
 		m_drawL[i]->draw(m_pWindow);
@@ -196,7 +233,7 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 	
-	m_fpsText.setPosition(m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 
 	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
 				
@@ -209,7 +246,7 @@ void Game::onMouseMove()
 
 	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 		m_clickL[i]->isHit(mousePos);
 
 	m_lastMousePosition = mousePos;
@@ -217,14 +254,16 @@ void Game::onMouseMove()
 
 void Game::onMouseDownLeft()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->PressedLeft();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedLeft())
+			break;
 }
 
 void Game::onMouseDownRight()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->PressedRight();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedRight())
+			break;
 }
 
 void Game::onMouseLeave()
@@ -239,28 +278,65 @@ void Game::onMouseLeave()
 
 void Game::onMouseUpLeft()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->ReleasedLeft();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedLeft())
+			break;
 }
 
 void Game::onMouseUpRight()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->ReleasedRight();
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedRight())
+			break;
 }
 
 void Game::onKeyDown(sf::Event e)
 {
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyDown(e);
+	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
+	else if(e.key.code == Keyboard::Left)
+		xMap-=5;
+	else if(e.key.code == Keyboard::Right)
+		xMap+=5;
+	else if(e.key.code == Keyboard::Up)
+		yMap-=5;
+	else if(e.key.code == Keyboard::Down)
+		yMap+=5;
+
+	if(e.key.code == Keyboard::G)
+		s->move(Vector2f(1,1));
 }
 
 void Game::onKeyUp(sf::Event e)
 {
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyUp(e);
+
 #ifdef _DEBUG
 	if(e.key.code == sf::Keyboard::Escape) 
 		m_pWindow->close();
 #endif
+}
+
+void Game::onTextEntered(sf::Event e)
+{
+	Uint32 c = e.text.unicode;
+	if(c >= 32 && c <= 126)
+	{
+		std::string s;
+		s = c;
+		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+			m_keyInputL[i]->onTextInput(s);
+	}
+}
+
+
+void Game::onClose()
+{
+	MyFonts::deleteFonts();
 }
 
 void Game::Input()
@@ -327,6 +403,11 @@ void Game::Input()
 				onKeyUp(event);
 			break;
 
+		case sf::Event::TextEntered:
+			if(m_inFocus)
+				onTextEntered(event);
+			break;
+
 		default:
 			break;
 		}
@@ -336,15 +417,23 @@ void Game::Input()
 void Game::timer()
 {
 	static int fpsCount = 0;
-
+	static int animationtime = 0;
+	
 	//std::cout<<m_animationTimer.getElapsedTime().asMilliseconds()<<std::endl;
-	if(m_animationTimer.getElapsedTime().asMilliseconds() > 1000 / 33)
+	
+
+	//ANIMATION//
+	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
+	m_animationTimer.restart();
+	while(animationtime > 1000 / 33)
 	{
-		m_animationTimer.restart();
+		animationtime -= 1000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
 	}
 
+
+	//...//
 	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
 	{
 		m_fpsCounter.restart();

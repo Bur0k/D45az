@@ -14,6 +14,9 @@
 #include "IView.h"
 #include "StandardButton.h"
 #include "Textblock.h"
+#include "Slider.h"
+#include "Map.h"
+#include "Textbox.h"
 
 #include "MusikSampler.h"
 
@@ -24,7 +27,7 @@ using namespace sf;
 // TODO derive game from renderWindow
 
 // manages gui views and timers
-class Game : private IButtonfunction
+class Game : private IButtonfunction, private ISliderFunction, public ITextBoxFunction
 {
 private:
 	//debug
@@ -38,16 +41,30 @@ private:
 
 	MusikSampler* m_pMS;
 
+	Slider* s;
+	Slider* s1;
+
+	Map map;
+	int xMap,yMap;
+
+	TextBox* tb;
+
 	///end debug
+
+	IView* m_pCurrentView;
+	Views m_ViewMode;
+
 	Clock m_fpsCounter;
 	Clock m_animationTimer;
+
 	RenderWindow* m_pWindow;
-	ScreenMode m_Screen;
+	
 	Vector2f m_size;
 	Font m_stdFont;
 	ClickList m_clickL;
 	DrawVect m_drawL;
 	AnimateVect m_animateL;
+	KeyInputVect m_keyInputL;
 
 	Text m_fpsText;
 
@@ -57,7 +74,7 @@ private:
 
 
 public:
-	Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize);
+	Game(RenderWindow* rw, Views sm, Vector2f windowSize);
 	~Game();
 	
 	//draws the current screen
@@ -66,8 +83,11 @@ public:
 	void Input();
 	void timer();
 
-	void setScreen(ScreenMode sm);
-	ScreenMode getScreen();
+	void setView(Views sm);
+	Views getView();
+	void onClose();
+
+	
 
 private:
 	void onButtonClick(int);
@@ -85,14 +105,19 @@ private:
 
 	void onMouseMove();
 	void onResize();
+	
 	void onMouseDownLeft();
 	void onMouseDownRight();
 	void onMouseUpLeft();
 	void onMouseUpRight();
 	void onMouseLeave();
-
+	void onTextEntered(sf::Event e);
 	void onKeyDown(sf::Event e);
 	void onKeyUp(sf::Event e);
+
+	void onSliderValueChange(int ID, double position);
+	void onSliderReleased(int ID, double position);
+	virtual void onTextBoxSend(int ID, std::string s);
 	
 };
 

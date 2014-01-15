@@ -15,11 +15,11 @@ private:
 	short id;
 	vector<PlayerData*> players;
 	short playerlimit;
-	PlayerData* gameMaster;
+	PlayerData gameMaster;
 	//Map currentMap;
 
 public:
-	GameLobbyLogic(short id, PlayerData* master);
+	GameLobbyLogic(short id, PlayerData master);
 	~GameLobbyLogic();
 
 	/*GETTER - SETTER*/
@@ -28,8 +28,8 @@ public:
 	short getID();
 	void setPlayerlimit(short limit);
 	short getPlayerlimit();
-	void setGamemaster(PlayerData* player);
-	PlayerData* getGamemaster();
+	void setGamemaster(PlayerData player);
+	PlayerData getGamemaster();
 	vector<PlayerData*>& getPlayers(); 
 	/*void setMap(Map map);*/
 	/*Map getMap();*/
@@ -37,6 +37,11 @@ public:
 	/*Funktionen*/
 
 	void addPlayer(PlayerData* player);
+	void sendPlayerNames(SOCKET s);
+	void sendMaxPlayers(SOCKET s);
+	void sendGameMaster(SOCKET s);
+	void sendCurrentMap(SOCKET s);
+	void sendGameLobbyData(SOCKET s);
 
 	/*Kommunikation*/
 

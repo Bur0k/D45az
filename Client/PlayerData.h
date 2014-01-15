@@ -10,21 +10,17 @@
 struct PlayerData
 {
 public:
-	SOCKET s;
 	std::string Name;
 };
 
-template<class T>
-class D45vector
+
+struct GameData
 {
-private:
-	std::vector<T> v;
-	std::mutex m;
-public:
-	std::vector<T> getCopy();
-	int size();
-	void push_back(T newData);
-	void erase(T toDelete);
+	short id;
+	std::vector<PlayerData> players;
+	short playerlimit;
+	PlayerData* gameMaster;
 };
+
 
 #endif

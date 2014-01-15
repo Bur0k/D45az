@@ -56,7 +56,7 @@
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
     <ClInclude Include="GameLobbyLogic.h">
-      <Filter>Codes\GameLobbyLogic\Source</Filter>
+      <Filter>Codes\GameLobbyLogic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="GameLobbyLogic.cpp">
       <Filter>Codes\GameLobbyLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerData.cpp">
+      <Filter>Codes\PlayerData\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

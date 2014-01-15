@@ -29,6 +29,13 @@ StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID
 	
 	//load texture to sf::RectangleShapes
 
+	for(int i = 0; i < 8; i++)
+	{
+		m_pST[i].t.setSmooth(false);
+		m_pST[i].t.setRepeated(true);
+		m_pST[i].s.setTexture(&m_pST[i].t, true);
+	}
+
 	//updatePosition();
 
 
@@ -67,9 +74,6 @@ void StandardButton::updatePosition()
 
 	for(int i = 0; i < 8; i++)
 	{
-		m_pST[i].t.setSmooth(false);
-		m_pST[i].t.setRepeated(true);
-		m_pST[i].s.setTexture(&m_pST[i].t, true);
 		m_pST[i].s.setPosition(getPosition());
 	}
 

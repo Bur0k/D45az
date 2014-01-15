@@ -3,6 +3,7 @@
 #include "Server.h"
 #include "NetworkParticipant.h"
 #include "LogInLogic.h"
+#include "LobbyLogic.h"
 
 Server* server;
 
@@ -10,13 +11,10 @@ class testServer : public NetworkParticipant
 {
 	void processNewMessage(SOCKET s,short id,vector<char> data)
 	{
-		/*std::cout<<"Client mit ID "<<s<<" hat folgendes gesendet:\nID:"<<id<<"\nData:\n";
+		std::cout<<"Client mit ID "<<s<<" hat folgendes gesendet:\nID:"<<std::hex<<(int)id<<"\nData:\n";
 		for(unsigned int i=0;i<data.size();i++)
-			std::cout<<data[i];
+			std::cout<<std::hex<<(int)data[i]<<" ";
 		std::cout<<"\nEnde Packet\n\n";
-
-		if(id>=0)
-			server->write(s,2,data);*/
 	}
 
 	void processNetworkError(SOCKET s,int id, std::string msg)
@@ -25,7 +23,7 @@ class testServer : public NetworkParticipant
 			std::cout<<"SERVER-";
 		else
 			std::cout<<"CLIENT ID "<<s<<"-";
-		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
+		std::cout << "ERROR: "<<std::hex<<(int)id<<" Message: " << msg << "\n";
 	}
 };
 
@@ -38,10 +36,13 @@ int main()
 
 	server->startListening();
 
-	LogInLogic LIL;
+	LogInLogic* LIL = new LogInLogic();
+	LobbyLogic* LL = new LobbyLogic();
 
 	getchar();
 
+	delete LIL;
+	delete LL;
 	delete ts;
 	delete server;
 }

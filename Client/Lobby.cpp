@@ -39,18 +39,62 @@ void Lobby::processNewMessage(short id,vector<char> data)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
 	case 0x0200:
 		{
+			unsigned int i = 0;
+			while (i < data.size())
+			{
+				char mapid = data[i];
+				i+=1;
+				short gameid = decodeShort(data, i);
+				i+=2;
+				short playerlimit = decodeShort(data, i);
+				i+=2;
+				short len = decodeShort(data, i);
+				i+=2;
+				string mastername = decodeString(data, i, len);
+				PlayerData master;
+				master.Name = mastername;
+				i+=len;
+				short countplayers = decodeShort(data,i);
+				i+=2;
+				std::vector<PlayerData> players;
+				for (int j = 0; j < countplayers; j++)
+				{
+					len = decodeShort(data, i);
+					i+=2;
+					string playername = decodeString(data, i, len);
+					i+=len;
+					PlayerData player;
+					player.Name = playername;
+					players.push_back(player);
+				}
+				GameData game;
+				game.id = gameid;
+				game.playerlimit = playerlimit;
+				game.gameMaster = &master;
+				game.players = players;
+				gamesCreated[mapid] = game;
+			}
+
 			break;
 		}
 		//	02:		Client -> Server (will zu Spiellobby connecten)
 		//	03: 	Server -> Client (connect Bestätigung)
 	case 0x0203:
 		{
+			if (data[0] == 1);
+				//connect erfolgreich, tu was
+			else;
+				//connect nicht erfolgreich, tu was
 			break;
 		}
 		//	04:		Client -> Server (will Spiellobby erstellen)
 		//	05: 	Server -> Client (erstellen Bestätigung)
 	case 0x0205:
 		{
+			if (data[0] == 1)
+				this->gameLobby = new GameLobby();
+			else;
+				//erstellen nicht erfolgreich, tu was
 			break;
 		}
 	}

@@ -10,10 +10,10 @@ class IClickable
 {
 public:
 	virtual bool isHit(sf::Vector2i &)=0;
-	virtual void PressedRight()=0;
-	virtual void  PressedLeft()=0;
-	virtual void  ReleasedRight()=0;
-	virtual void  ReleasedLeft()=0;
+	virtual bool PressedRight()=0;
+	virtual bool PressedLeft()=0;
+	virtual bool ReleasedRight()=0;
+	virtual bool ReleasedLeft()=0;
 };
 
 typedef std::vector<IClickable*> ClickList;
