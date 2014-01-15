@@ -43,8 +43,6 @@ void Game::onTextBoxSend(int ID, std::string s)
 
 Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 {
-
-
 	m_pWindow = rw;
 	m_ViewMode = Viewmode;
 	m_size = windowSize;
