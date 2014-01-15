@@ -51,10 +51,10 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 }
 
 
-bool LobbyView::MouseMooved(sf::Vector2i &)
+bool LobbyView::MouseMooved(sf::Vector2i & v)
 {
-	s->isHit(v);
-	connect->isHit(v);
+	s->MouseMooved(v);
+	connect->MouseMooved(v);
 	return false;
 }
 
@@ -115,3 +115,5 @@ void LobbyView::onSliderReleased(int ID, double position)
 {
 
 }
+
+void LobbyView::onResize(){}

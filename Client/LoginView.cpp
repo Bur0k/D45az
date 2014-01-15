@@ -116,3 +116,5 @@ Views LoginView::nextState()
 
 	return Views::NOCHANGE;
 }
+
+void LoginView::onResize(){}

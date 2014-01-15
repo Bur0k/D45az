@@ -51,6 +51,8 @@ public:
 
 	void onSliderValueChange(int ID, double position);
 	void onSliderReleased(int ID, double position);
+
+	void onResize();
 };
 
 

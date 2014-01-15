@@ -163,7 +163,9 @@ Game::~Game()
 
 void Game::setView(Views sm)
 {
+	//TODO remove or change
 	m_ViewMode = sm;
+	LoadView(sm);
 }
 
 Views Game::getView()
@@ -206,12 +208,8 @@ void Game::onResize()
 	
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 
-	//TODO ONRESIZE
-	//for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-	//		m_ViewVect[i]->
-
-	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
-				
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		m_ViewVect[i]->onResize();
 }
 
 void Game::onMouseMove()
@@ -221,8 +219,9 @@ void Game::onMouseMove()
 
 	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		m_clickL[i]->MouseMooved(mousePos);
+	if(m_ViewMode == Views::TESTSCREEN)
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			m_clickL[i]->MouseMooved(mousePos);
 
 	m_lastMousePosition = mousePos;
 
@@ -232,22 +231,26 @@ void Game::onMouseMove()
 
 void Game::onMouseDownLeft()
 {
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->PressedLeft())
-			break;
+	if(m_ViewMode == Views::TESTSCREEN)
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->PressedLeft())
+				break;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->PressedLeft();
+		if(m_ViewVect[i]->PressedLeft())
+			break;
 }
 
 void Game::onMouseDownRight()
 {
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->PressedRight())
-			break;
+	if(m_ViewMode == Views::TESTSCREEN)
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->PressedRight())
+				break;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->PressedRight();
+		if(m_ViewVect[i]->PressedRight())
+			break;
 }
 
 void Game::onMouseLeave()
@@ -262,26 +265,33 @@ void Game::onMouseLeave()
 
 void Game::onMouseUpLeft()
 {
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->ReleasedLeft())
-			break;
+	if(m_ViewMode == Views::TESTSCREEN)
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->ReleasedLeft())
+				break;
+
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->ReleasedLeft();
+		if(m_ViewVect[i]->ReleasedLeft())
+			break;
 }
 
 void Game::onMouseUpRight()
 {
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->ReleasedRight())
-			break;
+	if(m_ViewMode == Views::TESTSCREEN)
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->ReleasedRight())
+				break;
+
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->ReleasedRight();
+		if(m_ViewVect[i]->ReleasedRight())
+			break;
 }
 
 void Game::onKeyDown(sf::Event e)
 {
-	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
-		m_keyInputL[i]->onKeyDown(e);
+	if(m_ViewMode == Views::TESTSCREEN)
+		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+			m_keyInputL[i]->onKeyDown(e);
 	
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		m_ViewVect[i]->onKeyDown(e);

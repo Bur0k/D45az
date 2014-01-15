@@ -46,6 +46,7 @@ public:
 	virtual void onKeyUp(sf::Event);
 	virtual void onTextInput(std::string s);
 
+	virtual void onResize();
 };
 
 
