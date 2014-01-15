@@ -27,8 +27,15 @@ MusikSampler::~MusikSampler(void)
 		m_vBuffer.clear();
 
 	for (unsigned int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
-		if(m_vSound[i] != NULL)
-			delete m_vSound[i];
+	{
+		try
+		{
+				delete m_vSound[i];
+		}
+		catch(int e)
+		{
+		}
+	}
 }
 
 bool MusikSampler::load_music(int index)
@@ -84,13 +91,16 @@ bool MusikSampler::play_sound(int index)
 
 	tmp_sound->play();	
 
-	//for (int i = 0; i < m_vSound.size() ; i++)
-	//	if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
-	//		m_vSound[i] = tmp_sound; // neuen sound dahin, um speicher zu sparen
-	//	else
-	//		m_vSound.push_back(tmp_sound); // neu erzeugten sound normal anreihen
-	//if(m_vSound.size() == 0)
-		m_vSound.push_back(tmp_sound); // Referenz speichern, um später zu löschen
+	for (int i = 0; i < m_vSound.size() ; i++)
+		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
+		{
+			//cout << "vector size vorher:" << m_vSound.size() << endl;
+			delete m_vSound[i];					// Abgespielte Sounds aufräumen
+			m_vSound.erase(m_vSound.begin()+i);
+			//cout << "löschung" << endl << "vector size nachher:" << m_vSound.size() << endl;
+		}
+
+	m_vSound.push_back(tmp_sound); // Referenz speichern, um später zu löschen
 
 
    return 1;
