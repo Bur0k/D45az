@@ -18,7 +18,7 @@ MusikSampler::~MusikSampler(void)
 {
 		// Adresslisten freigeben
 	for ( int i = 0; i < m_vFull_songs.size(); i++)
-			m_vFull_songs[i].clear();
+		m_vFull_songs[i].clear();
 	for( int i = 0; i < m_vShort_sounds.size(); i++)
 		m_vShort_sounds[i].clear();
 
@@ -79,16 +79,19 @@ bool MusikSampler::play_music(int index)
 bool MusikSampler::play_sound(int index)
 {
 	sf::Sound* tmp_sound = new sf::Sound();
-
-	tmp_sound->setBuffer(m_vBuffer[index]);
+	
+	tmp_sound->setBuffer(m_vBuffer[index]); // sound abholen
 
 	tmp_sound->play();	
 
-	for (unsigned int i = 0; i < m_vSound.size() ; i++)
-		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
-			m_vSound[i] = tmp_sound; // neuen sound dahin, um speicher zu sparen
-		else
-			m_vSound.push_back(tmp_sound); // neu erzeugten sound normal anreihen
+	//for (int i = 0; i < m_vSound.size() ; i++)
+	//	if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
+	//		m_vSound[i] = tmp_sound; // neuen sound dahin, um speicher zu sparen
+	//	else
+	//		m_vSound.push_back(tmp_sound); // neu erzeugten sound normal anreihen
+	//if(m_vSound.size() == 0)
+		m_vSound.push_back(tmp_sound); // Referenz speichern, um später zu löschen
+
 
    return 1;
 }
