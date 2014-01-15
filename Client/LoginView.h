@@ -46,6 +46,7 @@ public:
 	virtual void onTextInput(std::string s);
 
 	virtual void onResize();
+	virtual void update(double elpasedMs);
 };
 
 
