@@ -3,24 +3,27 @@
 
 MusikSampler::MusikSampler(void)
 {
-	m_Path_full_song = "Data/Songs/";
-	m_vFull_songs.push_back("test.ogg");
+	m_SongPath = "Data/Songs/";
+	m_vSongFiles.push_back("1_example.ogg"); //songnamen manuell einfügen
+	m_vSongFiles.push_back("2_bullet.ogg");
 
-	m_Path_sounds = "Data/Sounds/";
-	m_vShort_sounds.push_back("sound1.wav");
-	m_vShort_sounds.push_back("sound2.wav");
+	m_Songnumber = 0; // vorinitialisieren, dann 1. track gespielt
+
+	m_Soundpath = "Data/Sounds/";
+	m_vSoundFiles.push_back("sound1.wav");
+	m_vSoundFiles.push_back("sound2.wav");
 	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
-	for(unsigned int i = 0; i < m_vShort_sounds.size(); i++)
-		m_vBuffer.push_back(load_sound(i));
+	for(unsigned int i = 0; i < m_vSoundFiles.size(); i++)
+		m_vBuffer.push_back(preload_soundbuffer(i));
 }
 
 MusikSampler::~MusikSampler(void)
 {
 		// Adresslisten freigeben
-	for ( int i = 0; i < m_vFull_songs.size(); i++)
-		m_vFull_songs[i].clear();
-	for( int i = 0; i < m_vShort_sounds.size(); i++)
-		m_vShort_sounds[i].clear();
+	for ( int i = 0; i < m_vSongFiles.size(); i++)
+		m_vSongFiles[i].clear();
+	for( int i = 0; i < m_vSoundFiles.size(); i++)
+		m_vSoundFiles[i].clear();
 
 		// Bufferliste freigeben
 	for (int i = 0; i < m_vBuffer.size(); i++)
@@ -40,9 +43,12 @@ MusikSampler::~MusikSampler(void)
 
 bool MusikSampler::load_music(int index)
 {
-	//if(m_vFull_songs[index].length == 0) // liste hat hier kein element
-		//return 0;
-	string full_path = m_Path_full_song + m_vFull_songs[index];
+	if(m_vSongFiles.size() == 0) // liste leer-> fehler im konstruktor
+	{
+		cout<<"Fehler, Code 17"<<  endl;
+		return 0;
+	}
+	string full_path = m_SongPath + m_vSongFiles[index];
 
 	if(!m_Music.openFromFile(full_path)) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
 	{
@@ -53,18 +59,22 @@ bool MusikSampler::load_music(int index)
 	return 1;
 }
 
-sf::SoundBuffer MusikSampler::load_sound(int index)
+sf::SoundBuffer MusikSampler::preload_soundbuffer(int index)
 {
-	//if(m_vShort_sounds[index].length == 0) // liste hat hier kein element
-		//return 0;
-
 	sf::SoundBuffer tmp_buffer;
 
-	string full_path = m_Path_sounds + m_vShort_sounds[index];
-
-	if(!tmp_buffer.loadFromFile(full_path)) // kein sound an speicherstelle hinterlegt , asonsten song jetzt drin
+	if(m_vSoundFiles.size() == 0)	// liste leer-> fehler im konstruktor
 	{
-		cout<<"keinen sound gefunden:" << full_path << endl;
+		cout<<"Fehler, Code 18"<<  endl;
+		return tmp_buffer;
+	}
+
+
+	string full_path = m_Soundpath + m_vSoundFiles[index];
+
+	if(!tmp_buffer.loadFromFile(full_path)) // kein sound an speicherstelle hinterlegt , ansonsten song jetzt drin
+	{
+		cout<<"Keinen sound gefunden:" << full_path << endl;
 		return tmp_buffer;
 	}
 
@@ -110,6 +120,24 @@ void MusikSampler::pause()
 {
     m_Music.pause();
 }
+
+void MusikSampler::next_song()
+{
+	/*
+	if(m_Music.getStatus() == 0) // nur Song wechseln, wenn alter fertig
+		return;
+	*/
+
+	if(m_Songnumber >= m_vSongFiles.size() ) // wenn letzter song gespielt wurde zurück
+		m_Songnumber = 1;
+	else 
+		m_Songnumber ++;
+
+	load_music(m_Songnumber-1);
+
+	m_Music.play();
+}
+
 
 /*
 void MusikSampler::stop()

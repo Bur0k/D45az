@@ -8,7 +8,7 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		m_pMS->play_music(0);
+		m_pMS->next_song();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:

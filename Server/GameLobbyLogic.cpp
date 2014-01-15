@@ -79,7 +79,7 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 {
 	std::vector<char> erfg;
 
-	for(int i = 0; i < this->players.size(); i++)
+	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		string name = this->players[i]->Name;
 		vector<char> tmp = code(name);
@@ -122,7 +122,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	bool socketAvailable = false;
 
-	for(int i = 0; i < this->players.size(); i++)
+	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		if(s == this->players[i]->s)
 			socketAvailable = true;
@@ -214,7 +214,7 @@ void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMes
 	{
 		case 0x0010:
 			{
-				for(int i = 0; i < this->players.size(); i++)
+				for(int i = 0; i < (signed) this->players.size(); i++)
 				{
 					if(s == this->players[i]->s)
 					{
@@ -230,7 +230,7 @@ void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMes
 			}break;
 		case 0x0011:
 			{
-				for(int i = 0; i < this->players.size(); i++)
+				for(int i = 0; i < (signed) this->players.size(); i++)
 				{
 					if(s == this->players[i]->s)
 					{

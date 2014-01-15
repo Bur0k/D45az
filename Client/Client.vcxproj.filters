@@ -236,10 +236,13 @@
       <Filter>DLLs</Filter>
     </None>
     <None Include="Projektplanung.doc" />
-    <None Include="Data\Songs\test.ogg">
+    <None Include="Data\Maps\test.tmx">
       <Filter>Data</Filter>
     </None>
-    <None Include="Data\Maps\test.tmx">
+    <None Include="Data\Songs\1_example.ogg">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Data\Songs\2_bullet.ogg">
       <Filter>Data</Filter>
     </None>
   </ItemGroup>

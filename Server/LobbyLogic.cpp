@@ -146,7 +146,7 @@ void LobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage
 	{
 		case 0x0010:
 			{
-				for(int i = 0; i < server->connectedPlayers.size(); i++)
+				for(int i = 0; i < (signed) server->connectedPlayers.size(); i++)
 				{
 					if(s == server->connectedPlayers[i].s)
 						server->connectedPlayers.erase(server->connectedPlayers.begin() + i);
@@ -154,7 +154,7 @@ void LobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage
 			}break;
 		case 0x0011:
 			{
-				for(int i = 0; i < server->connectedPlayers.size(); i++)
+				for(int i = 0; i < (signed) server->connectedPlayers.size(); i++)
 				{
 					if(s == server->connectedPlayers[i].s)
 						server->connectedPlayers.erase(server->connectedPlayers.begin() + i);
