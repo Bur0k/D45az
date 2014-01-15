@@ -99,6 +99,7 @@ void TextBox::onKeyDown(sf::Event e)
 	case Keyboard::Return:
 		if(m_returnIsSend)
 			Notify();
+		m_inFocus = false;
 		break;
 	}
 }

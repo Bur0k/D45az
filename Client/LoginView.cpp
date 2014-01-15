@@ -10,8 +10,7 @@ LoginView::LoginView()
 	logintext->setFillColor(MyColors.Red);
 	m_DrawV.push_back(logintext);
 
-	name = new TextBox(200,"enter name",sf::Vector2f(100,200),true,1);
-	name->attach(this);
+	name = new TextBox(200,"enter name",sf::Vector2f(100,200),false,1);
 
 	m_DrawV.push_back(name);
 	m_AnimateV.push_back(name);
@@ -36,11 +35,9 @@ LoginView::~LoginView()
 void LoginView::onButtonClick(int)
 {
 	//handle incoming clicks here
-}
-
-void LoginView::onTextBoxSend(int ID, std::string s)
-{
-	//recieve shit from textboxes
+	std::string s;
+	s = name->getText();
+	std::cout << "LOGIN NAME IS : " << s << std::endl;
 }
 
 

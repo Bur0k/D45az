@@ -8,7 +8,7 @@
 #include "Textbox.h"
 #include "Textblock.h"
 
-class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
+class LoginView : public IView , public IButtonfunction
 {
 public:
 	LoginView();
@@ -28,7 +28,6 @@ private:
 public:
 	virtual Views nextState();
 	//implementing a lot of interfaces
-	virtual void onTextBoxSend(int ID, std::string s);
 
 	virtual void onButtonClick(int);
 
