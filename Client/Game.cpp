@@ -41,7 +41,7 @@ Game::Game(RenderWindow* rw, ScreenMode sm, Vector2f windowSize)
 
 
 
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asdlkdjngsöljfngsäklnsdggllkjf", 5);
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "0123456789", 5);
 	m_drawL.push_back(tblock);
 
 
