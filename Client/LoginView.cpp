@@ -109,3 +109,10 @@ void LoginView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);
 }
+
+Views LoginView::nextState()
+{
+	//TODO do something 
+
+	return Views::NOCHANGE;
+}

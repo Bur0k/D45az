@@ -14,6 +14,7 @@ public:
 	LoginView();
 	~LoginView();
 
+private:
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
@@ -24,7 +25,8 @@ public:
 	Button* lgoinbutton;
 
 
-
+public:
+	virtual Views nextState();
 	//implementing a lot of interfaces
 	virtual void onTextBoxSend(int ID, std::string s);
 
