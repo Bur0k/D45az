@@ -44,7 +44,9 @@ void LoginView::onTextBoxSend(int ID, std::string s)
 bool LoginView::isHit(sf::Vector2i & mouse)
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		m_ClickV[i]->isHit(mouse);
+		if(m_ClickV[i]->isHit(mouse))
+			return true;
+	return false;
 }
 
 bool LoginView::PressedRight()
