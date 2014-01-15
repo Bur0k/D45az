@@ -50,25 +50,33 @@ bool LoginView::isHit(sf::Vector2i & mouse)
 bool LoginView::PressedRight()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		m_ClickV[i]->PressedRight();
+		if(m_ClickV[i]->PressedRight())
+			return true;
+	return false;
 }
 
 bool LoginView::PressedLeft()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		m_ClickV[i]->PressedLeft();
+		if(m_ClickV[i]->PressedLeft())
+			return true;
+	return false;
 }
 
 bool LoginView::ReleasedRight()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		m_ClickV[i]->ReleasedRight();
+		if(m_ClickV[i]->ReleasedRight())
+			return true;
+	return false;
 }
 
 bool LoginView::ReleasedLeft()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		m_ClickV[i]->ReleasedLeft();
+		if(m_ClickV[i]->ReleasedLeft())
+			return true;
+	return false;
 }
 	
 void LoginView::animationTick()
