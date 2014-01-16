@@ -10,11 +10,11 @@
 
 class MapLayer
 {
-	std::vector<std::vector<short>> layer;
 	TileSets* tilesets;
 
 public:
-	bool isCollisionLayer;
+	std::vector<std::vector<short>> layer;
+	bool isCityLayer;
 	const static int TileWidth=32;
 	const static int TileHeight=32;
 

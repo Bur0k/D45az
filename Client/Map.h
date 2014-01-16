@@ -10,14 +10,14 @@
 
 class Map
 {
-	std::vector<MapLayer*> layers;
 	TileSets* tilesets;
 	sf::Vector2i size;
 
 public:
 	Map();
 	~Map();
-
+	
+	std::vector<MapLayer*> layers;
 	void load(std::string MapLocation);
 	void render(sf::RenderTarget& RT,sf::IntRect View);
 	sf::Vector2i getLayerCount();//Gives the number of Rows and Colums of the first Layer

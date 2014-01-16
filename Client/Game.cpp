@@ -64,8 +64,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(tblock);
 
 	//SBAR 
-	SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
-	m_drawL.push_back(SBar);
+	/*SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
+	m_drawL.push_back(SBar);*/
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -173,7 +173,7 @@ Views Game::getView()
 void Game::Draw()
 {
 
-	if(m_ViewMode == TESTSCREEN)
+	if(m_ViewMode == Views::TESTSCREEN)
 		DrawTest();
 	else
 		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
@@ -353,22 +353,22 @@ void Game::LoadView(Views v)
 	IView* NewView;
 	switch (v)
 {
-	case NOCHANGE:
+	case Views::NOCHANGE:
 		return;
 		break;
-	case INGAME:
+	case Views::INGAME:
 		break;
-	case LOGIN:
+	case Views::LOGIN:
 		NewView = new LoginView();
 		break;
-	case MENUE:
+	case Views::MENUE:
 		break;
-	case LOBBY:
+	case Views::LOBBY:
 		NewView = new LobbyView();
 		break;
-	case INGAME_MENU:
+	case Views::INGAME_MENU:
 		break;
-	case TESTSCREEN:
+	case Views::TESTSCREEN:
 		return;
 		break;
 	default:
@@ -376,7 +376,6 @@ void Game::LoadView(Views v)
 	}
 
 	m_ViewVect.push_back(NewView);
-
 }
 
 
