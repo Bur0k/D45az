@@ -18,7 +18,7 @@ class Textblock : public IDrawable, public RectangleShape
 {
 public:
 	Textblock();
-	Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID);
+	Textblock(Vector2f pos, Vector2f size, String S, int CharSize);
 	~Textblock();
 	void operator=(const Textblock & tblock);
 
@@ -32,7 +32,7 @@ public:
 	virtual void draw(RenderWindow* rw);
 	std::string lineBreak(String S, Vector2f size);
 	void setText(String S, Vector2f size);
-	
+	void setPosition(Vector2f pos);
 };
 
 

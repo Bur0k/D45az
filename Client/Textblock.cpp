@@ -10,9 +10,8 @@ Textblock::~Textblock()
 	//TODO
 }
 
-Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID)
+Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 {
-	m_ID = ID;
 	setPosition(pos);
 	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_textblockText.setFont(m_Font);
@@ -21,7 +20,7 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID
 	m_textblockText.setCharacterSize(CharSize);
 	m_textblockText.setString(lineBreak(S, size));
 	textsize = m_textblockText.getLocalBounds();
-	this->setSize(Vector2f(textsize.width + 10, textsize.height + 10));
+	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
 
 	m_color = MyColors.White;
 	setFillColor(m_color);
@@ -30,6 +29,11 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize, int ID
 void Textblock::setText(String text, Vector2f size)
 {
 	m_textblockText.setString(lineBreak(text, size));
+}
+
+void Textblock::setPosition(Vector2f pos)
+{
+	m_textblockText.setPosition(pos);
 }
 
 std::string Textblock::lineBreak(String S, Vector2f size)

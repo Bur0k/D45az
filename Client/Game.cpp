@@ -59,7 +59,8 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 
 
 
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 200), "Es ist überragend es ist toll asdfas adfdsaf sdjkfnskj sjdnfk", 20, 5);
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 200), "Ejnsdfkjn", 20);
+	tblock->setPosition(Vector2f(500, 500));
 	m_drawL.push_back(tblock);
 
 
