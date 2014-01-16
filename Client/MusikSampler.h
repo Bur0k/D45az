@@ -4,6 +4,10 @@
 #include <vector>
 #include <SFML/Audio.hpp>
 
+#define sounds 0  
+#define songs  1 
+#define generel_noise 2 
+
 using namespace std;
 
 class MusikSampler
@@ -19,6 +23,11 @@ private:
 	string m_Soundpath;
 	vector<string> m_vSongFiles;
 	vector<string> m_vSoundFiles;
+
+	// Lautstärkeeinstellungen
+	float m_BgVolume; //backgound, also songs
+	float m_SoVolume; // so = sounds, also geräusche
+
 public:
 	//ctor & dtor
 	MusikSampler(void); 
@@ -31,6 +40,8 @@ public:
 	bool play_sound(int index);
 	void next_song();
 
+	//einstellungen
+	void set_volume(int type, float volume);
 
 	// noch nicht verwendet
     void pause();
@@ -38,7 +49,4 @@ public:
     int get_duration();
     void set_loop(bool loop);
     void set_pitch(float pitch);
-    void set_volume(float volume);
-
 };
-
