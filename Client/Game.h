@@ -68,7 +68,6 @@ private:
 	AnimateVect m_animateL;
 	KeyInputVect m_keyInputL;
 
-	Text m_fpsText;
 
 	bool m_inFocus;
 
@@ -76,6 +75,7 @@ private:
 
 
 public:
+	Text m_fpsText;
 	Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize);
 	~Game();
 	

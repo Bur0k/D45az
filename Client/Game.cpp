@@ -92,7 +92,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 	m_fpsText.setColor(MyColors.Red);
 
 
@@ -204,7 +204,7 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 	
-	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		m_ViewVect[i]->onResize();
@@ -482,13 +482,13 @@ void Game::timer()
 
 
 	//...//
-	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
+	fpsCount++;
+	if(m_fpsCounter.getElapsedTime().asMilliseconds() >= 1000)
 	{
 		m_fpsCounter.restart();
 		m_fpsText.setString(std::to_string(fpsCount));
 		fpsCount = 0;
 	}
 
-	fpsCount++;
 	//more timers ...
 }
