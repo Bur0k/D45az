@@ -8,6 +8,8 @@ class IngameLogic
 private:
 
 public:
+	IngameLogic::IngameLogic();
+	IngameLogic::~IngameLogic();
 };
 
 #endif
