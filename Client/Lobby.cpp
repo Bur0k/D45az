@@ -39,6 +39,8 @@ void Lobby::processNewMessage(short id,vector<char> data)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
 	case 0x0200:
 		{
+			m.lock();
+
 			unsigned int i = 0;
 			while (i < data.size())
 			{
@@ -71,6 +73,9 @@ void Lobby::processNewMessage(short id,vector<char> data)
 				game.players = players;
 				gamesCreated[id] = game;
 			}
+
+			updated = true;
+			m.unlock();
 
 			break;
 		}

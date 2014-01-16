@@ -43,8 +43,6 @@ void Game::onTextBoxSend(int ID, std::string s)
 
 Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 {
-
-
 	m_pWindow = rw;
 	m_ViewMode = Viewmode;
 	m_size = windowSize;
@@ -60,7 +58,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	LoadView(Viewmode);
 
 	//TESTSCREEN stuff
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5, 4);
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 25);
 	m_drawL.push_back(tblock);
 
 
@@ -220,7 +218,7 @@ void Game::onMouseMove()
 	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
 	if(m_ViewMode == Views::TESTSCREEN)
-		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			m_clickL[i]->MouseMooved(mousePos);
 
 	m_lastMousePosition = mousePos;
@@ -232,9 +230,9 @@ void Game::onMouseMove()
 void Game::onMouseDownLeft()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-			if(m_clickL[i]->PressedLeft())
-				break;
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedLeft())
+			break;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		if(m_ViewVect[i]->PressedLeft())
@@ -244,9 +242,9 @@ void Game::onMouseDownLeft()
 void Game::onMouseDownRight()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-			if(m_clickL[i]->PressedRight())
-				break;
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedRight())
+			break;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		if(m_ViewVect[i]->PressedRight())
@@ -266,9 +264,9 @@ void Game::onMouseLeave()
 void Game::onMouseUpLeft()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-			if(m_clickL[i]->ReleasedLeft())
-				break;
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedLeft())
+			break;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		if(m_ViewVect[i]->ReleasedLeft())
@@ -278,9 +276,9 @@ void Game::onMouseUpLeft()
 void Game::onMouseUpRight()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-			if(m_clickL[i]->ReleasedRight())
-				break;
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedRight())
+			break;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		if(m_ViewVect[i]->ReleasedRight())
@@ -290,8 +288,8 @@ void Game::onMouseUpRight()
 void Game::onKeyDown(sf::Event e)
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
-			m_keyInputL[i]->onKeyDown(e);
+	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
+		m_keyInputL[i]->onKeyDown(e);
 	
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 		m_ViewVect[i]->onKeyDown(e);
@@ -372,6 +370,7 @@ void Game::LoadView(Views v)
 	case INGAME_MENU:
 		break;
 	case TESTSCREEN:
+		return;
 		break;
 	default:
 		break;
@@ -468,6 +467,8 @@ void Game::timer()
 	//ANIMATION//
 	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
 	m_animationTimer.restart();
+
+	m_ViewVect[0]->update(animationtime);
 
 	while(animationtime > 1000 / 33)
 	{

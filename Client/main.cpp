@@ -19,7 +19,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 
 
@@ -59,21 +59,13 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	
 	
-	NetworkLogin NL1("Tim");
-	while(NL1.getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
+	NetworkLogin* NL1 = new NetworkLogin("Tim");
+	while(NL1->getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
 	{
 	}
-	cout << "NL1:" << NL1.getState() << endl;
+	cout << "NL1:" << NL1->getState() << endl;
 
-	Lobby* lobby = new Lobby();
-	
-	lobby->askforLobbyData();
-	lobby->createNewGameLobby();
-	while(lobby->gameLobby==NULL)
-		;
-	lobby->askforLobbyData();
-	lobby->gameLobby->maxPlayerChange(3);
-
+	delete NL1;
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
@@ -91,22 +83,24 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	*/
 	
-	Game g = Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
+	Game* g = new Game(&window, Views::LOBBY, sf::Vector2f(1280, 850));
 	
 	while (window.isOpen())
 	{ 
-		g.Input();
+		g->Input();
 
-		g.timer();
+		g->timer();
 
 		// clear the window with black 
 		window.clear(sf::Color::Black);
 		
-		g.Draw();
+		g->Draw();
 
 		// end the current frame
 		window.display();
 	}
+	
+	delete g;
 	
 	delete Client::get();
 

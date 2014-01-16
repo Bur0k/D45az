@@ -6,7 +6,7 @@ LoginView::LoginView()
 
 	//create all the ui elements here
 	
-	logintext = new Textblock(Vector2f(100,100),Vector2f(500,70),"LOGIN SCREEN", 50, 1);
+	logintext = new Textblock(Vector2f(100,100),Vector2f(500,70),"LOGIN SCREEN", 50);
 	logintext->setFillColor(MyColors.Red);
 	m_DrawV.push_back(logintext);
 

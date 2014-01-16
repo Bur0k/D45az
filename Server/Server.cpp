@@ -371,6 +371,9 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 			}
 			// Error
 			Server::get()->sendError(pPerHandleData->sock,0x0011,"Client lost Connection");
+			closesocket(pPerHandleData->sock);
+			delete pPerHandleData;
+			delete pPerIoData;
 			continue;
 		}
 		else

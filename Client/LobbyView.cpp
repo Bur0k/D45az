@@ -2,13 +2,13 @@
 
 
 LobbyView::LobbyView():
-	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",50,0),
-	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20,0),
-	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20,0)
+	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",50),
+	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20),
+	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20)
 {
-	playerName.setPosition(0,0);
-	mapName.setPosition(500,200);
-	gameLobbyMaster.setPosition(500,300);
+	playerName.setPos(sf::Vector2f(0,0));
+	mapName.setPos(sf::Vector2f(500,200));
+	gameLobbyMaster.setPos(sf::Vector2f(500,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
@@ -20,8 +20,18 @@ LobbyView::LobbyView():
 	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
 
 
+
+
+
+
 	lobby = new Lobby();
 	lobby->askforLobbyData();
+	lobby->askforLobbyData();
+	lobby->createNewGameLobby();
+	while(lobby->gameLobby==NULL)
+		;
+	lobby->askforLobbyData();
+	lobby->gameLobby->maxPlayerChange(3);
 }
 
 LobbyView::~LobbyView()
@@ -29,20 +39,28 @@ LobbyView::~LobbyView()
 	delete lobby;
 	delete connect;
 	delete s;
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		delete it->second;
+	gameLobbys.clear();
 }
 
 void LobbyView::draw(sf::RenderWindow* rw)
 {
-	for(unsigned int i=0;i<gameLobbys.size();i++)
-	{
-		gameLobbys[i]->lobbyName.draw(rw);
-		gameLobbys[i]->playerCount.draw(rw);
-	}
 	playerName.draw(rw);
 	mapName.draw(rw);
 	gameLobbyMaster.draw(rw);
 	connect->draw(rw);
 	s->draw(rw);
+
+	int y = 200;
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+	{
+		it->second->lobbyName.setPos(sf::Vector2f(20,y));
+		it->second->playerCount.setPos(sf::Vector2f(400,y));
+		y+=50;
+		it->second->lobbyName.draw(rw);
+		it->second->playerCount.draw(rw);
+	}
 }
 
 void LobbyView::onButtonClick(int)
@@ -128,5 +146,38 @@ void LobbyView::onResize()
 
 void LobbyView::update(double elpasedMs)
 {
+	static double elapsed=0;
+	elapsed+=elpasedMs;
+	if(elapsed>=100)
+	{
+		elapsed=0;
+		if(lobby->updated)
+		{
+			lobby->updated = false;
+			
+			for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+				delete it->second;
+			gameLobbys.clear();
 
+			lobby->m.lock();
+
+			for(auto it = lobby->gamesCreated.begin();it!=lobby->gamesCreated.end();it++)
+			{
+				short id = it->first;
+				GameLobbyData* GLA = new GameLobbyData();
+				GLA->lobbyName.setText("Gamelobby Name",sf::Vector2f(200,30));
+				string asdasd=std::to_string(it->second.players.size()) + " / " + std::to_string(it->second.playerlimit);
+				GLA->playerCount.setText(asdasd,sf::Vector2f(200,30));
+				
+				GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
+				GLA->lobbyName.setBackgroundColor(sf::Color(255,255,255,0));
+				GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
+				GLA->playerCount.setBackgroundColor(sf::Color(255,255,255,0));
+
+				gameLobbys[id] = GLA;
+			}
+
+			lobby->m.unlock();
+		}
+	}
 }
