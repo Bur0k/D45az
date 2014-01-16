@@ -63,6 +63,9 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 25);
 	m_drawL.push_back(tblock);
 
+	//SBAR 
+	SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
+	m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -92,7 +95,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	tb->attach(this);
 
-
+	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 	m_fpsText.setColor(MyColors.Red);
@@ -122,15 +125,9 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	m_keyInputL.push_back(tb);
 
-	//TESTSCREEN stuff end
 
-	// Musik Test Zeug
-
+	//Musik
 	m_pMS = new MusikSampler();
-	/*
-	MS->load_music(0);
-	MS->play_music();
-	*/
 
 	map.load("Data/Maps/test.tmx");
 	xMap=yMap=0;
