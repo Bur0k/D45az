@@ -139,7 +139,7 @@ void LobbyView::onSliderReleased(int ID, double position)
 
 }
 
-void LobbyView::onResize()
+void LobbyView::onResize(Vector2u &)
 {
 
 }

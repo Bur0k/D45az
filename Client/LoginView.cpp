@@ -122,4 +122,4 @@ void LoginView::update(double elpasedMs)
 
 }
 
-void LoginView::onResize(){}
+void LoginView::onResize(Vector2u &){}
