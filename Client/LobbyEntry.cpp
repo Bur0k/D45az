@@ -19,16 +19,13 @@ LobbyEntry::LobbyEntry(Vector2f size, Vector2f pos, std::string name, int player
 	m_players = players;
 	m_ID = id;
 
-	m_name.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	m_name.setString(name);
-	m_name.setColor(Color(255,255,255,255));
-	m_name.setPosition(m_dimensions.left + LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
+	m_nameText.setFont(MyFonts::getFont(GameFonts::ARIAL));
+	m_nameText.setString(name);
+	m_nameText.setColor(MyColors.Black);
+	m_nameText.setPosition(m_dimensions.left + LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
 	
-	m_number.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	m_number.setColor(Color(255,255,255,255));
-
-	this->setPosition(pos);
-	this->setSize(size);
+	m_numberText.setFont(MyFonts::getFont(GameFonts::ARIAL));
+	m_numberText.setColor(MyColors.Black);
 	
 }
 
@@ -67,8 +64,8 @@ void LobbyEntry::setPosition(Vector2f pos)
 
 void LobbyEntry::LEmove(Vector2f delta)
 {
-	m_name.move(delta);
-	m_number.move(delta);
+	m_nameText.move(delta);
+	m_numberText.move(delta);
 	move(delta);
 }
 

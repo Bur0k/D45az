@@ -376,7 +376,6 @@ void Game::LoadView(Views v)
 	}
 
 	m_ViewVect.push_back(NewView);
-
 }
 
 
