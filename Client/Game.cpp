@@ -306,6 +306,8 @@ void Game::onKeyDown(sf::Event e)
 
 	if(e.key.code == Keyboard::G)
 		s->move(Vector2f(1,1));
+	if(e.key.code == Keyboard::Q)
+		b3->unLock();
 }
 
 void Game::onKeyUp(sf::Event e)
