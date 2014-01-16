@@ -19,7 +19,7 @@ LobbyLogic::~LobbyLogic()
 {
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
-	for (std::map<char,GameLobbyLogic*>::iterator it=this->gamesCreated.begin(); it!=this->gamesCreated.end(); ++it)
+	for (std::map<short,GameLobbyLogic*>::iterator it=this->gamesCreated.begin(); it!=this->gamesCreated.end(); ++it)
 		delete it->second;
 }
 
@@ -34,7 +34,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0201:
 			{
 		
-			for (map<char, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
+			for (map<short, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
 			{
 				if (it->second->getPlayers().size() == 0)
 				{
@@ -44,10 +44,9 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				{
 					std::vector<char> tmp;
 
-					erfg.push_back(it->first);
+					//erfg.push_back(it->first);
 
-
-					tmp = code(it->second->getID());
+					tmp = code(it->first);
 					erfg.push_back(tmp[0]);
 					erfg.push_back(tmp[1]);
 
@@ -115,9 +114,10 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		//	05: 	Server -> Client (erstellen Bestätigung)
 		case 0x0204:
 			{
-				//data: string username, auslesen
+				//data: string gamename auslesen TODO! id aus gamelobbylogic entfernen
 				static short id = 0;
 				id++;
+				string gamename;
 
 				PlayerData requester;
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
@@ -127,10 +127,10 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 						break;
 					}
 				
-				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester);
+				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester, gamename);
 
-				std::map<char, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
-				this->gamesCreated.insert (it, std::pair<char, GameLobbyLogic*>('b',GameLobby));
+				std::map<short, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
+				this->gamesCreated.insert (it, std::pair<short, GameLobbyLogic*>(id,GameLobby));
 			
 				erfg.push_back(1);
 				server->write(s, 0x0205, erfg);

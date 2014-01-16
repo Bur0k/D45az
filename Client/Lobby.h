@@ -18,7 +18,7 @@ public:
 	bool updated;
 	map<short, GameData> gamesCreated;
 
-
+	
 	GameLobby* gameLobby;
 
 	Lobby();

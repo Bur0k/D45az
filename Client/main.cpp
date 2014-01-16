@@ -99,7 +99,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		// end the current frame
 		window.display();
 	}
-
+	
 	delete g;
 	
 	delete Client::get();
