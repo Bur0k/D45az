@@ -362,7 +362,7 @@ void Game::LoadView(Views v)
 	case INGAME:
 		break;
 	case LOGIN:
-		NewView = new LoginView();
+		NewView = new LoginView(m_pWindow->getSize());
 		break;
 	case MENUE:
 		break;
