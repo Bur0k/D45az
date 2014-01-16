@@ -16,7 +16,7 @@ class IView
 {
 public:
 	virtual ~IView(){};
-	virtual void onResize()=0;
+	virtual void onResize(sf::Vector2u &)=0;
 	virtual void update(double elpasedMs)=0;
 	virtual Views nextState()=0;
 };

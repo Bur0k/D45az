@@ -117,6 +117,6 @@ Lobby::Lobby()
 Lobby::~Lobby()
 {
 	c->deleteFromNewMessageCallback(this);
-	if (gameLobby != NULL)
-		delete gameLobby;
+	if (gameLobby.operator GameLobby *() != NULL)
+		delete gameLobby.operator GameLobby *();
 }

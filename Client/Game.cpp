@@ -94,7 +94,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 	m_fpsText.setColor(MyColors.Red);
 
 
@@ -206,10 +206,10 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 	
-	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->onResize();
+		m_ViewVect[i]->onResize(m_pWindow->getSize());
 }
 
 void Game::onMouseMove()
@@ -467,14 +467,16 @@ void Game::timer()
 	
 
 	//ANIMATION//
-	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
+	animationtime += m_animationTimer.getElapsedTime().asMicroseconds();
+
+	for(unsigned int i = 0;i<m_ViewVect.size();i++)
+		m_ViewVect[i]->update(static_cast<double>(m_animationTimer.getElapsedTime().asMicroseconds())/1000.0);
+	
 	m_animationTimer.restart();
 
-	m_ViewVect[0]->update(animationtime);
-
-	while(animationtime > 1000 / 33)
+	while(animationtime > 1000000 / 33)
 	{
-		animationtime -= 1000 / 33;
+		animationtime -= 1000000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
 
@@ -484,13 +486,13 @@ void Game::timer()
 
 
 	//...//
-	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
+	fpsCount++;
+	if(m_fpsCounter.getElapsedTime().asMicroseconds() >= 1000000)
 	{
 		m_fpsCounter.restart();
 		m_fpsText.setString(std::to_string(fpsCount));
 		fpsCount = 0;
 	}
 
-	fpsCount++;
 	//more timers ...
 }

@@ -64,7 +64,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	{
 	}
 	cout << "NL1:" << NL1->getState() << endl;
-
 	delete NL1;
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
@@ -86,7 +85,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	Game* g = new Game(&window, Views::LOBBY, sf::Vector2f(1280, 850));
 	
 	while (window.isOpen())
-	{ 
+	{
 		g->Input();
 
 		g->timer();
@@ -95,7 +94,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		window.clear(sf::Color::Black);
 		
 		g->Draw();
-
+		
 		// end the current frame
 		window.display();
 	}

@@ -45,7 +45,7 @@ public:
 	virtual void onKeyUp(sf::Event);
 	virtual void onTextInput(std::string s);
 
-	virtual void onResize();
+	virtual void onResize(sf::Vector2u &);
 	virtual void update(double elpasedMs);
 };
 
