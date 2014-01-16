@@ -2,13 +2,13 @@
 
 
 LobbyView::LobbyView():
-	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",50,0),
-	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20,0),
-	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20,0)
+	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",50),
+	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20),
+	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20)
 {
-	playerName.setPosition(0,0);
-	mapName.setPosition(500,200);
-	gameLobbyMaster.setPosition(500,300);
+	playerName.setPosition(sf::Vector2f(0,0));
+	mapName.setPosition(sf::Vector2f(500,200));
+	gameLobbyMaster.setPosition(sf::Vector2f(500,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
@@ -51,8 +51,8 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	int y = 200;
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 	{
-		it->second->lobbyName.setPosition(20,y);
-		it->second->playerCount.setPosition(200,y);
+		it->second->lobbyName.setPosition(sf::Vector2f(20,y));
+		it->second->playerCount.setPosition(sf::Vector2f(200,y));
 		y+=50;
 		it->second->lobbyName.draw(rw);
 		it->second->lobbyName.draw(rw);
@@ -142,7 +142,7 @@ void LobbyView::onResize()
 
 void LobbyView::update(double elpasedMs)
 {
-	static int elapsed=0;
+	static double elapsed=0;
 	elapsed+=elpasedMs;
 	if(elapsed>=100)
 	{

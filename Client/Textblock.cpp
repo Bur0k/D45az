@@ -45,7 +45,7 @@ std::string Textblock::lineBreak(String S, Vector2f size)
 	std::string tmp;
 	std::string output;
 
-	for(int i = 0; i < S.getSize(); i++)
+	for(unsigned int i = 0; i < S.getSize(); i++)
 	{
 		while(S[i + count] != ' ' || S[i + count] == '\0')
 		{
