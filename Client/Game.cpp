@@ -467,14 +467,16 @@ void Game::timer()
 	
 
 	//ANIMATION//
-	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
+	animationtime += m_animationTimer.getElapsedTime().asMicroseconds();
+
+	for(unsigned int i = 0;i<m_ViewVect.size();i++)
+		m_ViewVect[i]->update(static_cast<double>(m_animationTimer.getElapsedTime().asMicroseconds())/1000.0);
+	
 	m_animationTimer.restart();
 
-	m_ViewVect[0]->update(animationtime);
-
-	while(animationtime > 1000 / 33)
+	while(animationtime > 1000000 / 33)
 	{
-		animationtime -= 1000 / 33;
+		animationtime -= 1000000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
 
@@ -485,7 +487,7 @@ void Game::timer()
 
 	//...//
 	fpsCount++;
-	if(m_fpsCounter.getElapsedTime().asMilliseconds() >= 1000)
+	if(m_fpsCounter.getElapsedTime().asMicroseconds() >= 1000000)
 	{
 		m_fpsCounter.restart();
 		m_fpsText.setString(std::to_string(fpsCount));
