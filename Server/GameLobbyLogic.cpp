@@ -1,13 +1,14 @@
 #include "GameLobbyLogic.h"
 
-GameLobbyLogic::GameLobbyLogic(short id, PlayerData master)
+GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName)
 {
 	this->server = Server::get();
 
-	this->id = id;
+	//this->id = id;
 	this->gameMaster = master;
 	this->playerlimit = 4;
 	this->players.push_back(&this->gameMaster);
+	this->gameLobbyName = gameLobbyName;
 
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
@@ -21,15 +22,25 @@ GameLobbyLogic::~GameLobbyLogic()
 
 /* GETTER - SETTER */
 
-void GameLobbyLogic::setID(short id)
+void GameLobbyLogic::setName(string name)
 {
-	this->id = id;
+	 this->gameLobbyName = name;
 }
 
-short GameLobbyLogic::getID()
+string GameLobbyLogic::getName()
 {
-	return this->id;
+	return this->gameLobbyName;
 }
+
+//void GameLobbyLogic::setID(short id)
+//{
+//	this->id = id;
+//}
+//
+//short GameLobbyLogic::getID()
+//{
+//	return this->id;
+//}
 
 void GameLobbyLogic::setPlayerlimit(short limit)
 {

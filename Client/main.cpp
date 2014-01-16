@@ -65,13 +65,14 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	}
 	cout << "NL1:" << NL1.getState() << endl;
 
-	Lobby lobby("Tim");
-	lobby.askforLobbyData();
-	lobby.createNewGameLobby();
-	while(lobby.gameLobby==NULL)
+	Lobby* lobby = new Lobby();
+	
+	lobby->askforLobbyData();
+	lobby->createNewGameLobby();
+	while(lobby->gameLobby==NULL)
 		;
-	lobby.askforLobbyData();
-	lobby.gameLobby->maxPlayerChange(3);
+	lobby->askforLobbyData();
+	lobby->gameLobby->maxPlayerChange(3);
 
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END

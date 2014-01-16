@@ -42,9 +42,7 @@ void Lobby::processNewMessage(short id,vector<char> data)
 			unsigned int i = 0;
 			while (i < data.size())
 			{
-				char mapid = data[i];
-				i+=1;
-				short gameid = decodeShort(data, i);
+				short id = decodeShort(data, i);
 				i+=2;
 				short playerlimit = decodeShort(data, i);
 				i+=2;
@@ -68,11 +66,10 @@ void Lobby::processNewMessage(short id,vector<char> data)
 					players.push_back(player);
 				}
 				GameData game;
-				game.id = gameid;
 				game.playerlimit = playerlimit;
 				game.gameMaster = &master;
 				game.players = players;
-				gamesCreated[mapid] = game;
+				gamesCreated[id] = game;
 			}
 
 			break;
