@@ -7,6 +7,7 @@
 #include "GameLobby.h"
 #include <vector>
 #include <map>
+#include <atomic>
 
 class Lobby : public NetworkParticipant
 {
@@ -18,8 +19,8 @@ public:
 	bool updated;
 	map<short, GameData> gamesCreated;
 
-	
-	GameLobby* gameLobby;
+
+	std::atomic<GameLobby*> gameLobby;
 
 	Lobby();
 	~Lobby();

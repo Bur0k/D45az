@@ -28,10 +28,10 @@ LobbyView::LobbyView():
 	lobby->askforLobbyData();
 	lobby->askforLobbyData();
 	lobby->createNewGameLobby();
-	while(lobby->gameLobby==NULL)
+	while(lobby->gameLobby.operator GameLobby *()==NULL)
 		;
 	lobby->askforLobbyData();
-	lobby->gameLobby->maxPlayerChange(3);
+	lobby->gameLobby.operator GameLobby *()->maxPlayerChange(3);
 }
 
 LobbyView::~LobbyView()

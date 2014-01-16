@@ -21,3 +21,9 @@ LobbyEntry::LobbyEntry(Vector2f size, Vector2f pos, std::string name, int player
 	int m_players;
 	int m_ID;
 }
+
+
+void LobbyEntry::draw(RenderWindow* rw)
+{
+
+}

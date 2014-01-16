@@ -4,11 +4,12 @@
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include <vector>
+#include <atomic>
 
 class NetworkLogin : public NetworkParticipant
 {
 	Client* c;
-	short state;
+	std::atomic<short> state;
 
 public:
 	NetworkLogin(string Name);
