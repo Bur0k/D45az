@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="CityLogic.cpp" />
     <ClCompile Include="GameLobbyLogic.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="IngameLogic.cpp" />
     <ClCompile Include="LobbyLogic.cpp" />
     <ClCompile Include="LogInLogic.cpp" />
@@ -98,6 +99,7 @@
   <ItemGroup>
     <ClInclude Include="CityLogic.h" />
     <ClInclude Include="GameLobbyLogic.h" />
+    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="IngameLogic.h" />
     <ClInclude Include="LobbyLogic.h" />
     <ClInclude Include="LogInLogic.h" />

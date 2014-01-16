@@ -65,6 +65,9 @@
     <Filter Include="Codes\GameLogic\UnitLogic\Source">
       <UniqueIdentifier>{497de639-400e-4a7b-a3b6-ee5126ba6777}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\GameLogic\Source">
+      <UniqueIdentifier>{14a9aa51-4f88-468d-ac40-343016811011}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -97,6 +100,9 @@
     <ClInclude Include="UnitLogic.h">
       <Filter>Codes\GameLogic\UnitLogic</Filter>
     </ClInclude>
+    <ClInclude Include="GameLogic.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -128,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="UnitLogic.cpp">
       <Filter>Codes\GameLogic\UnitLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

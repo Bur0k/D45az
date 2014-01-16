@@ -1,6 +1,6 @@
-#include "IngameLogic.h"
+#include "GameLogic.h"
 
-IngameLogic::IngameLogic()
+GameLogic::GameLogic()
 {
 	this->server = Server::get();
 
@@ -8,13 +8,13 @@ IngameLogic::IngameLogic()
 	server->addToErrorCallback(this);
 }
 
-IngameLogic::~IngameLogic()
+GameLogic::~GameLogic()
 {
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
 }
 
-void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
 	switch(id)
 	{
@@ -25,7 +25,7 @@ void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 	}
 }
 	
-void IngameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
+void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 
 }

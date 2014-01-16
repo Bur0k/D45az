@@ -3,6 +3,7 @@
 
 #include "NetworkParticipant.h"
 #include "Server.h"
+#include "PlayerData.h"
 #include "CityLogic.h"
 #include "UnitGroupLogic.h"
 #include <vector>
@@ -14,6 +15,7 @@ class IngameLogic : public NetworkParticipant
 private:
 	Server* server;
 
+	PlayerData* owner;
 	vector<CityLogic> cities;
 	vector<UnitGroupLogic> unitGroups;
 	int gold;
