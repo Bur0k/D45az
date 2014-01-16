@@ -16,12 +16,12 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_textblockText.setFont(m_Font);
 	m_textblockText.setPosition(getPosition());
-	m_textblockText.setColor(MyColors.Orange);
+	m_textblockText.setColor(MyColors.Black);
 	m_textblockText.setCharacterSize(CharSize);
 	m_textblockText.setString(lineBreak(S, size));
 	textsize = m_textblockText.getLocalBounds();
 	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
-	m_color = MyColors.White;
+	m_color = MyColors.Gray;
 	setFillColor(m_color);
 	fixCharsize();
 }
@@ -57,6 +57,7 @@ void Textblock::setCharSize(int CharSize)
 
 void Textblock::fixCharsize()
 {
+	// Charsizes over 23 == problems --> fix
 	if(m_textblockText.getCharacterSize() > 23)
 	{
 		m_textblockText.move(0, -10);
