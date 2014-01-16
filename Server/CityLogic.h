@@ -13,11 +13,11 @@ private:
 	Server* server;
 
 public:
-	int level;
-	//position
-	int generatedIncome;
 	CityLogic();
 	~CityLogic();
+	int level;
+	int generatedIncome;
+	//position
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
