@@ -19,7 +19,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 
 
@@ -81,8 +81,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	/*
 
 	*/
-	
-	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
+	//TESTCREEN oder LOGIN bei Views
+	Game* g = new Game(&window, Views::TESTSCREEN, sf::Vector2f(1280, 850));
 	
 	while (window.isOpen())
 	{

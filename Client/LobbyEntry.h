@@ -12,17 +12,17 @@ class LobbyEntry : public Button
 private:
 	Rect<float> m_dimensions;
 
-	Text m_name;
-	Text m_number;
+	Text m_nameText;
+	Text m_numberText;
 	int m_maxPlayers;
 	int m_players;
 	int m_ID;
 
 	void updatePlayers();
-public:
 	LobbyEntry();
+public:
 	LobbyEntry(Vector2f size, Vector2f pos, std::string name, int players, int maxplayers, int id);
-	void move(Vector2f delta);
+	void LEmove(Vector2f delta);
 	
 	void setName(std::string name);
 	std::string getName();
@@ -33,7 +33,6 @@ public:
 
 	Vector2f getSize();
 	Vector2f getPosition();
-//	void move(Vector2f);
 	void setPosition(Vector2f pos);
 	virtual void draw(RenderWindow* rw);
 };

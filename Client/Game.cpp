@@ -63,6 +63,9 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 25);
 	m_drawL.push_back(tblock);
 
+	//SBAR 
+	/*SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
+	m_drawL.push_back(SBar);*/
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -92,7 +95,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	tb->attach(this);
 
-
+	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 	m_fpsText.setColor(MyColors.Red);
@@ -122,15 +125,9 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	m_keyInputL.push_back(tb);
 
-	//TESTSCREEN stuff end
 
-	// Musik Test Zeug
-
+	//Musik
 	m_pMS = new MusikSampler();
-	/*
-	MS->load_music(0);
-	MS->play_music();
-	*/
 
 	map.load("Data/Maps/test.tmx");
 	xMap=yMap=0;
@@ -176,7 +173,7 @@ Views Game::getView()
 void Game::Draw()
 {
 
-	if(m_ViewMode == TESTSCREEN)
+	if(m_ViewMode == Views::TESTSCREEN)
 		DrawTest();
 	else
 		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
@@ -356,22 +353,22 @@ void Game::LoadView(Views v)
 	IView* NewView;
 	switch (v)
 {
-	case NOCHANGE:
+	case Views::NOCHANGE:
 		return;
 		break;
-	case INGAME:
+	case Views::INGAME:
 		break;
 	case LOGIN:
 		NewView = new LoginView(m_pWindow->getSize());
 		break;
-	case MENUE:
+	case Views::MENUE:
 		break;
-	case LOBBY:
+	case Views::LOBBY:
 		NewView = new LobbyView();
 		break;
-	case INGAME_MENU:
+	case Views::INGAME_MENU:
 		break;
-	case TESTSCREEN:
+	case Views::TESTSCREEN:
 		return;
 		break;
 	default:
@@ -379,7 +376,6 @@ void Game::LoadView(Views v)
 	}
 
 	m_ViewVect.push_back(NewView);
-
 }
 
 

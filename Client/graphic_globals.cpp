@@ -13,7 +13,7 @@ sf::Font & MyFonts::getFont(GameFonts f)
 {
 	switch (f)
 	{
-	case ARIAL:
+	case GameFonts::ARIAL:
 		if(s_pArial == NULL)
 		{
 			std::cout << " LOADING FONT ARIAL " << std::endl;
@@ -22,8 +22,6 @@ sf::Font & MyFonts::getFont(GameFonts f)
 			if(!s_pArial->loadFromFile("Data/Fonts/arial.ttf"))
 				std::cout << "font arial load failed!!" << std::endl;
 		}
-		else 
-			std::cout << " FONT ALREADY LOADED " << std::endl;
 		
 		return *s_pArial;
 		break;

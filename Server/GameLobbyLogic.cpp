@@ -159,6 +159,8 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				{
 					// Spielstart
 
+					GameLogic* game = new GameLogic(this->players);
+
 					std::vector<char> erfg;
 
 					this->server->write(s, 0x0304, erfg);
