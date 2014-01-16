@@ -33,7 +33,7 @@ public:
 
 	Vector2f getSize();
 	Vector2f getPosition();
-	void move(Vector2f);
+	void move(Vector2f delta);
 	void setPosition(Vector2f pos);
 	virtual void draw(RenderWindow* rw);
 };

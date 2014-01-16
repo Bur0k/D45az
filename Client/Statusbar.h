@@ -13,11 +13,11 @@
 
 class Statusbar : public IClickable, public IDrawable, public IAnimatable
 {
-private: // soll eigentlich nicht abgeleitet werden
+private: // soll eigentlich NICHT abgeleitet werden
 	bool m_inFocus;
 	bool m_mouseOver;
 
-	//eigne größe
+	//Grundeigenschaften
 	Rect<float> m_dimensions;
 	RectangleShape m_BaseRect;
 
@@ -30,10 +30,13 @@ public:
 	Statusbar(Vector2f pos, Vector2f size);
 	~Statusbar(void);
 	//Setter & Getter
-	void setPosition(Vector2f);
+	void setPosition(Vector2f pos);
 	Vector2f getPosition();
+	void setBgColor(Color c);
+	//Hilfsfunktionen
+
 	//IClickable
-	virtual bool MouseMooved(sf::Vector2i &);
+	virtual bool MouseMoved(sf::Vector2i &);
 	virtual bool PressedRight();
 	virtual bool PressedLeft();
 	virtual bool ReleasedRight();
