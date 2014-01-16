@@ -74,10 +74,10 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 }
 
 
-bool LobbyView::MouseMooved(sf::Vector2i & v)
+bool LobbyView::MouseMoved(sf::Vector2i & v)
 {
-	s->MouseMooved(v);
-	connect->MouseMooved(v);
+	s->MouseMoved(v);
+	connect->MouseMoved(v);
 	return false;
 }
 

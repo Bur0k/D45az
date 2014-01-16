@@ -218,12 +218,12 @@ void Game::onMouseMove()
 
 	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-			m_clickL[i]->MouseMooved(mousePos);
+			m_clickL[i]->MouseMoved(mousePos);
 
 	m_lastMousePosition = mousePos;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-			m_ViewVect[i]->MouseMooved(mousePos);
+			m_ViewVect[i]->MouseMoved(mousePos);
 }
 
 void Game::onMouseDownLeft()

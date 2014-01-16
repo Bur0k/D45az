@@ -9,7 +9,7 @@
 class IClickable
 {
 public:
-	virtual bool MouseMooved(sf::Vector2i &)=0;
+	virtual bool MouseMoved(sf::Vector2i &)=0;
 	virtual bool PressedRight()=0;
 	virtual bool PressedLeft()=0;
 	virtual bool ReleasedRight()=0;

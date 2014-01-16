@@ -41,10 +41,10 @@ void LoginView::onButtonClick(int)
 }
 
 
-bool LoginView::MouseMooved(sf::Vector2i & mouse)
+bool LoginView::MouseMoved(sf::Vector2i & mouse)
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		if(m_ClickV[i]->MouseMooved(mouse))
+		if(m_ClickV[i]->MouseMoved(mouse))
 			return true;
 	return false;
 }
@@ -122,4 +122,13 @@ void LoginView::update(double elpasedMs)
 
 }
 
-void LoginView::onResize(Vector2u &){}
+void LoginView::onResize(Vector2u & size)
+{
+	//abstand zwischen den buttons 4% der gesamthöhe
+
+	sf::Vector2f pos(size.x / 2 - name->getSize().x / 2, size.y / 2 - name->getSize().y / 2);
+	name->setPos(pos);
+
+	lgoinbutton->setPosition(size.x / 2 - lgoinbutton->getSize().x / 2, name->getPos().y + name->getSize().y + 0.05 * size.y);
+	logintext->setPos(sf::Vector2f(size.x / 2 - logintext->getSize().x / 2, name->getPos().y - 0.05 * size.y - logintext->getSize().y));
+}

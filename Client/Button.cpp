@@ -123,7 +123,7 @@ bool Button::getIsPressed()
 	return m_isClicked;
 }
 
-bool Button::MouseMooved(Vector2i & mouse)
+bool Button::MouseMoved(Vector2i & mouse)
 {
 	//std::cout << "mouse position x " << mouse.x << " y " << mouse.y; 
 	if( mouse.x > getPosition().x && mouse.x < getPosition().x + getSize().x &&

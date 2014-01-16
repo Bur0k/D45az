@@ -62,5 +62,5 @@ jede ebene ein array zum zeichnen in game.draw(...)
 
 IClickable
 {
-	MouseMooved(vector2f);
+	MouseMoved(vector2f);
 }
