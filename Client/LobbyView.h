@@ -25,7 +25,7 @@ public:
 	public:
 		Textblock lobbyName;
 		Textblock playerCount;
-		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(200,30),"",20){}
+		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(),"",20),playerCount(sf::Vector2f(),sf::Vector2f(),"",20){}
 	};
 
 	std::map<short,GameLobbyData*> gameLobbys;

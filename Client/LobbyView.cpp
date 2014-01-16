@@ -6,9 +6,9 @@ LobbyView::LobbyView():
 	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster",20)
 {
-	playerName.setPosition(sf::Vector2f(0,0));
-	mapName.setPosition(sf::Vector2f(500,200));
-	gameLobbyMaster.setPosition(sf::Vector2f(500,300));
+	playerName.setPos(sf::Vector2f(0,0));
+	mapName.setPos(sf::Vector2f(500,200));
+	gameLobbyMaster.setPos(sf::Vector2f(500,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
@@ -18,6 +18,10 @@ LobbyView::LobbyView():
 	playerName.setText("Name",sf::Vector2f(300,100));
 	mapName.setText("Map Name",sf::Vector2f(300,100));
 	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
+
+
+
+
 
 
 	lobby = new Lobby();
@@ -51,11 +55,11 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	int y = 200;
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 	{
-		it->second->lobbyName.setPosition(sf::Vector2f(20,y));
-		it->second->playerCount.setPosition(sf::Vector2f(200,y));
+		it->second->lobbyName.setPos(sf::Vector2f(20,y));
+		it->second->playerCount.setPos(sf::Vector2f(400,y));
 		y+=50;
 		it->second->lobbyName.draw(rw);
-		it->second->lobbyName.draw(rw);
+		it->second->playerCount.draw(rw);
 	}
 }
 
@@ -164,6 +168,12 @@ void LobbyView::update(double elpasedMs)
 				GLA->lobbyName.setText("Gamelobby Name",sf::Vector2f(200,30));
 				string asdasd=std::to_string(it->second.players.size()) + " / " + std::to_string(it->second.playerlimit);
 				GLA->playerCount.setText(asdasd,sf::Vector2f(200,30));
+				
+				GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
+				GLA->lobbyName.setBackgroundColor(sf::Color(255,255,255,0));
+				GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
+				GLA->playerCount.setBackgroundColor(sf::Color(255,255,255,0));
+
 				gameLobbys[id] = GLA;
 			}
 
