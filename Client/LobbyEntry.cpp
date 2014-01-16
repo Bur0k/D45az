@@ -42,9 +42,10 @@ void LobbyEntry::updatePlayers()
 
 void LobbyEntry::draw(RenderWindow* rw)
 {
+	rw->draw(*this);
 	rw->draw(m_nameText);
 	rw->draw(m_numberText);
-	rw->draw(*this);
+	
 }
 
 Vector2f LobbyEntry::getSize()
