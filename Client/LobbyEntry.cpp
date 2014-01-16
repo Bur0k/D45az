@@ -67,6 +67,9 @@ void LobbyEntry::LEmove(Vector2f delta)
 	m_nameText.move(delta);
 	m_numberText.move(delta);
 	move(delta);
+
+	m_dimensions.left += delta.x;
+	m_dimensions.top += delta.y;
 }
 
 void LobbyEntry::setName(std::string name)
