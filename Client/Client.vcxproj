@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Maps\test.tmx" />
+    <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />
     <None Include="Data\Songs\2_bullet.ogg" />
     <None Include="libsndfile-1.dll" />

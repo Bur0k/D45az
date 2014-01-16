@@ -186,10 +186,8 @@ void LobbyView::update(double elpasedMs)
 				GLA->LE.setMaxPlayers(it->second.playerlimit);
 				GLA->LE.setPlayers(it->second.players.size());
 				
-				GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
-				GLA->lobbyName.setBackgroundColor(sf::Color(255,255,255,0));
-				GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
-				GLA->playerCount.setBackgroundColor(sf::Color(255,255,255,0));
+				//GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
+				//GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
 
 				gameLobbys[id] = GLA;
 			}
