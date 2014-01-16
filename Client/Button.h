@@ -86,7 +86,7 @@ public:
 	virtual void draw(RenderWindow* rw);
 
 	//implementing IClickable
-	bool MouseMooved(Vector2i &);
+	bool MouseMoved(Vector2i &);
 	bool  PressedRight();
 	bool  PressedLeft();
 	bool  ReleasedRight();

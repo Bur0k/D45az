@@ -40,7 +40,7 @@ public:
 
 	void draw(sf::RenderWindow* rw);
 
-	bool MouseMooved(sf::Vector2i &);
+	bool MouseMoved(sf::Vector2i &);
 	bool PressedRight();
 	bool PressedLeft();
 	bool ReleasedRight();
