@@ -37,6 +37,7 @@ public:
 	void setBackgroundColor(Color color);
 	void setCharSize(int CharSize);
 	void fixCharsize();
+	Vector2f getTBsize();
 };
 
 

@@ -209,7 +209,7 @@ void Game::onResize()
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->onResize();
+		m_ViewVect[i]->onResize(m_pWindow->getSize());
 }
 
 void Game::onMouseMove()

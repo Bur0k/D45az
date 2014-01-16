@@ -54,9 +54,19 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					tmp = code(it->second->getPlayerlimit());
 					erfg.push_back(tmp[0]);
 					erfg.push_back(tmp[1]);
+
+					string gamelobbyname = it->second->getName();
+					short len = gamelobbyname.length();
+					tmp = code(len);
+					erfg.push_back(tmp[0]);
+					erfg.push_back(tmp[1]);
+
+					tmp = code(gamelobbyname);
+					for (unsigned int i = 0; i < tmp.size(); i++)
+							erfg.push_back(tmp[i]);
 				
 					string master = it->second->getGamemaster().Name;
-					short len = master.length();
+					len = master.length();
 					tmp = code(len);
 					erfg.push_back(tmp[0]);
 					erfg.push_back(tmp[1]);

@@ -55,7 +55,7 @@ public:
 	void onSliderValueChange(int ID, double position);
 	void onSliderReleased(int ID, double position);
 
-	void onResize();
+	void onResize(sf::Vector2u &);
 
 	void update(double elpasedMs);
 };
