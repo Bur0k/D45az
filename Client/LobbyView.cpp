@@ -28,7 +28,7 @@ LobbyView::LobbyView():
 	lobby = new Lobby();
 	lobby->askforLobbyData();
 	lobby->askforLobbyData();
-	lobby->createNewGameLobby();
+	lobby->createNewGameLobby("MeinefkingLobby");
 	while(lobby->gameLobby.operator GameLobby *()==NULL)
 		;
 	lobby->askforLobbyData();
