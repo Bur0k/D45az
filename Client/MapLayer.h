@@ -18,7 +18,7 @@ public:
 	const static int TileWidth=32;
 	const static int TileHeight=32;
 
-	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCollisionLayer=false);
+	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCityLayer=false);
 	~MapLayer();
 
 	void render(sf::RenderTarget& RT,sf::IntRect OnScreen);

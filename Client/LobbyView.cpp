@@ -83,6 +83,8 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 {
 	s->MouseMoved(v);
 	connect->MouseMoved(v);
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		it->second->LE.MouseMoved(v);
 	return false;
 }
 
@@ -95,6 +97,8 @@ bool LobbyView::PressedLeft()
 {
 	s->PressedLeft();
 	connect->PressedLeft();
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		it->second->LE.PressedLeft();
 	return false;
 }
 
@@ -107,12 +111,16 @@ bool LobbyView::ReleasedLeft()
 {
 	s->ReleasedLeft();
 	connect->ReleasedLeft();
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		it->second->LE.ReleasedLeft();
 	return false;
 }
 	
 void LobbyView::animationTick()
 {
 	connect->animationTick();
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		it->second->LE.animationTick();
 }
 	
 void LobbyView::onKeyDown(sf::Event)

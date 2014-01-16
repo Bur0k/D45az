@@ -1,9 +1,9 @@
 #include <vld.h>
 #include "MapLayer.h"
 
-MapLayer::MapLayer(std::string LI,int RowNum,TileSets* TileSets,bool IsCollisionLayer)
+MapLayer::MapLayer(std::string LI,int RowNum,TileSets* TileSets,bool IsCityLayer)
 {
-	isCityLayer=IsCollisionLayer;
+	isCityLayer=IsCityLayer;
 	tilesets=TileSets;
 	
 	std::stringstream stream(LI);
