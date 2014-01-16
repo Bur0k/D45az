@@ -15,6 +15,11 @@ MusikSampler::MusikSampler(void)
 	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
 	for(unsigned int i = 0; i < m_vSoundFiles.size(); i++)
 		m_vBuffer.push_back(preload_soundbuffer(i));
+
+
+	// Lautstärke am Anfang 100%
+	m_BgVolume = 100.0;
+	m_SoVolume = 100.0;
 }
 
 MusikSampler::~MusikSampler(void)
@@ -89,16 +94,21 @@ bool MusikSampler::play_music(int index)
         return 0;
     }
 
-   m_Music.play();
-   return 1;
+	m_Music.setVolume(m_BgVolume);
+	m_Music.play();
+	return 1;
 }
 
 bool MusikSampler::play_sound(int index)
 {
 	sf::Sound* tmp_sound = new sf::Sound();
 	
+	if (index >= m_vBuffer.size() ) // sicher gehen, dass index innerhalb gültigen bereichs
+		return 0;
+
 	tmp_sound->setBuffer(m_vBuffer[index]); // sound abholen
 
+	tmp_sound->setVolume(m_SoVolume);
 	tmp_sound->play();	
 
 	for (int i = 0; i < m_vSound.size() ; i++)
@@ -133,11 +143,24 @@ void MusikSampler::next_song()
 	else 
 		m_Songnumber ++;
 
-	load_music(m_Songnumber-1);
-
-	m_Music.play();
+	play_music(m_Songnumber-1);
 }
 
+void MusikSampler::set_volume(int type, float volume)
+{
+	switch(type)
+	{
+		case sounds: m_SoVolume = volume; // für neue ändern
+			for (int i = 0; i < m_vSound.size() ; i++) // alle aktiven ändern
+			{
+				m_vSound[i]->setVolume(volume);
+			}	break;
+		case songs:  m_BgVolume = volume; 
+			m_Music.setVolume(volume); break;
+		case generel_noise: set_volume(sounds,volume); 
+							set_volume(songs,volume); break;
+	}
+}
 
 /*
 void MusikSampler::stop()
@@ -179,18 +202,5 @@ void MusikSampler::set_pitch(float pitch)
     }
 
     samples.SetPitch(pitch);
-}
-
-void MusikSampler::set_volume(float volume)
-{
-    if (!loaded)
-    {
-        return;
-    }
-
-    if (volume >= 0.0f && volume <= 100.0f)
-    {
-        samples.SetVolume(volume);
-    }
 }
 */

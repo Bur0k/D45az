@@ -29,6 +29,8 @@ void Game::onButtonClick(int index)
 void Game::onSliderValueChange(int ID, double position)
 {
 	std::cout << "Slider CHANGED ID: " << ID << " Value: " << position << std::endl;
+	std::cout << "Lautstärke jetzt: " << position*100 << endl;
+	m_pMS->set_volume(generel_noise, position*100);
 }
 
 void Game::onSliderReleased(int ID, double position)
