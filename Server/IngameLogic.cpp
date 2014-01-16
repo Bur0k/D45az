@@ -1,11 +1,13 @@
 #include "IngameLogic.h"
 
-IngameLogic::IngameLogic()
+IngameLogic::IngameLogic(PlayerData* owner)
 {
 	this->server = Server::get();
 
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
+
+	this->owner = owner;
 }
 
 IngameLogic::~IngameLogic()

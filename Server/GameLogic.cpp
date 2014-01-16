@@ -1,11 +1,14 @@
 #include "GameLogic.h"
 
-GameLogic::GameLogic()
+GameLogic::GameLogic(vector<PlayerData*> players)
 {
 	this->server = Server::get();
 
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
+
+	for(unsigned int i = 0; i < players.size(); i++)
+		IngameLogic* ingame = new IngameLogic(players[i]);
 }
 
 GameLogic::~GameLogic()

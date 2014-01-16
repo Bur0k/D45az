@@ -16,7 +16,7 @@ private:
 	vector<IngameLogic> playersIngame;
 
 public:
-	GameLogic::GameLogic();
+	GameLogic::GameLogic(vector<PlayerData*> players);
 	GameLogic::~GameLogic();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);

@@ -21,7 +21,7 @@ private:
 	int gold;
 
 public:
-	IngameLogic::IngameLogic();
+	IngameLogic::IngameLogic(PlayerData* owner);
 	IngameLogic::~IngameLogic();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
