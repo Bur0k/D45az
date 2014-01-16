@@ -54,6 +54,14 @@ void Textblock::setCharSize(int CharSize)
 	m_textblockText.setCharacterSize(CharSize);
 }
 
+void Textblock::fixCharsize()
+{
+	if(m_textblockText.getCharacterSize() > 23)
+	{
+		m_textblockText.move(m_textblockText.getCharacterSize(), 0);
+	}
+}
+
 std::string Textblock::lineBreak(String S, Vector2f size)
 {
 	std::string tmp_word;
