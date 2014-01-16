@@ -38,6 +38,27 @@
     <Filter Include="Codes\PlayerData\Source">
       <UniqueIdentifier>{5609a465-bc33-43ab-b28e-852d70972987}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\GameLogic">
+      <UniqueIdentifier>{fc764a10-5594-48ec-8357-859a48a9b50d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\IngameLogic">
+      <UniqueIdentifier>{e01a4ae6-52b5-4470-9649-33427d3b96e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\CityLogic">
+      <UniqueIdentifier>{4ad0253f-8391-4bb3-8f61-5feccf065450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\UnitLogic">
+      <UniqueIdentifier>{e10058f1-38f8-4cdb-b428-80c9f7a0a18c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\IngameLogic\Source">
+      <UniqueIdentifier>{875bacfe-25db-4c77-a567-c0fcd9bab9b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\CityLogic\Source">
+      <UniqueIdentifier>{ddd63c2c-2acb-4dc2-8dd7-9ea877bb4d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\UnitLogic\Source">
+      <UniqueIdentifier>{8ed224f1-0ded-4206-9159-8bbb23879656}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -58,6 +79,15 @@
     <ClInclude Include="GameLobbyLogic.h">
       <Filter>Codes\GameLobbyLogic</Filter>
     </ClInclude>
+    <ClInclude Include="IngameLogic.h">
+      <Filter>Codes\GameLogic\IngameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="CityLogic.h">
+      <Filter>Codes\GameLogic\CityLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitLogic.h">
+      <Filter>Codes\GameLogic\UnitLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -77,6 +107,15 @@
     </ClCompile>
     <ClCompile Include="PlayerData.cpp">
       <Filter>Codes\PlayerData\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="IngameLogic.cpp">
+      <Filter>Codes\GameLogic\IngameLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CityLogic.cpp">
+      <Filter>Codes\GameLogic\CityLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitLogic.cpp">
+      <Filter>Codes\GameLogic\UnitLogic\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

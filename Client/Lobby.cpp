@@ -50,6 +50,10 @@ void Lobby::processNewMessage(short id,vector<char> data)
 				i+=2;
 				short len = decodeShort(data, i);
 				i+=2;
+				string gamename = decodeString(data, i, len);
+				i+=len;
+				len = decodeShort(data, i);
+				i+=2;
 				string mastername = decodeString(data, i, len);
 				PlayerData master;
 				master.Name = mastername;
@@ -71,6 +75,7 @@ void Lobby::processNewMessage(short id,vector<char> data)
 				game.playerlimit = playerlimit;
 				game.gameMaster = &master;
 				game.players = players;
+				game.name = gamename;
 				gamesCreated[id] = game;
 			}
 
