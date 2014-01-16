@@ -82,7 +82,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	*/
 	//TESTCREEN oder LOGIN bei Views
-	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
+	Game* g = new Game(&window, Views::LOBBY, sf::Vector2f(1280, 850));
 	
 	while (window.isOpen())
 	{

@@ -64,8 +64,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(tblock);
 
 	//SBAR 
-	SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
-	m_drawL.push_back(SBar);
+	//SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
+	//m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	

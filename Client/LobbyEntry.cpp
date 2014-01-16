@@ -19,11 +19,12 @@ LobbyEntry::LobbyEntry(Vector2f size, Vector2f pos, std::string name, int player
 	m_players = players;
 	m_ID = id;
 
-	m_name.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	m_name.setString(name);
-	m_name.setPosition(m_dimensions.left + LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
+	m_nameText.setFont(MyFonts::getFont(GameFonts::ARIAL));
+	m_nameText.setString(name);
+	m_nameText.setPosition(m_dimensions.left + LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
 	
-	m_number.setFont(MyFonts::getFont(GameFonts::ARIAL));
+	m_numberText.setFont(MyFonts::getFont(GameFonts::ARIAL));
+	updatePlayers();
 
 	this->setPosition(pos);
 	this->setSize(size);
@@ -36,15 +37,15 @@ void LobbyEntry::updatePlayers()
 	s = std::to_string(m_players);
 	s += " / ";
 	s += std::to_string(m_maxPlayers);
-	m_name.setString(s);
-	sf::Rect<float> textsize = m_name.getLocalBounds();
-	m_name.setPosition(m_dimensions.left + m_dimensions.width - textsize.width - LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
+	m_nameText.setString(s);
+	sf::Rect<float> textsize = m_nameText.getLocalBounds();
+	m_nameText.setPosition(m_dimensions.left + m_dimensions.width - textsize.width - LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
 }
 
 void LobbyEntry::draw(RenderWindow* rw)
 {
-	rw->draw(m_name);
-	rw->draw(m_number);
+	rw->draw(m_nameText);
+	rw->draw(m_numberText);
 	rw->draw(*this);
 }
 
@@ -65,19 +66,19 @@ void LobbyEntry::setPosition(Vector2f pos)
 
 void LobbyEntry::move(Vector2f delta)
 {
-	m_name.move(delta);
-	m_number.move(delta);
+	m_nameText.move(delta);
+	m_numberText.move(delta);
 	this->move(delta);
 }
 
 void LobbyEntry::setName(std::string name)
 {
-	m_name.setString(name);
+	m_nameText.setString(name);
 }
 
 std::string LobbyEntry::getName()
 {
-	return m_name.getString();
+	return m_nameText.getString();
 }
 
 void LobbyEntry::setPlayers(int players)

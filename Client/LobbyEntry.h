@@ -12,8 +12,8 @@ class LobbyEntry : public Button
 private:
 	Rect<float> m_dimensions;
 
-	Text m_name;
-	Text m_number;
+	Text m_nameText;
+	Text m_numberText;
 	int m_maxPlayers;
 	int m_players;
 	int m_ID;
