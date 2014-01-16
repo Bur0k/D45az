@@ -5,13 +5,13 @@ LoginView::LoginView()
 {
 
 	//create all the ui elements here
-	logintext.setFont(MyFonts::getFont(GameFonts::ARIAL));
-	logintext.setPosition(100,100);
-	logintext.setString("LOGIN");
-	logintext.setCharacterSize(50);
 	
-	name = new TextBox(200,"enter name",sf::Vector2f(100,200),true,1);
-	name->attach(this);
+	logintext = new Textblock(Vector2f(100,100),Vector2f(500,70),"LOGIN SCREEN", 50);
+	logintext->setFillColor(MyColors.Red);
+	m_DrawV.push_back(logintext);
+
+	name = new TextBox(200,"enter name",sf::Vector2f(100,200),false,1);
+
 	m_DrawV.push_back(name);
 	m_AnimateV.push_back(name);
 	m_ClickV.push_back(name);
@@ -19,7 +19,8 @@ LoginView::LoginView()
 	
 	lgoinbutton = new StandardButton(Vector2f(100,300),Vector2f(100,70),"Login",1,false);
 	lgoinbutton->attachFunction(this);
-	m_DrawV.push_back(name);
+
+	m_DrawV.push_back(lgoinbutton);
 	m_AnimateV.push_back(lgoinbutton);
 	m_ClickV.push_back(lgoinbutton);
 }
@@ -28,23 +29,22 @@ LoginView::~LoginView()
 {
 	delete name;
 	delete lgoinbutton;
+	delete logintext;
 }
 
 void LoginView::onButtonClick(int)
 {
 	//handle incoming clicks here
+	std::string s;
+	s = name->getText();
+	std::cout << "LOGIN NAME IS : " << s << std::endl;
 }
 
-void LoginView::onTextBoxSend(int ID, std::string s)
-{
-	//recieve shit from textboxes
-}
 
-
-bool LoginView::isHit(sf::Vector2i & mouse)
+bool LoginView::MouseMooved(sf::Vector2i & mouse)
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		if(m_ClickV[i]->isHit(mouse))
+		if(m_ClickV[i]->MouseMooved(mouse))
 			return true;
 	return false;
 }
@@ -109,3 +109,17 @@ void LoginView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);
 }
+
+Views LoginView::nextState()
+{
+	//TODO do something 
+
+	return Views::NOCHANGE;
+}
+
+void LoginView::update(double elpasedMs)
+{
+
+}
+
+void LoginView::onResize(){}

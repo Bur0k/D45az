@@ -43,25 +43,24 @@ void Game::onTextBoxSend(int ID, std::string s)
 	std::cout << "TEXTBOX ID " << ID << " text:   " << s << std::endl;
 }
 
-Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
+Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 {
-
-
 	m_pWindow = rw;
-	m_ViewMode = sm;
+	m_ViewMode = Viewmode;
 	m_size = windowSize;
 
 	m_inFocus = true;
+	
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
-	m_stdFont = MyFonts::getFont(GameFonts::ARIAL);
-
+	//timers
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
 
+	LoadView(Viewmode);
 
-
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 200), "Stämme ist kuhl....  Kauft Litecoins von Jan bei Ebay... privat gibts Freundschaftsrabatt", 20, 5);
+	//TESTSCREEN stuff
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 25);
 	m_drawL.push_back(tblock);
 
 
@@ -94,7 +93,7 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	tb->attach(this);
 
 
-	m_fpsText.setFont(m_stdFont);
+	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 	m_fpsText.setColor(MyColors.Red);
 
@@ -122,6 +121,8 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	m_animateL.push_back(tb);
 
 	m_keyInputL.push_back(tb);
+
+	//TESTSCREEN stuff end
 
 	// Musik Test Zeug
 
@@ -152,11 +153,19 @@ Game::~Game()
 	delete tblock;
 
 	delete m_pMS;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		delete m_ViewVect[i];
+
+	MyFonts::deleteFonts();
+
 }
 
 void Game::setView(Views sm)
 {
+	//TODO remove or change
 	m_ViewMode = sm;
+	LoadView(sm);
 }
 
 Views Game::getView()
@@ -166,56 +175,18 @@ Views Game::getView()
 
 void Game::Draw()
 {
-	switch (m_ViewMode)
-	{
-	case INGAME:
-		DrawGame();
-		break;
-	case LOGIN:
-		DrawLogin();
-		break;
-	case MENUE:
-		DrawMainMenu();
-		break;
-	case LOBBY:
-		DrawLobby();
-		break;
-	case INGAME_MENU:
-		DrawGame();
-		DrawIngameMenu();
-		break;
-	case TESTSCREEN:
+
+	if(m_ViewMode == TESTSCREEN)
 		DrawTest();
-	default:
-		break;
-	}
+	else
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			m_ViewVect[i]->draw(m_pWindow);
 
+
+	//ALLWAYS draw fps counter while in debug mode
+//#ifdef _DEBUG
 	m_pWindow->draw(m_fpsText);
-}
-
-void Game::DrawGame()
-{
-
-}
-
-void Game::DrawLogin()
-{
-
-}
-
-void Game::DrawMainMenu()
-{
-	
-}
-
-void Game::DrawLobby()
-{
-
-}
-
-void Game::DrawIngameMenu()
-{
-
+//#endif
 }
 
 void Game::DrawTest()
@@ -237,8 +208,8 @@ void Game::onResize()
 	
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 
-	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
-				
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		m_ViewVect[i]->onResize();
 }
 
 void Game::onMouseMove()
@@ -248,23 +219,37 @@ void Game::onMouseMove()
 
 	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
 
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		m_clickL[i]->isHit(mousePos);
+			m_clickL[i]->MouseMooved(mousePos);
 
 	m_lastMousePosition = mousePos;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			m_ViewVect[i]->MouseMooved(mousePos);
 }
 
 void Game::onMouseDownLeft()
 {
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 		if(m_clickL[i]->PressedLeft())
+			break;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		if(m_ViewVect[i]->PressedLeft())
 			break;
 }
 
 void Game::onMouseDownRight()
 {
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 		if(m_clickL[i]->PressedRight())
+			break;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		if(m_ViewVect[i]->PressedRight())
 			break;
 }
 
@@ -280,22 +265,36 @@ void Game::onMouseLeave()
 
 void Game::onMouseUpLeft()
 {
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 		if(m_clickL[i]->ReleasedLeft())
+			break;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		if(m_ViewVect[i]->ReleasedLeft())
 			break;
 }
 
 void Game::onMouseUpRight()
 {
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 		if(m_clickL[i]->ReleasedRight())
+			break;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		if(m_ViewVect[i]->ReleasedRight())
 			break;
 }
 
 void Game::onKeyDown(sf::Event e)
 {
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyDown(e);
+	
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		m_ViewVect[i]->onKeyDown(e);
 	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
@@ -317,6 +316,9 @@ void Game::onKeyUp(sf::Event e)
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyUp(e);
 
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		m_ViewVect[i]->onKeyUp(e);
+
 #ifdef _DEBUG
 	if(e.key.code == sf::Keyboard::Escape) 
 		m_pWindow->close();
@@ -326,20 +328,60 @@ void Game::onKeyUp(sf::Event e)
 void Game::onTextEntered(sf::Event e)
 {
 	Uint32 c = e.text.unicode;
+	//filter input
 	if((c >= 32 && c <= 126) || c == 0x00F6 || c == 0x00FC || c == 0x00E4 || c == 0x00C4 || c == 0x00D6	|| c == 0x00DC || c == 0x00DF || c == 0x0FD6 )
 	{
 		std::string s;
 		s = c;
 		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 			m_keyInputL[i]->onTextInput(s);
+
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			m_ViewVect[i]->onTextInput(s);
 	}
 }
 
-
-void Game::onClose()
+void Game::LoadView(Views v)
 {
-	MyFonts::deleteFonts();
+
+	//unfinished implementation
+
+	//todo not allways clear to allow stacked views or animation
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		delete m_ViewVect[i];
+	m_ViewVect.clear();
+
+	//load new view
+
+	IView* NewView;
+	switch (v)
+{
+	case NOCHANGE:
+		return;
+		break;
+	case INGAME:
+		break;
+	case LOGIN:
+		NewView = new LoginView();
+		break;
+	case MENUE:
+		break;
+	case LOBBY:
+		NewView = new LobbyView();
+		break;
+	case INGAME_MENU:
+		break;
+	case TESTSCREEN:
+		return;
+		break;
+	default:
+		break;
+	}
+
+	m_ViewVect.push_back(NewView);
+
 }
+
 
 void Game::Input()
 {
@@ -427,11 +469,17 @@ void Game::timer()
 	//ANIMATION//
 	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
 	m_animationTimer.restart();
+
+	m_ViewVect[0]->update(animationtime);
+
 	while(animationtime > 1000 / 33)
 	{
 		animationtime -= 1000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
+
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			m_ViewVect[i]->animationTick();
 	}
 
 

@@ -12,20 +12,22 @@ class GameLobbyLogic : public NetworkParticipant
 {
 private:
 	Server* server;
-	short id;
+	//short id;
 	vector<PlayerData*> players;
 	short playerlimit;
 	PlayerData gameMaster;
+	string gameLobbyName;
 	//Map currentMap;
 
 public:
-	GameLobbyLogic(short id, PlayerData master);
+	GameLobbyLogic(short id, PlayerData master, string gameLobbyName);
 	~GameLobbyLogic();
 
 	/*GETTER - SETTER*/
-
-	void setID(short id);
-	short getID();
+	void setName(string name);
+	string getName();
+	//void setID(short id);
+	//short getID();
 	void setPlayerlimit(short limit);
 	short getPlayerlimit();
 	void setGamemaster(PlayerData player);

@@ -8,31 +8,32 @@
 #include "Textbox.h"
 #include "Textblock.h"
 
-class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
+class LoginView : public IView , public IButtonfunction
 {
 public:
 	LoginView();
 	~LoginView();
 
+private:
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
-	Text logintext;
+	Textblock* logintext;
 	TextBox* name;
 	Button* lgoinbutton;
 
 
-
+public:
+	virtual Views nextState();
 	//implementing a lot of interfaces
-	virtual void onTextBoxSend(int ID, std::string s);
 
 	virtual void onButtonClick(int);
 
 	virtual void draw(sf::RenderWindow* rw);
 
-	virtual bool isHit(sf::Vector2i &);
+	virtual bool MouseMooved(sf::Vector2i &);
 	virtual bool PressedRight();
 	virtual bool PressedLeft();
 	virtual bool ReleasedRight();
@@ -44,6 +45,8 @@ public:
 	virtual void onKeyUp(sf::Event);
 	virtual void onTextInput(std::string s);
 
+	virtual void onResize();
+	virtual void update(double elpasedMs);
 };
 
 

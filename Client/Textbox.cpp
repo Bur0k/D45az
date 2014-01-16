@@ -2,6 +2,11 @@
 
 TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnReturn, int id)
 {
+	m_dimensions.top = pos.y;
+	m_dimensions.left = pos.x;
+	m_dimensions.width = width;
+	m_dimensions.height = TEXTBOXHEIGHT;
+
 	m_inFocus = false;
 	m_returnIsSend = sendOnReturn;
 	m_mouseOver = false;
@@ -13,6 +18,9 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_CharacterDisplayOffset = 0;
 	m_anmation = 0;
 	m_cursorAnimation = 0;
+
+	m_focusCol = MyColors.Gray;
+	m_nofocusCol = MyColors.DarkGray;
 
 	Image img;
 	if(!img.loadFromFile("Data/Images/Button.png"))
@@ -31,11 +39,23 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_pBorder[6].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING));
 	m_pBorder[7].t.loadFromImage(img, IntRect(TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING));
 
-	
+	//position tilesheets
+
+
+	for(int i = 0; i < 8; i++)
+	{
+		m_pBorder[i].t.setSmooth(false);
+		m_pBorder[i].t.setRepeated(true);
+		m_pBorder[i].s.setTexture(& m_pBorder[i].t, true);
+	}
+
+	positionBorderElements();
+
 
 	m_BaseRect.setPosition(pos.x + TEXTBOXBORDERSPACING / 2, pos.y + TEXTBOXBORDERSPACING / 2);
-	m_BaseRect.setSize(Vector2f(width - TEXTBOXBORDERSPACING, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING));
+	m_BaseRect.setSize(Vector2f(m_dimensions.width - TEXTBOXBORDERSPACING, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING));
 	m_BaseRect.setFillColor(m_nofocusCol);
+
 
 	m_displayedText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_displayedText.setString(startText);
@@ -43,18 +63,42 @@ TextBox::TextBox(float width, sf::String startText, Vector2f pos, bool sendOnRet
 	m_displayedText.move(TEXTBOXBORDERSPACING, TEXTBOXBORDERSPACING / 3);
 	m_displayedText.setCharacterSize(25);
 
-	m_dimensions.top = pos.y;
-	m_dimensions.left = pos.x;
-	m_dimensions.width = width;
-	m_dimensions.height = TEXTBOXHEIGHT;
+	
 	
 	m_cursor.setPosition(m_dimensions.left + TEXTBOXBORDERSPACING, m_dimensions.top + TEXTBOXBORDERSPACING);
 	m_cursor.setSize(Vector2f(TEXTBOXCURSORWIDTH, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING * 2));
 
-	m_focusCol = MyColors.DarkGray;
-	m_nofocusCol = MyColors.Gray;
+	
 
 }
+
+void TextBox::positionBorderElements()
+{
+	m_pBorder[0].s.setSize(Vector2f(TEXTBOXBORDERSPACING,TEXTBOXBORDERSPACING));
+	m_pBorder[0].s.setPosition(m_dimensions.left, m_dimensions.top);
+
+	m_pBorder[1].s.setSize(Vector2f(m_dimensions.width - TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING));
+	m_pBorder[1].s.setPosition(m_dimensions.left + TEXTBOXBORDERSPACING, m_dimensions.top);
+
+	m_pBorder[2].s.setSize(Vector2f(TEXTBOXBORDERSPACING,TEXTBOXBORDERSPACING));
+	m_pBorder[2].s.setPosition(m_dimensions.left + m_dimensions.width - TEXTBOXBORDERSPACING, m_dimensions.top);
+
+	m_pBorder[3].s.setSize(Vector2f(TEXTBOXBORDERSPACING, m_dimensions.height - TEXTBOXBORDERSPACING * 2));
+	m_pBorder[3].s.setPosition(m_dimensions.left, m_dimensions.top + TEXTBOXBORDERSPACING);
+
+	m_pBorder[4].s.setSize(Vector2f(TEXTBOXBORDERSPACING, m_dimensions.height - TEXTBOXBORDERSPACING * 2));
+	m_pBorder[4].s.setPosition(m_dimensions.left + m_dimensions.width - TEXTBOXBORDERSPACING, m_dimensions.top + TEXTBOXBORDERSPACING);
+
+	m_pBorder[5].s.setSize(Vector2f(TEXTBOXBORDERSPACING,TEXTBOXBORDERSPACING));
+	m_pBorder[5].s.setPosition(m_dimensions.left, m_dimensions.top + m_dimensions.height - TEXTBOXBORDERSPACING);
+
+	m_pBorder[6].s.setSize(Vector2f(m_dimensions.width - TEXTBOXBORDERSPACING * 2, TEXTBOXBORDERSPACING));
+	m_pBorder[6].s.setPosition(m_dimensions.left + TEXTBOXBORDERSPACING, m_dimensions.top + m_dimensions.height - TEXTBOXBORDERSPACING);
+
+	m_pBorder[7].s.setSize(Vector2f(TEXTBOXBORDERSPACING,TEXTBOXBORDERSPACING));
+	m_pBorder[7].s.setPosition(m_dimensions.left + m_dimensions.width - TEXTBOXBORDERSPACING, m_dimensions.top + m_dimensions.height - TEXTBOXBORDERSPACING);
+}
+
 
 TextBox::~TextBox()
 {
@@ -96,6 +140,7 @@ void TextBox::onKeyDown(sf::Event e)
 	case Keyboard::Return:
 		if(m_returnIsSend)
 			Notify();
+		m_inFocus = false;
 		break;
 	}
 }
@@ -145,7 +190,7 @@ void TextBox::onTextInput(std::string s)
 void TextBox::fitText()
 {
 	std::string cut = m_text.substr(m_CharacterDisplayOffset, m_text.size() -  m_CharacterDisplayOffset);
-	std::cout << m_text << std::endl << cut << std::endl;
+	//std::cout << m_text << std::endl << cut << std::endl;
 	Rect<float> textDimensions;
 	textDimensions.width = 0;
 	
@@ -175,7 +220,7 @@ void TextBox::fitText()
 			break;
 		}
 	}
-	std::cout << "cursor position : " << m_cursorPosition << " string offset : " << m_CharacterDisplayOffset << std::endl;
+	//std::cout << "cursor position : " << m_cursorPosition << " string offset : " << m_CharacterDisplayOffset << std::endl;
 	if(m_cursorPosition == 0)
 		m_cursor.setPosition(m_displayedText.getPosition().x, m_cursor.getPosition().y);
 	if(m_text.size() == 0)
@@ -188,7 +233,7 @@ void TextBox::fitText()
 	}
 }
 
-bool TextBox::isHit(sf::Vector2i & mouse)
+bool TextBox::MouseMooved(sf::Vector2i & mouse)
 {
 	if( mouse.x >= m_dimensions.left && mouse.x <= m_dimensions.left + m_dimensions.width &&
 		mouse.y >= m_dimensions.top && mouse.y <= m_dimensions.top + m_dimensions.height)
@@ -258,6 +303,9 @@ void TextBox::move(Vector2f delta)
 	m_BaseRect.move(delta);
 	m_cursor.move(delta);
 	m_displayedText.move(delta);
+
+	for(int i = 0; i < 8; i++)
+		m_pBorder[i].s.move(delta);
 }
 
 Vector2f TextBox::getPos()
@@ -272,7 +320,13 @@ Vector2f TextBox::getSize()
 	return Vector2f(m_dimensions.width, m_dimensions.height);
 }
 
-void TextBox::setSize(float width){}
+void TextBox::setSize(float width)
+{
+	m_dimensions.width = width;
+	positionBorderElements();
+	m_BaseRect.setSize(Vector2f(m_dimensions.width - TEXTBOXBORDERSPACING, TEXTBOXHEIGHT - TEXTBOXBORDERSPACING));
+	fitText();
+}
 
 std::string TextBox::getText()
 {
@@ -330,10 +384,10 @@ void TextBox::animationTick()
 
 	double ratio1 =  sqrt((double)m_anmation) / sqrt((double)TEXTBOXANIMATIONLENGTH);
 	double ratio2 = 1 - ratio1;
-	m_BaseRect.setFillColor(Color(  (Uint8)(m_nofocusCol.r * ratio1 + m_focusCol.r * ratio2),
-									(Uint8)(m_nofocusCol.g * ratio1 + m_focusCol.g * ratio2),
-									(Uint8)(m_nofocusCol.b * ratio1 + m_focusCol.b * ratio2),
-									(Uint8)(m_nofocusCol.a * ratio1 + m_focusCol.a * ratio2)));
+	m_BaseRect.setFillColor(Color(  (Uint8)(m_nofocusCol.r * ratio2 + m_focusCol.r * ratio1),
+									(Uint8)(m_nofocusCol.g * ratio2 + m_focusCol.g * ratio1),
+									(Uint8)(m_nofocusCol.b * ratio2 + m_focusCol.b * ratio1),
+									(Uint8)(m_nofocusCol.a * ratio2 + m_focusCol.a * ratio1)));
 }
 
 void TextBox::draw(sf::RenderWindow* rw)
