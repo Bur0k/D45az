@@ -7,17 +7,17 @@
 std::vector<char> code(short s)
 {
 	std::vector<char> v;
-	v.push_back((char)s);
-	v.push_back((char)(s>>8));
+	v.push_back(static_cast<char>(s));
+	v.push_back(static_cast<char>(s>>8));
 	return v;
 }
 std::vector<char> code(int i)
 {
 	std::vector<char> v;
-	v.push_back((char)i);
-	v.push_back((char)(i>>8));
-	v.push_back((char)(i>>16));
-	v.push_back((char)(i>>24));
+	v.push_back(static_cast<char>(i));
+	v.push_back(static_cast<char>(i>>8));
+	v.push_back(static_cast<char>(i>>16));
+	v.push_back(static_cast<char>(i>>24));
 	return v;
 }
 std::vector<char> code(const std::string s)
@@ -105,7 +105,7 @@ Server::Server()
 		while(running)
 		{
 			addNewMessageCallbackMutex.lock();
-			for(int i=0;i<addNewMessageCallbackList.size();i++)
+			for(unsigned int i=0;i<addNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				newMessageCallback.push_back(addNewMessageCallbackList[i]);
@@ -122,7 +122,7 @@ Server::Server()
 		while(running)
 		{
 			deleteNewMessageCallbackMutex.lock();
-			for(int i=0;i<deleteNewMessageCallbackList.size();i++)
+			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				for(unsigned int i=0;i<newMessageCallback.size();i++)
@@ -145,7 +145,7 @@ Server::Server()
 		while(running)
 		{
 			addErrorCallbackMutex.lock();
-			for(int i=0;i<addErrorCallbackList.size();i++)
+			for(unsigned int i=0;i<addErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
 				errorCallback.push_back(addErrorCallbackList[i]);
@@ -162,7 +162,7 @@ Server::Server()
 		while(running)
 		{
 			deleteErrorCallbackMutex.lock();
-			for(int i=0;i<deleteErrorCallbackList.size();i++)
+			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
 			{
 				errorCallbackMutex.lock();
 				for(unsigned int i=0;i<errorCallback.size();i++)
@@ -472,7 +472,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 				case OP_READ: // Read
 					pPerIoData->currPos += (short)dwTrans;
 					
-					for(int i=0;i<dwTrans;i++)
+					for(unsigned int i=0;i<dwTrans;i++)
 						pPerIoData->buffer_.push_back(pPerIoData->buf[i]);
 
 					while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
@@ -591,7 +591,7 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
 	bool socketIsConnected = false;
 
-	for(int i=0;i<connectedPlayers.size();i++)
+	for(unsigned int i=0;i<connectedPlayers.size();i++)
 	{
 		if(connectedPlayers[i].s==s)
 		{
