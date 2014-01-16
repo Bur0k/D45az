@@ -34,6 +34,8 @@ public:
 	void setText(String S, Vector2f size);
 	void setPos(Vector2f pos);
 	void setFontColor(Color color);
+	void setBackgroundColor(Color color);
+	void setCharSize(int CharSize);
 };
 
 

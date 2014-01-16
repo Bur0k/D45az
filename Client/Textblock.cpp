@@ -34,12 +34,24 @@ void Textblock::setText(String text, Vector2f size)
 void Textblock::setPos(Vector2f pos)
 {
 	this->setPosition(pos);
+	textsize = m_textblockText.getLocalBounds();
+	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
 	m_textblockText.setPosition(pos);
 }
 
 void Textblock::setFontColor(Color color)
 {
 	m_textblockText.setColor(color);
+}
+
+void Textblock::setBackgroundColor(Color color)
+{
+	this->setFillColor(color);
+}
+
+void Textblock::setCharSize(int CharSize)
+{
+	m_textblockText.setCharacterSize(CharSize);
 }
 
 std::string Textblock::lineBreak(String S, Vector2f size)
