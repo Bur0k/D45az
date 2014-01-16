@@ -26,6 +26,11 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 	fixCharsize();
 }
 
+Vector2f Textblock::getTBsize()
+{
+	return this->getSize();
+}
+
 void Textblock::setText(String text, Vector2f size)
 {
 	m_textblockText.setString(lineBreak(text, size));

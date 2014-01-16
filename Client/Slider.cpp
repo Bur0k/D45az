@@ -79,8 +79,8 @@ double Slider::getValue()
 void Slider::setPosition(Vector2f pos)
 {
 	Vector2f delta;
-	delta.x = m_dimensions.left - pos.x;
-	delta.y = m_dimensions.top - pos.y;
+	delta.x = - m_dimensions.left + pos.x;
+	delta.y = - m_dimensions.top + pos.y;
 	move(delta);
 }
 
@@ -128,7 +128,7 @@ bool Slider::Detach(ISliderFunction* pCallback)
 	return false;
 }
 
-bool Slider::MouseMooved(sf::Vector2i & mouse)
+bool Slider::MouseMoved(sf::Vector2i & mouse)
 {
 	//check if mouse is on slider
 	

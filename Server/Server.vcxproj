@@ -84,20 +84,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CityLogic.cpp" />
     <ClCompile Include="GameLobbyLogic.cpp" />
+    <ClCompile Include="IngameLogic.cpp" />
     <ClCompile Include="LobbyLogic.cpp" />
     <ClCompile Include="LogInLogic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="UnitLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CityLogic.h" />
     <ClInclude Include="GameLobbyLogic.h" />
+    <ClInclude Include="IngameLogic.h" />
     <ClInclude Include="LobbyLogic.h" />
     <ClInclude Include="LogInLogic.h" />
     <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="PlayerData.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="UnitLogic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
