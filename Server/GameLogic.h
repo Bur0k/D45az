@@ -1,27 +1,26 @@
-#ifndef UNITLOGIC_H
-#define UNITLOGIC_H
+#ifndef GAMELOGIC_H
+#define GAMELOGIC_H
 
 #include "NetworkParticipant.h"
 #include "Server.h"
+#include "IngameLogic.h"
+#include <vector>
 
 using namespace std;
 
-class UnitLogic : public NetworkParticipant
+class GameLogic : public NetworkParticipant
 {
 private:
 	Server* server;
 
-public:
-	UnitLogic();
-	~UnitLogic();
+	vector<IngameLogic> playersIngame;
 
-	//Unittype
-	int Attackpower;
-	//Range
+public:
+	GameLogic::GameLogic(vector<PlayerData*> players);
+	GameLogic::~GameLogic();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-
 };
 
 #endif

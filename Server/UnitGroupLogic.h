@@ -1,23 +1,23 @@
-#ifndef UNITLOGIC_H
-#define UNITLOGIC_H
+#ifndef UNITGROUPLOGIC_H
+#define UNITGROUPLOGIC_H
 
 #include "NetworkParticipant.h"
 #include "Server.h"
+#include "UnitLogic.h"
+#include <vector>
 
 using namespace std;
 
-class UnitLogic : public NetworkParticipant
+class UnitGroupLogic
 {
 private:
 	Server* server;
 
 public:
-	UnitLogic();
-	~UnitLogic();
+	UnitGroupLogic();
+	~UnitGroupLogic();
 
-	//Unittype
-	int Attackpower;
-	//Range
+	vector<UnitLogic>troops;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
