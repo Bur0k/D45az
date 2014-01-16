@@ -13,7 +13,7 @@ sf::Font & MyFonts::getFont(GameFonts f)
 {
 	switch (f)
 	{
-	case ARIAL:
+	case GameFonts::ARIAL:
 		if(s_pArial == NULL)
 		{
 			std::cout << " LOADING FONT ARIAL " << std::endl;
