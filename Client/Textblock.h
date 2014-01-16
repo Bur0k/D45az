@@ -17,12 +17,12 @@ using namespace sf;
 class Textblock : public IDrawable, public RectangleShape
 {
 public:
-	Textblock();
 	Textblock(Vector2f pos, Vector2f size, String S, int CharSize);
 	~Textblock();
 	void operator=(const Textblock & tblock);
 
 protected:
+	Textblock();
 	Text m_textblockText;
 	int m_ID;
 	Font m_Font;
@@ -36,6 +36,7 @@ public:
 	void setFontColor(Color color);
 	void setBackgroundColor(Color color);
 	void setCharSize(int CharSize);
+	void fixCharsize();
 };
 
 

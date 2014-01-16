@@ -91,6 +91,7 @@
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
     <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="LobbyEntry.cpp" />
     <ClCompile Include="LobbyView.cpp" />
     <ClCompile Include="LoginView.cpp" />
     <ClCompile Include="main.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="IKeyboardInput.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />
+    <ClInclude Include="LobbyEntry.h" />
     <ClInclude Include="LobbyView.h" />
     <ClInclude Include="LoginView.h" />
     <ClInclude Include="Map.h" />
