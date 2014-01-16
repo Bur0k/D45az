@@ -92,6 +92,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="UnitGroupLogic.cpp" />
     <ClCompile Include="UnitLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +104,7 @@
     <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="PlayerData.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="UnitGroupLogic.h" />
     <ClInclude Include="UnitLogic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

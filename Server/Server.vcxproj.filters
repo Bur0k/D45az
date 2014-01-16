@@ -47,17 +47,23 @@
     <Filter Include="Codes\GameLogic\CityLogic">
       <UniqueIdentifier>{4ad0253f-8391-4bb3-8f61-5feccf065450}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Codes\GameLogic\UnitLogic">
-      <UniqueIdentifier>{e10058f1-38f8-4cdb-b428-80c9f7a0a18c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Codes\GameLogic\IngameLogic\Source">
       <UniqueIdentifier>{875bacfe-25db-4c77-a567-c0fcd9bab9b6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Codes\GameLogic\CityLogic\Source">
       <UniqueIdentifier>{ddd63c2c-2acb-4dc2-8dd7-9ea877bb4d48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Codes\GameLogic\UnitLogic\Source">
+    <Filter Include="Codes\GameLogic\UnitGroupLogic">
+      <UniqueIdentifier>{e10058f1-38f8-4cdb-b428-80c9f7a0a18c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\UnitGroupLogic\Source">
       <UniqueIdentifier>{8ed224f1-0ded-4206-9159-8bbb23879656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\UnitLogic">
+      <UniqueIdentifier>{b6185f7d-7ddb-4484-8e13-be07d0a29f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\UnitLogic\Source">
+      <UniqueIdentifier>{497de639-400e-4a7b-a3b6-ee5126ba6777}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="CityLogic.h">
       <Filter>Codes\GameLogic\CityLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitGroupLogic.h">
+      <Filter>Codes\GameLogic\UnitGroupLogic</Filter>
     </ClInclude>
     <ClInclude Include="UnitLogic.h">
       <Filter>Codes\GameLogic\UnitLogic</Filter>
@@ -113,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="CityLogic.cpp">
       <Filter>Codes\GameLogic\CityLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitGroupLogic.cpp">
+      <Filter>Codes\GameLogic\UnitGroupLogic\Source</Filter>
     </ClCompile>
     <ClCompile Include="UnitLogic.cpp">
       <Filter>Codes\GameLogic\UnitLogic\Source</Filter>

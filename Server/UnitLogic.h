@@ -8,8 +8,8 @@ class UnitLogic
 private:
 
 public:
-	UnitLogic::UnitLogic();
-	UnitLogic::~UnitLogic();
+	UnitLogic();
+	~UnitLogic();
 };
 
 #endif
