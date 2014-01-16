@@ -39,6 +39,8 @@ void Lobby::processNewMessage(short id,vector<char> data)
 		//	01: 	Client -> Server (fordert Lobby-Daten an)
 	case 0x0200:
 		{
+			m.lock();
+
 			unsigned int i = 0;
 			while (i < data.size())
 			{
@@ -68,12 +70,14 @@ void Lobby::processNewMessage(short id,vector<char> data)
 					players.push_back(player);
 				}
 				GameData game;
-				game.id = gameid;
 				game.playerlimit = playerlimit;
 				game.gameMaster = &master;
 				game.players = players;
-				gamesCreated[mapid] = game;
+				gamesCreated[gameid] = game;
 			}
+
+			updated = true;
+			m.unlock();
 
 			break;
 		}
@@ -83,8 +87,10 @@ void Lobby::processNewMessage(short id,vector<char> data)
 		{
 			if (data[0] == 1);
 				//connect erfolgreich, tu was
+			//gamelobbypointer auf das ausgewählte game setzen, den Spieler dort hinzufügen
 			else;
 				//connect nicht erfolgreich, tu was
+				//zu viele spieler oder so, anzeigen!
 			break;
 		}
 		//	04:		Client -> Server (will Spiellobby erstellen)
@@ -104,15 +110,15 @@ void Lobby::processNetworkError(int id, std::string msg)
 {
 }
 
-Lobby::Lobby(string Name)
+Lobby::Lobby()
 {
 	c = Client::get();
 	c->addToNewMessageCallback(this);
-
-	this->name = Name;
 }
 
 Lobby::~Lobby()
 {
 	c->deleteFromNewMessageCallback(this);
+	if (gameLobby != NULL)
+		delete gameLobby;
 }

@@ -14,9 +14,10 @@ enum Views {NOCHANGE, INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
 class IView 
 	: public IDrawable, public IClickable, public IAnimatable, public IKeyboardinput
 {
-protected:
-	virtual void cangeView()=0;
 public:
+	virtual ~IView(){};
+	virtual void onResize()=0;
+	virtual void update(double elpasedMs)=0;
 	virtual Views nextState()=0;
 };
 

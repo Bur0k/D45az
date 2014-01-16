@@ -40,6 +40,12 @@ protected:
 
 	SpriteTex* m_pBorder;
 
+	/* Sprite Layout
+		0 1 2
+		3 - 4
+		5 6 7
+	*/
+
 	int m_ID;
 	//cursor position on screen
 	int m_cursorPosition;
@@ -65,6 +71,7 @@ protected:
 	//decides which part of m_text will be displayed
 	void fitText();
 	void moveCursor(bool left);
+	void positionBorderElements();
 	
 public:
 	
@@ -96,7 +103,7 @@ public:
 	virtual void onTextInput(std::string s);
 
 	//implemnting Iclickable
-	virtual bool isHit(sf::Vector2i &);
+	virtual bool MouseMooved(sf::Vector2i &);
 	virtual bool PressedRight();
 	virtual bool PressedLeft();
 	virtual bool ReleasedRight();

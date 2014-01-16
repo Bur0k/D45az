@@ -6,6 +6,7 @@
 #include <vector>
 #include "StandardButton.h"
 #include "Slider.h"
+#include "Lobby.h"
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction
 {
@@ -19,24 +20,27 @@ public:
 	StandardButton* connect;
 
 	Slider* s;
-	struct GameLobbyData
+	class GameLobbyData
 	{
 	public:
 		Textblock lobbyName;
 		Textblock playerCount;
+		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(200,30),"",20,0){}
 	};
-	std::vector<GameLobbyData*> gameLobbys;
 
+	std::map<short,GameLobbyData*> gameLobbys;
 
+	Lobby* lobby;
 
 	//implementing a lot of interfaces
+	Views nextState();
 	void onTextBoxSend(int ID, std::string s);
 
 	void onButtonClick(int);
 
 	void draw(sf::RenderWindow* rw);
 
-	bool isHit(sf::Vector2i &);
+	bool MouseMooved(sf::Vector2i &);
 	bool PressedRight();
 	bool PressedLeft();
 	bool ReleasedRight();
@@ -48,6 +52,12 @@ public:
 	void onKeyUp(sf::Event);
 	void onTextInput(std::string s);
 
+	void onSliderValueChange(int ID, double position);
+	void onSliderReleased(int ID, double position);
+
+	void onResize();
+
+	void update(double elpasedMs);
 };
 
 

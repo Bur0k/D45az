@@ -11,13 +11,17 @@
 class Lobby : public NetworkParticipant
 {
 	Client* c;
-	string name;
-	map<char, GameData> gamesCreated;
+
 	
 public:
+	mutex m;
+	bool updated;
+	map<short, GameData> gamesCreated;
+
+
 	GameLobby* gameLobby;
 
-	Lobby(string name);
+	Lobby();
 	~Lobby();
 
 	void connectToGameLobby(char mapid);
