@@ -22,6 +22,7 @@ private:
 	LobbyEntry();
 public:
 	LobbyEntry(Vector2f size, Vector2f pos, std::string name, int players, int maxplayers, int id);
+	void move(Vector2f delta);
 	
 	void setName(std::string name);
 	std::string getName();
