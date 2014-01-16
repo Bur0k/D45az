@@ -31,7 +31,7 @@ void Textblock::setText(String text, Vector2f size)
 	m_textblockText.setString(lineBreak(text, size));
 }
 
-void Textblock::setPosition(Vector2f pos)
+void Textblock::setPos(Vector2f pos)
 {
 	this->setPosition(pos);
 	m_textblockText.setPosition(pos);
