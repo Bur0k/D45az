@@ -58,7 +58,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	LoadView(Viewmode);
 
 	//TESTSCREEN stuff
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5, 4);
+	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asasd fgdf klas", 5);
 	m_drawL.push_back(tblock);
 
 
