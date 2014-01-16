@@ -2,6 +2,7 @@
 #define LOGINVIEW_H
 
 #include <SFML\Graphics.hpp>
+#include <string>
 
 #include "IView.h"
 #include "StandardButton.h"
@@ -24,7 +25,7 @@ private:
 	TextBox* name;
 	Button* lgoinbutton;
 
-
+	
 public:
 	virtual Views nextState();
 	//implementing a lot of interfaces
@@ -33,7 +34,7 @@ public:
 
 	virtual void draw(sf::RenderWindow* rw);
 
-	virtual bool MouseMooved(sf::Vector2i &);
+	virtual bool MouseMoved(sf::Vector2i &);
 	virtual bool PressedRight();
 	virtual bool PressedLeft();
 	virtual bool ReleasedRight();
