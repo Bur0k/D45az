@@ -33,7 +33,13 @@ void Textblock::setText(String text, Vector2f size)
 
 void Textblock::setPosition(Vector2f pos)
 {
+	this->setPosition(pos);
 	m_textblockText.setPosition(pos);
+}
+
+void Textblock::setFontColor(Color color)
+{
+	m_textblockText.setColor(color);
 }
 
 std::string Textblock::lineBreak(String S, Vector2f size)

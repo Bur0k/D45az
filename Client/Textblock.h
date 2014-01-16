@@ -33,6 +33,7 @@ public:
 	std::string lineBreak(String S, Vector2f size);
 	void setText(String S, Vector2f size);
 	void setPosition(Vector2f pos);
+	void setFontColor(Color color);
 };
 
 
