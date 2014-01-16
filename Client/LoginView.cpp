@@ -41,10 +41,10 @@ void LoginView::onButtonClick(int)
 }
 
 
-bool LoginView::MouseMooved(sf::Vector2i & mouse)
+bool LoginView::MouseMoved(sf::Vector2i & mouse)
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
-		if(m_ClickV[i]->MouseMooved(mouse))
+		if(m_ClickV[i]->MouseMoved(mouse))
 			return true;
 	return false;
 }

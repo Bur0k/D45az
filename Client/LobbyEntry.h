@@ -5,6 +5,8 @@
 #include "Textblock.h"
 #include "graphic_globals.h"
 
+#define LOBBYENTRYBORDER 10
+
 class LobbyEntry : public Button
 {
 private:
@@ -16,7 +18,9 @@ private:
 	int m_players;
 	int m_ID;
 
+	void updatePlayers();
 public:
+	LobbyEntry();
 	LobbyEntry(Vector2f size, Vector2f pos, std::string name, int players, int maxplayers, int id);
 	void move(Vector2f delta);
 	
@@ -27,8 +31,9 @@ public:
 	void setMaxPlayers(int);
 	int getMaxPlayers();
 
-
+	Vector2f getSize();
 	Vector2f getPosition();
+	void move(Vector2f);
 	void setPosition(Vector2f pos);
 	virtual void draw(RenderWindow* rw);
 };
