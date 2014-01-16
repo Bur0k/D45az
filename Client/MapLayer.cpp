@@ -3,7 +3,7 @@
 
 MapLayer::MapLayer(std::string LI,int RowNum,TileSets* TileSets,bool IsCollisionLayer)
 {
-	isCollisionLayer=IsCollisionLayer;
+	isCityLayer=IsCollisionLayer;
 	tilesets=TileSets;
 	
 	std::stringstream stream(LI);
