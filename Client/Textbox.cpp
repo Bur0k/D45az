@@ -313,7 +313,10 @@ Vector2f TextBox::getPos()
 	return Vector2f(m_dimensions.left, m_dimensions.top);
 }
 
-void TextBox::setPos(Vector2f){}
+void TextBox::setPos(Vector2f pos)
+{
+	move(Vector2f(-m_dimensions.left + pos.x, -m_dimensions.top + pos.y)); 
+}
 
 Vector2f TextBox::getSize()
 {

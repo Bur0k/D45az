@@ -14,6 +14,8 @@ public:
 	int level;
 	//position
 	int generatedIncome;
+	CityLogic();
+	~CityLogic();
 };
 
 #endif

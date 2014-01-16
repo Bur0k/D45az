@@ -13,6 +13,7 @@
 #include "IAnimatable.h"
 #include "IView.h"
 #include "StandardButton.h"
+#include "Statusbar.h"
 #include "Textblock.h"
 #include "Slider.h"
 #include "Map.h"
@@ -42,6 +43,8 @@ private:
 	Textblock* tblock;
 
 	MusikSampler* m_pMS;
+
+	Statusbar* SBar;
 
 	Slider* s;
 	Slider* s1;

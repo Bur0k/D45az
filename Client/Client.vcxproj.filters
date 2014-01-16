@@ -115,6 +115,9 @@
     <ClCompile Include="LobbyEntry.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Statusbar.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -201,6 +204,9 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="LobbyEntry.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Statusbar.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
