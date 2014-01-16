@@ -19,6 +19,7 @@ struct GameData
 	std::vector<PlayerData> players;
 	short playerlimit;
 	PlayerData* gameMaster;
+	std::string name;
 };
 
 
