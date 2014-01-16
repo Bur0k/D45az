@@ -59,7 +59,7 @@ Vector2f LobbyEntry::getPosition()
 
 void LobbyEntry::setPosition(Vector2f pos)
 {
-	LEmove(Vector2f(m_dimensions.left - pos.x, m_dimensions.top - pos.y));
+	LEmove(Vector2f(-m_dimensions.left + pos.x, -m_dimensions.top + pos.y));
 }
 
 void LobbyEntry::LEmove(Vector2f delta)
