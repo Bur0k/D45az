@@ -47,14 +47,14 @@ void Map::load(std::string MapLocation)
 		for(TiXmlElement* element = root->FirstChildElement("layer");element;element=element->NextSiblingElement("layer"))
 		{
 			std::string isCollisionLayer(element->Attribute("name"));
-			bool isCollision=false;
-			if(std::string::npos != isCollisionLayer.find("Collision"))
-				isCollision=true;
+			bool isCityLayer=false;
+			if(std::string::npos != isCollisionLayer.find("CityLayer"))
+				isCityLayer=true;
 
 			const char* temptt = element->FirstChildElement()->GetText();
 			int tempii = std::atoi(root->Attribute("width"));
 
-			layers.push_back(new MapLayer(temptt,tempii,tilesets,isCollision));
+			layers.push_back(new MapLayer(temptt,tempii,tilesets,isCityLayer));
 		}
 	}
 }
