@@ -257,6 +257,9 @@
     <None Include="Data\Songs\2_bullet.ogg">
       <Filter>Data</Filter>
     </None>
+    <None Include="Data\Maps\TestMap.tmx">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">

@@ -12,7 +12,7 @@
 class LoginView : public IView , public IButtonfunction
 {
 public:
-	LoginView();
+	LoginView(Vector2u & size);
 	~LoginView();
 
 private:
@@ -24,7 +24,9 @@ private:
 	Textblock* logintext;
 	TextBox* name;
 	Button* lgoinbutton;
+	SpriteTex background;
 
+	void centering(Vector2u & size);
 	
 public:
 	virtual Views nextState();

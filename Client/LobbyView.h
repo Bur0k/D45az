@@ -7,6 +7,7 @@
 #include "StandardButton.h"
 #include "Slider.h"
 #include "Lobby.h"
+#include "LobbyEntry.h"
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction
 {
@@ -23,9 +24,15 @@ public:
 	class GameLobbyData
 	{
 	public:
+		static int nextID;
+		int id;
+		LobbyEntry LE;
 		Textblock lobbyName;
 		Textblock playerCount;
-		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(),"",20),playerCount(sf::Vector2f(),sf::Vector2f(),"",20){}
+		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(),"",20),
+			playerCount(sf::Vector2f(),sf::Vector2f(),"",20),
+			LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
+		{id = nextID++;}
 	};
 
 	std::map<short,GameLobbyData*> gameLobbys;

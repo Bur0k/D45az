@@ -1,21 +1,10 @@
 #include "Statusbar.h"
 
-
+//Ctro & Dtor-------------------------------------------------------
 Statusbar::Statusbar(Vector2f pos, Vector2f size)
-{/*
+{
 	setPosition(pos);
-	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
-	m_textblockText.setFont(m_Font);
-	m_textblockText.setPosition(getPosition());
-	m_textblockText.setColor(MyColors.Black);
-	m_textblockText.setCharacterSize(CharSize);
-	m_textblockText.setString(lineBreak(S, size));
-	textsize = m_textblockText.getLocalBounds();
-	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
-	m_color = MyColors.Gray;
-	setFillColor(m_color);
-	fixCharsize();
-	*/
+	setBgColor(MyColors.Azure);
 }
 
 
@@ -23,14 +12,30 @@ Statusbar::~Statusbar(void)
 {
 }
 
+//Getter & Setter-------------------------------------------------------
 Vector2f Statusbar::getPosition()
 {
 	return Vector2f(m_dimensions.left, m_dimensions.top);
 }
 
-void Statusbar::setPosition(Vector2f){}
+void Statusbar::setPosition(Vector2f pos)
+{
+	m_dimensions.left += pos.x;
+	m_dimensions.top += pos.y;
+}
 
-bool Statusbar::MouseMooved(sf::Vector2i & mouse)
+void Statusbar::setBgColor(Color c)
+{
+	m_BaseRect.setFillColor(c);
+}
+
+//Hilfsfunktionen-------------------------------------------------------
+
+
+
+
+//Interface-Funktionen-------------------------------------------------------
+bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 {
 	//checken ob maus nach einer bewegung auf der statusbar ist
 	if( mouse.x >= m_dimensions.left && mouse.x <= m_dimensions.left + m_dimensions.width &&

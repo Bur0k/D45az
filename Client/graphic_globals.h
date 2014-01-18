@@ -34,7 +34,7 @@ public:
 
 
 
-enum GameFonts {ARIAL};
+enum class GameFonts {ARIAL};
 
 //singleton style with Lazy initialization
 //font accessible via getFont(GameFonts); 

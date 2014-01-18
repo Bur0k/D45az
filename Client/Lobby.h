@@ -25,8 +25,8 @@ public:
 	Lobby();
 	~Lobby();
 
-	void connectToGameLobby(char mapid);
-	void createNewGameLobby();
+	void connectToGameLobby(short mapid);
+	void createNewGameLobby(std::string gamename);
 	void askforLobbyData();
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);

@@ -68,6 +68,12 @@
     <Filter Include="Codes\GameLogic\Source">
       <UniqueIdentifier>{14a9aa51-4f88-468d-ac40-343016811011}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{2e7014c8-5ef7-406b-bff2-7c3ca32ca605}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\Map">
+      <UniqueIdentifier>{831c05b4-6781-4e61-b08f-dcc64fbb55cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -102,6 +108,18 @@
     </ClInclude>
     <ClInclude Include="GameLogic.h">
       <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="tinystr.h">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml.h">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLayer.h">
+      <Filter>Codes\GameLogic\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,5 +156,36 @@
     <ClCompile Include="GameLogic.cpp">
       <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="tinystr.cpp">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml.cpp">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlerror.cpp">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlparser.cpp">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLayer.cpp">
+      <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Maps\test.tmx">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Data\Maps\TestMap.tmx">
+      <Filter>Data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Maps\TileSheets\test.png">
+      <Filter>Data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

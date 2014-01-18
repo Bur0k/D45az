@@ -123,6 +123,12 @@ bool Button::getIsPressed()
 	return m_isClicked;
 }
 
+void Button::unLock()
+{
+	m_lockedIn = false;
+}
+
+
 bool Button::MouseMoved(Vector2i & mouse)
 {
 	//std::cout << "mouse position x " << mouse.x << " y " << mouse.y; 

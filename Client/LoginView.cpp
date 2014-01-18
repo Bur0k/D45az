@@ -1,7 +1,7 @@
 #include "LoginView.h"
 
 
-LoginView::LoginView()
+LoginView::LoginView(Vector2u & size)
 {
 
 	//create all the ui elements here
@@ -23,6 +23,25 @@ LoginView::LoginView()
 	m_DrawV.push_back(lgoinbutton);
 	m_AnimateV.push_back(lgoinbutton);
 	m_ClickV.push_back(lgoinbutton);
+
+	
+
+	
+	Texture image;
+	if(!image.loadFromFile("Data/Images/background.png"))
+	{
+		std::cout << "Texture couldn't load" << std::endl;
+	}
+	else
+	{
+		std::cout << "Texture has loaded" << std::endl;                                                           //Startbild laden
+	}
+	background.t = image;
+	background.s.setTexture(&background.t);                      
+	background.s.setPosition(0,0);
+	background.s.setSize((sf::Vector2f)image.getSize());
+
+	centering(size);
 }
 
 LoginView::~LoginView()
@@ -106,8 +125,10 @@ void LoginView::onTextInput(std::string s)
 
 void LoginView::draw(sf::RenderWindow* rw)
 {
+	rw->draw(this->background.s);
+
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
-		m_DrawV[i]->draw(rw);
+		m_DrawV[i]->draw(rw);	
 }
 
 Views LoginView::nextState()
@@ -124,11 +145,18 @@ void LoginView::update(double elpasedMs)
 
 void LoginView::onResize(Vector2u & size)
 {
-	//abstand zwischen den buttons 4% der gesamthöhe
+	centering(size);
+}
+
+
+void LoginView::centering(Vector2u & size)
+{
+	//abstand zwischen den buttons 5% der gesamthöhe
 
 	sf::Vector2f pos(size.x / 2 - name->getSize().x / 2, size.y / 2 - name->getSize().y / 2);
 	name->setPos(pos);
-
 	lgoinbutton->setPosition(size.x / 2 - lgoinbutton->getSize().x / 2, name->getPos().y + name->getSize().y + 0.05 * size.y);
 	logintext->setPos(sf::Vector2f(size.x / 2 - logintext->getSize().x / 2, name->getPos().y - 0.05 * size.y - logintext->getSize().y));
+
+	background.s.setPosition(size.x / 2 - background.s.getSize().x / 2, size.y /2 - background.s.getSize().y);
 }

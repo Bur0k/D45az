@@ -76,6 +76,8 @@ public:
 
 	bool getIsPressed();
 
+	void unLock();
+
 	//changes color of the background Rectangle
 	//@param dir true if mouse is over the button
 	void animationTick();
