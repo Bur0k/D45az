@@ -13,11 +13,12 @@ class UnitGroupLogic
 private:
 	Server* server;
 
-public:
-	UnitGroupLogic();
-	~UnitGroupLogic();
+	vector<UnitLogic*> units;
+	int position;
 
-	vector<UnitLogic>troops;
+public:
+	UnitGroupLogic(short units, short type);
+	~UnitGroupLogic();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
