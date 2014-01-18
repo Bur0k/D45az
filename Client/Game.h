@@ -56,6 +56,8 @@ private:
 
 	///end debug
 
+	SpriteTex m_falseMouse;
+
 	std::vector<IView*> m_ViewVect;
 	IView* m_pCurrentView;
 	Views m_ViewMode;
@@ -76,6 +78,7 @@ private:
 
 	Vector2i m_lastMousePosition;
 
+	void ResetMouse();
 
 public:
 	Text m_fpsText;
@@ -121,7 +124,6 @@ private:
 	void onMouseDownRight();
 	void onMouseUpLeft();
 	void onMouseUpRight();
-	void onMouseLeave();
 	void onTextEntered(sf::Event e);
 	void onKeyDown(sf::Event e);
 	void onKeyUp(sf::Event e);

@@ -50,8 +50,19 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_size = windowSize;
 
 	m_inFocus = true;
-	
+
+
+	ResetMouse();
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
+
+
+	Image mouse;
+	if(!mouse.loadFromFile("Data/Images/mouse.png"))
+		std::cout << "game.cpp can't load image Data/Images/mouse.png" << std::endl;
+	m_falseMouse.t.loadFromImage(mouse);
+	m_falseMouse.s.setTexture(& m_falseMouse.t);
+	m_falseMouse.s.setPosition(m_lastMousePosition.x, m_lastMousePosition.y);
+	m_falseMouse.s.setSize(Vector2f(35,35));
 
 	//timers
 	m_animationTimer.restart();
@@ -179,7 +190,8 @@ void Game::Draw()
 		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 			m_ViewVect[i]->draw(m_pWindow);
 
-
+	//DrawMouse
+	m_pWindow->draw(m_falseMouse.s);
 	//ALLWAYS draw fps counter while in debug mode
 //#ifdef _DEBUG
 	m_pWindow->draw(m_fpsText);
@@ -211,19 +223,63 @@ void Game::onResize()
 
 void Game::onMouseMove()
 {
+	Vector2u winSize = m_pWindow->getSize();
+		
 	Vector2i mousePos = Mouse::getPosition(*m_pWindow);
-	Vector2i mpm = Mouse::getPosition();
+	if(mousePos.x == winSize.x / 2 && mousePos.y == winSize.y / 2)
+	{
+		m_lastMousePosition = mousePos;
+		return; //return if mouse was resetted to the center of the screen
+	}
 
-	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
+	Vector2f delta = Vector2f(mousePos.x - m_lastMousePosition.x , mousePos.y - m_lastMousePosition.y);
+	m_falseMouse.s.move(delta); //move displayed mouse
+
+	m_lastMousePosition = mousePos;
+
+	Vector2f mPos = m_falseMouse.s.getPosition();
+	bool borderColisionX = false;
+	bool borderColisionY = false;
+	if(mPos.x >= (float)winSize.x)
+	{
+		borderColisionX = true;
+	}
+	else if(mPos.x <= 0)
+	{
+		borderColisionX = true;
+	}
+	if(mPos.y >= (float)winSize.y)
+	{
+		borderColisionY = true;
+	}
+	else if(mPos.y <= 0)
+	{
+		borderColisionY = true;
+	}
+
+
+
+	if(borderColisionX)
+		m_falseMouse.s.move(-delta.x,0);
+	if(borderColisionY)
+		m_falseMouse.s.move(0,-delta.y);
+
+	ResetMouse();
+	
+
+
+	
+	//TODO alle mouse move aufrufe zu float umwandeln
 
 	if(m_ViewMode == Views::TESTSCREEN)
 	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-			m_clickL[i]->MouseMoved(mousePos);
+		m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
 
 	m_lastMousePosition = mousePos;
 
 	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-			m_ViewVect[i]->MouseMoved(mousePos);
+			m_ViewVect[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
+	
 }
 
 void Game::onMouseDownLeft()
@@ -250,15 +306,6 @@ void Game::onMouseDownRight()
 			break;
 }
 
-void Game::onMouseLeave()
-{
-#ifdef MOUSEGRAB
-	//TODO	this mouse grab hack does work if the scaling would be disabled
-	//		though it results in massive mouse jitterling along the edge of the window which is not acceptable
-	std::cout << " Mouse Left the Window " << std::endl;
-	Mouse::setPosition(m_lastMousePosition, *m_pWindow);
-#endif //MOUSEGRAB
-}
 
 void Game::onMouseUpLeft()
 {
@@ -340,6 +387,12 @@ void Game::onTextEntered(sf::Event e)
 	}
 }
 
+void Game::ResetMouse()
+{
+	Mouse::setPosition(Vector2i(m_pWindow->getSize().x / 2, m_pWindow->getSize().y / 2), *m_pWindow);
+	m_lastMousePosition = Mouse::getPosition();
+}
+
 void Game::LoadView(Views v)
 {
 
@@ -398,10 +451,13 @@ void Game::Input()
 
 		case sf::Event::GainedFocus:
 			m_inFocus = true;
+			m_pWindow->setMouseCursorVisible(false);
+			ResetMouse();
 			break;
 
 		case sf::Event::LostFocus:
 			m_inFocus = false;
+			m_pWindow->setMouseCursorVisible(true);
 			break;
 
 		case sf::Event::Resized:
@@ -410,7 +466,7 @@ void Game::Input()
 
 			/////MOUSE EVENTS/////
 		case sf::Event::MouseMoved:
-			if (m_inFocus) 
+			if (m_inFocus)
 				onMouseMove();
 			break;
 
@@ -426,12 +482,6 @@ void Game::Input()
 				onMouseUpLeft();
 			else if (m_inFocus)
 				onMouseUpRight();
-			break;
-
-		case sf::Event::MouseLeft:	//TODO doesn't work on scalable boarders
-			//TODO mouse grab only when in game mode not in menues or lobby
-			if (m_inFocus)
-				onMouseLeave();
 			break;
 
 			/////KEYBOARD EVENTS/////
@@ -454,6 +504,7 @@ void Game::Input()
 			break;
 		}
 	}
+
 }
 
 void Game::timer()

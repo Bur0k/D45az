@@ -74,7 +74,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(1280, 850), "D45az finezt");
 	window.setPosition(sf::Vector2i(400,0));
-	window.setMouseCursorVisible(true);
+	window.setMouseCursorVisible(false);
 
 
 	//testausgabe
@@ -82,7 +82,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	*/
 	//TESTCREEN oder LOGIN bei Views
-	Game* g = new Game(&window, Views::TESTSCREEN, sf::Vector2f(1280, 850));
+	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
 	
 	while (window.isOpen())
 	{
