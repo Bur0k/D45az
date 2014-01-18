@@ -20,6 +20,7 @@
 #include "Textbox.h"
 #include "LoginView.h"
 #include "LobbyView.h"
+#include "MenuView.h"
 
 #include "MusikSampler.h"
 
@@ -76,6 +77,9 @@ private:
 
 	bool m_inFocus;
 
+	//The Menu should not be opened and closed while just holding down the esc key
+	bool m_menubutton;
+
 	Vector2i m_lastMousePosition;
 
 	void ResetMouse();
@@ -91,7 +95,6 @@ public:
 	void Input();
 	void timer();
 
-	void setView(Views sm);
 	Views getView();
 	void onClose();
 

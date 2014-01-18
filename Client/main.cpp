@@ -77,12 +77,12 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	window.setMouseCursorVisible(false);
 
 
-	//testausgabe
-	/*
 
-	*/
-	//TESTCREEN oder LOGIN bei Views
+
+	//erlaubte einstiegspunkte für Views::
+	//TESTSCREEN LOGIN LOBBY
 	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
+	
 	
 	while (window.isOpen())
 	{
@@ -90,12 +90,10 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 		g->timer();
 
-		// clear the window with black 
 		window.clear(sf::Color::Black);
 		
 		g->Draw();
 		
-		// end the current frame
 		window.display();
 	}
 	

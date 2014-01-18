@@ -13,7 +13,7 @@ LobbyView::LobbyView():
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
-	connect->attachFunction(this);
+	connect->Attach(this);
 	s->Attach(this);
 
 	playerName.setText("Name",sf::Vector2f(300,100));
@@ -191,8 +191,12 @@ void LobbyView::update(double elpasedMs)
 
 				gameLobbys[id] = GLA;
 			}
-
 			lobby->m.unlock();
 		}
 	}
+}
+
+Views LobbyView::getType()
+{
+	return Views::LOBBY;
 }

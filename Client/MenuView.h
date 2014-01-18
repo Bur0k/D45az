@@ -1,34 +1,38 @@
-#ifndef LOGINVIEW_H
-#define LOGINVIEW_H
+#ifndef MENUVIEW_H
+#define MENUVIEW_H
 
-#include <SFML\Graphics.hpp>
-#include <string>
-
-#include "IView.h"
+#include <SFML/Graphics.hpp>
+#include "iview.h"
+#include "graphic_globals.h"
 #include "StandardButton.h"
-#include "Textbox.h"
-#include "Textblock.h"
+#include <math.h>
 
-class LoginView : public IView , public IButtonfunction
+using namespace sf;
+
+#define MENUANIMATIONTIME 30
+
+class MenuView : public IView, public IButtonfunction
 {
-public:
-	LoginView(Vector2u & size);
-	~LoginView();
-
 private:
+	bool m_animating;
+	int backgroundanimation;
+	Views m_nextView;
+
+	RectangleShape m_background;
+	
+	SpriteTex* m_pGraphics;
+	Button* m_exitbutton;
+	Button* m_continuebutton;
+
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
-	Textblock* logintext;
-	TextBox* name;
-	Button* lgoinbutton;
-	SpriteTex background;
-
-	void centering(Vector2u & size);
-	
 public:
+	MenuView(Vector2u & screensize);
+	~MenuView(void);
+
 	virtual Views nextState();
 	//implementing a lot of interfaces
 
@@ -52,7 +56,9 @@ public:
 	virtual void update(double elpasedMs);
 
 	virtual Views getType();
+
+private:
+	void centering(Vector2u & size);
 };
 
-
-#endif //LOGINVIEW_H
+#endif //MENUVIEW_H

@@ -50,6 +50,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_size = windowSize;
 
 	m_inFocus = true;
+	m_menubutton = false;
 
 
 	ResetMouse();
@@ -80,19 +81,19 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
-	b->attachFunction((IButtonfunction*)this);
+	b->Attach((IButtonfunction*)this);
 	
 	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "|| SOUND 1 || \n Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
 
-	b1->attachFunction((IButtonfunction*)this);
+	b1->Attach((IButtonfunction*)this);
 
 	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Musik stoppen", 4, false);
 
-	b2->attachFunction((IButtonfunction*)this);
+	b2->Attach((IButtonfunction*)this);
 
 	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"|| SOUND 2 || \n buttons können auch\nein und aus schalten" , 3, true);
 
-	b3->attachFunction(this);
+	b3->Attach(this);
 
 	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
 	
@@ -104,7 +105,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
 
-	tb->attach(this);
+	tb->Attach(this);
 
 	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
@@ -169,13 +170,6 @@ Game::~Game()
 
 }
 
-void Game::setView(Views sm)
-{
-	//TODO remove or change
-	m_ViewMode = sm;
-	LoadView(sm);
-}
-
 Views Game::getView()
 {
 	return m_ViewMode;
@@ -217,8 +211,8 @@ void Game::onResize()
 	
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->onResize(m_pWindow->getSize());
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onResize(m_pWindow->getSize());
 }
 
 void Game::onMouseMove()
@@ -277,8 +271,8 @@ void Game::onMouseMove()
 
 	m_lastMousePosition = mousePos;
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-			m_ViewVect[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
 	
 }
 
@@ -289,9 +283,8 @@ void Game::onMouseDownLeft()
 		if(m_clickL[i]->PressedLeft())
 			break;
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		if(m_ViewVect[i]->PressedLeft())
-			break;
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->PressedLeft();
 }
 
 void Game::onMouseDownRight()
@@ -301,9 +294,8 @@ void Game::onMouseDownRight()
 		if(m_clickL[i]->PressedRight())
 			break;
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		if(m_ViewVect[i]->PressedRight())
-			break;
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->PressedRight();
 }
 
 
@@ -314,9 +306,8 @@ void Game::onMouseUpLeft()
 		if(m_clickL[i]->ReleasedLeft())
 			break;
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		if(m_ViewVect[i]->ReleasedLeft())
-			break;
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->ReleasedLeft();
 }
 
 void Game::onMouseUpRight()
@@ -326,9 +317,8 @@ void Game::onMouseUpRight()
 		if(m_clickL[i]->ReleasedRight())
 			break;
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		if(m_ViewVect[i]->ReleasedRight())
-			break;
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->ReleasedRight();
 }
 
 void Game::onKeyDown(sf::Event e)
@@ -337,8 +327,8 @@ void Game::onKeyDown(sf::Event e)
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyDown(e);
 	
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->onKeyDown(e);
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onKeyDown(e);
 	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
@@ -355,6 +345,11 @@ void Game::onKeyDown(sf::Event e)
 		s->move(Vector2f(1,1));
 	if(e.key.code == Keyboard::Q)
 		b3->unLock();
+ 	if(e.key.code == Keyboard::Escape && !m_menubutton)
+	{
+		this->LoadView(Views::MENU);
+		m_menubutton = true;
+	}
 }
 
 void Game::onKeyUp(sf::Event e)
@@ -362,13 +357,16 @@ void Game::onKeyUp(sf::Event e)
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyUp(e);
 
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		m_ViewVect[i]->onKeyUp(e);
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onKeyUp(e);
 
-#ifdef _DEBUG
-	if(e.key.code == sf::Keyboard::Escape) 
-		m_pWindow->close();
-#endif
+	if(e.key.code == Keyboard::Escape)
+		m_menubutton = false;
+
+//#ifdef _DEBUG
+//	if(e.key.code == sf::Keyboard::Escape) 
+//		m_pWindow->close();
+//#endif
 }
 
 void Game::onTextEntered(sf::Event e)
@@ -382,8 +380,8 @@ void Game::onTextEntered(sf::Event e)
 		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 			m_keyInputL[i]->onTextInput(s);
 
-		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-			m_ViewVect[i]->onTextInput(s);
+		if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onTextInput(s);
 	}
 }
 
@@ -397,37 +395,63 @@ void Game::LoadView(Views v)
 {
 
 	//unfinished implementation
-
-	//todo not allways clear to allow stacked views or animation
-	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
-		delete m_ViewVect[i];
-	m_ViewVect.clear();
-
-	//load new view
+	bool clear = false;
 
 	IView* NewView;
+
 	switch (v)
 {
 	case Views::NOCHANGE:
 		return;
 		break;
+
 	case Views::INGAME:
+		
 		break;
+
 	case Views::LOGIN:
 		NewView = new LoginView(m_pWindow->getSize());
+		clear = true;
 		break;
-	case Views::MENUE:
+
+	case Views::MENU:
+		if(m_ViewMode == Views::MENU)
+		{
+			delete m_ViewVect[m_ViewVect.size() -1 ];
+			m_ViewVect.pop_back();
+			m_ViewMode = m_ViewVect[m_ViewVect.size() -1]->getType();
+			return;
+		}
+		else 
+		{
+			m_ViewMode = v;
+			NewView = new MenuView(m_pWindow->getSize());
+		}
 		break;
+
 	case Views::LOBBY:
 		NewView = new LobbyView();
+		clear = true;
 		break;
-	case Views::INGAME_MENU:
-		break;
+
 	case Views::TESTSCREEN:
 		return;
 		break;
+
+	case Views::CLOSE:
+		m_pWindow->close();
+		return;
+		break;
+
 	default:
 		break;
+	}
+
+	if(clear)
+	{
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			delete m_ViewVect[i];
+		m_ViewVect.clear();
 	}
 
 	m_ViewVect.push_back(NewView);
@@ -505,6 +529,9 @@ void Game::Input()
 		}
 	}
 
+	//check view for nextstate
+	if(m_ViewVect.size() > 0 && m_ViewMode != Views::TESTSCREEN)
+		LoadView(m_ViewVect[m_ViewVect.size() - 1]->nextState());
 }
 
 void Game::timer()
