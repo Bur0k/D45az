@@ -76,7 +76,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(tblock);
 
 	//SBAR 
-	SBar = new Statusbar(Vector2f(0, 0), Vector2f(1000, 100));
+	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight)); // so groß wies fenschter und 20 hoch
 	m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
@@ -210,6 +210,8 @@ void Game::onResize()
 	m_pWindow->setView(v);
 	
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
+	
+	SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->onResize(m_pWindow->getSize());

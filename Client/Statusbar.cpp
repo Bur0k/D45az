@@ -3,8 +3,9 @@
 //Ctro & Dtor-------------------------------------------------------
 Statusbar::Statusbar(Vector2f pos, Vector2f size)
 {
-	setPosition(pos);
-	setBgColor(MyColors.Azure);
+	m_BaseRect.setPosition(pos);
+	m_BaseRect.setSize(size);
+	m_BaseRect.setFillColor(MyColors.Black);
 }
 
 
@@ -27,6 +28,11 @@ void Statusbar::setPosition(Vector2f pos)
 void Statusbar::setBgColor(Color c)
 {
 	m_BaseRect.setFillColor(c);
+}
+
+void Statusbar::Resize(Vector2f new_size)
+{
+	m_BaseRect.setSize(new_size);
 }
 
 //Hilfsfunktionen-------------------------------------------------------
@@ -71,6 +77,6 @@ void Statusbar::animationTick() // IAnimation
 
 void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
-	//rw->draw(*this);
+	rw->draw(m_BaseRect);
 	//TODO draw nice graphics around m_BaseRect
 }
