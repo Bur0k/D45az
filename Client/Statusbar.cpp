@@ -71,12 +71,6 @@ void Statusbar::animationTick() // IAnimation
 
 void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
-	rw->draw(m_BaseRect);
-	if(m_inFocus) 
-		rw->draw(m_cursor);
-
-	for(int i = 0; i < 8; i++)
-		rw->draw(m_pBorder[i].s);
-
+	rw->draw(*this);
 	//TODO draw nice graphics around m_BaseRect
 }
