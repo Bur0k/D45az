@@ -425,7 +425,7 @@ void Game::LoadView(Views v)
 		else 
 		{
 			m_ViewMode = v;
-			NewView = new MenuView(m_pWindow->getSize());
+			NewView = new MenuView(m_pWindow->getSize(),false);
 		}
 		break;
 

@@ -183,7 +183,6 @@ bool Button::ReleasedLeft()
 	return false;
 }
 
-
 void Button::setScale(Vector2f){}
 void Button::setScale(float x, float y){}
 bool Button::PressedRight(){ return false; }
@@ -278,4 +277,3 @@ void Button::Notify()
 		m_attachedFunctions[i]->onButtonClick(m_ID);
 	}
 }
-

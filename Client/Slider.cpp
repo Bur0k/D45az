@@ -56,7 +56,7 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 		m_pBar[0].s.setSize(Vector2f(SLIDERENDBLOCKWIDTH, size.y));	//left knob
 		m_pBar[0].s.setPosition(pos.x,pos.y);
 		m_pBar[1].s.setSize(Vector2f(SLIDERENDBLOCKWIDTH, size.y)); //right knob
-		m_pBar[1].s.setPosition(pos.x + size.x -  SLIDERENDBLOCKWIDTH * 2, pos.y);
+		m_pBar[1].s.setPosition(pos.x + size.x -  SLIDERENDBLOCKWIDTH, pos.y);
 		m_pBar[2].s.setSize(Vector2f(size.x - SLIDERENDBLOCKWIDTH * 2, size.y / 3)); //slider Bar
 		m_pBar[2].s.setPosition(pos.x + SLIDERENDBLOCKWIDTH, pos.y + size.y / 3); 
 		m_pBar[3].s.setSize(Vector2f(size.y, size.y)); //slider
@@ -95,9 +95,9 @@ double Slider::getValue()
 {
 	double result = 0;
 	if(m_horizontal)
-		result = (double)(m_pBar[3].s.getPosition().x - m_dimensions.left - SLIDERENDBLOCKWIDTH) / (double)(m_dimensions.width - SLIDERENDBLOCKWIDTH * 3 - m_dimensions.height);
+		result = (double)(m_pBar[3].s.getPosition().x - m_dimensions.left - SLIDERENDBLOCKWIDTH) / (double)(m_dimensions.width - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height);
 	else
-		result = (double)(m_pBar[3].s.getPosition().y - m_dimensions.top - SLIDERENDBLOCKWIDTH) / (double)(m_dimensions.height - SLIDERENDBLOCKWIDTH * 3 - m_dimensions.width);
+		result = (double)(m_pBar[3].s.getPosition().y - m_dimensions.top - SLIDERENDBLOCKWIDTH) / (double)(m_dimensions.height - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.width);
 
 	return result;
 }
@@ -177,7 +177,7 @@ bool Slider::MouseMoved(sf::Vector2i & mouse)
 		m_wasClicked = true;
 		if(m_horizontal)
 		{
-			if(mouse.x >= m_dimensions.left + SLIDERENDBLOCKWIDTH && mouse.x <= m_dimensions.left + m_dimensions.width - SLIDERENDBLOCKWIDTH * 2)
+			if(mouse.x >= m_dimensions.left + SLIDERENDBLOCKWIDTH && mouse.x <= m_dimensions.left + m_dimensions.width - SLIDERENDBLOCKWIDTH * 1)
 			{
 				float delta = (float)mouse.x - m_oldMouse.x;
 				//std::cout << "Slider Mouse Delta :  x  " << delta << std::endl;
@@ -185,8 +185,8 @@ bool Slider::MouseMoved(sf::Vector2i & mouse)
 
 				// restrict movement
 				//x+
-				if(m_pBar[3].s.getPosition().x > m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height)
-					m_pBar[3].s.setPosition(m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.height ,m_pBar[3].s.getPosition().y);
+				if(m_pBar[3].s.getPosition().x > m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH - m_dimensions.height)
+					m_pBar[3].s.setPosition(m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH - m_dimensions.height ,m_pBar[3].s.getPosition().y);
 				//x-
 				if(m_pBar[3].s.getPosition().x < m_dimensions.left + SLIDERENDBLOCKWIDTH)
 					m_pBar[3].s.setPosition( m_dimensions.left + SLIDERENDBLOCKWIDTH ,m_pBar[3].s.getPosition().y);
@@ -194,7 +194,7 @@ bool Slider::MouseMoved(sf::Vector2i & mouse)
 		}
 		else
 		{
-			if(mouse.y >= m_dimensions.top + SLIDERENDBLOCKWIDTH && mouse.y <= m_dimensions.top + m_dimensions.height - SLIDERENDBLOCKWIDTH * 2)
+			if(mouse.y >= m_dimensions.top + SLIDERENDBLOCKWIDTH && mouse.y <= m_dimensions.top + m_dimensions.height - SLIDERENDBLOCKWIDTH * 1)
 			{
 				float delta = (float)mouse.y - m_oldMouse.y;
 				//std::cout << "Slider Mouse Delta :  y  " << delta << std::endl;
@@ -202,8 +202,8 @@ bool Slider::MouseMoved(sf::Vector2i & mouse)
 
 				// restrict movement
 				//y+
-				if(m_pBar[3].s.getPosition().y > m_dimensions.height + m_dimensions.top - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.width)
-					m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x, m_dimensions.height + m_dimensions.top - SLIDERENDBLOCKWIDTH * 2 - m_dimensions.width);
+				if(m_pBar[3].s.getPosition().y > m_dimensions.height + m_dimensions.top - SLIDERENDBLOCKWIDTH - m_dimensions.width)
+					m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x, m_dimensions.height + m_dimensions.top - SLIDERENDBLOCKWIDTH - m_dimensions.width);
 				//y-
 				if(m_pBar[3].s.getPosition().y < m_dimensions.top + SLIDERENDBLOCKWIDTH)
 					m_pBar[3].s.setPosition(m_pBar[3].s.getPosition().x, m_dimensions.top + SLIDERENDBLOCKWIDTH );
