@@ -1,6 +1,6 @@
 #include "GameLogic.h"
 
-GameLogic::GameLogic(vector<PlayerData*> players)
+GameLogic::GameLogic(vector<PlayerData*> players, short mapID)
 {
 	this->server = Server::get();
 

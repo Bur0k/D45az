@@ -107,7 +107,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0202:
 			{
 				// gameid aus daten lesen, den user da reinschreiben
-				char mapid = data[0];
+				short mapid = data[0];
 
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
 					if (server->connectedPlayers[i].s == s)
@@ -128,6 +128,9 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				static short id = 0;
 				id++;
 				string gamename;
+
+				short len = decodeShort(data, 0);
+				gamename = decodeString(data, 2, len);
 
 				PlayerData requester;
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)

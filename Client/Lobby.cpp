@@ -9,18 +9,30 @@
 
 #include "Lobby.h"
 
-void Lobby::connectToGameLobby(char mapid)
+void Lobby::connectToGameLobby(short mapid)
 {
 	vector<char> msg;
-	msg.push_back(mapid);
+	vector<char> tmp = code(mapid);
+	msg.push_back(tmp[0]);
+	msg.push_back(tmp[1]);
 
 	c->write(0x0202, msg);
 }
-void Lobby::createNewGameLobby()
+void Lobby::createNewGameLobby(std::string gamename)
 {
-	vector<char> leer;
+	vector<char> msg;
+	vector<char> tmp;
 
-	c->write(0x0204, leer);
+	tmp = code ((short) gamename.length());
+	msg.push_back(tmp[0]);
+	msg.push_back(tmp[1]);
+
+	tmp = code(gamename);
+
+	for (int i = 0; i < gamename.length(); i++)
+		msg.push_back(tmp[i]);
+
+	c->write(0x0204, msg);
 }
 
 

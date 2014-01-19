@@ -17,12 +17,14 @@ private:
 
 	PlayerData* owner;
 	vector<CityLogic> cities;
-	vector<UnitGroupLogic> unitGroups;
+	vector<UnitGroupLogic*> unitGroups;
 	int gold;
 
 public:
 	IngameLogic::IngameLogic(PlayerData* owner);
 	IngameLogic::~IngameLogic();
+
+	//Funktionen
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

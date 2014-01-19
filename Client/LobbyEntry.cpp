@@ -35,9 +35,9 @@ void LobbyEntry::updatePlayers()
 	s = std::to_string(m_players);
 	s += " / ";
 	s += std::to_string(m_maxPlayers);
-	m_nameText.setString(s);
-	sf::Rect<float> textsize = m_nameText.getLocalBounds();
-	m_nameText.setPosition(m_dimensions.left + m_dimensions.width - textsize.width - LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
+	m_numberText.setString(s);
+	sf::Rect<float> textsize = m_numberText.getLocalBounds();
+	m_numberText.setPosition(m_dimensions.left + m_dimensions.width - textsize.width - LOBBYENTRYBORDER, m_dimensions.top + LOBBYENTRYBORDER);
 }
 
 void LobbyEntry::draw(RenderWindow* rw)

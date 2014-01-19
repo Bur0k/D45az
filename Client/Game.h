@@ -20,6 +20,7 @@
 #include "Textbox.h"
 #include "LoginView.h"
 #include "LobbyView.h"
+#include "MenuView.h"
 
 #include "MusikSampler.h"
 
@@ -56,6 +57,8 @@ private:
 
 	///end debug
 
+	SpriteTex m_falseMouse;
+
 	std::vector<IView*> m_ViewVect;
 	IView* m_pCurrentView;
 	Views m_ViewMode;
@@ -74,8 +77,12 @@ private:
 
 	bool m_inFocus;
 
+	//The Menu should not be opened and closed while just holding down the esc key
+	bool m_menubutton;
+
 	Vector2i m_lastMousePosition;
 
+	void ResetMouse();
 
 public:
 	Text m_fpsText;
@@ -88,7 +95,6 @@ public:
 	void Input();
 	void timer();
 
-	void setView(Views sm);
 	Views getView();
 	void onClose();
 
@@ -121,7 +127,6 @@ private:
 	void onMouseDownRight();
 	void onMouseUpLeft();
 	void onMouseUpRight();
-	void onMouseLeave();
 	void onTextEntered(sf::Event e);
 	void onKeyDown(sf::Event e);
 	void onKeyUp(sf::Event e);

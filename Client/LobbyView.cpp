@@ -13,7 +13,7 @@ LobbyView::LobbyView():
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
-	connect->attachFunction(this);
+	connect->Attach(this);
 	s->Attach(this);
 
 	playerName.setText("Name",sf::Vector2f(300,100));
@@ -28,7 +28,7 @@ LobbyView::LobbyView():
 	lobby = new Lobby();
 	lobby->askforLobbyData();
 	lobby->askforLobbyData();
-	lobby->createNewGameLobby();
+	lobby->createNewGameLobby("MeinefkingLobby");
 	while(lobby->gameLobby.operator GameLobby *()==NULL)
 		;
 	lobby->askforLobbyData();
@@ -186,15 +186,17 @@ void LobbyView::update(double elpasedMs)
 				GLA->LE.setMaxPlayers(it->second.playerlimit);
 				GLA->LE.setPlayers(it->second.players.size());
 				
-				GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
-				GLA->lobbyName.setBackgroundColor(sf::Color(255,255,255,0));
-				GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
-				GLA->playerCount.setBackgroundColor(sf::Color(255,255,255,0));
+				//GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
+				//GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
 
 				gameLobbys[id] = GLA;
 			}
-
 			lobby->m.unlock();
 		}
 	}
+}
+
+Views LobbyView::getType()
+{
+	return Views::LOBBY;
 }

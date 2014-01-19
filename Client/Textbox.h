@@ -82,8 +82,8 @@ public:
 	std::ostream& operator<<(std::ostream&);
 
 	void Notify();
-	void attach(ITextBoxFunction*);
-	bool detach(ITextBoxFunction*);
+	void Attach(ITextBoxFunction*);
+	bool Detach(ITextBoxFunction*);
 
 	void move(Vector2f);
 	Vector2f getPos();
