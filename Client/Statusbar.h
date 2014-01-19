@@ -33,6 +33,7 @@ public:
 	void setPosition(Vector2f pos);
 	Vector2f getPosition();
 	void setBgColor(Color c);
+	void Resize(Vector2f new_size);
 	//Hilfsfunktionen
 
 	//IClickable
