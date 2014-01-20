@@ -14,7 +14,8 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size)
 
 Statusbar::~Statusbar(void)
 {
-	delete &(m_BMenu);
+	delete m_BMenu;
+	m_TextboxContainer.clear();
 }
 
 //Getter & Setter-------------------------------------------------------
