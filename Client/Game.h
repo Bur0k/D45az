@@ -27,7 +27,7 @@
 using namespace sf;
 
 //#define MOUSEGRAB
-#define Statusbarheight 20
+#define Statusbarheight windowSize.y / 20
 
 // TODO derive game from renderWindow
 

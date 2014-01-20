@@ -9,8 +9,10 @@
 #include "IDrawable.h"
 #include "IAnimatable.h"
 
-#include "Button.h"
+#include "StandardButton.h"
 #include "Textbox.h"
+
+#define AbstandX 5
 
 using namespace std;
 
@@ -23,7 +25,7 @@ private: // soll eigentlich NICHT abgeleitet werden
 
 	//Grundeigenschaften
 	RectangleShape m_BaseRect; // Hintergrund
-	vector<Button> m_ButtonContainer;
+	StandardButton* m_BMenu;
 	vector<TextBox> m_TextboxContainer;
 
 public:

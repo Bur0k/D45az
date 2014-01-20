@@ -7,16 +7,15 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size)
 	m_BaseRect.setSize(size);
 	m_BaseRect.setFillColor(MyColors.Gray);
 
-	Button* b1 = new Button(Vector2f(300,600), Vector2f(20,50),"Menü" , 1, true);
+	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, true);
+	m_BMenu->setFillColor(MyColors.Red);
 }
 
 
 Statusbar::~Statusbar(void)
 {
 	delete &(m_BaseRect);
-
-	for(int i = 0; i < m_ButtonContainer.size(); i++)
-		delete &(m_ButtonContainer[i]);
+	delete &(m_BMenu);
 	for(int i = 0; i < m_TextboxContainer.size(); i++)
 		delete &(m_TextboxContainer[i]);
 }
@@ -86,5 +85,8 @@ void Statusbar::animationTick() // IAnimation
 void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
 	rw->draw(m_BaseRect);
-	//TODO draw nice graphics around m_BaseRect
+	m_BMenu->draw(rw);
+
+	for(int i = 0; i < m_TextboxContainer.size(); i++)
+		m_TextboxContainer[i].draw(rw);
 }
