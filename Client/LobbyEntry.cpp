@@ -27,6 +27,7 @@ LobbyEntry::LobbyEntry(Vector2f size, Vector2f pos, std::string name, int player
 	m_numberText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_numberText.setColor(MyColors.Black);
 	
+	updatePlayers();
 }
 
 void LobbyEntry::updatePlayers()

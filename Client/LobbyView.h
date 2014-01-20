@@ -18,6 +18,8 @@ public:
 	Textblock playerName;
 	Textblock mapName;
 	Textblock gameLobbyMaster;
+	StandardButton* updateLobbys;
+	StandardButton* creatNewGamelobby;
 	StandardButton* connect;
 
 	Slider* s;
@@ -26,8 +28,8 @@ public:
 	public:
 		static int nextID;
 		int id;
-		LobbyEntry LE;
-		GameLobbyData():LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
+		LobbyEntry* LE;
+		GameLobbyData()//:LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
 		{id = nextID++;}
 	};
 

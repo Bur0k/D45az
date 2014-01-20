@@ -77,8 +77,6 @@ void StandardButton::updateVisuals()
 
 void StandardButton::updatePosition()
 {
-	
-
 
 	m_Rect.setPosition(getPosition().x + m_buttonTileSize / 2,
 						getPosition().y + m_buttonTileSize / 2);

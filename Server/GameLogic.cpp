@@ -38,6 +38,12 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 
 GameLogic::~GameLogic()
 {
+	for(int i = 0; i < this->playersIngame.size(); i++)
+		delete this->playersIngame[i];
+
+	for(int i = 0; i < this->startCities.size(); i++)
+		delete this->startCities[i];
+
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
 }

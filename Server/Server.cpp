@@ -494,27 +494,6 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 							pPerIoData->nextMsgSize = 0;
 						}
 					}
-					/*while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
-					{
-						if (pPerIoData->nextMsgSize == 0)
-							pPerIoData->nextMsgSize = (pPerIoData->buf[0]<<8)+pPerIoData->buf[1];
-						else
-						{
-							pPerIoData->currPos -= pPerIoData->nextMsgSize;
-							short id = (pPerIoData->buf[pPerIoData->currPos+2]<<8) + pPerIoData->buf[pPerIoData->currPos+3];
-
-							char* msg = new char[pPerIoData->nextMsgSize-4];
-							memcpy(msg,pPerIoData->buf+pPerIoData->currPos+4,sizeof(char)*(pPerIoData->nextMsgSize-4));
-							vector<char> message;
-							for(int i=0;i<pPerIoData->nextMsgSize-4;i++)
-								message.push_back(msg[i]);
-
-							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
-
-							pPerIoData->nextMsgSize = 0;
-							delete[] msg;
-						}
-					}*/
 
 					WSARecv(pPerHandleData->sock, &(pPerIoData->wsaBuf), 1, &dwTrans, &dwFlags, &(pPerIoData->ol), NULL);
 
