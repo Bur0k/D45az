@@ -27,11 +27,7 @@ public:
 		static int nextID;
 		int id;
 		LobbyEntry LE;
-		Textblock lobbyName;
-		Textblock playerCount;
-		GameLobbyData():lobbyName(sf::Vector2f(),sf::Vector2f(),"",20),
-			playerCount(sf::Vector2f(),sf::Vector2f(),"",20),
-			LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
+		GameLobbyData():LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
 		{id = nextID++;}
 	};
 
