@@ -11,6 +11,7 @@
 
 #include "StandardButton.h"
 #include "Textbox.h"
+#include "Game.h"
 
 #define AbstandX 5
 
@@ -20,8 +21,8 @@ using namespace std;
 class Statusbar : public IClickable, public IDrawable, public IAnimatable
 {
 private: // soll eigentlich NICHT abgeleitet werden
-	bool m_inFocus;
 	bool m_mouseOver;
+	Vector2f m_MousePos;
 
 	//Grundeigenschaften
 	RectangleShape m_BaseRect; // Hintergrund
@@ -30,9 +31,10 @@ private: // soll eigentlich NICHT abgeleitet werden
 
 public:
 	//ctor & dtor
-	Statusbar(Vector2f pos, Vector2f size);
+	Statusbar(Vector2f pos, Vector2f size, Game* game);
 	~Statusbar(void);
 	//Setter & Getter
+	void setMouse(Vector2f pos);
 	void setPosition(Vector2f pos);
 	Vector2f getPosition();
 	void setBgColor(Color c);

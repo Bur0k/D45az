@@ -76,8 +76,9 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(tblock);
 
 	//SBAR 
-	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight)); 
-	m_drawL.push_back(SBar);
+	MenuOpener MOpointer = &open_Menu;
+//	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), MenuOpener MOpointer); 
+//	m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -169,6 +170,11 @@ Game::~Game()
 
 	MyFonts::deleteFonts();
 
+}
+
+void Game::setMenubottun(bool onoff)
+{
+	m_menubutton = onoff;
 }
 
 Views Game::getView()
@@ -356,10 +362,13 @@ void Game::onKeyDown(sf::Event e)
 	if(e.key.code == Keyboard::Q)
 		b3->unLock();
  	if(e.key.code == Keyboard::Escape && !m_menubutton)
-	{
-		this->LoadView(Views::MENU);
-		m_menubutton = true;
-	}
+		open_Menu;
+}
+
+void Game::open_Menu()
+{
+	this->LoadView(Views::MENU);
+	m_menubutton = true;
 }
 
 void Game::onKeyUp(sf::Event e)

@@ -20,6 +20,7 @@ public:
 	Color Red;
 	Color Transparent;
 	Color MenuBackground;
+	Color Chartreuse;
 
 	MyColors() {
 		Orange = Color(0xFF, 0xA2, 0x00, 0xFF);
@@ -27,6 +28,8 @@ public:
 		Gray = Color(0x80, 0x80, 0x80, 0xFF);
 		DarkGray = Color(0x40, 0x40, 0x40, 0xFF);
 		MenuBackground = Color(0,0,0, 0xA0);
+		Chartreuse = Color(0x7f, 0xff, 0x0, 0xFA); 
+			
 		
 		Black = Color::Black;
 		White = Color::White;
