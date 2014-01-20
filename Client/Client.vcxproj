@@ -148,6 +148,7 @@
     <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />
@@ -176,6 +177,7 @@
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
+    <Image Include="Data\Images\commit-Button.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>

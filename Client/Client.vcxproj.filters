@@ -272,6 +272,9 @@
     <None Include="Data\Maps\TestMap.tmx">
       <Filter>Data</Filter>
     </None>
+    <None Include="Data\Images\commit Button.psd">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="client_Grafik.txt">
@@ -294,6 +297,9 @@
       <Filter>Data</Filter>
     </Image>
     <Image Include="Data\Images\Button_small.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\commit-Button.png">
       <Filter>Data</Filter>
     </Image>
   </ItemGroup>
