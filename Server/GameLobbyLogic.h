@@ -6,6 +6,7 @@
 #include "Server.h"
 #include "NetworkParticipant.h"
 #include "GameLogic.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ private:
 	PlayerData gameMaster;
 	string gameLobbyName;
 	short mapID;
-	//Map currentMap;
+	Map* currentMap;
 
 public:
 	GameLobbyLogic(short id, PlayerData master, string gameLobbyName);
@@ -35,8 +36,8 @@ public:
 	void setGamemaster(PlayerData player);
 	PlayerData getGamemaster();
 	vector<PlayerData*>& getPlayers(); 
-	/*void setMap(Map map);*/
-	/*Map getMap();*/
+	void setMap(Map* map);
+	Map* getMap();
 
 	/*Funktionen*/
 

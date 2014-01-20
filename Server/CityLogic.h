@@ -13,12 +13,15 @@ private:
 	Server* server;
 
 	short id;
-
-public:
-	CityLogic();
-	~CityLogic();
+	short posX;
+	short posY;
 	int level;
 	int generatedIncome;
+
+public:
+	CityLogic(short id, short x, short y);
+	~CityLogic();
+	
 	//position
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
