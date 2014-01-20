@@ -158,6 +158,7 @@ Game::~Game()
 	delete s;
 	delete s1;
 	delete tb;
+	delete SBar;
 
 	delete tblock;
 
@@ -210,8 +211,6 @@ void Game::onResize()
 	m_pWindow->setView(v);
 	
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
-	
-	SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->onResize(m_pWindow->getSize());
