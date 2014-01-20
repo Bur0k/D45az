@@ -91,8 +91,14 @@
     <ClCompile Include="LobbyLogic.cpp" />
     <ClCompile Include="LogInLogic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
     <ClCompile Include="UnitGroupLogic.cpp" />
     <ClCompile Include="UnitLogic.cpp" />
   </ItemGroup>
@@ -103,11 +109,22 @@
     <ClInclude Include="IngameLogic.h" />
     <ClInclude Include="LobbyLogic.h" />
     <ClInclude Include="LogInLogic.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLayer.h" />
     <ClInclude Include="NetworkParticipant.h" />
     <ClInclude Include="PlayerData.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="tinystr.h" />
+    <ClInclude Include="tinyxml.h" />
     <ClInclude Include="UnitGroupLogic.h" />
     <ClInclude Include="UnitLogic.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Maps\test.tmx" />
+    <None Include="Data\Maps\TestMap.tmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,12 +12,11 @@ private:
 	Server* server;
 
 public:
-	UnitLogic();
+	UnitLogic(short type);
 	~UnitLogic();
 
-	//Unittype
-	int Attackpower;
-	//Range
+	int attackpower;
+	int range;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

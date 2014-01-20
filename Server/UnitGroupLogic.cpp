@@ -1,8 +1,13 @@
 #include "UnitGroupLogic.h"
 
-UnitGroupLogic::UnitGroupLogic()
+UnitGroupLogic::UnitGroupLogic(short units, short type)
 {
+	for(unsigned int i = 0; i < units; i++)
+	{
+		UnitLogic* unit = new UnitLogic(type);
 
+		this->units.push_back(unit);
+	}
 }
 
 UnitGroupLogic::~UnitGroupLogic()

@@ -76,6 +76,8 @@ public:
 
 	bool getIsPressed();
 
+	void unLock();
+
 	//changes color of the background Rectangle
 	//@param dir true if mouse is over the button
 	void animationTick();
@@ -93,11 +95,11 @@ public:
 	bool  ReleasedLeft();
 
 	//attaching a function pointer 
-	bool attachFunction(IButtonfunction* pCallback);
+	bool Attach(IButtonfunction* pCallback);
 	//detaching a function pointer
-	bool detachFunction(IButtonfunction* pCallback);
+	bool Detach(IButtonfunction* pCallback);
 	//
-	void notify();
+	void Notify();
 
 
 };

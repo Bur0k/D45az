@@ -1,17 +1,15 @@
 #pragma once
 
 #include <vector>
-#include "TileSets.h"
 #include <string>
 #include <sstream>
 #include "SplittedSprite.h"
-#include <SFML\Graphics.hpp>
 #include <iostream>
+#include "TileSets.h"
 
 class MapLayer
 {
 	TileSets* tilesets;
-
 public:
 	std::vector<std::vector<short>> layer;
 	bool isCityLayer;
