@@ -18,6 +18,8 @@ public:
 	Textblock playerName;
 	Textblock mapName;
 	Textblock gameLobbyMaster;
+	StandardButton* updateLobbys;
+	StandardButton* creatNewGamelobby;
 	StandardButton* connect;
 
 	Slider* s;
@@ -37,7 +39,6 @@ public:
 
 	//implementing a lot of interfaces
 	Views nextState();
-	void onTextBoxSend(int ID, std::string s);
 
 	void onButtonClick(int);
 

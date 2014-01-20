@@ -91,6 +91,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
+    <ClCompile Include="IngameView.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="LobbyEntry.cpp" />
     <ClCompile Include="LobbyView.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
+    <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />
     <ClInclude Include="LobbyEntry.h" />
@@ -175,6 +177,7 @@
   <ItemGroup>
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
+    <Image Include="Data\Images\Button_small.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 
 void Lobby::connectToGameLobby(short mapid)
 {
+	updated = false;
 	vector<char> msg;
 	vector<char> tmp = code(mapid);
 	msg.push_back(tmp[0]);

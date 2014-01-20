@@ -121,6 +121,9 @@
     <ClCompile Include="MenuView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="IngameView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
     <ClCompile Include="CommitButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
@@ -218,6 +221,9 @@
     <ClInclude Include="MenuView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="IngameView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
     <ClInclude Include="CommitButton.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
@@ -291,6 +297,9 @@
       <Filter>Data</Filter>
     </Image>
     <Image Include="Data\Images\background.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\Button_small.png">
       <Filter>Data</Filter>
     </Image>
   </ItemGroup>

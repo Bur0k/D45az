@@ -1,6 +1,6 @@
 #include "LobbyView.h"
 
-int LobbyView::GameLobbyData::nextID = 0;
+int LobbyView::GameLobbyData::nextID = 10;
 
 LobbyView::LobbyView():
 	playerName(sf::Vector2f(0,0),sf::Vector2f(300,100),"Name",50),
@@ -11,6 +11,8 @@ LobbyView::LobbyView():
 	mapName.setPos(sf::Vector2f(500,200));
 	gameLobbyMaster.setPos(sf::Vector2f(500,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
+	updateLobbys = new StandardButton(sf::Vector2f(500,500),sf::Vector2f(100,75),"Update",1,false);
+	creatNewGamelobby = new StandardButton(sf::Vector2f(500,600),sf::Vector2f(100,75),"Create New\nGamelobby",2,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
 	connect->Attach(this);
@@ -26,8 +28,6 @@ LobbyView::LobbyView():
 
 
 	lobby = new Lobby();
-	lobby->askforLobbyData();
-	lobby->askforLobbyData();
 	lobby->createNewGameLobby("MeinefkingLobby");
 	while(lobby->gameLobby.operator GameLobby *()==NULL)
 		;
@@ -39,6 +39,9 @@ LobbyView::~LobbyView()
 {
 	delete lobby;
 	delete connect;
+	delete updateLobbys;
+	delete creatNewGamelobby;
+
 	delete s;
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		delete it->second;
@@ -51,6 +54,9 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	mapName.draw(rw);
 	gameLobbyMaster.draw(rw);
 	connect->draw(rw);
+	updateLobbys->draw(rw);
+	creatNewGamelobby->draw(rw);
+
 	s->draw(rw);
 
 	int y = 200;
@@ -62,14 +68,15 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	}
 }
 
-void LobbyView::onButtonClick(int)
+void LobbyView::onButtonClick(int id)
 {
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		if(it->second->id != id && it->second->LE.getIsEnabled())
+		{
+			it->second->LE.unLock();
+			break;
+		}
 	//handle incoming clicks here
-}
-
-void LobbyView::onTextBoxSend(int ID, std::string s)
-{
-	//recieve shit from textboxes
 }
 
 
@@ -77,6 +84,8 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 {
 	s->MouseMoved(v);
 	connect->MouseMoved(v);
+	updateLobbys->MouseMoved(v);
+	creatNewGamelobby->MouseMoved(v);
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE.MouseMoved(v);
 	return false;
@@ -91,6 +100,8 @@ bool LobbyView::PressedLeft()
 {
 	s->PressedLeft();
 	connect->PressedLeft();
+	updateLobbys->PressedLeft();
+	creatNewGamelobby->PressedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE.PressedLeft();
 	return false;
@@ -105,6 +116,8 @@ bool LobbyView::ReleasedLeft()
 {
 	s->ReleasedLeft();
 	connect->ReleasedLeft();
+	updateLobbys->ReleasedLeft();
+	creatNewGamelobby->ReleasedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE.ReleasedLeft();
 	return false;
@@ -113,6 +126,8 @@ bool LobbyView::ReleasedLeft()
 void LobbyView::animationTick()
 {
 	connect->animationTick();
+	updateLobbys->animationTick();
+	creatNewGamelobby->animationTick();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE.animationTick();
 }

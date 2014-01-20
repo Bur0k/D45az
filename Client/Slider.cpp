@@ -71,10 +71,10 @@ Slider::Slider(bool horizontal, Vector2f size, double startsliderposition, Vecto
 		
 		m_pBar[1].s.setRotation(-90);
 		m_pBar[1].s.setSize(Vector2f(SLIDERENDBLOCKWIDTH, size.x)); //right knob
-		m_pBar[1].s.setPosition(pos.x , pos.y + size.y -  SLIDERENDBLOCKWIDTH);
+		m_pBar[1].s.setPosition(pos.x , pos.y + size.y);
 		
 		m_pBar[2].s.setRotation(90);
-		m_pBar[2].s.setSize(Vector2f(size.y - SLIDERENDBLOCKWIDTH * 3,size.x / 3)); //slider Bar
+		m_pBar[2].s.setSize(Vector2f(size.y - SLIDERENDBLOCKWIDTH * 2,size.x / 3)); //slider Bar
 		m_pBar[2].s.setPosition(pos.x + size.x / 3 * 2, pos.y + SLIDERENDBLOCKWIDTH);
 
 		m_pBar[3].s.setSize(Vector2f(size.x, size.x)); //slider
@@ -189,7 +189,7 @@ bool Slider::MouseMoved(sf::Vector2i & mouse)
 					m_pBar[3].s.setPosition(m_dimensions.width + m_dimensions.left - SLIDERENDBLOCKWIDTH - m_dimensions.height ,m_pBar[3].s.getPosition().y);
 				//x-
 				if(m_pBar[3].s.getPosition().x < m_dimensions.left + SLIDERENDBLOCKWIDTH)
-					m_pBar[3].s.setPosition( m_dimensions.left + SLIDERENDBLOCKWIDTH ,m_pBar[3].s.getPosition().y);
+					m_pBar[3].s.setPosition(m_dimensions.left + SLIDERENDBLOCKWIDTH ,m_pBar[3].s.getPosition().y);
 			}
 		}
 		else
