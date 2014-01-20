@@ -8,7 +8,7 @@ GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName
 	this->gameMaster = master;
 	this->playerlimit = 4;
 	this->players.push_back(&this->gameMaster);
-	this->gameLobbyName = gameLobbyName;
+	this->gameLobbyName = GameLobbyName;
 
 	Map* map = new Map();
 	map->load("Data/Maps/TestMap.tmx");
