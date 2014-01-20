@@ -71,6 +71,7 @@ protected:
 	void setScale(float x, float y);
 
 public:
+	void setText(std::string s);
 	void setIsEnabled(bool enable);
 	bool getIsEnabled();
 

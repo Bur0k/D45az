@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CommitButton.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
@@ -116,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="CommitButton.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLobby.h" />
     <ClInclude Include="graphic_globals.h" />
@@ -148,6 +150,7 @@
     <ClInclude Include="IDrawable.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />
@@ -176,6 +179,7 @@
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
+    <Image Include="Data\Images\commit-Button.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>
