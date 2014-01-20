@@ -293,6 +293,9 @@
     <Image Include="Data\Images\background.png">
       <Filter>Data</Filter>
     </Image>
+    <Image Include="Data\Images\Button_small.png">
+      <Filter>Data</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Data\Sounds\sound1.wav">

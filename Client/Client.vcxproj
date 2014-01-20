@@ -175,6 +175,7 @@
   <ItemGroup>
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
+    <Image Include="Data\Images\Button_small.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>
