@@ -12,6 +12,8 @@ class CityLogic : public NetworkParticipant
 private:
 	Server* server;
 
+	short id;
+
 public:
 	CityLogic();
 	~CityLogic();

@@ -131,6 +131,11 @@ void Button::unLock()
 
 bool Button::MouseMoved(Vector2i & mouse)
 {
+	if(!m_isEnabled)
+	{
+		m_mouseOver = false;
+		return false;
+	}
 	//std::cout << "mouse position x " << mouse.x << " y " << mouse.y; 
 	if( mouse.x > getPosition().x && mouse.x < getPosition().x + getSize().x &&
 		mouse.y > getPosition().y && mouse.y < getPosition().y + getSize().y )
@@ -173,11 +178,10 @@ bool Button::ReleasedLeft()
 			unclicked();
 		}
 		if(m_mouseOver)
-			notify();
+			Notify();
 	}
 	return false;
 }
-
 
 void Button::setScale(Vector2f){}
 void Button::setScale(float x, float y){}
@@ -211,6 +215,11 @@ void Button::animationTick()
 //example implementation
 void Button::animation_upadate()
 {
+	if(!m_isEnabled)
+	{
+		setFillColor(m_color_disabled);
+	}
+
 	Color c = m_color_mouseOver;
 
 	double ratio1 =  sqrt((double)m_animation) / sqrt((double)m_animationLength);
@@ -243,14 +252,14 @@ void Button::unclicked()
 		animation_upadate();
 }
 
-bool Button::attachFunction(IButtonfunction* pCallback)
+bool Button::Attach(IButtonfunction* pCallback)
 {
 	//TODO no double attachments
 	m_attachedFunctions.push_back(pCallback);
 	return true;
 }
 
-bool Button::detachFunction(IButtonfunction* pCallback)
+bool Button::Detach(IButtonfunction* pCallback)
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
 		if(m_attachedFunctions[i] == pCallback)
@@ -261,11 +270,10 @@ bool Button::detachFunction(IButtonfunction* pCallback)
 	return false;
 }
 
-void Button::notify()
+void Button::Notify()
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
 	{
 		m_attachedFunctions[i]->onButtonClick(m_ID);
 	}
 }
-

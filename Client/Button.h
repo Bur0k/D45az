@@ -95,11 +95,11 @@ public:
 	bool  ReleasedLeft();
 
 	//attaching a function pointer 
-	bool attachFunction(IButtonfunction* pCallback);
+	bool Attach(IButtonfunction* pCallback);
 	//detaching a function pointer
-	bool detachFunction(IButtonfunction* pCallback);
+	bool Detach(IButtonfunction* pCallback);
 	//
-	void notify();
+	void Notify();
 
 
 };

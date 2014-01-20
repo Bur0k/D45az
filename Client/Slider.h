@@ -7,7 +7,8 @@
 
 #include "IClickable.h"
 #include "IDrawable.h"
-#include "graphic_globals.h"	//TODO struct in eigenes file
+#include "graphic_globals.h"	
+
 
 using namespace sf;
 

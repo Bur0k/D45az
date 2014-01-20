@@ -18,6 +18,7 @@ private:
 	short playerlimit;
 	PlayerData gameMaster;
 	string gameLobbyName;
+	short mapID;
 	//Map currentMap;
 
 public:

@@ -159,7 +159,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				{
 					// Spielstart
 
-					GameLogic* game = new GameLogic(this->players);
+					GameLogic* game = new GameLogic(this->players, this->mapID);
 
 					std::vector<char> erfg;
 

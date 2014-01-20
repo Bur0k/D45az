@@ -278,13 +278,13 @@ void TextBox::Notify()
 	}
 }
 
-void TextBox::attach(ITextBoxFunction* pCallback)
+void TextBox::Attach(ITextBoxFunction* pCallback)
 {
 	//TODO no double attachments
 	m_attachedFunctions.push_back(pCallback);
 }
 
-bool TextBox::detach(ITextBoxFunction* pCallback)
+bool TextBox::Detach(ITextBoxFunction* pCallback)
 {
 	for(unsigned int i = 0; i < m_attachedFunctions.size(); i++)
 		if(m_attachedFunctions[i] == pCallback)
