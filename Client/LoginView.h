@@ -50,6 +50,8 @@ public:
 
 	virtual void onResize(sf::Vector2u &);
 	virtual void update(double elpasedMs);
+
+	virtual Views getType();
 };
 
 

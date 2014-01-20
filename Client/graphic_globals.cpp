@@ -16,11 +16,11 @@ sf::Font & MyFonts::getFont(GameFonts f)
 	case GameFonts::ARIAL:
 		if(s_pArial == NULL)
 		{
-			std::cout << " LOADING FONT ARIAL " << std::endl;
+			std::cout << "loading Font: Arial" << std::endl;
 			
 			s_pArial = new Font();
 			if(!s_pArial->loadFromFile("Data/Fonts/arial.ttf"))
-				std::cout << "font arial load failed!!" << std::endl;
+				std::cout << "graphic_globals.cpp : font arial load failed!!" << std::endl;
 		}
 		
 		return *s_pArial;

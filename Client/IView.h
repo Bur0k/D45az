@@ -7,7 +7,7 @@
 #include "IKeyboardInput.h"
 
 
-enum class Views {NOCHANGE, INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
+enum class Views {NOCHANGE, INGAME, LOGIN, MENU, LOBBY, CLOSE, TESTSCREEN};
 
 
 //unites all gui Interfaces for Model View Controller Implementation
@@ -19,6 +19,8 @@ public:
 	virtual void onResize(sf::Vector2u &)=0;
 	virtual void update(double elpasedMs)=0;
 	virtual Views nextState()=0;
+	//needed for View Management in class game
+	virtual Views getType()=0;
 };
 
 #endif //IVIEW_H

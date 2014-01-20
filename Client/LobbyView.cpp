@@ -13,7 +13,7 @@ LobbyView::LobbyView():
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
-	connect->attachFunction(this);
+	connect->Attach(this);
 	s->Attach(this);
 
 	playerName.setText("Name",sf::Vector2f(300,100));
@@ -56,12 +56,6 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	int y = 200;
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 	{
-		/*it->second->lobbyName.setPos(sf::Vector2f(20,y));
-		it->second->playerCount.setPos(sf::Vector2f(400,y));
-		y+=50;
-		it->second->lobbyName.draw(rw);
-		it->second->playerCount.draw(rw);*/
-
 		it->second->LE.setPosition(sf::Vector2f(20.0,y));
 		it->second->LE.draw(rw);
 		y+=50;
@@ -178,21 +172,20 @@ void LobbyView::update(double elpasedMs)
 			{
 				short id = it->first;
 				GameLobbyData* GLA = new GameLobbyData();
-				GLA->lobbyName.setText("Gamelobby Name",sf::Vector2f(200,30));
-				string asdasd=std::to_string(it->second.players.size()) + " / " + std::to_string(it->second.playerlimit);
-				GLA->playerCount.setText(asdasd,sf::Vector2f(200,30));
 
-				GLA->LE.setName("Gamelobby Name");
+				GLA->LE.setName(it->second.name);
 				GLA->LE.setMaxPlayers(it->second.playerlimit);
 				GLA->LE.setPlayers(it->second.players.size());
 				
-				//GLA->lobbyName.setFontColor(sf::Color(255,255,255,255));
-				//GLA->playerCount.setFontColor(sf::Color(255,255,255,255));
 
 				gameLobbys[id] = GLA;
 			}
-
 			lobby->m.unlock();
 		}
 	}
+}
+
+Views LobbyView::getType()
+{
+	return Views::LOBBY;
 }

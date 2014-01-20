@@ -18,7 +18,7 @@ LoginView::LoginView(Vector2u & size)
 	m_KeyV.push_back(name);
 	
 	lgoinbutton = new StandardButton(Vector2f(100,300),Vector2f(100,70),"Login",1,false);
-	lgoinbutton->attachFunction(this);
+	lgoinbutton->Attach(this);
 
 	m_DrawV.push_back(lgoinbutton);
 	m_AnimateV.push_back(lgoinbutton);
@@ -158,5 +158,10 @@ void LoginView::centering(Vector2u & size)
 	lgoinbutton->setPosition(size.x / 2 - lgoinbutton->getSize().x / 2, name->getPos().y + name->getSize().y + 0.05 * size.y);
 	logintext->setPos(sf::Vector2f(size.x / 2 - logintext->getSize().x / 2, name->getPos().y - 0.05 * size.y - logintext->getSize().y));
 
-	background.s.setPosition(size.x / 2 - background.s.getSize().x / 2, size.y /2 - background.s.getSize().y);
+	background.s.setPosition(size.x / 2 - background.s.getSize().x / 2, size.y /2 - background.s.getSize().y / 2);
+}
+
+Views LoginView::getType()
+{
+	return Views::LOGIN;
 }
