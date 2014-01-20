@@ -16,10 +16,6 @@ IngameLogic::~IngameLogic()
 	server->deleteFromErrorCallback(this);
 }
 
-void IngameLogic::createUnitGroup(short integratedUnits)
-{
-	
-}
 
 void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
