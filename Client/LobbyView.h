@@ -37,7 +37,6 @@ public:
 
 	//implementing a lot of interfaces
 	Views nextState();
-	void onTextBoxSend(int ID, std::string s);
 
 	void onButtonClick(int);
 

@@ -14,10 +14,8 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size)
 
 Statusbar::~Statusbar(void)
 {
-	delete &(m_BaseRect);
 	delete &(m_BMenu);
-	for(int i = 0; i < m_TextboxContainer.size(); i++)
-		delete &(m_TextboxContainer[i]);
+	m_TextboxContainer.clear();
 }
 
 //Getter & Setter-------------------------------------------------------

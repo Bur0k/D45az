@@ -26,9 +26,15 @@ LobbyView::LobbyView():
 
 
 	lobby = new Lobby();
-	lobby->askforLobbyData();
-	lobby->askforLobbyData();
 	lobby->createNewGameLobby("MeinefkingLobby");
+	lobby->createNewGameLobby("MeinefkingLobby2");
+	lobby->createNewGameLobby("MeinefkingLobby3");
+	lobby->createNewGameLobby("MeinefkingLobby4");
+	lobby->createNewGameLobby("MeinefkingLobby5");
+	lobby->createNewGameLobby("MeinefkingLobby6");
+	lobby->createNewGameLobby("MeinefkingLobby7");
+	lobby->createNewGameLobby("MeinefkingLobby8");
+	lobby->createNewGameLobby("MeinefkingLobby9");
 	while(lobby->gameLobby.operator GameLobby *()==NULL)
 		;
 	lobby->askforLobbyData();
@@ -62,14 +68,15 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	}
 }
 
-void LobbyView::onButtonClick(int)
+void LobbyView::onButtonClick(int id)
 {
+	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		if(it->second->id != id && it->second->LE.getIsEnabled())
+		{
+			it->second->LE.unLock();
+			break;
+		}
 	//handle incoming clicks here
-}
-
-void LobbyView::onTextBoxSend(int ID, std::string s)
-{
-	//recieve shit from textboxes
 }
 
 
