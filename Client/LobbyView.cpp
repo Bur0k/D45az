@@ -71,16 +71,12 @@ void LobbyView::draw(sf::RenderWindow* rw)
 
 void LobbyView::onButtonClick(int id)
 {
-	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-		if(it->second->id != id-10 && it->second->LE->getIsEnabled())
-		{
-			it->second->LE->unLock();
-			break;
-		}
 		
 	if(id == 0)
 	{
-		lobby->connectToGameLobby(id-10);
+		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+			if(it->second->LE->getIsEnabled())
+				lobby->connectToGameLobby(it->second->LE->getID()-10);
 	}
 	else if( id == 1)
 	{
@@ -88,8 +84,16 @@ void LobbyView::onButtonClick(int id)
 	}
 	else if( id == 2)
 	{
-		static int testInt = 0;
-		lobby->createNewGameLobby("Test"+to_string(testInt));
+		lobby->createNewGameLobby("Buraks Lobby");
+	}
+	else
+	{
+		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+			if(it->second->LE->getID() != id && it->second->LE->getIsEnabled())
+			{
+				it->second->LE->unLock();
+				break;
+			}
 	}
 	//handle incoming clicks here
 }
@@ -203,10 +207,10 @@ void LobbyView::update(double elpasedMs)
 
 			for(auto it = lobby->gamesCreated.begin();it!=lobby->gamesCreated.end();it++)
 			{
-				short id = it->first;
+				short id = it->first + 10;
 				GameLobbyData* GLA = new GameLobbyData();
 
-				GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.playerlimit,it->second.players.size(),++GLA->nextID+10);
+				GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.playerlimit,it->second.players.size(),id);
 				GLA->LE->Attach(this);
 
 				gameLobbys[id] = GLA;

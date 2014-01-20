@@ -136,7 +136,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
 					if (server->connectedPlayers[i].s == s)
 					{
-						server->connectedPlayers[i];
+						requester = server->connectedPlayers[i];
 					}
 				
 					if(!requester.isGamemaster)
