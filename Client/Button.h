@@ -71,10 +71,13 @@ protected:
 	void setScale(float x, float y);
 
 public:
+	void setText(std::string s);
 	void setIsEnabled(bool enable);
 	bool getIsEnabled();
 
 	bool getIsPressed();
+
+	void unLock();
 
 	//changes color of the background Rectangle
 	//@param dir true if mouse is over the button
@@ -86,18 +89,18 @@ public:
 	virtual void draw(RenderWindow* rw);
 
 	//implementing IClickable
-	bool isHit(Vector2i &);
-	void  PressedRight();
-	void  PressedLeft();
-	void  ReleasedRight();
-	void  ReleasedLeft();
+	bool MouseMoved(Vector2i &);
+	bool  PressedRight();
+	bool  PressedLeft();
+	bool  ReleasedRight();
+	bool  ReleasedLeft();
 
 	//attaching a function pointer 
-	bool attachFunction(IButtonfunction* pCallback);
+	bool Attach(IButtonfunction* pCallback);
 	//detaching a function pointer
-	bool detachFunction(IButtonfunction* pCallback);
+	bool Detach(IButtonfunction* pCallback);
 	//
-	void notify();
+	void Notify();
 
 
 };

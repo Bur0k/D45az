@@ -6,17 +6,17 @@
 std::vector<char> code(short s)
 {
 	std::vector<char> v;
-	v.push_back(s);
-	v.push_back(s>>8);
+	v.push_back(static_cast<char>(s));
+	v.push_back(static_cast<char>(s>>8));
 	return v;
 }
 std::vector<char> code(int i)
 {
 	std::vector<char> v;
-	v.push_back(i);
-	v.push_back(i>>8);
-	v.push_back(i>>16);
-	v.push_back(i>>24);
+	v.push_back(static_cast<char>(i));
+	v.push_back(static_cast<char>(i>>8));
+	v.push_back(static_cast<char>(i>>16));
+	v.push_back(static_cast<char>(i>>24));
 	return v;
 }
 std::vector<char> code(const std::string s)
@@ -31,16 +31,16 @@ short decodeShort(const std::vector<char>& v, int from)
 {
 	short s;
 	s = v[from];
-	s += v[from]<<8;
+	s += v[from+1]<<8;
 	return s;
 }
 int decodeInt(const std::vector<char>& v, int from)
 {
 	short i;
 	i = v[from];
-	i += v[from]<<8;
-	i += v[from]<<16;
-	i += v[from]<<24;
+	i += v[from+1]<<8;
+	i += v[from+2]<<16;
+	i += v[from+3]<<24;
 	return i;
 }
 std::string decodeString(const std::vector<char>& v, int from, int len)
@@ -70,8 +70,37 @@ Client::~Client()
 		readThread->join();
 		delete readThread;
 	}
+	if(writeThread!=NULL)
+	{
+		writeThread->join();
+		delete writeThread;
+	}
 
 	closesocket(s);
+	Sleep(1000);
+
+	if(addNewMessageCallbackThread!=NULL)
+	{
+		addNewMessageCallbackThread->join();
+		delete addNewMessageCallbackThread;
+	}
+	if(deleteNewMessageCallbackThread!=NULL)
+	{
+		deleteNewMessageCallbackThread->join();
+		delete deleteNewMessageCallbackThread;
+	}
+	
+	if(addErrorCallbackThread!=NULL)
+	{
+		addErrorCallbackThread->join();
+		delete addErrorCallbackThread;
+	}
+	if(deleteErrorCallbackThread!=NULL)
+	{
+		deleteErrorCallbackThread->join();
+		delete deleteErrorCallbackThread; 
+	}
+
 }
 
 void Client::connectToServer(string ip, int port)
@@ -142,6 +171,87 @@ void Client::connectToServer(string ip, int port)
 			delete[] buffer;
 		}
 	});
+
+	addNewMessageCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			addNewMessageCallbackMutex.lock();
+			for(unsigned int i=0;i<addNewMessageCallbackList.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				newMessageCallback.push_back(addNewMessageCallbackList[i]);
+				newMessageCallbackMutex.unlock();
+			}
+			addNewMessageCallbackList.clear();
+			addNewMessageCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+	deleteNewMessageCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			deleteNewMessageCallbackMutex.lock();
+			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				for(unsigned int j=0;j<newMessageCallback.size();j++)
+					if(newMessageCallback[j] == deleteNewMessageCallbackList[i])
+					{
+						newMessageCallback.erase(newMessageCallback.begin()+j);
+						break;
+					}
+				newMessageCallbackMutex.unlock();
+			}
+			deleteNewMessageCallbackList.clear();
+			deleteNewMessageCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+		Sleep(1);
+	});
+
+	addErrorCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			addErrorCallbackMutex.lock();
+			for(unsigned int i=0;i<addErrorCallbackList.size();i++)
+			{
+				errorCallbackMutex.lock();
+				errorCallback.push_back(addErrorCallbackList[i]);
+				errorCallbackMutex.unlock();
+			}
+			addErrorCallbackList.clear();
+			addErrorCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+	deleteErrorCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			deleteErrorCallbackMutex.lock();
+			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
+			{
+				errorCallbackMutex.lock();
+				for(unsigned int j=0;j<errorCallback.size();j++)
+					if(errorCallback[j] == deleteErrorCallbackList[i])
+					{
+						errorCallback.erase(errorCallback.begin()+j);
+						break;
+					}
+				errorCallbackMutex.unlock();
+			}
+			deleteErrorCallbackList.clear();
+			deleteErrorCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
 }
 
 
@@ -186,15 +296,16 @@ void Client::beginRead()
 	{
 		while(running)
 		{
-			static char buffer[1024];
+			static vector<char> buffer_ = vector<char>();
+			static char buffer[512];
 			static short currPos = 0;
 			static short nextMsgSize = 0;
 			
 			Sleep(1);
 
-			int recievedBytes = recv(s,buffer+currPos,1024-currPos,0);
+			int recievedBytes = recv(s,buffer,512,0);
 			if(recievedBytes == 0)
-				;//Connection closed
+				break;//Connection closed
 			else if(recievedBytes <0)
 			{
 				if(WSAGetLastError() == 10035)//Would block
@@ -206,28 +317,29 @@ void Client::beginRead()
 					break;
 				}
 			}
+
+			for(int i=0;i<recievedBytes;i++)
+				buffer_.push_back(buffer[i]);
 			
 			currPos += recievedBytes;
 			while (currPos >= nextMsgSize && currPos != 0)
 			{
-				if (nextMsgSize == 0)
-					nextMsgSize = (buffer[0]<<8)+buffer[1];
+				if (nextMsgSize < 2)
+					nextMsgSize = (buffer_[0]<<8)+buffer_[1];
 				else
 				{
 					currPos -= nextMsgSize;
-					short id = (buffer[currPos+2]<<8) + buffer[currPos+3];
+					short id = (buffer_[2]<<8) + buffer_[3];
 
-					char* msg = new char[nextMsgSize-4];
-					memcpy(msg,buffer+currPos+4,sizeof(char)*(nextMsgSize-4));
-					vector<char> message;
-					for(int i=0;i<nextMsgSize-4;i++)
-						message.push_back(msg[i]);
+					vector<char> message;//RECIEVE MAL MACHEN
+					if(nextMsgSize>4)
+						message.insert(message.end(),buffer_.begin()+4,buffer_.begin()+nextMsgSize);
+
+					buffer_.erase(buffer_.begin(),buffer_.begin()+nextMsgSize);
 
 					sendNewMessage(id,message);
 
-
-					nextMsgSize = 0;
-					delete[] msg;
+					nextMsgSize = 1;
 				}
 			}
 		}
@@ -236,38 +348,28 @@ void Client::beginRead()
 
 void Client::addToNewMessageCallback(NetworkParticipant* np)
 {
-	newMessageCallbackMutex.lock();
-	newMessageCallback.push_back(np);
-	newMessageCallbackMutex.unlock();
+	addNewMessageCallbackMutex.lock();
+	addNewMessageCallbackList.push_back(np);
+	addNewMessageCallbackMutex.unlock();
 }
 
 void Client::deleteFromNewMessageCallback(NetworkParticipant* np)
 {
-	newMessageCallbackMutex.lock();
-	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		if(newMessageCallback[i] == np)
-		{
-			newMessageCallback.erase(newMessageCallback.begin()+i);
-			break;
-		}
-	newMessageCallbackMutex.unlock();
+	deleteNewMessageCallbackMutex.lock();
+	deleteNewMessageCallbackList.push_back(np);
+	deleteNewMessageCallbackMutex.unlock();
 }
 
 void Client::addToErrorCallback(NetworkParticipant* np)
 {
-	errorCallbackMutex.lock();
-	errorCallback.push_back(np);
-	errorCallbackMutex.unlock();
+	addErrorCallbackMutex.lock();
+	addErrorCallbackList.push_back(np);
+	addErrorCallbackMutex.unlock();
 }
 
 void Client::deleteFromErrorCallback(NetworkParticipant* np)
 {
-	errorCallbackMutex.lock();
-	for(unsigned int i=0;i<errorCallback.size();i++)
-		if(errorCallback[i] == np)
-		{
-			errorCallback.erase(errorCallback.begin()+i);
-			break;
-		}
-	errorCallbackMutex.unlock();
+	deleteErrorCallbackMutex.lock();
+	deleteErrorCallbackList.push_back(np);
+	deleteErrorCallbackMutex.unlock();
 }
