@@ -7,42 +7,110 @@ Textblock::Textblock()
 
 Textblock::~Textblock()
 {
-
+	//TODO
 }
 
-Textblock::Textblock(Vector2f pos, Vector2f size, String S, int ID)
+Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 {
-
-	m_ID = ID;
-
-	setSize(size);
 	setPosition(pos);
 	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_textblockText.setFont(m_Font);
-	m_textblockText.setString(S);
 	m_textblockText.setPosition(getPosition());
-	m_textblockText.setColor(MyColors.Orange);
+	m_textblockText.setColor(MyColors.Black);
+	m_textblockText.setCharacterSize(CharSize);
+	m_textblockText.setString(lineBreak(S, size));
+	textsize = m_textblockText.getLocalBounds();
+	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
+	m_color = MyColors.Gray;
+	setFillColor(m_color);
+	fixCharsize();
+}
 
-	sf::Rect<float> textsize;
+Vector2f Textblock::getTBsize()
+{
+	return this->getSize();
+}
 
-	while(true)
+void Textblock::setText(String text, Vector2f size)
+{
+	m_textblockText.setString(lineBreak(text, size));
+}
+
+void Textblock::setPos(Vector2f pos)
+{
+	this->setPosition(pos);
+	textsize = m_textblockText.getLocalBounds();
+	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
+	m_textblockText.setPosition(pos);
+	fixCharsize();
+}
+
+void Textblock::setFontColor(Color color)
+{
+	m_textblockText.setColor(color);
+}
+
+void Textblock::setBackgroundColor(Color color)
+{
+	this->setFillColor(color);
+}
+
+void Textblock::setCharSize(int CharSize)
+{
+	m_textblockText.setCharacterSize(CharSize);
+}
+
+void Textblock::fixCharsize()
+{
+	// Charsizes over 23 == problems --> fix
+	if(m_textblockText.getCharacterSize() > 23)
 	{
-		textsize = m_textblockText.getLocalBounds();
-		float scale = m_textblockText.getScale().x;
-		if(textsize.width * scale > size.x || textsize.height * scale > size.y)
+		m_textblockText.move(0, -10);
+	}
+}
+
+std::string Textblock::lineBreak(String S, Vector2f size)
+{
+	std::string tmp_word;
+	std::string tmp_line;
+	int count = 0;
+	std::string biggest;
+	std::string tmp;
+	std::string output;
+
+	for(unsigned int i = 0; i < S.getSize(); i++)
+	{
+		while(S[i + count] != ' ' || S[i + count] == '\0')
 		{
-			scale *= 0.8f;
-			m_textblockText.setScale(scale, scale);
+			tmp_word += S[i + count];
+			count++;
+
+			if(count + i == S.getSize())
+				break;
 		}
-		else
-			break;
+		if(i + count != S.getSize())
+		{
+			tmp_word += ' ';
+		}
+		tmp_line += tmp_word;
+		m_textblockText.setString(tmp_line);
+		textsize = m_textblockText.getLocalBounds();
+
+		if(size.x < textsize.width)
+		{
+			output += '\n';
+			output += tmp_word;
+			tmp_line = tmp_word;
+			tmp_word.clear();
+		}
+		output += tmp_word;
+		tmp_word.clear();
+
+		i += count;
+		count = 0;
 	}
 
-	m_textblockText.move(	(getSize().x - textsize.width * m_textblockText.getScale().x) / 2.0f,
-							(getSize().y - textsize.height * 1.5f * m_textblockText.getScale().y) / 2.0f);
-
-	m_color = MyColors.White;
-	setFillColor(m_color);
+	return output;
 }
 
 void Textblock::operator=(const Textblock & tblock)

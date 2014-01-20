@@ -1,30 +1,52 @@
 #include "GameLobbyLogic.h"
 
-GameLobbyLogic::GameLobbyLogic(short id, PlayerData* master)
+GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName)
 {
 	this->server = Server::get();
-	this->id = id;
+
+	//this->id = id;
 	this->gameMaster = master;
+	this->playerlimit = 4;
+	this->players.push_back(&this->gameMaster);
+	this->gameLobbyName = GameLobbyName;
+
+	Map* map = new Map();
+	map->load("Data/Maps/TestMap.tmx");
+	this->currentMap = map;
 
 	server->addToNewMessageCallback(this);
+	server->addToErrorCallback(this);
 }
 
 GameLobbyLogic::~GameLobbyLogic()
 {
+	delete this->currentMap;
+
 	server->deleteFromNewMessageCallback(this);
+	server->deleteFromErrorCallback(this);
 }
 
 /* GETTER - SETTER */
 
-void GameLobbyLogic::setID(short id)
+void GameLobbyLogic::setName(string name)
 {
-	this->id = id;
+	 this->gameLobbyName = name;
 }
 
-short GameLobbyLogic::getID()
+string GameLobbyLogic::getName()
 {
-	return this->id;
+	return this->gameLobbyName;
 }
+
+//void GameLobbyLogic::setID(short id)
+//{
+//	this->id = id;
+//}
+//
+//short GameLobbyLogic::getID()
+//{
+//	return this->id;
+//}
 
 void GameLobbyLogic::setPlayerlimit(short limit)
 {
@@ -36,12 +58,12 @@ short GameLobbyLogic::getPlayerlimit()
 	return this->playerlimit;
 }
 
-void GameLobbyLogic::setGamemaster(PlayerData* player)
+void GameLobbyLogic::setGamemaster(PlayerData player)
 {
 	this->gameMaster = player;
 }
 
-PlayerData* GameLobbyLogic::getGamemaster()
+PlayerData GameLobbyLogic::getGamemaster()
 {
 	return this->gameMaster;
 }
@@ -51,17 +73,17 @@ vector<PlayerData*>& GameLobbyLogic::getPlayers()
 	return this->players;
 }
 
-/*
-void GameLobbyLogic::setMap(Map map)
+
+void GameLobbyLogic::setMap(Map* map)
 {
 	this->currentMap = map;
 }
 
-Map GameLobbyLogic::getMap()
+Map* GameLobbyLogic::getMap()
 {
 	return this->currentMap;
 }
-*/
+
 
 /* Funktionen */
 
@@ -74,15 +96,16 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 {
 	std::vector<char> erfg;
 
-	for(int i = 0; i > this->players.size(); i++)
+	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		string name = this->players[i]->Name;
 		vector<char> tmp = code(name);
 
 		erfg.insert(erfg.end(), tmp.begin(), tmp.end());
+		erfg.push_back('/');
 		
-		if( i == (this->players.size() - 1))
-			erfg.push_back('/');
+		//if( i == (this->players.size() - 1))
+		//	erfg.push_back('/');
 	}
 
 	this->server->write(s, 0x0302, erfg);
@@ -96,10 +119,14 @@ void GameLobbyLogic::sendMaxPlayers(SOCKET s)
 
 void GameLobbyLogic::sendGameMaster(SOCKET s)
 {
-	vector<char> erfg = code(this->gameMaster->Name);
+	vector<char> erfg = code(this->gameMaster.Name);
 	this->server->write(s, 0x0306, erfg);
 }
 
+void GameLobbyLogic::sendGameLobbyData(SOCKET s)
+{
+
+}
 //void GameLobbyLogic::sendCurrentMap(SOCKET s)
 //{
 //	vector<char> erfg = code(this->currentMap->id);
@@ -112,7 +139,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 {
 	bool socketAvailable = false;
 
-	for(int i = 0; i > this->players.size(); i++)
+	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		if(s == this->players[i]->s)
 			socketAvailable = true;
@@ -126,7 +153,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			{
 				for(unsigned int i = 0; i < this->players.size(); i++)
 					if(this->players[i]->s == s)
-						this->players.erase(this->players.begin() + i, this->players.begin() + i);
+						this->players.erase(this->players.begin() + i);
 				
 				std::vector<char> erfg;
 
@@ -134,9 +161,11 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			}break;
 		case 0x0303:
 			{
-				if(this->gameMaster->s == s)
+				if(this->gameMaster.s == s)
 				{
 					// Spielstart
+
+					GameLogic* game = new GameLogic(this->players, this->currentMap);
 
 					std::vector<char> erfg;
 
@@ -145,7 +174,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			}break;
 		case 0x0310:
 			{
-				if(this->gameMaster->s == s)
+				if(this->gameMaster.s == s)
 				{
 					short map = data[0] - 48;
 
@@ -158,9 +187,9 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			}break;
 		case 0x0311:
 			{
-				if(this->gameMaster->s == s)
+				if(this->gameMaster.s == s)
 				{
-					short anz = data[0] - 48;
+					short anz = data[0];
 
 					if(anz > 4)
 						anz = 4;
@@ -168,7 +197,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					this->setPlayerlimit(anz);
 
 					std::vector<char> erfg;
-					char playerCount = anz + 48;
+					char playerCount = anz;
 					erfg.push_back(playerCount);
 					this->server->write(s, 0x0321, erfg);
 				}
@@ -200,4 +229,39 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
+	switch (errCode)
+	{
+		case 0x0010:
+			{
+				for(int i = 0; i < (signed) this->players.size(); i++)
+				{
+					if(s == this->players[i]->s)
+					{
+						if(this->players[i]->s == this->gameMaster.s)
+							if(this->players.size() != 1)
+							{
+								this->setGamemaster(*this->players[i + 1]);
+							}
+				
+						this->players.erase(this->players.begin() + i);	
+					}
+				}
+			}break;
+		case 0x0011:
+			{
+				for(int i = 0; i < (signed) this->players.size(); i++)
+				{
+					if(s == this->players[i]->s)
+					{
+						if(this->players[i]->s == this->gameMaster.s)
+							if(this->players.size() != 1)
+							{
+								this->setGamemaster(*this->players[i + 1]);
+							}
+				
+						this->players.erase(this->players.begin() + i);	
+					}
+				}
+			}break;
+	}
 }

@@ -7,7 +7,7 @@
  - MACH NEN BUTTON
 
 
-
+ 
 
 
 
@@ -32,9 +32,9 @@ INGAME
 - interface
 	- basic elemente 
 		- textbox eingabe
-		- slider
-		- checkbox
-		- einheit
+		- slider 
+		- checkbox 
+		- einheit 
 	- interface hauptbox (reiter)
 		- baumenü
 		- einheiten
@@ -43,7 +43,7 @@ INGAME
 		- menubutton
 		- truppen
 		- gebiete
-		- recourcen
+		- resourcen
 	- spielfeld overlay
 		- städte info
 		
@@ -62,5 +62,5 @@ jede ebene ein array zum zeichnen in game.draw(...)
 
 IClickable
 {
-	ishit(vector2f);
+	MouseMoved(vector2f);
 }

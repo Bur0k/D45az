@@ -4,22 +4,29 @@
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include "PlayerData.h"
+#include "GameLobby.h"
 #include <vector>
 #include <map>
+#include <atomic>
 
 class Lobby : public NetworkParticipant
 {
 	Client* c;
-	string name;
-	map<char, GameData> gamesCreated;
-	
 
+	
 public:
-	Lobby(string name);
+	mutex m;
+	bool updated;
+	map<short, GameData> gamesCreated;
+
+
+	std::atomic<GameLobby*> gameLobby;
+
+	Lobby();
 	~Lobby();
 
-	void connectToGameLobby(char mapid);
-	void createNewGameLobby();
+	void connectToGameLobby(short mapid);
+	void createNewGameLobby(std::string gamename);
 	void askforLobbyData();
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);

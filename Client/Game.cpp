@@ -8,7 +8,7 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		m_pMS->play_music(0);
+		m_pMS->next_song();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -29,6 +29,8 @@ void Game::onButtonClick(int index)
 void Game::onSliderValueChange(int ID, double position)
 {
 	std::cout << "Slider CHANGED ID: " << ID << " Value: " << position << std::endl;
+	std::cout << "Lautstärke jetzt: " << position*100 << endl;
+	m_pMS->set_volume(generel_noise, position*100);
 }
 
 void Game::onSliderReleased(int ID, double position)
@@ -36,44 +38,63 @@ void Game::onSliderReleased(int ID, double position)
 	std::cout << "Slider RELEASED ID: " << ID << " Value: " << position << std::endl;
 }
 
-
-Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
+void Game::onTextBoxSend(int ID, std::string s)
 {
+	std::cout << "TEXTBOX ID " << ID << " text:   " << s << std::endl;
+}
 
-
+Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
+{
 	m_pWindow = rw;
-	m_ViewMode = sm;
+	m_ViewMode = Viewmode;
 	m_size = windowSize;
 
 	m_inFocus = true;
+	m_menubutton = false;
+
+
+	ResetMouse();
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
-	m_stdFont = MyFonts::getFont(GameFonts::ARIAL);
 
+	Image mouse;
+	if(!mouse.loadFromFile("Data/Images/mouse.png"))
+		std::cout << "game.cpp can't load image Data/Images/mouse.png" << std::endl;
+	m_falseMouse.t.loadFromImage(mouse);
+	m_falseMouse.s.setTexture(& m_falseMouse.t);
+	m_falseMouse.s.setPosition(m_lastMousePosition.x, m_lastMousePosition.y);
+	m_falseMouse.s.setSize(Vector2f(35,35));
+
+	//timers
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
 
+	LoadView(Viewmode);
 
-
-	tblock = new Textblock(Vector2f(20, 30), Vector2f(100, 100), "asdlkdjngsöljfngsäklnsdggllkjf", 5);
+	//TESTSCREEN stuff
+	tblock = new Textblock(Vector2f(20, 80), Vector2f(100, 100), "asasd fgdf klas", 25);
 	m_drawL.push_back(tblock);
 
+	//SBAR 
+	MenuOpener MOpointer = &open_Menu;
+//	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), MenuOpener MOpointer); 
+//	m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
-	b->attachFunction((IButtonfunction*)this);
+	b->Attach((IButtonfunction*)this);
 	
 	b1 = new Button(Vector2f(500,200),Vector2f(100,200), "|| SOUND 1 || \n Basisklasse \n Button \n automatische \n grössenanpassung", 2, false);
 
-	b1->attachFunction((IButtonfunction*)this);
+	b1->Attach((IButtonfunction*)this);
 
 	b2 = new StandardButton(Vector2f(500,500), Vector2f(170,100),"Musik stoppen", 4, false);
 
-	b2->attachFunction((IButtonfunction*)this);
+	b2->Attach((IButtonfunction*)this);
 
 	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"|| SOUND 2 || \n buttons können auch\nein und aus schalten" , 3, true);
 
-	b3->attachFunction(this);
+	b3->Attach(this);
 
 	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
 	
@@ -83,9 +104,13 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 
 	s1->Attach(this);
 
+	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
 
-	m_fpsText.setFont(m_stdFont);
-	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
+	tb->Attach(this);
+
+	//FPS anzeige
+	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 	m_fpsText.setColor(MyColors.Red);
 
 
@@ -95,6 +120,7 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	m_clickL.push_back(b3);
 	m_clickL.push_back(s);
 	m_clickL.push_back(s1);
+	m_clickL.push_back(tb);
 	
 	m_drawL.push_back(b);
 	m_drawL.push_back(b1);
@@ -102,21 +128,22 @@ Game::Game(RenderWindow* rw, Views sm, Vector2f windowSize)
 	m_drawL.push_back(b3);
 	m_drawL.push_back(s);
 	m_drawL.push_back(s1);
-	
+	m_drawL.push_back(tb);
+
 	m_animateL.push_back(b);
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
+	m_animateL.push_back(tb);
+
+	m_keyInputL.push_back(tb);
 
 
-
-	// Musik Test Zeug
-
+	//Musik
 	m_pMS = new MusikSampler();
-	/*
-	MS->load_music(0);
-	MS->play_music();
-	*/
+
+	map.load("Data/Maps/test.tmx");
+	xMap=yMap=0;
 }
 
 Game::~Game()
@@ -131,15 +158,23 @@ Game::~Game()
 	delete b3;
 	delete s;
 	delete s1;
+	delete tb;
+	delete SBar;
 
 	delete tblock;
 
 	delete m_pMS;
+
+	for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+		delete m_ViewVect[i];
+
+	MyFonts::deleteFonts();
+
 }
 
-void Game::setView(Views sm)
+void Game::setMenubottun(bool onoff)
 {
-	m_ViewMode = sm;
+	m_menubutton = onoff;
 }
 
 Views Game::getView()
@@ -149,73 +184,25 @@ Views Game::getView()
 
 void Game::Draw()
 {
-	switch (m_ViewMode)
-	{
-	case INGAME:
-		DrawGame();
-		break;
-	case LOGIN:
-		DrawLogin();
-		break;
-	case MENUE:
-		DrawMainMenu();
-		break;
-	case LOBBY:
-		DrawLobby();
-		break;
-	case INGAME_MENU:
-		DrawGame();
-		DrawIngameMenu();
-		break;
-	case TESTSCREEN:
+
+	if(m_ViewMode == Views::TESTSCREEN)
 		DrawTest();
-	default:
-		break;
-	}
+	else
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			m_ViewVect[i]->draw(m_pWindow);
 
+	//DrawMouse
+	m_pWindow->draw(m_falseMouse.s);
+	//ALLWAYS draw fps counter while in debug mode
+//#ifdef _DEBUG
 	m_pWindow->draw(m_fpsText);
-}
-
-void Game::DrawGame()
-{
-
-}
-
-void Game::DrawLogin()
-{
-
-}
-
-void Game::DrawMainMenu()
-{
-	
-}
-
-void Game::DrawLobby()
-{
-
-}
-
-void Game::DrawIngameMenu()
-{
-
+//#endif
 }
 
 void Game::DrawTest()
-{
-	/*sf::Text t = sf::Text();
-	t.setString("Hallo Welt\nD45az finezt.");
-	t.setPosition(sf::Vector2f(200,200));
-	t.setFont(m_stdFont);
-	t.setColor(sf::Color::White);
-
-	sf::RectangleShape r = sf::RectangleShape();
-	r.setPosition(sf::Vector2f(200,400));
-	r.setSize(sf::Vector2f(250,250));
-	r.setFillColor(sf::Color::Blue);*/
-
-	//m_pWindow->draw(t);
-	//m_pWindow->draw(r);
+{	
+	sf::IntRect RenderRect(xMap,yMap,m_pWindow->getSize().x,m_pWindow->getSize().y);
+	map.render(*m_pWindow, RenderRect);
 
 	for(unsigned int i = 0; i < m_drawL.size(); i++)
 		m_drawL[i]->draw(m_pWindow);
@@ -224,71 +211,164 @@ void Game::DrawTest()
 void Game::onResize()
 {
 	View v = m_pWindow->getView();
+	m_size = (Vector2f)m_pWindow->getSize();
 	m_pWindow->setSize(sf::Vector2u(m_pWindow->getSize().x, m_pWindow->getSize().y));
 	v.setSize(sf::Vector2f((float)m_pWindow->getSize().x , (float)m_pWindow->getSize().y));
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
-	
-	m_fpsText.setPosition((float)m_pWindow->getSize().x - 50, 30);
 
-	//std::cout << "Changing View on Resize :  " << "x" << m_pWindow->getSize().x << " x " << m_pWindow->getSize().y << std::endl;
-				
+	SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
+
+	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
+
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onResize(m_pWindow->getSize());
 }
 
 void Game::onMouseMove()
 {
+	Vector2u winSize = m_pWindow->getSize();
+		
 	Vector2i mousePos = Mouse::getPosition(*m_pWindow);
-	Vector2i mpm = Mouse::getPosition();
+	if(mousePos.x == winSize.x / 2 && mousePos.y == winSize.y / 2)
+	{
+		m_lastMousePosition = mousePos;
+		return; //return if mouse was resetted to the center of the screen
+	}
 
-	//std::cout << " Window Mouse Position  x " << mpm.x << " y " << mpm.y << std::endl;
-
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->isHit(mousePos);
+	Vector2f delta = Vector2f(mousePos.x - m_lastMousePosition.x , mousePos.y - m_lastMousePosition.y);
+	m_falseMouse.s.move(delta); //move displayed mouse
 
 	m_lastMousePosition = mousePos;
+
+	Vector2f mPos = m_falseMouse.s.getPosition();
+	bool borderColisionX = false;
+	bool borderColisionY = false;
+	if(mPos.x >= (float)winSize.x)
+	{
+		borderColisionX = true;
+	}
+	else if(mPos.x <= 0)
+	{
+		borderColisionX = true;
+	}
+	if(mPos.y >= (float)winSize.y)
+	{
+		borderColisionY = true;
+	}
+	else if(mPos.y <= 0)
+	{
+		borderColisionY = true;
+	}
+
+
+
+	if(borderColisionX)
+		m_falseMouse.s.move(-delta.x,0);
+	if(borderColisionY)
+		m_falseMouse.s.move(0,-delta.y);
+
+	ResetMouse();
+	
+
+
+	
+	//TODO alle mouse move aufrufe zu float umwandeln
+
+	if(m_ViewMode == Views::TESTSCREEN)
+	{
+		SBar->MouseMoved(mousePos); // Maus auf Statusbar?
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
+	}
+
+	m_lastMousePosition = mousePos;
+
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
+	
 }
 
 void Game::onMouseDownLeft()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->PressedLeft();
+	if(m_ViewMode == Views::TESTSCREEN)
+	{
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->PressedLeft())
+				break;	
+		SBar->PressedLeft();
+	}
+
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->PressedLeft();
 }
 
 void Game::onMouseDownRight()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->PressedRight();
+	if(m_ViewMode == Views::TESTSCREEN)
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->PressedRight())
+			break;
+
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->PressedRight();
 }
 
-void Game::onMouseLeave()
-{
-#ifdef MOUSEGRAB
-	//TODO	this mouse grab hack does work if the scaling would be disabled
-	//		though it results in massive mouse jitterling along the edge of the window which is not acceptable
-	std::cout << " Mouse Left the Window " << std::endl;
-	Mouse::setPosition(m_lastMousePosition, *m_pWindow);
-#endif //MOUSEGRAB
-}
 
 void Game::onMouseUpLeft()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->ReleasedLeft();
+	if(m_ViewMode == Views::TESTSCREEN)
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedLeft())
+			break;
+
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->ReleasedLeft();
 }
 
 void Game::onMouseUpRight()
 {
-	for(unsigned int i = 0; i < m_clickL.size(); i++)
-		m_clickL[i]->ReleasedRight();
+	if(m_ViewMode == Views::TESTSCREEN)
+	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+		if(m_clickL[i]->ReleasedRight())
+			break;
+
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->ReleasedRight();
 }
 
 void Game::onKeyDown(sf::Event e)
 {
+	if(m_ViewMode == Views::TESTSCREEN)
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyDown(e);
 	
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onKeyDown(e);
+	
 	if(e.key.code == Keyboard::F)
 		b->move(-6,0);
+	else if(e.key.code == Keyboard::Left)
+		xMap-=5;
+	else if(e.key.code == Keyboard::Right)
+		xMap+=5;
+	else if(e.key.code == Keyboard::Up)
+		yMap-=5;
+	else if(e.key.code == Keyboard::Down)
+		yMap+=5;
+
+	if(e.key.code == Keyboard::G)
+		s->move(Vector2f(1,1));
+	if(e.key.code == Keyboard::Q)
+		b3->unLock();
+ 	if(e.key.code == Keyboard::Escape && !m_menubutton)
+		open_Menu;
+}
+
+void Game::open_Menu()
+{
+	this->LoadView(Views::MENU);
+	m_menubutton = true;
 }
 
 void Game::onKeyUp(sf::Event e)
@@ -296,31 +376,106 @@ void Game::onKeyUp(sf::Event e)
 	for(unsigned int i = 0; i < m_keyInputL.size(); i++)
 		m_keyInputL[i]->onKeyUp(e);
 
-#ifdef _DEBUG
-	if(e.key.code == sf::Keyboard::Escape) 
-		m_pWindow->close();
-#endif
+	if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onKeyUp(e);
+
+	if(e.key.code == Keyboard::Escape)
+		m_menubutton = false;
+
+//#ifdef _DEBUG
+//	if(e.key.code == sf::Keyboard::Escape) 
+//		m_pWindow->close();
+//#endif
 }
 
 void Game::onTextEntered(sf::Event e)
 {
 	Uint32 c = e.text.unicode;
-	if((c >= 32 && c <= 126) /* ... */)
+	//filter input
+	if((c >= 32 && c <= 126) || c == 0x00F6 || c == 0x00FC || c == 0x00E4 || c == 0x00C4 || c == 0x00D6	|| c == 0x00DC || c == 0x00DF || c == 0x0FD6 )
 	{
 		std::string s;
 		s = c;
 		for(unsigned int i = 0; i < m_keyInputL.size(); i++)
-			m_keyInputL[i]->onTextInput(c);
-		std::cout << "TEXT ENTERED : " << (std::string)s << std::endl;
+			m_keyInputL[i]->onTextInput(s);
+
+		if(m_ViewVect.size() > 0)
+		m_ViewVect[m_ViewVect.size() - 1]->onTextInput(s);
 	}
 }
 
-
-void Game::onClose()
+void Game::ResetMouse()
 {
-	MyFonts::deleteFonts();
-
+	Mouse::setPosition(Vector2i(m_pWindow->getSize().x / 2, m_pWindow->getSize().y / 2), *m_pWindow);
+	m_lastMousePosition = Mouse::getPosition();
 }
+
+void Game::LoadView(Views v)
+{
+
+	//unfinished implementation
+	bool clear = false;
+
+	IView* NewView;
+
+	switch (v)
+{
+	case Views::NOCHANGE:
+		return;
+		break;
+
+	case Views::INGAME:
+		
+		break;
+
+	case Views::LOGIN:
+		NewView = new LoginView(m_pWindow->getSize());
+		clear = true;
+		break;
+
+	case Views::MENU:
+		if(m_ViewMode == Views::MENU)
+		{
+			delete m_ViewVect[m_ViewVect.size() -1 ];
+			m_ViewVect.pop_back();
+			m_ViewMode = m_ViewVect[m_ViewVect.size() -1]->getType();
+			return;
+		}
+		else 
+		{
+			m_ViewMode = v;
+			NewView = new MenuView(m_pWindow->getSize(),false);
+		}
+		break;
+
+	case Views::LOBBY:
+		NewView = new LobbyView();
+		clear = true;
+		break;
+
+	case Views::TESTSCREEN:
+		return;
+		break;
+
+	case Views::CLOSE:
+		m_pWindow->close();
+		return;
+		break;
+
+	default:
+		break;
+	}
+
+	if(clear)
+	{
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			delete m_ViewVect[i];
+		m_ViewVect.clear();
+	}
+
+	m_ViewVect.push_back(NewView);
+}
+
 
 void Game::Input()
 {
@@ -339,10 +494,13 @@ void Game::Input()
 
 		case sf::Event::GainedFocus:
 			m_inFocus = true;
+			m_pWindow->setMouseCursorVisible(false);
+			ResetMouse();
 			break;
 
 		case sf::Event::LostFocus:
 			m_inFocus = false;
+			m_pWindow->setMouseCursorVisible(true);
 			break;
 
 		case sf::Event::Resized:
@@ -351,7 +509,7 @@ void Game::Input()
 
 			/////MOUSE EVENTS/////
 		case sf::Event::MouseMoved:
-			if (m_inFocus) 
+			if (m_inFocus)
 				onMouseMove();
 			break;
 
@@ -367,12 +525,6 @@ void Game::Input()
 				onMouseUpLeft();
 			else if (m_inFocus)
 				onMouseUpRight();
-			break;
-
-		case sf::Event::MouseLeft:	//TODO doesn't work on scalable boarders
-			//TODO mouse grab only when in game mode not in menues or lobby
-			if (m_inFocus)
-				onMouseLeave();
 			break;
 
 			/////KEYBOARD EVENTS/////
@@ -395,6 +547,10 @@ void Game::Input()
 			break;
 		}
 	}
+
+	//check view for nextstate
+	if(m_ViewVect.size() > 0 && m_ViewMode != Views::TESTSCREEN)
+		LoadView(m_ViewVect[m_ViewVect.size() - 1]->nextState());
 }
 
 void Game::timer()
@@ -406,25 +562,32 @@ void Game::timer()
 	
 
 	//ANIMATION//
-	animationtime += m_animationTimer.getElapsedTime().asMilliseconds();
+	animationtime += m_animationTimer.getElapsedTime().asMicroseconds();
+
+	for(unsigned int i = 0;i<m_ViewVect.size();i++)
+		m_ViewVect[i]->update(static_cast<double>(m_animationTimer.getElapsedTime().asMicroseconds())/1000.0);
+	
 	m_animationTimer.restart();
-	while(animationtime > 1000 / 33)
+
+	while(animationtime > 1000000 / 33)
 	{
-		animationtime -= 1000 / 33;
+		animationtime -= 1000000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
 			m_animateL[i]->animationTick();
+
+		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
+			m_ViewVect[i]->animationTick();
 	}
 
 
 	//...//
-	if(m_fpsCounter.getElapsedTime().asSeconds() >= 1)
+	fpsCount++;
+	if(m_fpsCounter.getElapsedTime().asMicroseconds() >= 1000000)
 	{
 		m_fpsCounter.restart();
 		m_fpsText.setString(std::to_string(fpsCount));
 		fpsCount = 0;
 	}
 
-	fpsCount++;
 	//more timers ...
 }
-

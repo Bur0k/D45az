@@ -22,10 +22,11 @@ public:
 typedef std::vector<ITextBoxFunction*>TextBoxFuncVect;
 
 
-#define TEXTBOXHEIGHT 40
+#define TEXTBOXHEIGHT 50
 #define TEXTBOXBORDERSPACING 10
 #define TEXTBOXCURSORWIDTH 3
-#define TEXTBOXANIMATIONLENGTH 70
+#define TEXTBOXANIMATIONLENGTH 30
+#define TEXTBOXCURSORBLINKTIME 15 
 
 
 class TextBox : public IKeyboardinput, public IClickable, public IDrawable, public IAnimatable
@@ -35,11 +36,23 @@ protected:
 	bool m_returnIsSend;
 	bool m_mouseOver;
 	bool m_isStartStringDisplayed;
+	bool m_cursorRight;
+
+	SpriteTex* m_pBorder;
+
+	/* Sprite Layout
+		0 1 2
+		3 - 4
+		5 6 7
+	*/
 
 	int m_ID;
+	//cursor position on screen
 	int m_cursorPosition;
+	//amount of chars that the string is offset to the left (or amount of chars NOT displayed in the box)
 	int m_CharacterDisplayOffset;
 	int m_anmation;
+	int m_cursorAnimation;
 
 	Color m_focusCol;
 	Color m_nofocusCol;
@@ -57,18 +70,20 @@ protected:
 	
 	//decides which part of m_text will be displayed
 	void fitText();
-
+	void moveCursor(bool left);
+	void positionBorderElements();
 	
 public:
 	
 	///@param startText should be description of what the box does or an example of expected format
 	TextBox(float width, sf::String startText, Vector2f pos, bool sendOnReturn, int id);
-	
+	~TextBox();
+
 	std::ostream& operator<<(std::ostream&);
 
 	void Notify();
-	void attach(ITextBoxFunction*);
-	bool detach(ITextBoxFunction*);
+	void Attach(ITextBoxFunction*);
+	bool Detach(ITextBoxFunction*);
 
 	void move(Vector2f);
 	Vector2f getPos();
@@ -79,6 +94,8 @@ public:
 
 	std::string getText();
 	void setText(std::string);
+	void clear();
+
 
 	//implementing Ikeyboardinput
 	virtual void onKeyDown(sf::Event);
@@ -86,11 +103,11 @@ public:
 	virtual void onTextInput(std::string s);
 
 	//implemnting Iclickable
-	virtual bool isHit(sf::Vector2i &);
-	virtual void PressedRight();
-	virtual void PressedLeft();
-	virtual void ReleasedRight();
-	virtual void ReleasedLeft();
+	virtual bool MouseMoved(sf::Vector2i &);
+	virtual bool PressedRight();
+	virtual bool PressedLeft();
+	virtual bool ReleasedRight();
+	virtual bool ReleasedLeft();
 
 	//implementing IDrawable
 	virtual void draw(sf::RenderWindow* rw);

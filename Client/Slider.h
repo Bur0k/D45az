@@ -7,7 +7,8 @@
 
 #include "IClickable.h"
 #include "IDrawable.h"
-#include "graphic_globals.h"	//TODO struct in eigenes file
+#include "graphic_globals.h"	
+
 
 using namespace sf;
 
@@ -61,11 +62,11 @@ public:
 
 	//Implementation of IClickable
 
-	bool isHit(Vector2i &);
-	void PressedRight();
-	void PressedLeft();
-	void ReleasedRight();
-	void ReleasedLeft();
+	bool MouseMoved(Vector2i &);
+	bool PressedRight();
+	bool PressedLeft();
+	bool ReleasedRight();
+	bool ReleasedLeft();
 
 	void draw(RenderWindow* rw);
 	

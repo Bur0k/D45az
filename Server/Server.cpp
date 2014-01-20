@@ -7,17 +7,17 @@
 std::vector<char> code(short s)
 {
 	std::vector<char> v;
-	v.push_back(s);
-	v.push_back(s>>8);
+	v.push_back(static_cast<char>(s));
+	v.push_back(static_cast<char>(s>>8));
 	return v;
 }
 std::vector<char> code(int i)
 {
 	std::vector<char> v;
-	v.push_back(i);
-	v.push_back(i>>8);
-	v.push_back(i>>16);
-	v.push_back(i>>24);
+	v.push_back(static_cast<char>(i));
+	v.push_back(static_cast<char>(i>>8));
+	v.push_back(static_cast<char>(i>>16));
+	v.push_back(static_cast<char>(i>>24));
 	return v;
 }
 std::vector<char> code(const std::string s)
@@ -32,16 +32,16 @@ short decodeShort(const std::vector<char>& v, int from)
 {
 	short s;
 	s = v[from];
-	s += v[from]<<8;
+	s += v[from+1]<<8;
 	return s;
 }
 int decodeInt(const std::vector<char>& v, int from)
 {
 	short i;
 	i = v[from];
-	i += v[from]<<8;
-	i += v[from]<<16;
-	i += v[from]<<24;
+	i += v[from+1]<<8;
+	i += v[from+2]<<16;
+	i += v[from+3]<<24;
 	return i;
 }
 std::string decodeString(const std::vector<char>& v, int from, int len)
@@ -83,7 +83,10 @@ Server::Server()
 			toWriteMutex.unlock();
 
 			if(dataToSend.data.size() == 0)
+			{
+				Sleep(1);
 				continue;
+			}
 
 			char* buffer = new char[dataToSend.data.size()];
 			for(unsigned int i=0;i<dataToSend.data.size();i++)
@@ -94,6 +97,86 @@ Server::Server()
 				sendError(dataToSend.s,-3,"Send failed with error: "+to_string(WSAGetLastError()));
 
 			delete[] buffer;
+		}
+	});
+
+	addNewMessageCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			addNewMessageCallbackMutex.lock();
+			for(unsigned int i=0;i<addNewMessageCallbackList.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				newMessageCallback.push_back(addNewMessageCallbackList[i]);
+				newMessageCallbackMutex.unlock();
+			}
+			addNewMessageCallbackList.clear();
+			addNewMessageCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+	deleteNewMessageCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			deleteNewMessageCallbackMutex.lock();
+			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				for(unsigned int i=0;i<newMessageCallback.size();i++)
+					if(newMessageCallback[i] == deleteNewMessageCallbackList[i])
+					{
+						newMessageCallback.erase(newMessageCallback.begin()+i);
+						break;
+					}
+				newMessageCallbackMutex.unlock();
+			}
+			deleteNewMessageCallbackList.clear();
+			deleteNewMessageCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+
+	addErrorCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			addErrorCallbackMutex.lock();
+			for(unsigned int i=0;i<addErrorCallbackList.size();i++)
+			{
+				errorCallbackMutex.lock();
+				errorCallback.push_back(addErrorCallbackList[i]);
+				errorCallbackMutex.unlock();
+			}
+			addErrorCallbackList.clear();
+			addErrorCallbackMutex.unlock();
+
+			Sleep(1);
+		}
+	});
+	deleteErrorCallbackThread = new thread([=]()
+	{
+		while(running)
+		{
+			deleteErrorCallbackMutex.lock();
+			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
+			{
+				errorCallbackMutex.lock();
+				for(unsigned int i=0;i<errorCallback.size();i++)
+					if(errorCallback[i] == deleteErrorCallbackList[i])
+					{
+						errorCallback.erase(errorCallback.begin()+i);
+						break;
+					}
+				errorCallbackMutex.unlock();
+			}
+			deleteErrorCallbackList.clear();
+			deleteErrorCallbackMutex.unlock();
+
+			Sleep(1);
 		}
 	});
 
@@ -132,6 +215,16 @@ Server::~Server()
 
 	writeThread->join();
 	delete writeThread;
+
+	addNewMessageCallbackThread->join();
+	delete addNewMessageCallbackThread;
+	deleteNewMessageCallbackThread->join();
+	delete deleteNewMessageCallbackThread;
+
+	addErrorCallbackThread->join();
+	delete addErrorCallbackThread;
+	deleteErrorCallbackThread->join();
+	delete deleteErrorCallbackThread;
 }
 
 void Server::startListening()
@@ -277,7 +370,10 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 				continue;
 			}
 			// Error
-			printf("GetQueuedCompletionStatus failed with error: %d\n", GetLastError());
+			Server::get()->sendError(pPerHandleData->sock,0x0011,"Client lost Connection");
+			closesocket(pPerHandleData->sock);
+			delete pPerHandleData;
+			delete pPerIoData;
 			continue;
 		}
 		else
@@ -292,11 +388,12 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 			if((0 == dwTrans) && (OP_READ == pPerIoData->opType || OP_WRITE == pPerIoData->opType))
 			{
 				// Client leave.
-				printf("Client: <%s : %d> leave.\n", inet_ntoa(pPerHandleData->addr.sin_addr), ntohs(pPerHandleData->addr.sin_port));
+				Server::get()->sendError(pPerHandleData->sock,0x0010,"Client leave");
 				closesocket(pPerHandleData->sock);
 				delete pPerHandleData;
 				delete pPerIoData;
 				continue;
+
 			}
 			else
 			{
@@ -374,26 +471,27 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 
 				case OP_READ: // Read
 					pPerIoData->currPos += (short)dwTrans;
+					
+					for(unsigned int i=0;i<dwTrans;i++)
+						pPerIoData->buffer_.push_back(pPerIoData->buf[i]);
 
 					while (pPerIoData->currPos >= pPerIoData->nextMsgSize && pPerIoData->currPos != 0)
 					{
 						if (pPerIoData->nextMsgSize == 0)
-							pPerIoData->nextMsgSize = (pPerIoData->buf[0]<<8)+pPerIoData->buf[1];
+							pPerIoData->nextMsgSize = (pPerIoData->buffer_[0]<<8)+pPerIoData->buffer_[1];
 						else
 						{
 							pPerIoData->currPos -= pPerIoData->nextMsgSize;
-							short id = (pPerIoData->buf[pPerIoData->currPos+2]<<8) + pPerIoData->buf[pPerIoData->currPos+3];
+							short id = (pPerIoData->buffer_[2]<<8) + pPerIoData->buffer_[3];
 
-							char* msg = new char[pPerIoData->nextMsgSize-4];
-							memcpy(msg,pPerIoData->buf+pPerIoData->currPos+4,sizeof(char)*(pPerIoData->nextMsgSize-4));
-							vector<char> message;
-							for(int i=0;i<pPerIoData->nextMsgSize-4;i++)
-								message.push_back(msg[i]);
-
+							vector<char> message;//RECIEVE MAL MACHEN
+							if(pPerIoData->nextMsgSize>4)
+								message.insert(message.end(),pPerIoData->buffer_.begin()+4,pPerIoData->buffer_.begin()+pPerIoData->nextMsgSize);
+							pPerIoData->buffer_.erase(pPerIoData->buffer_.begin(),pPerIoData->buffer_.begin()+pPerIoData->nextMsgSize);
+							
 							Server::self->sendNewMessage(pPerHandleData->sock,id,message);
-
+							
 							pPerIoData->nextMsgSize = 0;
-							delete[] msg;
 						}
 					}
 
@@ -471,7 +569,8 @@ void Server::sendError(SOCKET s,int errCode,string errMessage)
 void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 {
 	bool socketIsConnected = false;
-	for(int i=0;i<connectedPlayers.size();i++)
+
+	for(unsigned int i=0;i<connectedPlayers.size();i++)
 	{
 		if(connectedPlayers[i].s==s)
 		{
@@ -513,38 +612,28 @@ void Server::write(SOCKET s,short id,vector<char> data)
 
 void Server::addToNewMessageCallback(NetworkParticipant* np)
 {
-	newMessageCallbackMutex.lock();
-	newMessageCallback.push_back(np);
-	newMessageCallbackMutex.unlock();
+	addNewMessageCallbackMutex.lock();
+	addNewMessageCallbackList.push_back(np);
+	addNewMessageCallbackMutex.unlock();
 }
 
 void Server::deleteFromNewMessageCallback(NetworkParticipant* np)
 {
-	newMessageCallbackMutex.lock();
-	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		if(newMessageCallback[i] == np)
-		{
-			newMessageCallback.erase(newMessageCallback.begin()+i);
-			break;
-		}
-		newMessageCallbackMutex.unlock();
+	deleteNewMessageCallbackMutex.lock();
+	deleteNewMessageCallbackList.push_back(np);
+	deleteNewMessageCallbackMutex.unlock();
 }
 
 void Server::addToErrorCallback(NetworkParticipant* np)
 {
-	errorCallbackMutex.lock();
-	errorCallback.push_back(np);
-	errorCallbackMutex.unlock();
+	addErrorCallbackMutex.lock();
+	addErrorCallbackList.push_back(np);
+	addErrorCallbackMutex.unlock();
 }
 
 void Server::deleteFromErrorCallback(NetworkParticipant* np)
 {
-	errorCallbackMutex.lock();
-	for(unsigned int i=0;i<errorCallback.size();i++)
-		if(errorCallback[i] == np)
-		{
-			errorCallback.erase(errorCallback.begin()+i);
-			break;
-		}
-		errorCallbackMutex.unlock();
+	deleteErrorCallbackMutex.lock();
+	deleteErrorCallbackList.push_back(np);
+	deleteErrorCallbackMutex.unlock();
 }

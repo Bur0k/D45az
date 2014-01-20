@@ -1,6 +1,6 @@
 #include "GameLobby.h"
 
-GameLobby::GameLobby(void)
+GameLobby::GameLobby()
 {
 	c = Client::get();
 	c->addToNewMessageCallback(this);
@@ -44,10 +44,10 @@ void GameLobby::maxPlayerChange(short value)
 {
 	vector<char> erfg = code(value);
 
-	this->c->write(0x0303, erfg);
+	this->c->write(0x0311, erfg);
 }
 
-void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void GameLobby::processNewMessage(short id,vector<char> data)
 {
 	switch(id)
 	{
@@ -59,12 +59,15 @@ void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		{
 			string name;
 
-			for(unsigned int i = 0; i > data.size(); i++)
+			for(unsigned int i = 0; i < data.size(); i++)
 			{
-				while(data[i] != '/')
+				if(data[i] != '/')
 					name += data[i];
-
-				this->players.push_back(name);
+				else
+				{
+					this->players.push_back(name);
+					name.clear();
+				}
 			}
 		}break;
 	case 0x0304:
@@ -73,7 +76,7 @@ void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		}break;
 	case 0x0305:
 		{
-			this->playerLimit = decodeShort(data, 0);
+			this->playerLimit = data[0];
 		}break;
 	case 0x0306:
 		{
@@ -85,7 +88,11 @@ void GameLobby::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		}break;
 	case 0x0321:
 		{
-			this->playerLimit = decodeShort(data, 0);
+			this->playerLimit = data[0];
 		}break;
 	}
+}
+
+void GameLobby::processNetworkError(int id, std::string msg)
+{
 }

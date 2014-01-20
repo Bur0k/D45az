@@ -5,6 +5,8 @@
 #include "PlayerData.h"
 #include "Server.h"
 #include "NetworkParticipant.h"
+#include "GameLogic.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -12,27 +14,30 @@ class GameLobbyLogic : public NetworkParticipant
 {
 private:
 	Server* server;
-	short id;
+	//short id;
 	vector<PlayerData*> players;
 	short playerlimit;
-	PlayerData* gameMaster;
-	//Map currentMap;
+	PlayerData gameMaster;
+	string gameLobbyName;
+	short mapID;
+	Map* currentMap;
 
 public:
-	GameLobbyLogic(short id, PlayerData* master);
+	GameLobbyLogic(short id, PlayerData master, string gameLobbyName);
 	~GameLobbyLogic();
 
 	/*GETTER - SETTER*/
-
-	void setID(short id);
-	short getID();
+	void setName(string name);
+	string getName();
+	//void setID(short id);
+	//short getID();
 	void setPlayerlimit(short limit);
 	short getPlayerlimit();
-	void setGamemaster(PlayerData* player);
-	PlayerData* getGamemaster();
+	void setGamemaster(PlayerData player);
+	PlayerData getGamemaster();
 	vector<PlayerData*>& getPlayers(); 
-	/*void setMap(Map map);*/
-	/*Map getMap();*/
+	void setMap(Map* map);
+	Map* getMap();
 
 	/*Funktionen*/
 
@@ -41,6 +46,7 @@ public:
 	void sendMaxPlayers(SOCKET s);
 	void sendGameMaster(SOCKET s);
 	void sendCurrentMap(SOCKET s);
+	void sendGameLobbyData(SOCKET s);
 
 	/*Kommunikation*/
 

@@ -8,6 +8,7 @@
 #include "NetworkParticipant.h"
 #include "NetworkLogin.h"
 #include "Lobby.h"
+#include "LobbyView.h"
 
 #include "MusikSampler.h"
 
@@ -28,15 +29,15 @@ class testClient : public NetworkParticipant
 {
 	void processNewMessage(short id,vector<char> data)
 	{
-		std::cout<<"Server hat folgendes gesendet:\nID:"<<id<<"\nData:\n";
+		std::cout<<"Server hat folgendes gesendet:\nID:"<<std::hex<<(int)id<<"\nData:\n";
 		for(unsigned int i=0;i<data.size();i++)
-			std::cout<<data[i];
+			std::cout<<std::hex<<(int)data[i]<<" ";
 		std::cout<<"\nEnde Packet\n\n";
 	}
 
 	void processNetworkError(int id, std::string msg)
 	{
-		std::cout << "ERROR: "<<id<<" Message: " << msg << "\n";
+		std::cout << "ERROR: "<<std::hex<<(int)id<<" Message: " << msg << "\n";
 	}
 } tc;
 
@@ -46,6 +47,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR szCmdLine
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
+	
 	//********** BURAKS CLIENT TEST SHIT
 #ifdef BURAKTESTSHIT
 	Client* c = Client::get();
@@ -57,17 +59,12 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	
 	
-	NetworkLogin NL1("Burak");
-	while(NL1.getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
+	NetworkLogin* NL1 = new NetworkLogin("Tim");
+	while(NL1->getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
 	{
 	}
-	cout << "NL1:" << NL1.getState() << endl;
-
-	Lobby lobby("Burak");
-
-
-
-
+	cout << "NL1:" << NL1->getState() << endl;
+	delete NL1;
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
@@ -77,46 +74,33 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(1280, 850), "D45az finezt");
 	window.setPosition(sf::Vector2i(400,0));
-	window.setMouseCursorVisible(true);
-
-	// Musik Test Zeug
-	/*
-	MusikSampler* MS = new MusikSampler();
-	
-	MS->load_music(0);
-	MS->play_music();
-	*/
+	window.setMouseCursorVisible(false);
 
 
-	//testausgabe
-	/*
 
-	*/
+
+	//erlaubte einstiegspunkte für Views::
+	//TESTSCREEN LOGIN LOBBY
+	Game* g = new Game(&window, Views::LOBBY, sf::Vector2f(1280, 850));
 	
-	
-	Game g = Game(&window, TESTSCREEN, sf::Vector2f(1280, 850));
-	
-	Map map;
-	map.load("Data/Maps/test.tmx");
 	
 	while (window.isOpen())
-	{ 
-		g.Input();
+	{
+		g->Input();
 
-		g.timer();
+		g->timer();
 
-		// clear the window with black 
 		window.clear(sf::Color::Black);
 		
-		map.render(window, sf::IntRect(0,0,1280, 850));
-		g.Draw();
-
-		// end the current frame
+		g->Draw();
+		
 		window.display();
 	}
-	g.onClose();
+	
+	delete g;
 	
 	delete Client::get();
+
 	MyFonts::deleteFonts(); //TODO in game implementieren
 
 	return 0;

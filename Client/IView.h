@@ -5,20 +5,22 @@
 #include "IClickable.h"
 #include "IAnimatable.h"
 #include "IKeyboardInput.h"
-#include "Game.h"
 
 
-enum Views {INGAME, LOGIN, MENUE, LOBBY, INGAME_MENU, TESTSCREEN};
+enum class Views {NOCHANGE, INGAME, LOGIN, MENU, LOBBY, CLOSE, TESTSCREEN};
 
 
 //unites all gui Interfaces for Model View Controller Implementation
 class IView 
 	: public IDrawable, public IClickable, public IAnimatable, public IKeyboardinput
 {
-protected:
-	virtual void cangeView()=0;
 public:
-	virtual void onResize()=0;
+	virtual ~IView(){};
+	virtual void onResize(sf::Vector2u &)=0;
+	virtual void update(double elpasedMs)=0;
+	virtual Views nextState()=0;
+	//needed for View Management in class game
+	virtual Views getType()=0;
 };
 
 #endif //IVIEW_H

@@ -3,37 +3,57 @@
 
 MusikSampler::MusikSampler(void)
 {
-	m_Path_full_song = "Data/Songs/";
-	m_vFull_songs.push_back("test.ogg");
+	m_SongPath = "Data/Songs/";
+	m_vSongFiles.push_back("1_example.ogg"); //songnamen manuell einfügen
+	m_vSongFiles.push_back("2_bullet.ogg");
 
-	m_Path_sounds = "Data/Sounds/";
-	m_vShort_sounds.push_back("sound1.wav");
-	m_vShort_sounds.push_back("sound2.wav");
+	m_Songnumber = 0; // vorinitialisieren, dann 1. track gespielt
+
+	m_Soundpath = "Data/Sounds/";
+	m_vSoundFiles.push_back("sound1.wav");
+	m_vSoundFiles.push_back("sound2.wav");
 	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
-	for(unsigned int i = 0; i < m_vShort_sounds.size(); i++)
-		m_vBuffer.push_back(load_sound(i));
+	for(unsigned int i = 0; i < m_vSoundFiles.size(); i++)
+		m_vBuffer.push_back(preload_soundbuffer(i));
+
+
+	// Lautstärke am Anfang 100%
+	m_BgVolume = 100.0;
+	m_SoVolume = 100.0;
 }
 
 MusikSampler::~MusikSampler(void)
 {
 		// Adresslisten freigeben
-	m_vFull_songs.clear();
-
-	m_vShort_sounds.clear();
+	for ( int i = 0; i < m_vSongFiles.size(); i++)
+		m_vSongFiles[i].clear();
+	for( int i = 0; i < m_vSoundFiles.size(); i++)
+		m_vSoundFiles[i].clear();
 
 		// Bufferliste freigeben
-	m_vBuffer.clear(); 
-
+	for (int i = 0; i < m_vBuffer.size(); i++)
+		m_vBuffer.clear();
 
 	for (unsigned int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
-		delete m_vSound[i];
+	{
+		try
+		{
+				delete m_vSound[i];
+		}
+		catch(int e)
+		{
+		}
+	}
 }
 
 bool MusikSampler::load_music(int index)
 {
-	//if(m_vFull_songs[index].length == 0) // liste hat hier kein element
-		//return 0;
-	string full_path = m_Path_full_song + m_vFull_songs[index];
+	if(m_vSongFiles.size() == 0) // liste leer-> fehler im konstruktor
+	{
+		cout<<"Fehler, Code 17"<<  endl;
+		return 0;
+	}
+	string full_path = m_SongPath + m_vSongFiles[index];
 
 	if(!m_Music.openFromFile(full_path)) // kein song an speicherstelle hinterlegt , asonsten song jetzt drin
 	{
@@ -44,18 +64,22 @@ bool MusikSampler::load_music(int index)
 	return 1;
 }
 
-sf::SoundBuffer MusikSampler::load_sound(int index)
+sf::SoundBuffer MusikSampler::preload_soundbuffer(int index)
 {
-	//if(m_vShort_sounds[index].length == 0) // liste hat hier kein element
-		//return 0;
-
 	sf::SoundBuffer tmp_buffer;
 
-	string full_path = m_Path_sounds + m_vShort_sounds[index];
-
-	if(!tmp_buffer.loadFromFile(full_path)) // kein sound an speicherstelle hinterlegt , asonsten song jetzt drin
+	if(m_vSoundFiles.size() == 0)	// liste leer-> fehler im konstruktor
 	{
-		cout<<"keinen sound gefunden:" << full_path << endl;
+		cout<<"Fehler, Code 18"<<  endl;
+		return tmp_buffer;
+	}
+
+
+	string full_path = m_Soundpath + m_vSoundFiles[index];
+
+	if(!tmp_buffer.loadFromFile(full_path)) // kein sound an speicherstelle hinterlegt , ansonsten song jetzt drin
+	{
+		cout<<"Keinen sound gefunden:" << full_path << endl;
 		return tmp_buffer;
 	}
 
@@ -70,23 +94,34 @@ bool MusikSampler::play_music(int index)
         return 0;
     }
 
-   m_Music.play();
-   return 1;
+	m_Music.setVolume(m_BgVolume);
+	m_Music.play();
+	return 1;
 }
 
 bool MusikSampler::play_sound(int index)
 {
 	sf::Sound* tmp_sound = new sf::Sound();
+	
+	if (index >= m_vBuffer.size() ) // sicher gehen, dass index innerhalb gültigen bereichs
+		return 0;
 
-	tmp_sound->setBuffer(m_vBuffer[index]);
+	tmp_sound->setBuffer(m_vBuffer[index]); // sound abholen
 
+	tmp_sound->setVolume(m_SoVolume);
 	tmp_sound->play();	
 
-	for (unsigned int i = 0; i < m_vSound.size() ; i++)
+	for (int i = 0; i < m_vSound.size() ; i++)
 		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
-			m_vSound[i] = tmp_sound; // neuen sound dahin, um speicher zu sparen
-		else
-			m_vSound.push_back(tmp_sound); // neu erzeugten sound normal anreihen
+		{
+			//cout << "vector size vorher:" << m_vSound.size() << endl;
+			delete m_vSound[i];					// Abgespielte Sounds aufräumen
+			m_vSound.erase(m_vSound.begin()+i);
+			//cout << "löschung" << endl << "vector size nachher:" << m_vSound.size() << endl;
+		}
+
+	m_vSound.push_back(tmp_sound); // Referenz speichern, um später zu löschen
+
 
    return 1;
 }
@@ -94,6 +129,37 @@ bool MusikSampler::play_sound(int index)
 void MusikSampler::pause()
 {
     m_Music.pause();
+}
+
+void MusikSampler::next_song()
+{
+	/*
+	if(m_Music.getStatus() == 0) // nur Song wechseln, wenn alter fertig
+		return;
+	*/
+
+	if(m_Songnumber >= m_vSongFiles.size() ) // wenn letzter song gespielt wurde zurück
+		m_Songnumber = 1;
+	else 
+		m_Songnumber ++;
+
+	play_music(m_Songnumber-1);
+}
+
+void MusikSampler::set_volume(int type, float volume)
+{
+	switch(type)
+	{
+		case sounds: m_SoVolume = volume; // für neue ändern
+			for (int i = 0; i < m_vSound.size() ; i++) // alle aktiven ändern
+			{
+				m_vSound[i]->setVolume(volume);
+			}	break;
+		case songs:  m_BgVolume = volume; 
+			m_Music.setVolume(volume); break;
+		case generel_noise: set_volume(sounds,volume); 
+							set_volume(songs,volume); break;
+	}
 }
 
 /*
@@ -136,18 +202,5 @@ void MusikSampler::set_pitch(float pitch)
     }
 
     samples.SetPitch(pitch);
-}
-
-void MusikSampler::set_volume(float volume)
-{
-    if (!loaded)
-    {
-        return;
-    }
-
-    if (volume >= 0.0f && volume <= 100.0f)
-    {
-        samples.SetVolume(volume);
-    }
 }
 */

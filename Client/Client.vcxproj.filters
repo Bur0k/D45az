@@ -106,6 +106,33 @@
     <ClCompile Include="graphic_globals.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="LoginView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyEntry.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Statusbar.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="IngameView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CommitButton.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="IngameMainGui.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -185,6 +212,33 @@
     <ClInclude Include="MapLayer.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="LoginView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyEntry.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Statusbar.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IngameView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommitButton.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IngameMainGui.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -224,10 +278,19 @@
       <Filter>DLLs</Filter>
     </None>
     <None Include="Projektplanung.doc" />
-    <None Include="Data\Songs\test.ogg">
+    <None Include="Data\Maps\test.tmx">
       <Filter>Data</Filter>
     </None>
-    <None Include="Data\Maps\test.tmx">
+    <None Include="Data\Songs\1_example.ogg">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Data\Songs\2_bullet.ogg">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Data\Maps\TestMap.tmx">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Data\Images\commit Button.psd">
       <Filter>Data</Filter>
     </None>
   </ItemGroup>
@@ -246,6 +309,15 @@
       <Filter>Data</Filter>
     </Image>
     <Image Include="Data\Images\Button.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\background.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\Button_small.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\commit-Button.png">
       <Filter>Data</Filter>
     </Image>
   </ItemGroup>

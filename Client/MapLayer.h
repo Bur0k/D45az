@@ -1,24 +1,22 @@
 #pragma once
 
 #include <vector>
-#include "TileSets.h"
 #include <string>
 #include <sstream>
 #include "SplittedSprite.h"
-#include <SFML\Graphics.hpp>
 #include <iostream>
+#include "TileSets.h"
 
 class MapLayer
 {
-	std::vector<std::vector<short>> layer;
 	TileSets* tilesets;
-
 public:
-	bool isCollisionLayer;
+	std::vector<std::vector<short>> layer;
+	bool isCityLayer;
 	const static int TileWidth=32;
 	const static int TileHeight=32;
 
-	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCollisionLayer=false);
+	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCityLayer=false);
 	~MapLayer();
 
 	void render(sf::RenderTarget& RT,sf::IntRect OnScreen);

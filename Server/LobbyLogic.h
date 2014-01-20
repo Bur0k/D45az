@@ -15,7 +15,7 @@
 class LobbyLogic : public NetworkParticipant
 {
 private:
-	map<char, GameLobbyLogic*> gamesCreated;
+	map<short, GameLobbyLogic*> gamesCreated;
 	Server* server;
 
 

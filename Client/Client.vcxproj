@@ -74,6 +74,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -86,18 +87,26 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CommitButton.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
+    <ClCompile Include="IngameMainGui.cpp" />
+    <ClCompile Include="IngameView.cpp" />
     <ClCompile Include="Lobby.cpp" />
+    <ClCompile Include="LobbyEntry.cpp" />
+    <ClCompile Include="LobbyView.cpp" />
+    <ClCompile Include="LoginView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLayer.cpp" />
+    <ClCompile Include="MenuView.cpp" />
     <ClCompile Include="MusikSampler.cpp" />
     <ClCompile Include="NetworkLogin.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="SplittedSprite.cpp" />
     <ClCompile Include="StandardButton.cpp" />
+    <ClCompile Include="Statusbar.cpp" />
     <ClCompile Include="Textblock.cpp" />
     <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="TileSets.cpp" />
@@ -105,10 +114,12 @@
     <ClCompile Include="tinyxml.cpp" />
     <ClCompile Include="tinyxmlerror.cpp" />
     <ClCompile Include="tinyxmlparser.cpp" />
+    <ClCompile Include="Unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="CommitButton.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLobby.h" />
     <ClInclude Include="graphic_globals.h" />
@@ -116,10 +127,16 @@
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
+    <ClInclude Include="IngameMainGui.h" />
+    <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />
+    <ClInclude Include="LobbyEntry.h" />
+    <ClInclude Include="LobbyView.h" />
+    <ClInclude Include="LoginView.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLayer.h" />
+    <ClInclude Include="MenuView.h" />
     <ClInclude Include="MusikSampler.h" />
     <ClInclude Include="NetworkLogin.h" />
     <ClInclude Include="NetworkParticipant.h" />
@@ -127,16 +144,21 @@
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SplittedSprite.h" />
     <ClInclude Include="StandardButton.h" />
+    <ClInclude Include="Statusbar.h" />
     <ClInclude Include="Textblock.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileSets.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />
     <ClInclude Include="IDrawable.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Maps\test.tmx" />
-    <None Include="Data\Songs\test.ogg" />
+    <None Include="Data\Maps\TestMap.tmx" />
+    <None Include="Data\Songs\1_example.ogg" />
+    <None Include="Data\Songs\2_bullet.ogg" />
     <None Include="libsndfile-1.dll" />
     <None Include="openal32.dll" />
     <None Include="Projektplanung.doc" />
@@ -158,7 +180,10 @@
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
+    <Image Include="Data\Images\Button_small.png" />
+    <Image Include="Data\Images\commit-Button.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>
