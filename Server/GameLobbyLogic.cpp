@@ -10,6 +10,10 @@ GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName
 	this->players.push_back(&this->gameMaster);
 	this->gameLobbyName = gameLobbyName;
 
+	Map* map = new Map();
+	map->load("Data/Maps/TestMap.tmx");
+	this->currentMap = map;
+
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
 }
@@ -67,17 +71,17 @@ vector<PlayerData*>& GameLobbyLogic::getPlayers()
 	return this->players;
 }
 
-/*
-void GameLobbyLogic::setMap(Map map)
+
+void GameLobbyLogic::setMap(Map* map)
 {
 	this->currentMap = map;
 }
 
-Map GameLobbyLogic::getMap()
+Map* GameLobbyLogic::getMap()
 {
 	return this->currentMap;
 }
-*/
+
 
 /* Funktionen */
 
@@ -159,7 +163,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				{
 					// Spielstart
 
-					GameLogic* game = new GameLogic(this->players, this->mapID);
+					GameLogic* game = new GameLogic(this->players, this->currentMap);
 
 					std::vector<char> erfg;
 
