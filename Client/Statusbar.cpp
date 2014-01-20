@@ -1,13 +1,13 @@
 #include "Statusbar.h"
 
 //Ctro & Dtor-------------------------------------------------------
-Statusbar::Statusbar(Vector2f pos, Vector2f size)
+Statusbar::Statusbar(Vector2f pos, Vector2f size, Game* game)
 {
 	m_BaseRect.setPosition(pos);
 	m_BaseRect.setSize(size);
-	m_BaseRect.setFillColor(MyColors.Gray);
+	m_BaseRect.setFillColor(MyColors.MenuBackground);
 
-	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, true);
+	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, true, false);
 	m_BMenu->setFillColor(MyColors.Red);
 }
 
@@ -18,6 +18,11 @@ Statusbar::~Statusbar(void)
 }
 
 //Getter & Setter-------------------------------------------------------
+void Statusbar::setMouse(Vector2f pos)
+{
+	m_MousePos = pos;
+}
+
 Vector2f Statusbar::getPosition()
 {
 	return m_BaseRect.getPosition();
@@ -49,7 +54,10 @@ bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 	//checken ob maus nach einer bewegung auf der statusbar ist
 	if( mouse.x >= m_BaseRect.getPosition().x && mouse.x <= m_BaseRect.getPosition().x + m_BaseRect.getSize().x &&
 		mouse.y >= m_BaseRect.getPosition().y && mouse.y <= m_BaseRect.getPosition().y + m_BaseRect.getSize().y)
+	{
+		setMouse(Vector2f(mouse.x, mouse.y));	
 		m_mouseOver = true;
+	}
 	else
 		m_mouseOver = false;
 
@@ -58,16 +66,18 @@ bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 
 bool Statusbar::PressedLeft()
 {
-	if(m_mouseOver && !m_inFocus) //TODO verschiedene objekte müssen anwählbar sein
+	if(m_mouseOver) //TODO verschiedene objekte müssen anwählbar sein
 	{
-		m_inFocus = true;
-	}
-	else if(m_inFocus && m_mouseOver)
+		if(m_MousePos.x >= m_BMenu->getPosition().x && m_MousePos.x <= m_BMenu->getOrigin().x + m_BMenu->getPosition().x
+			&& m_MousePos.y >= m_BMenu->getPosition().y && m_MousePos.y <= m_BMenu->getOrigin().y + m_BMenu->getPosition().y)
+		{
+			m_pGame->LoadView(Views::MENU);
+			m_pGame->setMenubottun(1); // MEnü an
+		}
 		return true;
-	else if(!m_mouseOver)
-		m_inFocus = false;
-
-	return false;
+	}
+	else 
+		return false;
 }
 
 bool Statusbar::ReleasedLeft(){ return false; }

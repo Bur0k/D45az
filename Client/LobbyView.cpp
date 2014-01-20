@@ -16,6 +16,8 @@ LobbyView::LobbyView():
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
 	connect->Attach(this);
+	updateLobbys->Attach(this);
+	creatNewGamelobby->Attach(this);
 	s->Attach(this);
 
 	playerName.setText("Name",sf::Vector2f(300,100));
@@ -28,11 +30,7 @@ LobbyView::LobbyView():
 
 
 	lobby = new Lobby();
-	lobby->createNewGameLobby("MeinefkingLobby");
-	while(lobby->gameLobby.operator GameLobby *()==NULL)
-		;
 	lobby->askforLobbyData();
-	lobby->gameLobby.operator GameLobby *()->maxPlayerChange(3);
 }
 
 LobbyView::~LobbyView()
@@ -44,7 +42,10 @@ LobbyView::~LobbyView()
 
 	delete s;
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+	{
+		delete it->second->LE;
 		delete it->second;
+	}
 	gameLobbys.clear();
 }
 
@@ -62,20 +63,38 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	int y = 200;
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 	{
-		it->second->LE.setPosition(sf::Vector2f(20.0,y));
-		it->second->LE.draw(rw);
+		it->second->LE->setPosition(sf::Vector2f(20.0,y));
+		it->second->LE->draw(rw);
 		y+=50;
 	}
 }
 
 void LobbyView::onButtonClick(int id)
 {
-	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-		if(it->second->id != id && it->second->LE.getIsEnabled())
-		{
-			it->second->LE.unLock();
-			break;
-		}
+		
+	if(id == 0)
+	{
+		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+			if(it->second->LE->getIsEnabled())
+				lobby->connectToGameLobby(it->second->LE->getID()-10);
+	}
+	else if( id == 1)
+	{
+		lobby->askforLobbyData();
+	}
+	else if( id == 2)
+	{
+		lobby->createNewGameLobby("Buraks Lobby");
+	}
+	else
+	{
+		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+			if(it->second->LE->getID() != id && it->second->LE->getIsEnabled())
+			{
+				it->second->LE->unLock();
+				break;
+			}
+	}
 	//handle incoming clicks here
 }
 
@@ -87,7 +106,7 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 	updateLobbys->MouseMoved(v);
 	creatNewGamelobby->MouseMoved(v);
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-		it->second->LE.MouseMoved(v);
+		it->second->LE->MouseMoved(v);
 	return false;
 }
 
@@ -103,7 +122,7 @@ bool LobbyView::PressedLeft()
 	updateLobbys->PressedLeft();
 	creatNewGamelobby->PressedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-		it->second->LE.PressedLeft();
+		it->second->LE->PressedLeft();
 	return false;
 }
 
@@ -119,7 +138,7 @@ bool LobbyView::ReleasedLeft()
 	updateLobbys->ReleasedLeft();
 	creatNewGamelobby->ReleasedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-		it->second->LE.ReleasedLeft();
+		it->second->LE->ReleasedLeft();
 	return false;
 }
 	
@@ -129,7 +148,7 @@ void LobbyView::animationTick()
 	updateLobbys->animationTick();
 	creatNewGamelobby->animationTick();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-		it->second->LE.animationTick();
+		it->second->LE->animationTick();
 }
 	
 void LobbyView::onKeyDown(sf::Event)
@@ -178,20 +197,21 @@ void LobbyView::update(double elpasedMs)
 			lobby->updated = false;
 			
 			for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+			{
+				delete it->second->LE;
 				delete it->second;
+			}
 			gameLobbys.clear();
 
 			lobby->m.lock();
 
 			for(auto it = lobby->gamesCreated.begin();it!=lobby->gamesCreated.end();it++)
 			{
-				short id = it->first;
+				short id = it->first + 10;
 				GameLobbyData* GLA = new GameLobbyData();
 
-				GLA->LE.setName(it->second.name);
-				GLA->LE.setMaxPlayers(it->second.playerlimit);
-				GLA->LE.setPlayers(it->second.players.size());
-				
+				GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.playerlimit,it->second.players.size(),id);
+				GLA->LE->Attach(this);
 
 				gameLobbys[id] = GLA;
 			}

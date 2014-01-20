@@ -137,17 +137,29 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					if (server->connectedPlayers[i].s == s)
 					{
 						requester = server->connectedPlayers[i];
-						break;
 					}
 				
-				GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester, gamename);
+					if(!requester.isGamemaster)
+					{
+						GameLobbyLogic* GameLobby = new GameLobbyLogic(id, requester, gamename);
 
-				std::map<short, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
-				this->gamesCreated.insert (it, std::pair<short, GameLobbyLogic*>(id,GameLobby));
+						std::map<short, GameLobbyLogic*>::iterator it = this->gamesCreated.begin();
+						this->gamesCreated.insert (it, std::pair<short, GameLobbyLogic*>(id,GameLobby));
 			
-				erfg.push_back(1);
-				server->write(s, 0x0205, erfg);
+						for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
+						if (server->connectedPlayers[i].s == s)
+						{
+							server->connectedPlayers[i].isGamemaster = true;
+						}
 
+						erfg.push_back(1);
+						server->write(s, 0x0205, erfg);
+					}
+					else
+					{
+						erfg.push_back(0);
+						server->write(s, 0x0205, erfg);
+					}
 				break;
 			}
 	}

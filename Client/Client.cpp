@@ -324,7 +324,7 @@ void Client::beginRead()
 			currPos += recievedBytes;
 			while (currPos >= nextMsgSize && currPos != 0)
 			{
-				if (nextMsgSize == 0)
+				if (nextMsgSize < 2)
 					nextMsgSize = (buffer_[0]<<8)+buffer_[1];
 				else
 				{
@@ -339,7 +339,7 @@ void Client::beginRead()
 
 					sendNewMessage(id,message);
 
-					nextMsgSize = 0;
+					nextMsgSize = 1;
 				}
 			}
 		}

@@ -7,17 +7,17 @@ CommitButton::CommitButton(Vector2u winSize)
 
 	Texture image;
 	//150, 150 --- 100, 100
-	if(!image.loadFromFile("Data/Images/background.png"))
+	if(!image.loadFromFile("Data/Images/commit-Button.png"))
 	{
-		std::cout << "Texture couldn't load" << std::endl;
+		std::cout << "commit-Button couldn't load" << std::endl;
 	}
 	else
 	{
-		std::cout << "Texture has loaded" << std::endl;                                                           //Startbild laden
+		std::cout << "commit-Button has loaded" << std::endl;                                                           //Startbild laden
 	}
 	foreground.t = image;
 	foreground.s.setTexture(&foreground.t);                      
-	foreground.s.setPosition(0,0);
+	foreground.s.setPosition(50,50);
 	foreground.s.setSize((sf::Vector2f)image.getSize());
 }
 
@@ -30,5 +30,11 @@ CommitButton::~CommitButton()
 void CommitButton::draw(RenderWindow* rw)
 {
 	rw->draw(*this);
+	rw->draw(foreground.s);
 	rw->draw(m_buttonText);
+}
+
+void CommitButton::onResize()
+{
+	this->setPosition(windowSize.x - 150, windowSize.y - 150);
 }
