@@ -22,6 +22,7 @@ private:
 	sf::RectangleShape m_Rect;
 	SpriteTex* m_pST;
 	
+	int m_buttonTileSize;
 	/* Sprite Layout
 		0 1 2
 		3 - 4
@@ -37,7 +38,7 @@ private:
 public:
 	StandardButton();
 	///@param Size x or y should be bigger than 10 px
-	StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock);
+	StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, bool big = true);
 	~StandardButton();
 
 	void draw(RenderWindow* rw);

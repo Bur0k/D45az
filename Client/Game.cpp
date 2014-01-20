@@ -205,6 +205,7 @@ void Game::DrawTest()
 void Game::onResize()
 {
 	View v = m_pWindow->getView();
+	m_size = (Vector2f)m_pWindow->getSize();
 	m_pWindow->setSize(sf::Vector2u(m_pWindow->getSize().x, m_pWindow->getSize().y));
 	v.setSize(sf::Vector2f((float)m_pWindow->getSize().x , (float)m_pWindow->getSize().y));
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
