@@ -80,6 +80,12 @@ void Button::operator=(const Button & b)
 		m_attachedFunctions.push_back(m_attachedFunctions[i]);
 }
 
+void Button::setText(std::string s)
+{
+	m_buttonText.setString(s);
+	fitText(0);
+}
+
 void Button::fitText(int border)
 {
 	m_buttonText.setPosition(getPosition());

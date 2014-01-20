@@ -121,6 +121,9 @@
     <ClCompile Include="MenuView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="CommitButton.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -213,6 +216,9 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="MenuView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommitButton.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
