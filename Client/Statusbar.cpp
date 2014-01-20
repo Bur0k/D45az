@@ -35,7 +35,6 @@ void Statusbar::setBgColor(Color c)
 
 void Statusbar::Resize(Vector2f new_size)
 {
-		//SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
 	m_BaseRect.setSize(new_size);
 }
 

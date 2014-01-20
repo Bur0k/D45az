@@ -121,6 +121,9 @@
     <ClCompile Include="MenuView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="IngameView.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -215,6 +218,9 @@
     <ClInclude Include="MenuView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="IngameView.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -285,6 +291,9 @@
       <Filter>Data</Filter>
     </Image>
     <Image Include="Data\Images\background.png">
+      <Filter>Data</Filter>
+    </Image>
+    <Image Include="Data\Images\Button_small.png">
       <Filter>Data</Filter>
     </Image>
   </ItemGroup>

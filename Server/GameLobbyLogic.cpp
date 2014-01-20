@@ -20,6 +20,8 @@ GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName
 
 GameLobbyLogic::~GameLobbyLogic()
 {
+	delete this->currentMap;
+
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
 }

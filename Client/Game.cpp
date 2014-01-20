@@ -205,11 +205,14 @@ void Game::DrawTest()
 void Game::onResize()
 {
 	View v = m_pWindow->getView();
+	m_size = (Vector2f)m_pWindow->getSize();
 	m_pWindow->setSize(sf::Vector2u(m_pWindow->getSize().x, m_pWindow->getSize().y));
 	v.setSize(sf::Vector2f((float)m_pWindow->getSize().x , (float)m_pWindow->getSize().y));
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
-	
+
+	SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
+
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
 	if(m_ViewVect.size() > 0)
@@ -267,8 +270,11 @@ void Game::onMouseMove()
 	//TODO alle mouse move aufrufe zu float umwandeln
 
 	if(m_ViewMode == Views::TESTSCREEN)
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
+	{
+		SBar->MouseMoved(mousePos); // Maus auf Statusbar?
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
+	}
 
 	m_lastMousePosition = mousePos;
 
@@ -280,9 +286,12 @@ void Game::onMouseMove()
 void Game::onMouseDownLeft()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->PressedLeft())
-			break;
+	{
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->PressedLeft())
+				break;	
+		SBar->PressedLeft();
+	}
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->PressedLeft();
