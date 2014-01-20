@@ -88,7 +88,6 @@ void MenuView::positionElements(Vector2u & size)
 
 	m_pGraphics[2].s.setPosition(refPoint.x - MENU_BORDERSPACING,m_pGraphics[1].s.getPosition().y + m_pGraphics[1].s.getSize().y);
 
-	
 }
 
 MenuView::~MenuView(void)
