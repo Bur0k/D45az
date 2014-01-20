@@ -15,7 +15,6 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size)
 Statusbar::~Statusbar(void)
 {
 	delete m_BMenu;
-	m_TextboxContainer.clear();
 }
 
 //Getter & Setter-------------------------------------------------------
@@ -36,7 +35,6 @@ void Statusbar::setBgColor(Color c)
 
 void Statusbar::Resize(Vector2f new_size)
 {
-		//SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
 	m_BaseRect.setSize(new_size);
 }
 
