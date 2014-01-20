@@ -12,6 +12,8 @@ struct PlayerData
 public:
 	SOCKET s;
 	std::string Name;
+	bool isGamemaster;
+	PlayerData(){isGamemaster = false;}
 };
 
 template<class T>
