@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include <vector>
@@ -10,6 +9,13 @@
 #include "IDrawable.h"
 #include "IAnimatable.h"
 
+#include "StandardButton.h"
+#include "Textbox.h"
+
+#define AbstandX 5
+
+using namespace std;
+
 
 class Statusbar : public IClickable, public IDrawable, public IAnimatable
 {
@@ -18,12 +24,9 @@ private: // soll eigentlich NICHT abgeleitet werden
 	bool m_mouseOver;
 
 	//Grundeigenschaften
-	Rect<float> m_dimensions;
-	RectangleShape m_BaseRect;
-
-	//komische Sachen
-	RectangleShape m_cursor;
-	SpriteTex* m_pBorder;
+	RectangleShape m_BaseRect; // Hintergrund
+	StandardButton* m_BMenu;
+	vector<TextBox> m_TextboxContainer;
 
 public:
 	//ctor & dtor
@@ -34,7 +37,8 @@ public:
 	Vector2f getPosition();
 	void setBgColor(Color c);
 	void Resize(Vector2f new_size);
-	//Hilfsfunktionen
+	//Containerverwaltung
+	//void Push(
 
 	//IClickable
 	virtual bool MouseMoved(sf::Vector2i &);

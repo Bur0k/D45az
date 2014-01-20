@@ -5,24 +5,28 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size)
 {
 	m_BaseRect.setPosition(pos);
 	m_BaseRect.setSize(size);
-	m_BaseRect.setFillColor(MyColors.Black);
+	m_BaseRect.setFillColor(MyColors.Gray);
+
+	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, true);
+	m_BMenu->setFillColor(MyColors.Red);
 }
 
 
 Statusbar::~Statusbar(void)
 {
+	delete m_BMenu;
+	m_TextboxContainer.clear();
 }
 
 //Getter & Setter-------------------------------------------------------
 Vector2f Statusbar::getPosition()
 {
-	return Vector2f(m_dimensions.left, m_dimensions.top);
+	return m_BaseRect.getPosition();
 }
 
 void Statusbar::setPosition(Vector2f pos)
 {
-	m_dimensions.left += pos.x;
-	m_dimensions.top += pos.y;
+	m_BaseRect.setPosition(pos);
 }
 
 void Statusbar::setBgColor(Color c)
@@ -32,6 +36,7 @@ void Statusbar::setBgColor(Color c)
 
 void Statusbar::Resize(Vector2f new_size)
 {
+		//SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
 	m_BaseRect.setSize(new_size);
 }
 
@@ -44,8 +49,8 @@ void Statusbar::Resize(Vector2f new_size)
 bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 {
 	//checken ob maus nach einer bewegung auf der statusbar ist
-	if( mouse.x >= m_dimensions.left && mouse.x <= m_dimensions.left + m_dimensions.width &&
-		mouse.y >= m_dimensions.top && mouse.y <= m_dimensions.top + m_dimensions.height)
+	if( mouse.x >= m_BaseRect.getPosition().x && mouse.x <= m_BaseRect.getPosition().x + m_BaseRect.getSize().x &&
+		mouse.y >= m_BaseRect.getPosition().y && mouse.y <= m_BaseRect.getPosition().y + m_BaseRect.getSize().y)
 		m_mouseOver = true;
 	else
 		m_mouseOver = false;
@@ -78,5 +83,8 @@ void Statusbar::animationTick() // IAnimation
 void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
 	rw->draw(m_BaseRect);
-	//TODO draw nice graphics around m_BaseRect
+	m_BMenu->draw(rw);
+
+	for(int i = 0; i < m_TextboxContainer.size(); i++)
+		m_TextboxContainer[i].draw(rw);
 }
