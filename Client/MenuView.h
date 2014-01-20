@@ -45,7 +45,7 @@ public:
 	virtual Views nextState();
 	//implementing a lot of interfaces
 
-	virtual void onButtonClick(int);
+	
 
 	virtual void draw(sf::RenderWindow* rw);
 
@@ -65,6 +65,10 @@ public:
 	virtual void update(double elpasedMs);
 
 	virtual Views getType();
+
+
+
+	virtual void onButtonClick(int);
 
 	virtual void onSliderValueChange(int ID, double position);
 	virtual void onSliderReleased(int ID, double position);
