@@ -21,6 +21,7 @@
 #include "LoginView.h"
 #include "LobbyView.h"
 #include "MenuView.h"
+#include "CommitButton.h"
 
 #include "MusikSampler.h"
 
@@ -40,6 +41,7 @@ private:
 	Button* b1;
 	Button* b2;
 	Button* b3;
+	Button* b4;
 
 	Textblock* tblock;
 

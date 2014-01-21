@@ -1,7 +1,7 @@
 #include "CommitButton.h"
 
 
-CommitButton::CommitButton(Vector2u winSize)
+CommitButton::CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize) :  Button(pos, size, S, ID, lock)
 {
 	this->windowSize = winSize;
 
@@ -17,8 +17,11 @@ CommitButton::CommitButton(Vector2u winSize)
 	}
 	foreground.t = image;
 	foreground.s.setTexture(&foreground.t);                      
-	foreground.s.setPosition(50,50);
+	foreground.s.setPosition(this->getPosition().x - 50, this->getPosition().y - 50);
 	foreground.s.setSize((sf::Vector2f)image.getSize());
+
+	std::cout << "width: " << windowSize.x << "x bild: " << this->getPosition().x - 50 << std::endl;
+	std::cout << "height: " << windowSize.y << "y bild: " << this->getPosition().y - 50 << std::endl;
 }
 
 
@@ -30,11 +33,17 @@ CommitButton::~CommitButton()
 void CommitButton::draw(RenderWindow* rw)
 {
 	rw->draw(*this);
-	rw->draw(foreground.s);
+		rw->draw(foreground.s);
 	rw->draw(m_buttonText);
 }
 
-void CommitButton::onResize()
+void CommitButton::onResize(Vector2u winSize)
 {
-	this->setPosition(windowSize.x - 150, windowSize.y - 150);
+	this->windowSize = winSize;
+	this->setPosition(windowSize.x - this->getSize().x, windowSize.y - this->getSize().y);
+	foreground.s.setPosition(this->getPosition().x - 50, this->getPosition().y - 50);
+	
+
+	std::cout << "width: " << windowSize.x << "x bild: " << foreground.s.getPosition().x << "  x button: " << this->getPosition().x <<std::endl;
+	std::cout << "height: " << windowSize.y << "y bild: " << foreground.s.getPosition().y << "  y button: " << this->getPosition().y << std::endl;
 }
