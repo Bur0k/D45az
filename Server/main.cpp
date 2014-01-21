@@ -4,6 +4,7 @@
 #include "NetworkParticipant.h"
 #include "LogInLogic.h"
 #include "LobbyLogic.h"
+#include "Map.h"
 
 Server* server;
 
@@ -29,6 +30,10 @@ class testServer : public NetworkParticipant
 
 int main()
 {
+	Map map;
+	map.load("Data/Maps/TestMap.tmx");
+	
+
 	testServer* ts = new testServer();
 
 	server = Server::get();

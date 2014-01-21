@@ -4,6 +4,7 @@
 #include "NetworkParticipant.h"
 #include "Server.h"
 #include "UnitLogic.h"
+#include <math.h>
 #include <vector>
 
 using namespace std;
@@ -14,11 +15,20 @@ private:
 	Server* server;
 
 	vector<UnitLogic*> units;
-	int position;
+	vector<UnitGroupLogic*>* unitGroups;
+	
+	POINT pos;
 
 public:
-	UnitGroupLogic(short units, short type);
+	UnitGroupLogic(short units, UnitTypes type, POINT p, vector<UnitGroupLogic*>* unitGroups);
 	~UnitGroupLogic();
+
+	void moveOneStep(POINT to);
+	void addUnit(short units, UnitTypes type);
+	void removeUnit(short units, UnitTypes type); 
+	void move(POINT moves[], int arrlen);
+	void splitandMove(short units[], UnitTypes types[], POINT moves[], int arrlen);
+
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

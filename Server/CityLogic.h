@@ -13,8 +13,7 @@ private:
 	Server* server;
 
 	short id;
-	short posX;
-	short posY;
+	POINT* position;
 	int level;
 	int generatedIncome;
 

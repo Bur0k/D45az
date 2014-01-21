@@ -10,7 +10,7 @@ private:
 	SpriteTex foreground;
 
 public:
-	CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize);
+	CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize, unsigned int characterSize = 30);
 	~CommitButton();
 
 	virtual void draw(RenderWindow* rw);

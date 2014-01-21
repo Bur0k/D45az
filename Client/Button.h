@@ -23,7 +23,7 @@ class Button : public IDrawable, public RectangleShape, public IClickable, publi
 public:
 	//TODO standadconstructor
 	Button();
-	Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock);
+	Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, unsigned int characterSize = 30);
 	Button(const Button & b);
 	~Button();
 	void operator=(const Button & b);
@@ -47,6 +47,7 @@ protected:
 	bool m_mouseOver;
 
 	Font m_Font;
+	unsigned int m_characterSize;
 
 	Color m_color;
 	Color m_color_mouseOver;

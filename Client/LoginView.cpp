@@ -11,6 +11,11 @@ LoginView::LoginView(Vector2u & size)
 
 	m_DrawV.push_back(logintext);
 
+	nameStatus= new Textblock(Vector2f(100,400),Vector2f(500,70),"", 50);
+	nameStatus->setFillColor(MyColors.Black);
+	nameStatus->setBackgroundColor(MyColors.Transparent);
+	m_DrawV.push_back(nameStatus);
+
 	name = new TextBox(200,"enter name",sf::Vector2f(100,200),false,1);
 	name->Attach(this);
 
@@ -26,12 +31,14 @@ LoginView::LoginView(Vector2u & size)
 	m_AnimateV.push_back(lgoinbutton);
 	m_ClickV.push_back(lgoinbutton);
 
+	next = Views::NOCHANGE;
 	
 
-	
 	Texture image;
-	if(!image.loadFromFile("Data/Images/background.png"))
-		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;
+	/*if(!image.loadFromFile("Data/Images/background.png"))
+		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;*/
+	if(!image.loadFromFile("Data/Images/Button.png"))
+		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;
 	
 	background.t = image;
 	background.s.setTexture(&background.t);                      
@@ -39,6 +46,8 @@ LoginView::LoginView(Vector2u & size)
 	background.s.setSize((sf::Vector2f)image.getSize());
 
 	centering(size);
+	
+	NL = nullptr;
 }
 
 LoginView::~LoginView()
@@ -46,15 +55,20 @@ LoginView::~LoginView()
 	delete name;
 	delete lgoinbutton;
 	delete logintext;
+	delete nameStatus;
+	if(NL!=nullptr)
+		delete NL;
 }
 
 void LoginView::onButtonClick(int)
 {
-	//handle incoming clicks here
 	std::string s;
 	s = name->getText();
-	std::cout << "LOGIN NAME IS : " << s << std::endl;
-	
+	if(NL==nullptr)
+	{
+		NL = new NetworkLogin(s);
+		nameStatus->setText("",sf::Vector2f());
+	}
 	
 	//BURAK GOES HERE
 
@@ -141,12 +155,22 @@ Views LoginView::nextState()
 {
 	//TODO do something 
 
-	return Views::NOCHANGE;
+	return next;
 }
 
 void LoginView::update(double elpasedMs)
 {
-
+	if(NL != nullptr)
+	{
+		if(NL->getState() == 1)
+			next = Views::LOBBY;
+		else if(NL->getState() == -1)
+		{
+			nameStatus->setText("Name is already in usage.\nPlease choose a different name.",sf::Vector2f(400,400));
+			delete NL;
+			NL = nullptr;
+		}
+	}
 }
 
 void LoginView::onResize(Vector2u & size)

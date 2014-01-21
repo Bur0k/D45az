@@ -7,8 +7,12 @@ Button::Button()
 	//TODO
 }
 
-Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
+
+
+Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, unsigned int characterSize)
 {
+	m_characterSize = characterSize;
+
 	m_animation = 0;
 	m_animationLength = 15;
 	m_ID = ID;
@@ -22,6 +26,8 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock)
 	setSize(size);
 	setPosition(pos);
 	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
+	m_buttonText.setCharacterSize(m_characterSize);
+
 	m_buttonText.setFont(m_Font);
 	m_buttonText.setString(S);
 	
