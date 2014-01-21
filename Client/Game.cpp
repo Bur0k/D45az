@@ -76,9 +76,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(tblock);
 
 	//SBAR 
-	//MenuOpener MOpointer = &open_Menu;
-	//	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), MenuOpener MOpointer); 
-	//	m_drawL.push_back(SBar);
+	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), this); 
+	m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -110,8 +109,6 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
 
 	tb->Attach(this);
-
-
 
 	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
@@ -168,7 +165,7 @@ Game::~Game()
 	delete s;
 	delete s1;
 	delete tb;
-//	delete SBar;
+	delete SBar;
 
 	delete tblock;
 
@@ -289,8 +286,6 @@ void Game::onMouseMove()
 	ResetMouse();
 	
 
-
-	
 	//TODO alle mouse move aufrufe zu float umwandeln
 
 	if(m_ViewMode == Views::TESTSCREEN)
@@ -301,6 +296,8 @@ void Game::onMouseMove()
 	}
 
 	m_lastMousePosition = mousePos;
+
+	SBar->MouseMoved((Vector2i)m_falseMouse.s.getPosition()); // STatusbar abchecken
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
@@ -314,7 +311,7 @@ void Game::onMouseDownLeft()
 		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			if(m_clickL[i]->PressedLeft())
 				break;	
-		//SBar->PressedLeft();
+		SBar->PressedLeft();
 	}
 
 	if(m_ViewVect.size() > 0)
@@ -380,10 +377,10 @@ void Game::onKeyDown(sf::Event e)
 	if(e.key.code == Keyboard::Q)
 		b3->unLock();
  	if(e.key.code == Keyboard::Escape && !m_menubutton)
-		open_Menu();
+		OpenMenu();
 }
 
-void Game::open_Menu()
+void Game::OpenMenu()
 {
 	this->LoadView(Views::MENU);
 	m_menubutton = true;
@@ -443,7 +440,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		NewView = new IngameView(m_pWindow->getSize());
+		
 		break;
 
 	case Views::LOGIN:
