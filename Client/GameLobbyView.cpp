@@ -11,7 +11,7 @@ GameLobbyView::~GameLobbyView()
 {
 	for (int i = 0; i < 4; i++)
 		delete this->players[i];
-
+	
 	delete this->mapName;
 }
 
