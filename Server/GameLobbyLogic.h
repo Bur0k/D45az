@@ -42,6 +42,7 @@ public:
 	/*Funktionen*/
 
 	void addPlayer(PlayerData* player);
+	bool isAlreadyConnected(SOCKET s);
 	void sendPlayerNames(SOCKET s);
 	void sendMaxPlayers(SOCKET s);
 	void sendGameMaster(SOCKET s);
