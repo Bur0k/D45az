@@ -16,8 +16,9 @@ class Unit : public IDrawable, public IClickable
 private:
 	Rect<float> m_dimensions;
 	SpriteTex m_UnitImage;
-	Text m_numberOfSoldiers;
-	int m_numberOfSoldierss;
+	Text m_numberOfSoldiersText;
+	int m_numberOfSoldiers;
+	UnitTypes m_type;
 
 public:
 	Unit(UnitTypes Type, int Amount);

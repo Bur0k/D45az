@@ -3,7 +3,30 @@
 
 Unit::Unit(UnitTypes Type, int Amount)
 {
+	m_numberOfSoldiers = Amount;
+	m_type = Type;
 
+	std::string path;
+	path = "Data/Images/";
+
+	switch (m_type)
+	{
+	case UnitTypes::LIGHT:
+		path += "unit_light.png";
+		break;
+	case UnitTypes::HEAVY:
+		path += "unit_heavy.png";
+		break;
+	case UnitTypes::LONGRANGE:
+		path += "unit_ranged.png";
+		break;
+	case UnitTypes::ARTILLERY:
+		path += "unit_artillery.png";
+		break;
+	default:
+		std::cout<< "unit.cpp: unknown unit!!!"; 
+		break;
+	}
 }
 
 Unit::~Unit()

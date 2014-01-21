@@ -8,26 +8,31 @@
 #include "StandardButton.h"
 #include "Textbox.h"
 #include "Textblock.h"
+#include "NetworkLogin.h"
 
-class LoginView : public IView , public IButtonfunction
+class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
 public:
 	LoginView(Vector2u & size);
 	~LoginView();
 
 private:
+	Views next;
+
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
 	Textblock* logintext;
+	Textblock* nameStatus;
 	TextBox* name;
 	Button* lgoinbutton;
 	SpriteTex background;
 
 	void centering(Vector2u & size);
-	
+
+	NetworkLogin* NL;
 public:
 	virtual Views nextState();
 	//implementing a lot of interfaces
@@ -52,6 +57,8 @@ public:
 	virtual void update(double elpasedMs);
 
 	virtual Views getType();
+
+	void onTextBoxSend(int ID, std::string s);
 };
 
 
