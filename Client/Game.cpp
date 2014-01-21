@@ -440,7 +440,8 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		
+		NewView = new IngameView(m_pWindow->getSize());
+		clear = true;
 		break;
 
 	case Views::LOGIN:
