@@ -20,6 +20,7 @@
 #include "Textbox.h"
 #include "LoginView.h"
 #include "LobbyView.h"
+#include "GameLobbyView.h"
 #include "MenuView.h"
 #include "CommitButton.h"
 #include "IngameView.h"

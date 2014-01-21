@@ -29,7 +29,13 @@ public:
 	GameLobbyView(Vector2u & screensize);
 	~GameLobbyView();
 
-	
+	Textblock* players[4];
+
+	Textblock* mapName;
+
+	StandardButton* kickPlayer;
+	StandardButton* leave;
+	StandardButton* startgame;
 	
 
 	void draw(sf::RenderWindow* rw);

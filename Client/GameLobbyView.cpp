@@ -2,13 +2,17 @@
 
 GameLobbyView::GameLobbyView(Vector2u & screensize)
 {
-	
+	for (int i = 0; i < 4; i++)
+		this->players[i] = new Textblock(sf::Vector2f(10,10),sf::Vector2f(50, 10), "player1", 25);
 	
 }
 
 GameLobbyView::~GameLobbyView()
 {
-	
+	for (int i = 0; i < 4; i++)
+		delete this->players[i];
+
+	delete this->mapName;
 }
 
 
@@ -128,6 +132,6 @@ void GameLobbyView::onResize(Vector2u & size)
 
 Views GameLobbyView::getType()
 {
-	return Views::;
+	return Views::GAMELOBBY;
 }
 
