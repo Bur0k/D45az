@@ -94,6 +94,9 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	b3 = new StandardButton(Vector2f(300,600), Vector2f(120,100),"|| SOUND 2 || \n buttons können auch\nein und aus schalten" , 3, true);
 
 	b3->Attach(this);
+	
+	b4 = new CommitButton(Vector2f(m_pWindow->getSize().x - 100, m_pWindow->getSize().y - 100 - 100),Vector2f(100,100),"mybutton",5,false, m_pWindow->getSize());
+	b4->Attach((IButtonfunction*)this);
 
 	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
 	
@@ -117,6 +120,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_clickL.push_back(b1);
 	m_clickL.push_back(b2);
 	m_clickL.push_back(b3);
+	m_clickL.push_back(b4);
 	m_clickL.push_back(s);
 	m_clickL.push_back(s1);
 	m_clickL.push_back(tb);
@@ -125,6 +129,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(b1);
 	m_drawL.push_back(b2);
 	m_drawL.push_back(b3);
+	m_drawL.push_back(b4);
 	m_drawL.push_back(s);
 	m_drawL.push_back(s1);
 	m_drawL.push_back(tb);
@@ -133,6 +138,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_animateL.push_back(b1);
 	m_animateL.push_back(b2);
 	m_animateL.push_back(b3);
+	m_animateL.push_back(b4);
 	m_animateL.push_back(tb);
 
 	m_keyInputL.push_back(tb);
@@ -155,6 +161,7 @@ Game::~Game()
 	delete b1;
 	delete b2;
 	delete b3;
+	delete b4;
 	delete s;
 	delete s1;
 	delete tb;
@@ -212,6 +219,8 @@ void Game::onResize()
 	m_pWindow->setView(v);
 
 	SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
+
+	((CommitButton*)b4)->onResize(m_pWindow->getSize());
 
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
