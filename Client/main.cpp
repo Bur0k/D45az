@@ -6,7 +6,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include "NetworkParticipant.h"
-#include "NetworkLogin.h"
 #include "Lobby.h"
 #include "LobbyView.h"
 
@@ -19,7 +18,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 
 
@@ -59,12 +58,12 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	
 	
-	NetworkLogin* NL1 = new NetworkLogin("Tim");
+	/* = new NetworkLogin("Tim");
 	while(NL1->getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
 	{
 	}
 	cout << "NL1:" << NL1->getState() << endl;
-	delete NL1;
+	delete NL1;*/
 #endif //BURAKTESTSHIT	
 	//********** BURAKS CLIENT TEST SHIT END
 
@@ -81,7 +80,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	//erlaubte einstiegspunkte für Views::
 	//TESTSCREEN LOGIN LOBBY
-	Game* g = new Game(&window, Views::TESTSCREEN, sf::Vector2f(1280, 850));
+	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
 	
 	
 	while (window.isOpen())

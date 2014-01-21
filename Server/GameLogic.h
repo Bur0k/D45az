@@ -27,4 +27,11 @@ public:
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 
+enum mapElements
+{
+	StartCity,
+	NeutralCity,
+	Mountains
+};
+
 #endif
