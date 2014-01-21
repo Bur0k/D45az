@@ -39,7 +39,7 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 	for(int i = 0; i < w->layer.size(); i++)
 		for(int j = 0; j < w->layer[i].size(); j++)
 		{
-			if(w->layer[i][j] == BARRICADE)
+			if(w->layer[i][j] == BARRICADE1 || w->layer[i][j] == BARRICADE2 || w->layer[i][j] == STARTCITY || w->layer[i][j] == NEUTRALCITY)
 			{
 				POINT* p = new POINT();
 				p->x = j;
@@ -64,6 +64,12 @@ GameLogic::~GameLogic()
 
 	for(int i = 0; i < this->startCities.size(); i++)
 		delete this->startCities[i];
+
+	for(int i = 0; i < this->neutralCities.size(); i++)
+		delete this->neutralCities[i];
+
+	for(int i = 0; i < this->barricades.size(); i++)
+		delete this->barricades[i];
 
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
