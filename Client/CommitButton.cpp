@@ -1,7 +1,7 @@
 #include "CommitButton.h"
 
 
-CommitButton::CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize) :  Button(pos, size, S, ID, lock)
+CommitButton::CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize, unsigned int characterSize) :  Button(pos, size, S, ID, lock, characterSize)
 {
 	this->windowSize = winSize;
 

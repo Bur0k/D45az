@@ -96,7 +96,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	b3->Attach(this);
 	
-	b4 = new CommitButton(Vector2f(m_pWindow->getSize().x - 100, m_pWindow->getSize().y - 100 - 100),Vector2f(100,100),"mybutton",5,false, m_pWindow->getSize());
+	b4 = new CommitButton(Vector2f(m_pWindow->getSize().x - 100, m_pWindow->getSize().y - 100 - 100),Vector2f(100,100),"mybutton",5,false, m_pWindow->getSize(), 20);
 	b4->Attach((IButtonfunction*)this);
 
 	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
