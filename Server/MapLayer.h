@@ -10,11 +10,12 @@ class MapLayer
 public:
 	std::vector<std::vector<short>> layer;
 	bool isCityLayer;
+	bool isBarricadeLayer;
 	bool isMountainLayer;
 	const static int TileWidth=32;
 	const static int TileHeight=32;
 
-	MapLayer(std::string LayerInformation,int RowNum,bool IsCityLayer=false);
+	MapLayer(std::string LayerInformation,int RowNum,bool IsCityLayer=false,bool IsBarricadeLayer=false);
 	~MapLayer();
 
 };
