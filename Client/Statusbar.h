@@ -11,11 +11,16 @@
 
 #include "StandardButton.h"
 #include "Textbox.h"
-#include "Game.h"
 
 #define AbstandX 5
 
 using namespace std;
+
+class StatusBarFunctions
+{
+public:
+	virtual void OpenMenu()=0;
+};
 
 
 class Statusbar : public IClickable, public IDrawable, public IAnimatable
@@ -29,9 +34,12 @@ private: // soll eigentlich NICHT abgeleitet werden
 	StandardButton* m_BMenu;
 	vector<TextBox> m_TextboxContainer;
 
+	//Zeiger auf andere Klassen
+	StatusBarFunctions* m_pOpenMenu;
+
 public:
 	//ctor & dtor
-	Statusbar(Vector2f pos, Vector2f size);
+	Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu);
 	~Statusbar(void);
 	//Setter & Getter
 	void setMouse(Vector2f pos);
