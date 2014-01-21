@@ -27,7 +27,7 @@ LobbyView::LobbyView():
 
 
 
-
+	next = Views::NOCHANGE;
 
 	lobby = new Lobby();
 	lobby->askforLobbyData();
@@ -168,7 +168,7 @@ void LobbyView::onTextInput(std::string s)
 
 Views LobbyView::nextState()
 {
-	return Views::NOCHANGE;
+	return next;
 }
 
 void LobbyView::onSliderValueChange(int ID, double position)
@@ -210,7 +210,7 @@ void LobbyView::update(double elpasedMs)
 				short id = it->first + 10;
 				GameLobbyData* GLA = new GameLobbyData();
 
-				GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.playerlimit,it->second.players.size(),id);
+				GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.players.size(),it->second.playerlimit,id);
 				GLA->LE->Attach(this);
 
 				gameLobbys[id] = GLA;
