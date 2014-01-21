@@ -2,10 +2,14 @@
 #define UNIT_H
 
 #include <SFML\Graphics.hpp>
-
 #include "IDrawable.h"
 #include "IClickable.h"
 #include "graphic_globals.h"
+
+
+#define UNIT_WIDTH 60
+#define UNIT_HEIGHT 90
+
 
 using namespace sf;
 
@@ -14,14 +18,23 @@ enum class UnitTypes{LIGHT, HEAVY, LONGRANGE, ARTILLERY};
 class Unit : public IDrawable, public IClickable
 {
 private:
+
+
+
 	Rect<float> m_dimensions;
 	SpriteTex m_UnitImage;
 	Text m_numberOfSoldiersText;
+	
+	
+
 	int m_numberOfSoldiers;
 	UnitTypes m_type;
+	RectangleShape m_textbg;
+	bool m_mouseOver;
 
 public:
-	Unit(UnitTypes Type, int Amount);
+	bool m_clicked;
+	Unit(Vector2f pos, UnitTypes Type, int Amount);
 	~Unit();
 
 	int getNumberOfSoldiers();
@@ -40,7 +53,12 @@ public:
 	bool PressedLeft();
 	bool ReleasedRight();
 	bool ReleasedLeft();
+
+private:
+	
 };
+
+
 
 
 #endif //UNIT_H

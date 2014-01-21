@@ -35,8 +35,10 @@ LoginView::LoginView(Vector2u & size)
 	
 
 	Texture image;
-	if(!image.loadFromFile("Data/Images/background.png"))
-		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;
+	/*if(!image.loadFromFile("Data/Images/background.png"))
+		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;*/
+	if(!image.loadFromFile("Data/Images/Button.png"))
+		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;
 	
 	background.t = image;
 	background.s.setTexture(&background.t);                      

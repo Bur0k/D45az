@@ -77,7 +77,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
@@ -90,8 +90,8 @@
     <ClCompile Include="CommitButton.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLobby.cpp" />
+    <ClCompile Include="GameLobbyView.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
-    <ClCompile Include="IngameMainGui.cpp" />
     <ClCompile Include="IngameView.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="LobbyEntry.cpp" />
@@ -122,12 +122,12 @@
     <ClInclude Include="CommitButton.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLobby.h" />
+    <ClInclude Include="GameLobbyView.h" />
     <ClInclude Include="graphic_globals.h" />
     <ClInclude Include="IAnimatable.h" />
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
-    <ClInclude Include="IngameMainGui.h" />
     <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />

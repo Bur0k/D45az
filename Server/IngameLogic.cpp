@@ -36,13 +36,18 @@ void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 	case 0x0504:
 		{
 			short units = data[0];
-			short type = data[1];
+			// muss noch richtig initialisiert/ ausgelesen werden
+			UnitTypes type = UnitTypes::ARTILLERY;
 
 			//TODO
 			// Poition muss noch mit übergeben werden!
+			POINT pos;
+			pos.x = 1;
+			pos.y = 1;
+			
 
-			UnitGroupLogic* uGroup = new UnitGroupLogic(units, type);
-			this->unitGroups.push_back(uGroup);
+			UnitGroupLogic* uGroup = new UnitGroupLogic(units, type, pos, &this->unitGroups);
+			//this->unitGroups.push_back(uGroup); wird im konstruktor erledigt
 			this->server->write(s, 0x0505, erfg); 
 		}
 	}

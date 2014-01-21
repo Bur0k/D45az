@@ -89,7 +89,8 @@ Map* GameLobbyLogic::getMap()
 
 void GameLobbyLogic::addPlayer(PlayerData* player)
 {
-	this->players.push_back(player);
+	if(this->players.size() < this->playerlimit)
+		this->players.push_back(player);
 }
 
 bool GameLobbyLogic::isAlreadyConnected(SOCKET s)

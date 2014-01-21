@@ -34,11 +34,12 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0201:
 			{
 		
-			for (map<short, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end(); it++)
+			for (map<short, GameLobbyLogic*>::iterator it = gamesCreated.begin(); it != gamesCreated.end();)
 			{
 				if (it->second->getPlayers().size() == 0)
 				{
-					gamesCreated.erase(it);
+					it = gamesCreated.erase(it);
+					continue;
 				}
 				else
 				{
@@ -94,6 +95,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 							erfg.push_back(tmp[i]);
 					}
 				}
+				it++;
 			}
 							
 			server->write(s, 0x0200,erfg);
