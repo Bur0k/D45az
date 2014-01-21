@@ -77,8 +77,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	//SBAR 
 	//MenuOpener MOpointer = &open_Menu;
-//	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), MenuOpener MOpointer); 
-//	m_drawL.push_back(SBar);
+	//	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), MenuOpener MOpointer); 
+	//	m_drawL.push_back(SBar);
 
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
@@ -110,6 +110,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
 
 	tb->Attach(this);
+
+
 
 	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
@@ -441,7 +443,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		
+		NewView = new IngameView(m_pWindow->getSize());
 		break;
 
 	case Views::LOGIN:
@@ -476,6 +478,11 @@ void Game::LoadView(Views v)
 	case Views::CLOSE:
 		m_pWindow->close();
 		return;
+		break;
+
+	case Views::GAMELOBBY:
+		//NewView = ..
+		clear = true;
 		break;
 
 	default:

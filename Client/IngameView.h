@@ -1,18 +1,35 @@
 #ifndef INGAMEVIEW_H
 #define INGAMEVIEW_H
 
+#include <vector>
 #include <SFML\Graphics.hpp>
 #include "IView.h"
 #include "StandardButton.h"
 #include "Slider.h"
 #include "Textblock.h"
 #include "Textbox.h"
+#include "Unit.h"
+#include "Map.h"
 
 
 class IngameView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+
+	//debug
+
+	Unit* u, * u1;
+
+	//debug off
+
+	//is filled with the army that is currently selected
+	std::vector<Unit*> UnitVector;
+
+	Map m_map;
+	Vector2f m_mapSize;
+	IntRect m_mapView;
+	Vector2i m_tileSize;
 
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;

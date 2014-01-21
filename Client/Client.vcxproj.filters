@@ -127,10 +127,10 @@
     <ClCompile Include="CommitButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="IngameMainGui.cpp">
+    <ClCompile Include="Unit.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Unit.cpp">
+    <ClCompile Include="GameLobbyView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -233,10 +233,10 @@
     <ClInclude Include="CommitButton.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="IngameMainGui.h">
+    <ClInclude Include="Unit.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
+    <ClInclude Include="GameLobbyView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>

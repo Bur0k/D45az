@@ -91,7 +91,6 @@ void StandardButton::updatePosition()
 	//move sprites to position and scale them appropriately
 	Vector2f size = this->getSize();
 
-
 	m_pST[0].s.setSize(Vector2f(m_buttonTileSize, m_buttonTileSize));
 	m_pST[1].s.move(m_buttonTileSize, 0);
 	m_pST[1].s.setSize(Vector2f(size.x - m_buttonTileSize * 2, m_buttonTileSize));

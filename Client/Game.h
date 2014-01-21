@@ -22,6 +22,7 @@
 #include "LobbyView.h"
 #include "MenuView.h"
 #include "CommitButton.h"
+#include "IngameView.h"
 
 #include "MusikSampler.h"
 
