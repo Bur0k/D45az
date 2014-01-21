@@ -3,7 +3,24 @@
 
 Unit::Unit(UnitTypes Type, int Amount)
 {
+	m_numberOfSoldiers = Amount;
+	m_type = Type;
 
+	std::string path;
+
+	switch (m_type)
+	{
+	case UnitTypes::LIGHT:
+		break;
+	case UnitTypes::HEAVY:
+		break;
+	case UnitTypes::LONGRANGE:
+		break;
+	case UnitTypes::ARTILLERY:
+		break;
+	default:
+		break;
+	}
 }
 
 Unit::~Unit()
