@@ -1,17 +1,17 @@
-#include "IngameView.h"
+#include "IngameMainGui.h"
 
-IngameView::IngameView(Vector2u & screensize)
-{
-	m_nextView = Views::NOCHANGE;
-}
 
-IngameView::~IngameView()
+IngameMainGuy::IngameMainGuy(Vector2u & screensize)
 {
 
 }
 
+IngameMainGuy::~IngameMainGuy()
+{
+	
+}
 
-void IngameView::onButtonClick(int id)
+void IngameMainGuy::onButtonClick(int id)
 {
 	switch (id)
 	{
@@ -20,24 +20,24 @@ void IngameView::onButtonClick(int id)
 	}
 }
 
-void IngameView::onSliderValueChange(int ID, double position)
+void IngameMainGuy::onSliderValueChange(int ID, double position)
 {
 	//DO SOMETHING
 }
 
-void IngameView::onSliderReleased(int ID, double position)
+void IngameMainGuy::onSliderReleased(int ID, double position)
 {
 	//DO SOMETHING
 }
 
-void IngameView::onTextBoxSend(int ID, std::string s)
+void IngameMainGuy::onTextBoxSend(int ID, std::string s)
 {
 
 }
 
 
 
-bool IngameView::MouseMoved(sf::Vector2i & mouse)
+bool IngameMainGuy::MouseMoved(sf::Vector2i & mouse)
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->MouseMoved(mouse))
@@ -45,7 +45,7 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	return false;
 }
 
-bool IngameView::PressedRight()
+bool IngameMainGuy::PressedRight()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
@@ -53,7 +53,7 @@ bool IngameView::PressedRight()
 	return false;
 }
 
-bool IngameView::PressedLeft()
+bool IngameMainGuy::PressedLeft()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
@@ -61,7 +61,7 @@ bool IngameView::PressedLeft()
 	return false;
 }
 
-bool IngameView::ReleasedRight()
+bool IngameMainGuy::ReleasedRight()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->ReleasedRight())
@@ -69,7 +69,7 @@ bool IngameView::ReleasedRight()
 	return false;
 }
 
-bool IngameView::ReleasedLeft()
+bool IngameMainGuy::ReleasedLeft()
 {
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->ReleasedLeft())
@@ -77,52 +77,36 @@ bool IngameView::ReleasedLeft()
 	return false;
 }
 	
-void IngameView::animationTick()
+void IngameMainGuy::animationTick()
 {
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 }
 	
-void IngameView::onKeyDown(sf::Event e)
+void IngameMainGuy::onKeyDown(sf::Event e)
 {
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyDown(e);
 }
 
-void IngameView::onKeyUp(sf::Event e)
+void IngameMainGuy::onKeyUp(sf::Event e)
 {
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
 }
-void IngameView::onTextInput(std::string s)
+void IngameMainGuy::onTextInput(std::string s)
 {
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onTextInput(s);
 }
 
-void IngameView::draw(sf::RenderWindow* rw)
+void IngameMainGuy::draw(sf::RenderWindow* rw)
 {
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 }
 
-Views IngameView::nextState()
+void IngameMainGuy::onResize(sf::Vector2u &)
 {
-	return m_nextView;
-}
 
-void IngameView::update(double elpasedMs)
-{
-	//BURAK GOES HERE
 }
-
-void IngameView::onResize(Vector2u & size)
-{
-	
-}
-
-Views IngameView::getType()
-{
-	return Views::INGAME;
-}
-

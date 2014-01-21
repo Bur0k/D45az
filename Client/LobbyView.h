@@ -27,10 +27,9 @@ public:
 	{
 	public:
 		static int nextID;
-		int id;
-		LobbyEntry LE;
-		GameLobbyData():LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
-		{id = nextID++;}
+		LobbyEntry* LE;
+		GameLobbyData()//:LE(sf::Vector2f(420,50),sf::Vector2f(),"",0,0,nextID)
+		{}
 	};
 
 	std::map<short,GameLobbyData*> gameLobbys;

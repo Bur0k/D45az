@@ -127,6 +127,12 @@
     <ClCompile Include="CommitButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="IngameMainGui.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -225,6 +231,12 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="CommitButton.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="IngameMainGui.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>

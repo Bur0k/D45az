@@ -8,9 +8,11 @@ LoginView::LoginView(Vector2u & size)
 	
 	logintext = new Textblock(Vector2f(100,100),Vector2f(500,70),"LOGIN SCREEN", 50);
 	logintext->setFillColor(MyColors.Red);
+
 	m_DrawV.push_back(logintext);
 
 	name = new TextBox(200,"enter name",sf::Vector2f(100,200),false,1);
+	name->Attach(this);
 
 	m_DrawV.push_back(name);
 	m_AnimateV.push_back(name);
@@ -52,6 +54,15 @@ void LoginView::onButtonClick(int)
 	std::string s;
 	s = name->getText();
 	std::cout << "LOGIN NAME IS : " << s << std::endl;
+	
+	
+	//BURAK GOES HERE
+
+}
+
+void LoginView::onTextBoxSend(int ID, std::string s)
+{
+	onButtonClick(1);
 }
 
 

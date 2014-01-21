@@ -35,6 +35,8 @@ public:
 	Vector2f getPosition();
 	void setPosition(Vector2f pos);
 	virtual void draw(RenderWindow* rw);
+
+	int getID(){return m_ID;}
 };
 
 #endif //LOBBYENTRY_H

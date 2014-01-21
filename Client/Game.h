@@ -31,7 +31,6 @@ using namespace sf;
 #define Statusbarheight 50
 
 // TODO derive game from renderWindow
-
 // manages gui views and timers
 class Game : private IButtonfunction, private ISliderFunction, public ITextBoxFunction
 {
@@ -48,7 +47,7 @@ private:
 
 	MusikSampler* m_pMS;
 
-	Statusbar* SBar;
+	//Statusbar* SBar;
 
 	Slider* s;
 	Slider* s1;
@@ -91,7 +90,10 @@ public:
 	Text m_fpsText;
 	Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize);
 	~Game();
-	
+	//setter & getter
+	void setMenubottun(bool onoff); // vilt überflüssig
+	void open_Menu(); // zu übergebende funtktion
+
 	//draws the current screen
 	void Draw();
 	//manages the user input
@@ -103,7 +105,7 @@ public:
 
 	
 
-private:
+public:
 
 	void LoadView(Views);
 	void onButtonClick(int);
@@ -139,5 +141,7 @@ private:
 	virtual void onTextBoxSend(int ID, std::string s);
 	
 };
+
+	//typedef void (Game::*MenuOpener) (void) const; //Funktionpointer
 
 #endif
