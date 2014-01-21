@@ -242,21 +242,27 @@ void Game::onMouseMove()
 	m_lastMousePosition = mousePos;
 
 	Vector2f mPos = m_falseMouse.s.getPosition();
+	
 	bool borderColisionX = false;
+	bool xp = false;
 	bool borderColisionY = false;
-	if(mPos.x >= (float)winSize.x)
+	bool yp = false;
+
+	if(mPos.x > (float)winSize.x)
+	{
+		borderColisionX = true;
+		xp = true;
+	}
+	else if(mPos.x < 0)
 	{
 		borderColisionX = true;
 	}
-	else if(mPos.x <= 0)
-	{
-		borderColisionX = true;
-	}
-	if(mPos.y >= (float)winSize.y)
+	if(mPos.y > (float)winSize.y)
 	{
 		borderColisionY = true;
+		yp = true;
 	}
-	else if(mPos.y <= 0)
+	else if(mPos.y < 0)
 	{
 		borderColisionY = true;
 	}
@@ -264,9 +270,10 @@ void Game::onMouseMove()
 
 
 	if(borderColisionX)
-		m_falseMouse.s.move(-delta.x,0);
+		m_falseMouse.s.setPosition((xp)? m_pWindow->getSize().x : 0, m_falseMouse.s.getPosition().y);
+	
 	if(borderColisionY)
-		m_falseMouse.s.move(0,-delta.y);
+		m_falseMouse.s.setPosition(m_falseMouse.s.getPosition().x, (yp)? m_pWindow->getSize().y : 0 );
 
 	ResetMouse();
 	
