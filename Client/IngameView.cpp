@@ -2,12 +2,26 @@
 
 IngameView::IngameView(Vector2u & screensize)
 {
+	//debug 
 	m_nextView = Views::NOCHANGE;
+	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE,120);
+	m_ClickV.push_back(u);
+	m_DrawV.push_back(u);
+
+	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY,17);
+	m_ClickV.push_back(u1);
+	m_DrawV.push_back(u1);
+	//debug end
+
+	m_map.load("Data/Maps/test.tmx");
+	m_map.layers[0]->TileHeight;
+	
 }
 
 IngameView::~IngameView()
 {
-
+	delete u;
+	delete u1;
 }
 
 
@@ -104,6 +118,12 @@ void IngameView::draw(sf::RenderWindow* rw)
 {
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
+	
+	Rect<float> MapView;
+	m_mapView.width= rw->getSize().x;
+	m_mapView.height = rw->getSize().y;
+
+	m_map.render(*rw,m_mapView);
 }
 
 Views IngameView::nextState()

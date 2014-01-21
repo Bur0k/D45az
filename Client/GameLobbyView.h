@@ -1,44 +1,42 @@
-#ifndef INGAMEMAINGUY_H
-#define INGAMEMAINGUY_H
+#ifndef GAMELOBBYVIEW_H
+#define GAMELOBBYVIEW_H
 
+#include <vector>
 #include <SFML\Graphics.hpp>
 #include "IView.h"
 #include "StandardButton.h"
 #include "Slider.h"
 #include "Textblock.h"
 #include "Textbox.h"
+#include "Unit.h"
+#include "Map.h"
 
-using namespace sf;
 
-enum class GuiModes{EMPTY, CITY, ARMY};
-
-class IngameMainGuy	: 
+class GameLobbyView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
 
 	
-	SpriteTex m_Background;
-
-	GuiModes mode;
-
-	//0-3 images for purchase mode rest for army mode
-	SpriteTex* Unit_images;
-	Text* m_city_purchaseText;
-	StandardButton* m_city_buyUnitButtons;
-
-	
-
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
+	Views m_nextView;
 
 public:
-	IngameMainGuy(Vector2u & screensize);
-	~IngameMainGuy();
+	GameLobbyView(Vector2u & screensize);
+	~GameLobbyView();
 
+	Textblock* players[4];
+
+	Textblock* mapName;
+
+	StandardButton* kickPlayer;
+	StandardButton* leave;
+	StandardButton* startgame;
+	
 
 	void draw(sf::RenderWindow* rw);
 
@@ -55,7 +53,11 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	
+	void update(double elpasedMs);
+
+	Views getType();
+
+	Views nextState();
 
 	void onButtonClick(int);
 	void onSliderValueChange(int ID, double position);
@@ -63,4 +65,8 @@ public:
 	void onTextBoxSend(int ID, std::string s);
 };
 
-#endif //INGAMEMAINGUY_H
+
+
+
+
+#endif //GAMELOBBYVIEW_H

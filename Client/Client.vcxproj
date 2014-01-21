@@ -91,6 +91,7 @@
     <ClCompile Include="CommitButton.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLobby.cpp" />
+    <ClCompile Include="GameLobbyView.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
     <ClCompile Include="Ingame.cpp" />
     <ClCompile Include="IngameMainGui.cpp" />
@@ -126,12 +127,12 @@
     <ClInclude Include="CommitButton.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLobby.h" />
+    <ClInclude Include="GameLobbyView.h" />
     <ClInclude Include="graphic_globals.h" />
     <ClInclude Include="IAnimatable.h" />
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
-    <ClInclude Include="Ingame.h" />
     <ClInclude Include="IngameMainGui.h" />
     <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
@@ -160,7 +161,19 @@
     <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Images\button_small.psd" />
     <None Include="Data\Images\commit Button.psd" />
+    <None Include="Data\Images\menu_bot.psd" />
+    <None Include="Data\Images\menu_mid.psd" />
+    <None Include="Data\Images\menu_top.psd" />
+    <None Include="Data\Images\Mouse.psd" />
+    <None Include="Data\Images\slider_bar.psd" />
+    <None Include="Data\Images\slider_end.psd" />
+    <None Include="Data\Images\slider_mover.psd" />
+    <None Include="Data\Images\unit_artillery.psd" />
+    <None Include="Data\Images\unit_heavy.psd" />
+    <None Include="Data\Images\unit_light.psd" />
+    <None Include="Data\Images\unit_ranged.psd" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />
@@ -190,6 +203,17 @@
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
     <Image Include="Data\Images\commit-Button.png" />
+    <Image Include="Data\Images\menu_bot.png" />
+    <Image Include="Data\Images\menu_mid.png" />
+    <Image Include="Data\Images\menu_top.png" />
+    <Image Include="Data\Images\mouse.png" />
+    <Image Include="Data\Images\slider_bar.png" />
+    <Image Include="Data\Images\slider_end.png" />
+    <Image Include="Data\Images\slider_mover.png" />
+    <Image Include="Data\Images\unit_artillery.png" />
+    <Image Include="Data\Images\unit_heavy.png" />
+    <Image Include="Data\Images\unit_light.png" />
+    <Image Include="Data\Images\unit_ranged.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>

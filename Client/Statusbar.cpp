@@ -1,8 +1,10 @@
 #include "Statusbar.h"
 
 //Ctro & Dtor-------------------------------------------------------
-Statusbar::Statusbar(Vector2f pos, Vector2f size)
+Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 {
+	m_pOpenMenu = OpenMenu;
+
 	m_BaseRect.setPosition(pos);
 	m_BaseRect.setSize(size);
 	m_BaseRect.setFillColor(MyColors.MenuBackground);
@@ -45,9 +47,6 @@ void Statusbar::Resize(Vector2f new_size)
 
 //Hilfsfunktionen-------------------------------------------------------
 
-
-
-
 //Interface-Funktionen-------------------------------------------------------
 bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 {
@@ -57,9 +56,12 @@ bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 	{
 		setMouse(Vector2f(mouse.x, mouse.y));	
 		m_mouseOver = true;
+		cout << "drüber";
 	}
 	else
+	{
 		m_mouseOver = false;
+	}
 
 	return m_mouseOver;
 }
@@ -68,12 +70,10 @@ bool Statusbar::PressedLeft()
 {
 	if(m_mouseOver) //TODO verschiedene objekte müssen anwählbar sein
 	{
-		if(m_MousePos.x >= m_BMenu->getPosition().x && m_MousePos.x <= m_BMenu->getOrigin().x + m_BMenu->getPosition().x
-			&& m_MousePos.y >= m_BMenu->getPosition().y && m_MousePos.y <= m_BMenu->getOrigin().y + m_BMenu->getPosition().y)
-		{
-//			m_pGame->LoadView(Views::MENU);
-	//		m_pGame->setMenubottun(1); // MEnü an
-		}
+		if(m_MousePos.x >= m_BMenu->getPosition().x && m_MousePos.x <= m_BMenu->getSize().x + m_BMenu->getPosition().x  // Menübutton getroffen
+			&& m_MousePos.y >= m_BMenu->getPosition().y && m_MousePos.y <= m_BMenu->getSize().y + m_BMenu->getPosition().y)
+			m_pOpenMenu->OpenMenu();
+
 		return true;
 	}
 	else 
