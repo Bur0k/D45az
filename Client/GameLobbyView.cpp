@@ -129,5 +129,6 @@ void GameLobbyView::onResize(Vector2u & size)
 Views GameLobbyView::getType()
 {
 	return Views::;
+	asdf
 }
 
