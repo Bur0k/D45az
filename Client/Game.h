@@ -32,7 +32,7 @@ using namespace sf;
 
 // TODO derive game from renderWindow
 // manages gui views and timers
-class Game : private IButtonfunction, private ISliderFunction, public ITextBoxFunction
+class Game : private IButtonfunction, private ISliderFunction, public ITextBoxFunction, public StatusBarFunctions
 {
 private:
 	//debug
@@ -43,19 +43,17 @@ private:
 	Button* b3;
 	Button* b4;
 
+	
+	TextBox* tb;
 	Textblock* tblock;
-
 	MusikSampler* m_pMS;
-
-	//Statusbar* SBar;
+	Statusbar* SBar;
 
 	Slider* s;
 	Slider* s1;
 
 	Map map;
 	int xMap,yMap;
-
-	TextBox* tb;
 
 	///end debug
 
@@ -92,7 +90,7 @@ public:
 	~Game();
 	//setter & getter
 	void setMenubottun(bool onoff); // vilt überflüssig
-	void open_Menu(); // zu übergebende funtktion
+	void OpenMenu(); // zu übergebende funtktion
 
 	//draws the current screen
 	void Draw();
@@ -141,7 +139,4 @@ public:
 	virtual void onTextBoxSend(int ID, std::string s);
 	
 };
-
-	//typedef void (Game::*MenuOpener) (void) const; //Funktionpointer
-
 #endif
