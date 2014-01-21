@@ -11,9 +11,12 @@
 
 using namespace std;
 
+
 #define STARTCITY 51
 #define NEUTRALCITY 49
-#define BARRICADE 21
+#define BARRICADE1 21
+#define BARRICADE2 22
+
 
 class GameLogic : public NetworkParticipant
 {

@@ -5,8 +5,8 @@ CityLogic::CityLogic(short id, short x, short y)
 	this->server = Server::get();
 
 	this->id = id;
-	this->posX = x;
-	this->posY = y;
+	this->position->x = x;
+	this->position->y = y;
 	this->level = 1;
 	this->generatedIncome = 500;
 
