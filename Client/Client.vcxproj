@@ -86,12 +86,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="City.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CommitButton.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="GameLobbyView.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
+    <ClCompile Include="Ingame.cpp" />
+    <ClCompile Include="IngameMainGui.cpp" />
     <ClCompile Include="IngameView.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="LobbyEntry.cpp" />
@@ -115,9 +118,11 @@
     <ClCompile Include="tinyxmlerror.cpp" />
     <ClCompile Include="tinyxmlparser.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="UnitGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="City.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="CommitButton.h" />
     <ClInclude Include="Game.h" />
@@ -128,6 +133,7 @@
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
+    <ClInclude Include="IngameMainGui.h" />
     <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />
@@ -152,6 +158,7 @@
     <ClInclude Include="tinyxml.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Images\button_small.psd" />
