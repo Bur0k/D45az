@@ -110,7 +110,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				short mapid = data[0];
 
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
-					if (server->connectedPlayers[i].s == s)
+					if (server->connectedPlayers[i].s == s && gamesCreated[mapid]->isAlreadyConnected(s) == false)
 					{
 							gamesCreated[mapid]->addPlayer(&server->connectedPlayers[i]);
 							break;

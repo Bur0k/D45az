@@ -210,7 +210,6 @@ void Client::connectToServer(string ip, int port)
 
 			Sleep(1);
 		}
-		Sleep(1);
 	});
 
 	addErrorCallbackThread = new thread([=]()

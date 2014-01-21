@@ -92,6 +92,17 @@ void GameLobbyLogic::addPlayer(PlayerData* player)
 	this->players.push_back(player);
 }
 
+bool GameLobbyLogic::isAlreadyConnected(SOCKET s)
+{
+	for(int i = 0; i < this->players.size(); i++)
+	{
+		if(this->players[i]->s == s)
+			return true;
+	}
+
+	return false;
+}
+
 void GameLobbyLogic::sendPlayerNames(SOCKET s)
 {
 	std::vector<char> erfg;
