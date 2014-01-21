@@ -7,8 +7,13 @@
 #include "Map.h"
 #include "CityLogic.h"
 #include <vector>
+#include <math.h>
 
 using namespace std;
+
+#define STARTCITY 51
+#define NEUTRALCITY 49
+#define BARRICADE 21
 
 class GameLogic : public NetworkParticipant
 {
@@ -17,7 +22,9 @@ private:
 
 	vector<IngameLogic*> playersIngame;
 	Map* map;
-	vector<CityLogic*> startCities; 
+	vector<CityLogic*> startCities;
+	vector<CityLogic*> neutralCities;
+	vector<POINT*> barricades; 
 
 public:
 	GameLogic::GameLogic(vector<PlayerData*> players, Map* map);
@@ -25,13 +32,6 @@ public:
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-};
-
-enum mapElements
-{
-	StartCity,
-	NeutralCity,
-	Mountains
 };
 
 #endif

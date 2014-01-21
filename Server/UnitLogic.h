@@ -6,17 +6,20 @@
 
 using namespace std;
 
+enum class UnitTypes{LIGHT, HEAVY, LONGRANGE, ARTILLERY};
+
 class UnitLogic : public NetworkParticipant
 {
 private:
 	Server* server;
 
 public:
-	UnitLogic(short type);
+	UnitLogic(UnitTypes type);
 	~UnitLogic();
 
 	int attackpower;
 	int range;
+	UnitTypes type;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
