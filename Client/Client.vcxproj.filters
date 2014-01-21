@@ -35,6 +35,12 @@
     <Filter Include="Codes\PlayerData">
       <UniqueIdentifier>{0e668548-644a-442e-9c31-c2d9ad6c59eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\GameLogic">
+      <UniqueIdentifier>{b2835509-dbbd-41c6-b8e4-ec8256553986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\Source">
+      <UniqueIdentifier>{019f1177-0a7c-440a-9808-eb7d3334e8bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -132,6 +138,15 @@
     </ClCompile>
     <ClCompile Include="Unit.cpp">
       <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Ingame.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="City.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitGroup.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +253,15 @@
     </ClInclude>
     <ClInclude Include="Unit.h">
       <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Ingame.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitGroup.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="City.h">
+      <Filter>Codes\GameLogic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
