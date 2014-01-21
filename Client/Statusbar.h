@@ -31,7 +31,7 @@ private: // soll eigentlich NICHT abgeleitet werden
 
 public:
 	//ctor & dtor
-	Statusbar(Vector2f pos, Vector2f size, Game* game);
+	Statusbar(Vector2f pos, Vector2f size);
 	~Statusbar(void);
 	//Setter & Getter
 	void setMouse(Vector2f pos);

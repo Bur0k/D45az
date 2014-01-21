@@ -76,7 +76,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_drawL.push_back(tblock);
 
 	//SBAR 
-	MenuOpener MOpointer = &open_Menu;
+	//MenuOpener MOpointer = &open_Menu;
 //	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), MenuOpener MOpointer); 
 //	m_drawL.push_back(SBar);
 
@@ -159,7 +159,7 @@ Game::~Game()
 	delete s;
 	delete s1;
 	delete tb;
-	delete SBar;
+//	delete SBar;
 
 	delete tblock;
 
@@ -217,7 +217,7 @@ void Game::onResize()
 	v.setCenter(sf::Vector2f((float)m_pWindow->getSize().x / 2 , (float)m_pWindow->getSize().y / 2));
 	m_pWindow->setView(v);
 
-	SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
+	//SBar->Resize(Vector2f(m_size.x, Statusbarheight)); // Statusbar anpassen
 
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
 
@@ -277,7 +277,7 @@ void Game::onMouseMove()
 
 	if(m_ViewMode == Views::TESTSCREEN)
 	{
-		SBar->MouseMoved(mousePos); // Maus auf Statusbar?
+		//SBar->MouseMoved(mousePos); // Maus auf Statusbar?
 		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
 	}
@@ -296,7 +296,7 @@ void Game::onMouseDownLeft()
 		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			if(m_clickL[i]->PressedLeft())
 				break;	
-		SBar->PressedLeft();
+		//SBar->PressedLeft();
 	}
 
 	if(m_ViewVect.size() > 0)
@@ -362,7 +362,7 @@ void Game::onKeyDown(sf::Event e)
 	if(e.key.code == Keyboard::Q)
 		b3->unLock();
  	if(e.key.code == Keyboard::Escape && !m_menubutton)
-		open_Menu;
+		open_Menu();
 }
 
 void Game::open_Menu()

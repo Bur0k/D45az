@@ -1,7 +1,7 @@
 #include "Statusbar.h"
 
 //Ctro & Dtor-------------------------------------------------------
-Statusbar::Statusbar(Vector2f pos, Vector2f size, Game* game)
+Statusbar::Statusbar(Vector2f pos, Vector2f size)
 {
 	m_BaseRect.setPosition(pos);
 	m_BaseRect.setSize(size);
@@ -71,8 +71,8 @@ bool Statusbar::PressedLeft()
 		if(m_MousePos.x >= m_BMenu->getPosition().x && m_MousePos.x <= m_BMenu->getOrigin().x + m_BMenu->getPosition().x
 			&& m_MousePos.y >= m_BMenu->getPosition().y && m_MousePos.y <= m_BMenu->getOrigin().y + m_BMenu->getPosition().y)
 		{
-			m_pGame->LoadView(Views::MENU);
-			m_pGame->setMenubottun(1); // MEnü an
+//			m_pGame->LoadView(Views::MENU);
+	//		m_pGame->setMenubottun(1); // MEnü an
 		}
 		return true;
 	}

@@ -45,7 +45,7 @@ private:
 
 	MusikSampler* m_pMS;
 
-	Statusbar* SBar;
+	//Statusbar* SBar;
 
 	Slider* s;
 	Slider* s1;
@@ -90,7 +90,7 @@ public:
 	~Game();
 	//setter & getter
 	void setMenubottun(bool onoff); // vilt überflüssig
-	void open_Menu() const; // zu übergebende funtktion
+	void open_Menu(); // zu übergebende funtktion
 
 	//draws the current screen
 	void Draw();
@@ -140,6 +140,6 @@ public:
 	
 };
 
-	typedef void (Game::*MenuOpener) (void) const; //Funktionpointer
+	//typedef void (Game::*MenuOpener) (void) const; //Funktionpointer
 
 #endif
