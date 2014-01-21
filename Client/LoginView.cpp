@@ -67,8 +67,6 @@ void LoginView::onButtonClick(int)
 		NL = new NetworkLogin(s);
 		nameStatus->setText("",sf::Vector2f());
 	}
-	std::cout << "LOGIN NAME IS : " << s << std::endl;
-	
 	
 	//BURAK GOES HERE
 
