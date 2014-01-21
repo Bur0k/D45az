@@ -8,14 +8,16 @@ LoginView::LoginView(Vector2u & size)
 	
 	logintext = new Textblock(Vector2f(100,100),Vector2f(500,70),"LOGIN SCREEN", 50);
 	logintext->setFillColor(MyColors.Red);
+
 	m_DrawV.push_back(logintext);
-	
+
 	nameStatus= new Textblock(Vector2f(100,400),Vector2f(500,70),"", 50);
 	nameStatus->setFillColor(MyColors.Black);
 	nameStatus->setBackgroundColor(MyColors.Transparent);
 	m_DrawV.push_back(nameStatus);
 
 	name = new TextBox(200,"enter name",sf::Vector2f(100,200),false,1);
+	name->Attach(this);
 
 	m_DrawV.push_back(name);
 	m_AnimateV.push_back(name);
@@ -30,8 +32,8 @@ LoginView::LoginView(Vector2u & size)
 	m_ClickV.push_back(lgoinbutton);
 
 	next = Views::NOCHANGE;
-
 	
+
 	Texture image;
 	if(!image.loadFromFile("Data/Images/background.png"))
 		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;
@@ -65,6 +67,16 @@ void LoginView::onButtonClick(int)
 		NL = new NetworkLogin(s);
 		nameStatus->setText("",sf::Vector2f());
 	}
+	std::cout << "LOGIN NAME IS : " << s << std::endl;
+	
+	
+	//BURAK GOES HERE
+
+}
+
+void LoginView::onTextBoxSend(int ID, std::string s)
+{
+	onButtonClick(1);
 }
 
 

@@ -10,7 +10,7 @@
 #include "Textblock.h"
 #include "NetworkLogin.h"
 
-class LoginView : public IView , public IButtonfunction
+class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
 public:
 	LoginView(Vector2u & size);
@@ -57,6 +57,8 @@ public:
 	virtual void update(double elpasedMs);
 
 	virtual Views getType();
+
+	void onTextBoxSend(int ID, std::string s);
 };
 
 
