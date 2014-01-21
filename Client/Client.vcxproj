@@ -154,7 +154,19 @@
     <ClInclude Include="Unit.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Images\button_small.psd" />
     <None Include="Data\Images\commit Button.psd" />
+    <None Include="Data\Images\menu_bot.psd" />
+    <None Include="Data\Images\menu_mid.psd" />
+    <None Include="Data\Images\menu_top.psd" />
+    <None Include="Data\Images\Mouse.psd" />
+    <None Include="Data\Images\slider_bar.psd" />
+    <None Include="Data\Images\slider_end.psd" />
+    <None Include="Data\Images\slider_mover.psd" />
+    <None Include="Data\Images\unit_artillery.psd" />
+    <None Include="Data\Images\unit_heavy.psd" />
+    <None Include="Data\Images\unit_light.psd" />
+    <None Include="Data\Images\unit_ranged.psd" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />
@@ -184,6 +196,17 @@
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
     <Image Include="Data\Images\commit-Button.png" />
+    <Image Include="Data\Images\menu_bot.png" />
+    <Image Include="Data\Images\menu_mid.png" />
+    <Image Include="Data\Images\menu_top.png" />
+    <Image Include="Data\Images\mouse.png" />
+    <Image Include="Data\Images\slider_bar.png" />
+    <Image Include="Data\Images\slider_end.png" />
+    <Image Include="Data\Images\slider_mover.png" />
+    <Image Include="Data\Images\unit_artillery.png" />
+    <Image Include="Data\Images\unit_heavy.png" />
+    <Image Include="Data\Images\unit_light.png" />
+    <Image Include="Data\Images\unit_ranged.png" />
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>
