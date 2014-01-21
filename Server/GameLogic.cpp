@@ -19,10 +19,16 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 	for( int i = 0; i < v->layer.size();i++)
 		for( int j = 0; j < v->layer[i].size();j++)
 		{
-			if( v->layer[i][j] == 51)
+			if( v->layer[i][j] == STARTCITY)
 			{
 				CityLogic* c = new CityLogic(id, i, j);
 				this->startCities.push_back(c);
+				id++;
+			}
+			if( v->layer[i][j] == NEUTRALCITY)
+			{
+				CityLogic* c = new CityLogic(id, i, j);
+				this->neutralCities.push_back(c);
 				id++;
 			}
 		}

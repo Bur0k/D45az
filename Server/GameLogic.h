@@ -10,6 +10,10 @@
 
 using namespace std;
 
+#define STARTCITY 51
+#define NEUTRALCITY 49
+#define MOUNTAINS 21
+
 class GameLogic : public NetworkParticipant
 {
 private:
@@ -17,7 +21,8 @@ private:
 
 	vector<IngameLogic*> playersIngame;
 	Map* map;
-	vector<CityLogic*> startCities; 
+	vector<CityLogic*> startCities;
+	vector<CityLogic*> neutralCities;
 
 public:
 	GameLogic::GameLogic(vector<PlayerData*> players, Map* map);
@@ -25,13 +30,6 @@ public:
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-};
-
-enum mapElements
-{
-	StartCity,
-	NeutralCity,
-	Mountains
 };
 
 #endif
