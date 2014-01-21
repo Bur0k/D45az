@@ -11,6 +11,7 @@
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction
 {
+	Views next;
 public:
 	LobbyView();
 	~LobbyView();
