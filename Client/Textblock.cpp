@@ -67,7 +67,7 @@ void Textblock::fixCharsize()
 	// Charsizes over 23 == problems --> fix
 	if(m_textblockText.getCharacterSize() > 23)
 	{
-		m_textblockText.move(0, -10);
+		m_textblockText.move(0, -3);
 	}
 }
 

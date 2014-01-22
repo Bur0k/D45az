@@ -77,12 +77,23 @@ GameLogic::~GameLogic()
 
 void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
+	std::vector<char> erfg;
+
 	switch(id)
 	{
 	case 0x0400:
 		{
+			for(int i = 0; i < (signed) this->playersIngame.size(); i++)
+			{
+				string name = this->playersIngame[i]->owner->Name;
+				vector<char> tmp = code(name);
 
-		}
+				erfg.insert(erfg.end(), tmp.begin(), tmp.end());
+				erfg.push_back('/');
+				}
+			}
+
+		server->write(s, 0x0401, erfg);
 	}
 }
 	

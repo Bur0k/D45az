@@ -219,7 +219,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				this->sendGameMaster(s);
 				this->sendMaxPlayers(s);
 				this->sendPlayerNames(s);
-				//this->sendCurrentMap(s);
+				this->sendCurrentMap(s);
 			}
 			}break;
 		}

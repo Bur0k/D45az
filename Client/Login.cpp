@@ -1,6 +1,6 @@
-#include "NetworkLogin.h"
+#include "Login.h"
 
-void NetworkLogin::processNewMessage(short id,vector<char> data)
+void Login::processNewMessage(short id,vector<char> data)
 {
 	if(id==0x0101)
 	{
@@ -15,11 +15,11 @@ void NetworkLogin::processNewMessage(short id,vector<char> data)
 	}
 }
 
-void NetworkLogin::processNetworkError(int id, std::string msg)
+void Login::processNetworkError(int id, std::string msg)
 {
 }
 
-NetworkLogin::NetworkLogin(string Name)
+Login::Login(string Name)
 {
 	state = 0;
 	c = Client::get();
@@ -32,13 +32,13 @@ NetworkLogin::NetworkLogin(string Name)
 	c->write(0x0100,charName);
 }
 
-NetworkLogin::~NetworkLogin()
+Login::~Login()
 {
 	c->deleteFromNewMessageCallback(this);
 }
 
 //returns 0 for no Response until now, returns 1 for name can be used returns -1 for name is already used
-short NetworkLogin::getState()
+short Login::getState()
 {
 	return state;
 }
