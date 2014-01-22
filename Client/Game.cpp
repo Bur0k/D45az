@@ -434,7 +434,8 @@ void Game::LoadView(Views v)
 		break;
 		
 	case Views::GAMELOBBY:
-		NewView = new GameLobbyView(m_pWindow->getSize());
+		// EY BURAK gib mal Parameter da rein :P
+		//NewView = new GameLobbyView(m_pWindow->getSize(), );
 		clear = true;
 		break;
 

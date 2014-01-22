@@ -22,6 +22,7 @@ private:
 
 	// auf welchem spiel arbeite ich?
 	GameLobby* game;
+	bool amIGamemaster;
 	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
 
 	DrawVect m_DrawV;
@@ -34,7 +35,7 @@ private:
 	void centering(Vector2u & size);
 
 public:
-	GameLobbyView(Vector2u & screensize);
+	GameLobbyView(Vector2u & screensize, GameLobby* game, bool amIGamemaster);
 	~GameLobbyView();
 
 	Textblock* players[4];
