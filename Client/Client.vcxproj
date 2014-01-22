@@ -94,7 +94,6 @@
     <ClCompile Include="GameLobbyView.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
     <ClCompile Include="Ingame.cpp" />
-    <ClCompile Include="IngameMainGui.cpp" />
     <ClCompile Include="IngameView.cpp" />
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="LobbyEntry.cpp" />
@@ -133,7 +132,6 @@
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
-    <ClInclude Include="IngameMainGui.h" />
     <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />

@@ -142,15 +142,9 @@
     <ClCompile Include="GameLobbyView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Ingame.cpp">
-      <Filter>Codes\GameLogic\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="City.cpp">
-      <Filter>Codes\GameLogic\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitGroup.cpp">
-      <Filter>Codes\GameLogic\Source</Filter>
-    </ClCompile>
+    <ClCompile Include="City.cpp" />
+    <ClCompile Include="Ingame.cpp" />
+    <ClCompile Include="UnitGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -257,15 +251,8 @@
     <ClInclude Include="GameLobbyView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Ingame.h">
-      <Filter>Codes\GameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitGroup.h">
-      <Filter>Codes\GameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="City.h">
-      <Filter>Codes\GameLogic</Filter>
-    </ClInclude>
+    <ClInclude Include="City.h" />
+    <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
