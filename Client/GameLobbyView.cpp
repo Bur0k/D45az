@@ -2,25 +2,24 @@
 
 GameLobbyView::GameLobbyView(Vector2u & screensize)
 {
-
-	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 20), "player1", 25);
+	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), "player1", 30);
 	m_DrawV.push_back(this->players[0]);
-	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 20), "player2", 25);
+	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 40), "player2", 30);
 	m_DrawV.push_back(this->players[1]);
-	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 20), "player3", 25);
+	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 40), "player3", 30);
 	m_DrawV.push_back(this->players[2]);
-	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(100, 20), "", 25);
-	this->players[3]->setBackgroundColor(MyColors.Transparent);
+	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), "", 30);
 	m_DrawV.push_back(this->players[3]);
 
-	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(50, 20), "mapname", 25);
+	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(50, 20), "mapname", 30);
 	m_DrawV.push_back(mapName);
 
-	this->kickPlayer[0] = new StandardButton(sf::Vector2f(10, 250), sf::Vector2f(20, 10), "kick", KICKP1, false); 
-	this->kickPlayer[1] = new StandardButton(sf::Vector2f(40, 250), sf::Vector2f(20, 10), "kick", KICKP2, false); 
-	this->kickPlayer[2] = new StandardButton(sf::Vector2f(70, 250), sf::Vector2f(20, 10), "kick", KICKP3, false); 
-	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(20, 10), "leave", LEAVE, false);
-	this->startgame = new StandardButton(sf::Vector2f(50, 280), sf::Vector2f(20, 10), "start", START, false);
+
+	this->kickPlayer[0] = new StandardButton(sf::Vector2f(10, 250), sf::Vector2f(50, 25), "kick", KICKP1, false, false); 
+	this->kickPlayer[1] = new StandardButton(sf::Vector2f(40, 250), sf::Vector2f(50, 25), "kick", KICKP2, false, false); 
+	this->kickPlayer[2] = new StandardButton(sf::Vector2f(70, 250), sf::Vector2f(50, 25), "kick", KICKP3, false, false); 
+	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(100, 50), "leave", LEAVE, false);
+	this->startgame = new StandardButton(sf::Vector2f(50, 280), sf::Vector2f(100, 50), "start", START, false);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -70,10 +69,14 @@ void GameLobbyView::onButtonClick(int id)
 	{
 		case LEAVE:
 			{
+				this->game->disconnect();
+				this->m_nextView = Views::LOBBY;
 				break;
 			}
 		case START:
 			{
+				this->game->startGame();
+				this->m_nextView = Views::INGAME;
 				break;
 			}
 		case KICKP1:
@@ -202,6 +205,24 @@ Views GameLobbyView::getType()
 
 void GameLobbyView::centering(Vector2u & size)
 {
+	int space = (size.y / 100) * 10;
 
+	if (space < 50)
+		space = 50;
+
+	this->players[0]->setPos(Vector2f(size.x / 2 - this->players[0]->getSize().x / 2, size.y / 2 - 2 * this->players[0]->getSize().y - 1.5 * space));
+	
+	this->players[1]->setPos(Vector2f(size.x / 2 - this->players[1]->getSize().x / 2, size.y / 2 - this->players[1]->getSize().y - 0.5 * space));	
+	this->kickPlayer[0]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[0]->getSize().x / 2, this->players[1]->getPosition().y + this->players[1]->getSize().y + space / 4));
+	
+	this->players[2]->setPos(Vector2f(size.x / 2 - this->players[2]->getSize().x / 2, size.y / 2 + 0.5 * space));
+	this->kickPlayer[1]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[1]->getSize().x / 2, this->players[2]->getPosition().y + this->players[2]->getSize().y + space / 4));
+
+	this->players[3]->setPos(Vector2f(size.x / 2 - this->players[3]->getSize().x / 2, size.y / 2 + this->players[3]->getSize().y + 1.5 * space));
+	this->kickPlayer[2]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[2]->getSize().x / 2, this->players[3]->getPosition().y + this->players[3]->getSize().y + space / 4));
+
+	this->leave->setPosition(size.x / 2 - this->players[3]->getSize().x, this->players[3]->getPosition().y + this->players[3]->getSize().y + space);
+
+	this->startgame->setPosition(this->players[3]->getPosition().x + this->players[3]->getSize().x - this->startgame->getSize().x, this->players[3]->getPosition().y + this->players[3]->getSize().y + space);
 }
 

@@ -13,11 +13,15 @@
 #include "GameLobby.h"
 
 
+// TODO: Update, nicht gamemaster fall, textblock geht irgendwann?, hintergrund
+
 class GameLobbyView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
-	//GameLobby* game;
+
+	// auf welchem spiel arbeite ich?
+	GameLobby* game;
 	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
 
 	DrawVect m_DrawV;
