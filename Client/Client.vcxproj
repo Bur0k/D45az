@@ -99,6 +99,7 @@
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="LobbyEntry.cpp" />
     <ClCompile Include="LobbyView.cpp" />
+    <ClCompile Include="LogicData.cpp" />
     <ClCompile Include="LoginView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -134,11 +135,13 @@
     <ClInclude Include="IButtonfunction.h" />
     <ClInclude Include="IClickable.h" />
     <ClInclude Include="IKeyboardInput.h" />
+    <ClInclude Include="Ingame.h" />
     <ClInclude Include="IngameView.h" />
     <ClInclude Include="IView.h" />
     <ClInclude Include="Lobby.h" />
     <ClInclude Include="LobbyEntry.h" />
     <ClInclude Include="LobbyView.h" />
+    <ClInclude Include="LogicData.h" />
     <ClInclude Include="LoginView.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLayer.h" />

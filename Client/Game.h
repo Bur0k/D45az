@@ -31,7 +31,6 @@ using namespace sf;
 
 
 //#define MOUSEGRAB
-#define Statusbarheight 50
 
 // TODO derive game from renderWindow
 // manages gui views and timers
@@ -39,7 +38,6 @@ class Game : private IButtonfunction, private ISliderFunction, public ITextBoxFu
 {
 private:
 	//debug
-
 	Button* b;
 	Button* b1;
 	Button* b2;
@@ -50,7 +48,6 @@ private:
 	TextBox* tb;
 	Textblock* tblock;
 	MusikSampler* m_pMS;
-	Statusbar* SBar;
 
 	Slider* s;
 	Slider* s1;

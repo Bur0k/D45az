@@ -75,10 +75,6 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	tblock = new Textblock(Vector2f(20, 80), Vector2f(100, 100), "asasd fgdf klas", 25);
 	m_drawL.push_back(tblock);
 
-	//SBAR 
-	SBar = new Statusbar(Vector2f(0, 0), Vector2f(m_size.x, Statusbarheight), this); 
-	m_drawL.push_back(SBar);
-
 	b = new StandardButton(Vector2f(500,100),Vector2f(200,60),"hello",1,false);
 	
 	b->Attach((IButtonfunction*)this);
@@ -109,6 +105,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	tb = new TextBox(500, "das ist eine textbox", Vector2f(100,600), true, 1);
 
 	tb->Attach(this);
+
+
 
 	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
@@ -165,7 +163,6 @@ Game::~Game()
 	delete s;
 	delete s1;
 	delete tb;
-	delete SBar;
 
 	delete tblock;
 
@@ -284,8 +281,8 @@ void Game::onMouseMove()
 		m_falseMouse.s.setPosition(m_falseMouse.s.getPosition().x, (yp)? m_pWindow->getSize().y : 0 );
 
 	ResetMouse();
-	
 
+	
 	//TODO alle mouse move aufrufe zu float umwandeln
 
 	if(m_ViewMode == Views::TESTSCREEN)
@@ -296,8 +293,6 @@ void Game::onMouseMove()
 	}
 
 	m_lastMousePosition = mousePos;
-
-	SBar->MouseMoved((Vector2i)m_falseMouse.s.getPosition()); // STatusbar abchecken
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
@@ -311,7 +306,6 @@ void Game::onMouseDownLeft()
 		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			if(m_clickL[i]->PressedLeft())
 				break;	
-		SBar->PressedLeft();
 	}
 
 	if(m_ViewVect.size() > 0)
@@ -440,7 +434,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		NewView = new IngameView(m_pWindow->getSize());
+		NewView = new IngameView(m_pWindow->getSize(), this);
 		clear = true;
 		break;
 
@@ -476,11 +470,6 @@ void Game::LoadView(Views v)
 	case Views::CLOSE:
 		m_pWindow->close();
 		return;
-		break;
-
-	case Views::GAMELOBBY:
-		NewView = new GameLobbyView(m_pWindow->getSize());
-		clear = true;
 		break;
 
 	default:

@@ -1,6 +1,6 @@
 #include "IngameView.h"
 
-IngameView::IngameView(Vector2u & screensize)
+IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 {
 	//debug 
 	m_nextView = Views::NOCHANGE;
@@ -16,12 +16,20 @@ IngameView::IngameView(Vector2u & screensize)
 	m_map.load("Data/Maps/test.tmx");
 	m_map.layers[0]->TileHeight;
 	
+
+	
+	//SBAR 
+	m_SBar = new Statusbar(Vector2f(0, 0), Vector2f(screensize.x, Statusbarheight), SBar_Function); 
+	m_DrawV.push_back(m_SBar);
+	m_ClickV.push_back(m_SBar);
+	m_AnimateV.push_back(m_SBar);
 }
 
 IngameView::~IngameView()
 {
 	delete u;
 	delete u1;
+	delete m_SBar;
 }
 
 
@@ -139,7 +147,7 @@ void IngameView::pt1zyklisch(double elpasedMs)
 
 void IngameView::onResize(Vector2u & size)
 {
-	
+	m_SBar->Resize((Vector2f) size);
 }
 
 Views IngameView::getType()
