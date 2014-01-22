@@ -1,7 +1,8 @@
 #include "CommitButton.h"
 
 
-CommitButton::CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize, unsigned int characterSize) :  Button(pos, size, S, ID, lock, characterSize)
+CommitButton::CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize, unsigned int characterSize) :
+	Button(Vector2f(winSize.x - 100, winSize.y - 100), Vector2f(100,100), S, ID, lock, characterSize)
 {
 	this->windowSize = winSize;
 
@@ -34,6 +35,7 @@ void CommitButton::onResize(Vector2u winSize)
 {
 	this->windowSize = winSize;
 	this->setPosition(windowSize.x - this->getSize().x, windowSize.y - this->getSize().y);
+	this->fitText(10);
 	foreground.s.setPosition(this->getPosition().x - 50, this->getPosition().y - 50);
 	
 }
