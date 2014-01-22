@@ -110,6 +110,8 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	tb->Attach(this);
 
+
+
 	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
@@ -284,8 +286,8 @@ void Game::onMouseMove()
 		m_falseMouse.s.setPosition(m_falseMouse.s.getPosition().x, (yp)? m_pWindow->getSize().y : 0 );
 
 	ResetMouse();
-
 	
+
 	//TODO alle mouse move aufrufe zu float umwandeln
 
 	if(m_ViewMode == Views::TESTSCREEN)
@@ -440,7 +442,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		
+		NewView = new IngameView(m_pWindow->getSize());
 		break;
 
 	case Views::LOGIN:
@@ -475,6 +477,11 @@ void Game::LoadView(Views v)
 	case Views::CLOSE:
 		m_pWindow->close();
 		return;
+		break;
+
+	case Views::GAMELOBBY:
+		//NewView = ..
+		clear = true;
 		break;
 
 	default:
