@@ -3,19 +3,17 @@
 
 #include "NetworkParticipant.h"
 #include "Client.h"
+#include <SFML\Graphics.hpp>
 
 class City : public NetworkParticipant
 {
-private:
 
-	Client* c;
+	sf::Vector2i position;
+	int level;
 
 public:
-	City();
+	City(sf::Vector2i position, int level);
 	~City();
-
-	void processNewMessage(short id,vector<char> data);
-	void processNetworkError(int id, std::string msg);
 };
 
 #endif

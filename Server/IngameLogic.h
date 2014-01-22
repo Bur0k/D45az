@@ -12,7 +12,7 @@ using namespace std;
 
 class IngameLogic : public NetworkParticipant
 {
-private:
+public:
 	Server* server;
 
 	PlayerData* owner;
