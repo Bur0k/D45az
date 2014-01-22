@@ -6,23 +6,23 @@ LobbyView::LobbyView():
 	playerName(sf::Vector2f(0,0),sf::Vector2f(500,100),"Name",40),
 	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster:",20),
-	gameLobbyMasterValue(sf::Vector2f(500,300),sf::Vector2f(300,100),"",20)
+	gameLobbyMasterValue(sf::Vector2f(500,400),sf::Vector2f(300,100),"",20)
 {
 	playerName.setPos(sf::Vector2f(0,0));
 	mapName.setPos(sf::Vector2f(500,200));
 	gameLobbyMaster.setPos(sf::Vector2f(500,300));
 	gameLobbyMasterValue.setPos(sf::Vector2f(800,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
-	updateLobbys = new StandardButton(sf::Vector2f(500,500),sf::Vector2f(100,75),"Update",1,false);
+	pt1zyklischLobbys = new StandardButton(sf::Vector2f(500,500),sf::Vector2f(100,75),"pt1zyklisch",1,false);
 	creatNewGamelobby = new StandardButton(sf::Vector2f(500,600),sf::Vector2f(100,75),"Create New\nGamelobby",2,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
 	connect->Attach(this);
-	updateLobbys->Attach(this);
+	pt1zyklischLobbys->Attach(this);
 	creatNewGamelobby->Attach(this);
 	s->Attach(this);
 
-	//playerName.setText(playerData.Name,sf::Vector2f(500,100));
+	playerName.setText(playerData.Name,sf::Vector2f(500,100));
 	mapName.setText("Map Name",sf::Vector2f(300,100));
 	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
 
@@ -39,7 +39,7 @@ LobbyView::~LobbyView()
 {
 	delete lobby;
 	delete connect;
-	delete updateLobbys;
+	delete pt1zyklischLobbys;
 	delete creatNewGamelobby;
 
 	delete s;
@@ -56,8 +56,9 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	playerName.draw(rw);
 	mapName.draw(rw);
 	gameLobbyMaster.draw(rw);
+	gameLobbyMasterValue.draw(rw);
 	connect->draw(rw);
-	updateLobbys->draw(rw);
+	pt1zyklischLobbys->draw(rw);
 	creatNewGamelobby->draw(rw);
 
 	s->draw(rw);
@@ -96,7 +97,8 @@ void LobbyView::onButtonClick(int id)
 				it->second->LE->unLock();
 			if(it->second->LE->getID() == id)
 			{
-				gameLobbyMasterValue.setText(lobby->gamesCreated[id-10].gameMaster->Name,sf::Vector2f(300,100));
+				gameLobbyMasterValue.setText(lobby->gamesCreated[id-10].gameMaster.Name,sf::Vector2f(300,100));
+				gameLobbyMasterValue.setBackgroundColor(MyColors.White);
 			}
 		}
 	}
@@ -108,7 +110,7 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 {
 	s->MouseMoved(v);
 	connect->MouseMoved(v);
-	updateLobbys->MouseMoved(v);
+	pt1zyklischLobbys->MouseMoved(v);
 	creatNewGamelobby->MouseMoved(v);
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->MouseMoved(v);
@@ -124,7 +126,7 @@ bool LobbyView::PressedLeft()
 {
 	s->PressedLeft();
 	connect->PressedLeft();
-	updateLobbys->PressedLeft();
+	pt1zyklischLobbys->PressedLeft();
 	creatNewGamelobby->PressedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->PressedLeft();
@@ -140,7 +142,7 @@ bool LobbyView::ReleasedLeft()
 {
 	s->ReleasedLeft();
 	connect->ReleasedLeft();
-	updateLobbys->ReleasedLeft();
+	pt1zyklischLobbys->ReleasedLeft();
 	creatNewGamelobby->ReleasedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->ReleasedLeft();
@@ -150,7 +152,7 @@ bool LobbyView::ReleasedLeft()
 void LobbyView::animationTick()
 {
 	connect->animationTick();
-	updateLobbys->animationTick();
+	pt1zyklischLobbys->animationTick();
 	creatNewGamelobby->animationTick();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->animationTick();
@@ -190,16 +192,16 @@ void LobbyView::onResize(Vector2u &)
 
 }
 
-void LobbyView::update(double elpasedMs)
+void LobbyView::pt1zyklisch(double elpasedMs)
 {
 	static double elapsed=0;
 	elapsed+=elpasedMs;
 	if(elapsed>=100)
 	{
 		elapsed=0;
-		if(lobby->updated)
+		if(lobby->pt1zyklischd)
 		{
-			lobby->updated = false;
+			lobby->pt1zyklischd = false;
 			
 			for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 			{

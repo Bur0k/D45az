@@ -1,19 +1,19 @@
-#ifndef _NETWORKLOGIN_H
-#define _NETWORKLOGIN_H
+#ifndef LOGIN_H
+#define LOGIN_H
 
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include <vector>
 #include <atomic>
 
-class NetworkLogin : public NetworkParticipant
+class Login : public NetworkParticipant
 {
 	Client* c;
 	std::atomic<short> state;
 
 public:
-	NetworkLogin(string Name);
-	~NetworkLogin();
+	Login(string Name);
+	~Login();
 
 	//returns 0 for no Response until now, returns 1 for name can be used returns -1 for name is already used
 	short getState();

@@ -1,25 +1,11 @@
 #include "City.h"
 
-City::City()
+City::City(sf::Vector2i position, int level)
 {
+	this->position = position;
+	this->level = level;
 }
 
 City::~City()
 {
-}
-
-void City::processNewMessage(short id,vector<char> data)
-{
-	switch(id)
-	{
-	case 0x0:
-		{
-
-		}break;
-	}
-}
-
-void City::processNetworkError(int id, std::string msg)
-{
-
 }

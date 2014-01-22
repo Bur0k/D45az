@@ -155,7 +155,7 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::update(double elpasedMs)
+void IngameView::pt1zyklisch(double elpasedMs)
 {
 	//LOADING STUFF GOES HERE
 }
