@@ -13,12 +13,12 @@ LobbyView::LobbyView():
 	gameLobbyMaster.setPos(sf::Vector2f(500,300));
 	gameLobbyMasterValue.setPos(sf::Vector2f(800,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
-	pt1zyklischLobbys = new StandardButton(sf::Vector2f(500,500),sf::Vector2f(100,75),"pt1zyklisch",1,false);
+	updateLobbys = new StandardButton(sf::Vector2f(500,500),sf::Vector2f(100,75),"Update",1,false);
 	creatNewGamelobby = new StandardButton(sf::Vector2f(500,600),sf::Vector2f(100,75),"Create New\nGamelobby",2,false);
 	s = new Slider(false,sf::Vector2f(20,400),0.0,sf::Vector2f(450,200),0);
 
 	connect->Attach(this);
-	pt1zyklischLobbys->Attach(this);
+	updateLobbys->Attach(this);
 	creatNewGamelobby->Attach(this);
 	s->Attach(this);
 
@@ -39,7 +39,7 @@ LobbyView::~LobbyView()
 {
 	delete lobby;
 	delete connect;
-	delete pt1zyklischLobbys;
+	delete updateLobbys;
 	delete creatNewGamelobby;
 
 	delete s;
@@ -58,7 +58,7 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	gameLobbyMaster.draw(rw);
 	gameLobbyMasterValue.draw(rw);
 	connect->draw(rw);
-	pt1zyklischLobbys->draw(rw);
+	updateLobbys->draw(rw);
 	creatNewGamelobby->draw(rw);
 
 	s->draw(rw);
@@ -110,7 +110,7 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 {
 	s->MouseMoved(v);
 	connect->MouseMoved(v);
-	pt1zyklischLobbys->MouseMoved(v);
+	updateLobbys->MouseMoved(v);
 	creatNewGamelobby->MouseMoved(v);
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->MouseMoved(v);
@@ -126,7 +126,7 @@ bool LobbyView::PressedLeft()
 {
 	s->PressedLeft();
 	connect->PressedLeft();
-	pt1zyklischLobbys->PressedLeft();
+	updateLobbys->PressedLeft();
 	creatNewGamelobby->PressedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->PressedLeft();
@@ -142,7 +142,7 @@ bool LobbyView::ReleasedLeft()
 {
 	s->ReleasedLeft();
 	connect->ReleasedLeft();
-	pt1zyklischLobbys->ReleasedLeft();
+	updateLobbys->ReleasedLeft();
 	creatNewGamelobby->ReleasedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->ReleasedLeft();
@@ -152,7 +152,7 @@ bool LobbyView::ReleasedLeft()
 void LobbyView::animationTick()
 {
 	connect->animationTick();
-	pt1zyklischLobbys->animationTick();
+	updateLobbys->animationTick();
 	creatNewGamelobby->animationTick();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->animationTick();

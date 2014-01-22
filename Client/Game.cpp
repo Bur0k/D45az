@@ -432,6 +432,11 @@ void Game::LoadView(Views v)
 	case Views::NOCHANGE:
 		return;
 		break;
+		
+	case Views::GAMELOBBY:
+		NewView = new GameLobbyView(m_pWindow->getSize());
+		clear = true;
+		break;
 
 	case Views::INGAME:
 		NewView = new IngameView(m_pWindow->getSize(), this);
