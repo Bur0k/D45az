@@ -13,6 +13,7 @@
 #include "Textbox.h"
 
 #define AbstandX 5
+#define Statusbarheight 50
 
 using namespace std;
 
@@ -23,7 +24,7 @@ public:
 };
 
 
-class Statusbar : public IClickable, public IDrawable, public IAnimatable
+class Statusbar : public IClickable, public IDrawable, public IAnimatable, public IButtonfunction
 {
 private: // soll eigentlich NICHT abgeleitet werden
 	bool m_mouseOver;
@@ -60,5 +61,7 @@ public:
 	virtual void draw(sf::RenderWindow* rw);
 	//IAnimatable
 	virtual void animationTick();
+	//IButtonFunktion
+	void onButtonClick(int);
 };
 

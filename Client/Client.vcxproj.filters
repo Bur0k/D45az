@@ -44,6 +44,12 @@
     <Filter Include="Data\sound">
       <UniqueIdentifier>{7af7f865-d792-45a0-9585-e9b2a58fe496}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\GameLogic">
+      <UniqueIdentifier>{cfa06e43-0f80-4ef9-a4e7-1abc25c93f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Codes\GameLogic\Source">
+      <UniqueIdentifier>{c3749aa9-d962-486c-a32b-4d2e09c29105}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -142,9 +148,18 @@
     <ClCompile Include="GameLobbyView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="City.cpp" />
-    <ClCompile Include="Ingame.cpp" />
-    <ClCompile Include="UnitGroup.cpp" />
+    <ClCompile Include="City.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Ingame.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitGroup.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicData.cpp">
+      <Filter>Codes\GameLogic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -251,8 +266,18 @@
     <ClInclude Include="GameLobbyView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="City.h" />
-    <ClInclude Include="UnitGroup.h" />
+    <ClInclude Include="City.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitGroup.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Ingame.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicData.h">
+      <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
