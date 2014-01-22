@@ -10,6 +10,7 @@
 #include "Textbox.h"
 #include "Unit.h"
 #include "Map.h"
+#include "Statusbar.h"
 
 
 class IngameView : 
@@ -38,8 +39,10 @@ private:
 
 	Views m_nextView;
 
+	Statusbar* m_SBar;
+
 public:
-	IngameView(Vector2u & screensize);
+	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function);
 	~IngameView();
 
 	
