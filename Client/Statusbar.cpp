@@ -9,14 +9,26 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 	m_BaseRect.setSize(size);
 	m_BaseRect.setFillColor(MyColors.MenuBackground);
 
-	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, false, false);
+	//angezeigte Elemente
+	m_BMenu = new StandardButton(Vector2f(pos.x + 5, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, false, false);
 	m_BMenu->Attach(this); 
+
+    if (!m_TGold.loadFromFile("Data/Images/gold.png"))
+        return;
+	else 
+		m_SGold = new Sprite(m_TGold);
+	m_SGold->setPosition(120, 5);
+
+	m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 40), String("1038"), 28);
 }
 
 
 Statusbar::~Statusbar(void)
 {
 	delete m_BMenu;
+	delete m_SGold;
+	delete m_TBGold;
+	
 }
 
 //Getter & Setter-------------------------------------------------------
@@ -74,9 +86,8 @@ void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
 	rw->draw(m_BaseRect);
 	m_BMenu->draw(rw);
-
-	for(int i = 0; i < m_TextboxContainer.size(); i++)
-		m_TextboxContainer[i].draw(rw);
+	rw->draw(*m_SGold);
+	m_TBGold->draw(rw);
 }
 
 void Statusbar::onButtonClick(int id)

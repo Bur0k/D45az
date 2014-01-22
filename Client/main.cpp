@@ -18,7 +18,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-#define BURAKTESTSHIT
+//#define BURAKTESTSHIT
 
 PlayerData playerData;
 
