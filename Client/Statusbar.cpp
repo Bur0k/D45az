@@ -13,13 +13,30 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 	m_BMenu = new StandardButton(Vector2f(pos.x + 5, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, false, false);
 	m_BMenu->Attach(this); 
 
-    if (!m_TGold.loadFromFile("Data/Images/gold.png"))
-        return;
-	else 
-		m_SGold = new Sprite(m_TGold);
-	m_SGold->setPosition(120, 5);
-
 	m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 100), String("1038"), 40);
+
+/*
+	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
+	{
+		Sprite* Stmp = new Sprite(m_Ttmp);
+		m_vSPictures.push_back(Stmp);
+	}
+	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
+	{
+		Sprite* Stmp = new Sprite(m_Ttmp);
+		m_vSPictures.push_back(Stmp);
+	}
+	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
+	{
+		Sprite* Stmp = new Sprite(m_Ttmp);
+		m_vSPictures.push_back(Stmp);
+	}
+	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
+	{
+		Sprite* Stmp = new Sprite(m_Ttmp);
+		m_vSPictures.push_back(Stmp);
+	}
+	*/
 }
 
 
@@ -27,7 +44,7 @@ Statusbar::~Statusbar(void)
 {
 	//Elemente
 	delete m_BMenu;
-	delete m_SGold;
+	//delete m_SGold;
 	delete m_TBGold;
 }
 
@@ -86,7 +103,6 @@ void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
 	rw->draw(m_BaseRect);
 	m_BMenu->draw(rw);
-	rw->draw(*m_SGold);
 	m_TBGold->draw(rw);
 }
 

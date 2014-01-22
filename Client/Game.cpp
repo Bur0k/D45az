@@ -253,6 +253,8 @@ void Game::onMouseMove()
 	bool borderColisionY = false;
 	bool yp = false;
 
+	
+
 	if(mPos.x > (float)winSize.x)
 	{
 		borderColisionX = true;
@@ -291,6 +293,14 @@ void Game::onMouseMove()
 		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
 	}
+
+	if(m_ViewMode == Views::INGAME)
+	{
+		int x = (borderColisionX)? (xp)? 1 : -1 : 0;
+		int y = (borderColisionY)? (yp)? 1 : -1 : 0;
+		static_cast<IngameView*>(m_ViewVect[m_ViewVect.size() - 1])->setScrollDirection(x,y);
+	}
+
 
 	m_lastMousePosition = mousePos;
 

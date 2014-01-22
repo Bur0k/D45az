@@ -11,7 +11,7 @@ LoginView::LoginView(Vector2u & size)
 
 	m_DrawV.push_back(logintext);
 
-	status= new Textblock(Vector2f(100,600),Vector2f(700,70),"STATUS", 40);
+	status= new Textblock(Vector2f(100,600),Vector2f(700,70),"", 40);
 	status->setFontColor(MyColors.Red);
 	status->setBackgroundColor(MyColors.Transparent);
 	m_DrawV.push_back(status);
@@ -35,9 +35,9 @@ LoginView::LoginView(Vector2u & size)
 	
 
 	Texture image;
-	/*if(!image.loadFromFile("Data/Images/background.png"))
+	if(!image.loadFromFile("Data/Images/background.png"))
 		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;/**/
-	if(!image.loadFromFile("Data/Images/Button.png"))
+	/*if(!image.loadFromFile("Data/Images/Button.png"))
 		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;/**/
 	
 	background.t = image;
