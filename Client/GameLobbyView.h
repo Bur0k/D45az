@@ -10,20 +10,24 @@
 #include "Textbox.h"
 #include "Unit.h"
 #include "Map.h"
+#include "GameLobby.h"
 
 
 class GameLobbyView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+	//GameLobby* game;
+	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
 
-	
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
 	Views m_nextView;
+
+	void centering(Vector2u & size);
 
 public:
 	GameLobbyView(Vector2u & screensize);
@@ -33,7 +37,7 @@ public:
 
 	Textblock* mapName;
 
-	StandardButton* kickPlayer;
+	StandardButton* kickPlayer[3];
 	StandardButton* leave;
 	StandardButton* startgame;
 	
