@@ -9,7 +9,7 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 	m_BaseRect.setSize(size);
 	m_BaseRect.setFillColor(MyColors.MenuBackground);
 
-	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, true, false);
+	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, false, false);
 	m_BMenu->Attach(this); 
 }
 
@@ -58,7 +58,10 @@ bool Statusbar::PressedLeft()
 	return m_BMenu->PressedLeft();
 }
 
-bool Statusbar::ReleasedLeft(){ return false; }
+bool Statusbar::ReleasedLeft()
+{ 
+	return m_BMenu->ReleasedLeft(); 
+}
 bool Statusbar::PressedRight(){ return false; }
 bool Statusbar::ReleasedRight(){ return false; }
 

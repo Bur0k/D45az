@@ -13,6 +13,7 @@
 #include "Textbox.h"
 
 #define AbstandX 5
+#define Statusbarheight 50
 
 using namespace std;
 
