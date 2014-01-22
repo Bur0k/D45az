@@ -30,10 +30,10 @@ private:
 	*/
 
 	//gets called by parent class
-	void updateVisuals();
+	void pt1zyklischVisuals();
 
 	//if position of parent rectangle changes adjust current graphics
-	void updatePosition();
+	void pt1zyklischPosition();
 
 public:
 	StandardButton();

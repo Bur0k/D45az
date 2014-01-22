@@ -575,7 +575,7 @@ void Game::timer()
 	animationtime += m_animationTimer.getElapsedTime().asMicroseconds();
 
 	for(unsigned int i = 0;i<m_ViewVect.size();i++)
-		m_ViewVect[i]->update(static_cast<double>(m_animationTimer.getElapsedTime().asMicroseconds())/1000.0);
+		m_ViewVect[i]->pt1zyklisch(static_cast<double>(m_animationTimer.getElapsedTime().asMicroseconds())/1000.0);
 	
 	m_animationTimer.restart();
 

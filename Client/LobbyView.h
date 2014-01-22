@@ -20,7 +20,7 @@ public:
 	Textblock mapName;
 	Textblock gameLobbyMaster;
 	Textblock gameLobbyMasterValue;
-	StandardButton* updateLobbys;
+	StandardButton* pt1zyklischLobbys;
 	StandardButton* creatNewGamelobby;
 	StandardButton* connect;
 
@@ -62,7 +62,7 @@ public:
 
 	void onResize(sf::Vector2u &);
 
-	void update(double elpasedMs);
+	void pt1zyklisch(double elpasedMs);
 
 	virtual Views getType();
 };
