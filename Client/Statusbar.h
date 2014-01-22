@@ -10,12 +10,13 @@
 #include "IAnimatable.h"
 
 #include "StandardButton.h"
-#include "Textbox.h"
+#include "Textblock.h"
 
-#define AbstandX 5
+#define Elementlength 60
 #define Statusbarheight 50
 
 using namespace std;
+using namespace sf;
 
 class StatusBarFunctions
 {
@@ -31,9 +32,13 @@ private: // soll eigentlich NICHT abgeleitet werden
 	Vector2f m_MousePos;
 
 	//Grundeigenschaften
+
+	//angezeigte Elemente
 	RectangleShape m_BaseRect; // Hintergrund
 	StandardButton* m_BMenu;
-	vector<TextBox> m_TextboxContainer;
+	Texture m_TGold;
+	Sprite* m_SGold;
+	Textblock* m_TBGold;
 
 	//Zeiger auf andere Klassen
 	StatusBarFunctions* m_pOpenMenu;
