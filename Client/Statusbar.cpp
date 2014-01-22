@@ -19,16 +19,16 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 		m_SGold = new Sprite(m_TGold);
 	m_SGold->setPosition(120, 5);
 
-	m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 40), String("1038"), 28);
+	m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 100), String("1038"), 40);
 }
 
 
 Statusbar::~Statusbar(void)
 {
+	//Elemente
 	delete m_BMenu;
 	delete m_SGold;
 	delete m_TBGold;
-	
 }
 
 //Getter & Setter-------------------------------------------------------
