@@ -42,7 +42,7 @@ void Statusbar::setBgColor(Color c)
 
 void Statusbar::Resize(Vector2f new_size)
 {
-	m_BaseRect.setSize(new_size);
+	m_BaseRect.setSize(Vector2f(new_size.x, Statusbarheight));
 }
 
 //Hilfsfunktionen-------------------------------------------------------
