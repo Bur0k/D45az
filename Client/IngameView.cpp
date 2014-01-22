@@ -116,6 +116,7 @@ void IngameView::onTextInput(std::string s)
 
 void IngameView::draw(sf::RenderWindow* rw)
 {
+	m_map.render(*rw,m_mapView);
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 	
@@ -123,7 +124,7 @@ void IngameView::draw(sf::RenderWindow* rw)
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
 
-	m_map.render(*rw,m_mapView);
+	
 }
 
 Views IngameView::nextState()

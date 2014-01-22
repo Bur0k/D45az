@@ -34,6 +34,8 @@ Vector2f Textblock::getTBsize()
 void Textblock::setText(String text, Vector2f size)
 {
 	m_textblockText.setString(lineBreak(text, size));
+	textsize = m_textblockText.getLocalBounds();
+	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
 }
 
 void Textblock::setPos(Vector2f pos)

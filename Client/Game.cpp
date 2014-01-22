@@ -110,8 +110,6 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	tb->Attach(this);
 
-
-
 	//FPS anzeige
 	m_fpsText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_fpsText.setPosition((float)m_pWindow->getSize().x - 150, 30);
@@ -443,6 +441,7 @@ void Game::LoadView(Views v)
 
 	case Views::INGAME:
 		NewView = new IngameView(m_pWindow->getSize());
+		clear = true;
 		break;
 
 	case Views::LOGIN:
@@ -480,7 +479,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::GAMELOBBY:
-		//NewView = ..
+		NewView = new GameLobbyView(m_pWindow->getSize());
 		clear = true;
 		break;
 

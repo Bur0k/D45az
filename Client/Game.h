@@ -20,6 +20,7 @@
 #include "Textbox.h"
 #include "LoginView.h"
 #include "LobbyView.h"
+#include "GameLobbyView.h"
 #include "MenuView.h"
 #include "CommitButton.h"
 #include "IngameView.h"
@@ -27,6 +28,7 @@
 #include "MusikSampler.h"
 
 using namespace sf;
+
 
 //#define MOUSEGRAB
 #define Statusbarheight 50

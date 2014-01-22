@@ -19,6 +19,7 @@ public:
 	Textblock playerName;
 	Textblock mapName;
 	Textblock gameLobbyMaster;
+	Textblock gameLobbyMasterValue;
 	StandardButton* updateLobbys;
 	StandardButton* creatNewGamelobby;
 	StandardButton* connect;

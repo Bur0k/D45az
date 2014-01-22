@@ -20,6 +20,15 @@ CityLogic::~CityLogic()
 	server->deleteFromErrorCallback(this);
 }
 
+void CityLogic::upgradeCity()
+{
+	if(this->level <= 5)
+	{
+		this->level++;
+		this->generatedIncome += 500;
+	}
+}
+
 void CityLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
 	switch(id)
