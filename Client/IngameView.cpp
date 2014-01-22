@@ -2,8 +2,10 @@
 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 {
-	//debug 
 	m_nextView = Views::NOCHANGE;
+
+	//debug 
+	
 	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE,120);
 	m_ClickV.push_back(u);
 	m_DrawV.push_back(u);
@@ -12,10 +14,20 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 	m_ClickV.push_back(u1);
 	m_DrawV.push_back(u1);
 	//debug end
-
-	m_map.load("Data/Maps/test.tmx");
-	m_map.layers[0]->TileHeight;
 	
+	m_map.load("Data/Maps/test.tmx");
+	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight);
+	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size());
+	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
+	
+	
+
+	//Interface Goes Here
+	m_commitB = new CommitButton(Vector2f(0,0), Vector2f(0,0), "commit", COMMIT,false, screensize);
+	m_commitB->Attach(this);
+	m_DrawV.push_back(m_commitB);
+	m_ClickV.push_back(m_commitB); 
+	m_AnimateV.push_back(m_commitB);
 
 	
 	//SBAR 
@@ -37,6 +49,9 @@ void IngameView::onButtonClick(int id)
 {
 	switch (id)
 	{
+	case COMMIT:
+		m_commitB->setIsEnabled(false);
+		break;
 	default:
 		break;
 	}
@@ -142,16 +157,49 @@ Views IngameView::nextState()
 
 void IngameView::pt1zyklisch(double elpasedMs)
 {
-	//BURAK GOES HERE
+	//LOADING STUFF GOES HERE
 }
 
 void IngameView::onResize(Vector2u & size)
 {
 	m_SBar->Resize((Vector2f) size);
+	m_commitB->onResize(size);
 }
 
 Views IngameView::getType()
 {
 	return Views::INGAME;
+}
+
+void IngameView::nextPhase()
+{
+	switch (m_phase)
+	{
+	case YOURTURN:
+		m_phase = WAITFORPLAYERS;
+		break;
+
+	case WAITFORPLAYERS:
+		m_phase = WATCHRESULTS;
+		break;
+
+	case WATCHRESULTS:
+		m_phase = YOURTURN;
+		m_commitB->setIsEnabled(true);
+		break;
+
+	case GAMEOVER:
+		std::cout << "This Game has ended!" << std::endl;
+		break;
+
+	default:
+		std::cout << "IngameView Error: unknow phase!" << std::endl;
+		break;
+	}
+}
+
+void IngameView::MoveMap(int x, int y)
+{
+	
 }
 
