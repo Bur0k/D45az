@@ -18,7 +18,7 @@
 
 //DEBUG DEFINES IF DEFINED ENABLED
 
-//#define BURAKTESTSHIT
+#define BURAKTESTSHIT
 
 PlayerData playerData;
 
@@ -53,7 +53,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	Client* c = Client::get();
 	c->addToErrorCallback(&tc);
 	c->addToNewMessageCallback(&tc);
-	c->connectToServer("localhost",4242);
+	c->connectToServer("10.10.10.85",4242);
 	c->beginRead();std::vector<char> testData;
 	Client::get()->write(0,testData);
 

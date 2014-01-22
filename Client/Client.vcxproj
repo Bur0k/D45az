@@ -90,7 +90,6 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CommitButton.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameLobby.cpp" />
     <ClCompile Include="GameLobbyView.cpp" />
     <ClCompile Include="graphic_globals.cpp" />
@@ -99,6 +98,7 @@
     <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="LobbyEntry.cpp" />
     <ClCompile Include="LobbyView.cpp" />
+    <ClCompile Include="LogicData.cpp" />
     <ClCompile Include="LoginView.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -126,7 +126,6 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="CommitButton.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameData.h" />
     <ClInclude Include="GameLobby.h" />
     <ClInclude Include="GameLobbyView.h" />
     <ClInclude Include="graphic_globals.h" />
@@ -140,6 +139,7 @@
     <ClInclude Include="Lobby.h" />
     <ClInclude Include="LobbyEntry.h" />
     <ClInclude Include="LobbyView.h" />
+    <ClInclude Include="LogicData.h" />
     <ClInclude Include="LoginView.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLayer.h" />
