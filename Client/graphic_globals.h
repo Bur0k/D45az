@@ -20,7 +20,12 @@ public:
 	Color Red;
 	Color Transparent;
 	Color MenuBackground;
+	Color WhiteTransparent;
+	Color BlueTransparent;
 	Color Chartreuse;
+	Color Gold;
+	Color Silver;
+	Color Bronze;
 
 	MyColors() {
 		Orange = Color(0xFF, 0xA2, 0x00, 0xFF);
@@ -29,8 +34,12 @@ public:
 		DarkGray = Color(0x40, 0x40, 0x40, 0xFF);
 		MenuBackground = Color(0,0,0, 0xA0);
 		Chartreuse = Color(0x7f, 0xff, 0x0, 0xFA); 
-			
-		
+		WhiteTransparent = Color(0xFF, 0xFF, 0xFF, 0x80);
+		BlueTransparent = Color(0x0, 0x0, 0xFF, 0x80);
+		Gold = Color(201,137,16);
+		Silver = Color(168,168,168);
+		Bronze = Color(150,90,56);
+
 		Black = Color::Black;
 		White = Color::White;
 		Red = Color::Red;

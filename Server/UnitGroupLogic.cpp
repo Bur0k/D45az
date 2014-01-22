@@ -51,8 +51,6 @@ void UnitGroupLogic::removeUnit(short units, UnitTypes type)
 			}
 		}
 	}
-	if (this->units.size() == 0)
-		delete this;
 }
 
 void UnitGroupLogic::move(POINT moves[], int arrlen)

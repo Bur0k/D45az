@@ -7,7 +7,7 @@
 #include "IKeyboardInput.h"
 
 
-enum class Views {NOCHANGE, INGAME, LOGIN, MENU, LOBBY, CLOSE, TESTSCREEN};
+enum class Views {NOCHANGE, INGAME, LOGIN, MENU, LOBBY, GAMELOBBY, CLOSE, TESTSCREEN};
 
 
 //unites all gui Interfaces for Model View Controller Implementation

@@ -21,7 +21,9 @@ public:
 	CityLogic(short id, short x, short y);
 	~CityLogic();
 	
-	//position
+	// Funktionen
+
+	void upgradeCity();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
