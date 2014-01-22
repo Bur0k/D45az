@@ -51,7 +51,9 @@ private:
 	//pixels
 	Vector2i m_mapTotalSize;
 
-	float m_mapspeed;
+	//scrolling the map
+	Vector2i m_scrolldir;
+	Vector2f m_scrollspeed;
 
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
@@ -70,7 +72,7 @@ public:
 
 	//param x : -1, 0, +1
 	//param y : same
-	void MoveMap(int x, int y);
+	void setScrollDirection(int x, int y);
 
 	void draw(sf::RenderWindow* rw);
 
@@ -101,6 +103,7 @@ public:
 private:
 	//gets called from Update if nex phase is required 
 	void nextPhase();
+	void moveMap();
 };
 
 

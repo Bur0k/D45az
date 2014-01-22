@@ -4,6 +4,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 {
 	m_nextView = Views::NOCHANGE;
 
+	
+
 	//debug 
 	
 	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE,120);
@@ -20,7 +22,12 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size());
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
 	
-	
+	//GET STARTING Mapview POSITION
+	m_mapView.left = (m_mapTotalSize.x - screensize.x) / 2;
+	m_mapView.top = (m_mapTotalSize.y - screensize.y) / 2;
+	m_mapView.width = screensize.x;
+	m_mapView.height = screensize.y;
+
 
 	//Interface Goes Here
 	m_commitB = new CommitButton(Vector2f(0,0), Vector2f(0,0), "commit", COMMIT,false, screensize);
@@ -42,6 +49,7 @@ IngameView::~IngameView()
 	delete u;
 	delete u1;
 	delete m_SBar;
+	delete m_commitB;
 }
 
 
@@ -118,6 +126,8 @@ void IngameView::animationTick()
 {
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
+
+	moveMap();
 }
 	
 void IngameView::onKeyDown(sf::Event e)
@@ -164,6 +174,8 @@ void IngameView::onResize(Vector2u & size)
 {
 	m_SBar->Resize((Vector2f) size);
 	m_commitB->onResize(size);
+	m_mapView.width = size.x;
+	m_mapView.height = size.y;
 }
 
 Views IngameView::getType()
@@ -198,8 +210,69 @@ void IngameView::nextPhase()
 	}
 }
 
-void IngameView::MoveMap(int x, int y)
+void IngameView::setScrollDirection(int x, int y)
 {
-	
+	m_scrolldir.x  = x;
+	m_scrolldir.y = y;
+}
+
+void IngameView::moveMap()
+{
+	static int _x;
+	static int _y;
+
+	//X
+	//increase or decrease the scrollspeed
+	m_scrollspeed.x += (m_scrolldir.x != 0)? 1 : -2;
+	if(m_scrollspeed.x < 0)
+		m_scrollspeed.x = 0;
+	else if(m_scrollspeed.x > INGAMEVIEW_MAX_MAPSPEED)
+		m_scrollspeed.x = INGAMEVIEW_MAX_MAPSPEED;
+
+	//update the local statics
+	if(m_scrolldir.x != 0)
+		_x = m_scrolldir.x;
+	else if(m_scrollspeed.x == 0)
+		_x = 0;
+
+	//move the map or not move if at border
+	m_mapView.left += m_scrollspeed.x * _x;
+	if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
+	{
+		m_mapView.left = m_mapTotalSize.x - m_mapView.width;
+		m_scrollspeed.x = 0;
+	}
+	else if(m_mapView.left < 0)
+	{
+		m_mapView.left = 0;
+		m_scrollspeed.x = 0;
+	}
+
+	//Y
+	//increase or decrease the scrollspeed
+	m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
+	if(m_scrollspeed.y < 0)
+		m_scrollspeed.y = 0;
+	else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
+		m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
+
+	//update the local statics
+	if(m_scrolldir.y != 0)
+		_y = m_scrolldir.y;
+	else if(m_scrollspeed.y == 0)
+		_y = 0;
+
+	//move the map or not move if at border
+	m_mapView.top += m_scrollspeed.y * _y; 
+	if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
+	{
+		m_mapView.top = m_mapTotalSize.y - m_mapView.height;
+		m_scrollspeed.y = 0;
+	}
+	else if(m_mapView.top < 0)
+	{
+		m_mapView.top = 0;
+		m_scrollspeed.y = 0;
+	}
 }
 
