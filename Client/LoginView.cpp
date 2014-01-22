@@ -16,7 +16,7 @@ LoginView::LoginView(Vector2u & size)
 	nameStatus->setBackgroundColor(MyColors.Transparent);
 	m_DrawV.push_back(nameStatus);
 
-	name = new TextBox(200,"enter name",sf::Vector2f(100,200),false,1);
+	name = new TextBox(200,"Enter name",sf::Vector2f(100,200),false,1);
 	name->Attach(this);
 
 	m_DrawV.push_back(name);
@@ -66,6 +66,7 @@ void LoginView::onButtonClick(int)
 	s = name->getText();
 	if(NL==nullptr)
 	{
+		playerData.Name = s;
 		NL = new NetworkLogin(s);
 		nameStatus->setText("",sf::Vector2f());
 	}
@@ -153,8 +154,6 @@ void LoginView::draw(sf::RenderWindow* rw)
 
 Views LoginView::nextState()
 {
-	//TODO do something 
-
 	return next;
 }
 

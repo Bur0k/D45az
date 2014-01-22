@@ -266,16 +266,13 @@
     <ClInclude Include="GameLobbyView.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="City.h">
+    <ClInclude Include="Ingame.h">
       <Filter>Codes\GameLogic</Filter>
     </ClInclude>
     <ClInclude Include="UnitGroup.h">
       <Filter>Codes\GameLogic</Filter>
     </ClInclude>
-    <ClInclude Include="Ingame.h">
-      <Filter>Codes\GameLogic</Filter>
-    </ClInclude>
-    <ClInclude Include="GameData.h">
+    <ClInclude Include="City.h">
       <Filter>Codes\GameLogic</Filter>
     </ClInclude>
   </ItemGroup>

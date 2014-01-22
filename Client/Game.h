@@ -29,6 +29,7 @@
 
 using namespace sf;
 
+
 //#define MOUSEGRAB
 #define Statusbarheight 50
 

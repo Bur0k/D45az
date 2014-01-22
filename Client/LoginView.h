@@ -9,6 +9,7 @@
 #include "Textbox.h"
 #include "Textblock.h"
 #include "NetworkLogin.h"
+#include "PlayerData.h"
 
 class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
