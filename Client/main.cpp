@@ -20,6 +20,7 @@
 
 #define BURAKTESTSHIT
 
+PlayerData playerData;
 
 
 using namespace std;
