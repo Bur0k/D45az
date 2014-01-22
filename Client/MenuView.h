@@ -62,7 +62,7 @@ public:
 	virtual void onTextInput(std::string s);
 
 	virtual void onResize(sf::Vector2u &);
-	virtual void update(double elpasedMs);
+	virtual void pt1zyklisch(double elpasedMs);
 
 	virtual Views getType();
 

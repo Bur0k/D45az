@@ -8,8 +8,9 @@
 #include "StandardButton.h"
 #include "Textbox.h"
 #include "Textblock.h"
-#include "NetworkLogin.h"
+#include "Login.h"
 #include "PlayerData.h"
+#include "Connect.h"
 
 class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
@@ -26,14 +27,17 @@ private:
 	KeyInputVect m_KeyV;
 
 	Textblock* logintext;
-	Textblock* nameStatus;
+	Textblock* status;
 	TextBox* name;
 	Button* lgoinbutton;
 	SpriteTex background;
 
 	void centering(Vector2u & size);
 
-	NetworkLogin* NL;
+	Login* NL;
+	Connect* connect;
+	bool connected;
+	Client* c;
 public:
 	virtual Views nextState();
 	//implementing a lot of interfaces
@@ -55,7 +59,7 @@ public:
 	virtual void onTextInput(std::string s);
 
 	virtual void onResize(sf::Vector2u &);
-	virtual void update(double elpasedMs);
+	virtual void pt1zyklisch(double elpasedMs);
 
 	virtual Views getType();
 

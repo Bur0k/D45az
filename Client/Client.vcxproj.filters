@@ -82,9 +82,6 @@
     <ClCompile Include="Textbox.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkLogin.cpp">
-      <Filter>Codes\Network\Source</Filter>
-    </ClCompile>
     <ClCompile Include="StandardButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
@@ -145,6 +142,12 @@
     <ClCompile Include="City.cpp" />
     <ClCompile Include="Ingame.cpp" />
     <ClCompile Include="UnitGroup.cpp" />
+    <ClCompile Include="Login.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Connect.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -185,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="graphic_globals.h">
       <Filter>Codes\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkLogin.h">
-      <Filter>Codes\Network</Filter>
     </ClInclude>
     <ClInclude Include="IView.h">
       <Filter>Codes\Graphic</Filter>
@@ -253,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="City.h" />
     <ClInclude Include="UnitGroup.h" />
+    <ClInclude Include="Login.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Connect.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">

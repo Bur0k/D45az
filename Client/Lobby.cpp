@@ -11,7 +11,7 @@
 
 void Lobby::connectToGameLobby(short mapid)
 {
-	updated = false;
+	pt1zyklischd = false;
 	vector<char> msg;
 	vector<char> tmp = code(mapid);
 	msg.push_back(tmp[0]);
@@ -86,13 +86,13 @@ void Lobby::processNewMessage(short id,vector<char> data)
 				}
 				GameData game;
 				game.playerlimit = playerlimit;
-				game.gameMaster = &master;
+				game.gameMaster = master;
 				game.players = players;
 				game.name = gamename;
 				gamesCreated[id] = game;
 			}
 
-			updated = true;
+			pt1zyklischd = true;
 			m.unlock();
 
 			break;

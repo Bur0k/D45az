@@ -16,7 +16,7 @@ class Lobby : public NetworkParticipant
 	
 public:
 	mutex m;
-	bool updated;
+	bool pt1zyklischd;
 	map<short, GameData> gamesCreated;
 
 

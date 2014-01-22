@@ -119,7 +119,7 @@ Views GameLobbyView::nextState()
 	return m_nextView;
 }
 
-void GameLobbyView::update(double elpasedMs)
+void GameLobbyView::pt1zyklisch(double elpasedMs)
 {
 	//BURAK GOES HERE
 	//this gets info from the server 

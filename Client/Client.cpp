@@ -142,7 +142,7 @@ void Client::connectToServer(string ip, int port)
 		return ;
 	}
 
-
+	sendNewMessage(0x0001,std::vector<char>());
 	
 	writeThread = new thread([=]()
 	{
