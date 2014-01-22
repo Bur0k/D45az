@@ -429,6 +429,9 @@
     <Image Include="Data\Images\unit_artillery.png">
       <Filter>Data\img</Filter>
     </Image>
+    <Image Include="Data\Images\gold.png">
+      <Filter>Data\img</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Data\Sounds\sound1.wav">

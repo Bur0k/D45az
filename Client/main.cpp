@@ -58,7 +58,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 
 
-
 	//erlaubte einstiegspunkte für Views::
 	//TESTSCREEN LOGIN LOBBY
 	Game* g = new Game(&window, Views::INGAME, sf::Vector2f(1280, 850));

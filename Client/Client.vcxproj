@@ -206,6 +206,7 @@
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
     <Image Include="Data\Images\commit-Button.png" />
+    <Image Include="Data\Images\gold.png" />
     <Image Include="Data\Images\menu_bot.png" />
     <Image Include="Data\Images\menu_mid.png" />
     <Image Include="Data\Images\menu_top.png" />

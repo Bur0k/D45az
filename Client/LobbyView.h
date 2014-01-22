@@ -20,7 +20,7 @@ public:
 	Textblock mapName;
 	Textblock gameLobbyMaster;
 	Textblock gameLobbyMasterValue;
-	StandardButton* pt1zyklischLobbys;
+	StandardButton* updateLobbys;
 	StandardButton* creatNewGamelobby;
 	StandardButton* connect;
 
