@@ -47,27 +47,11 @@ int main()//int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPS
 int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem das SFML Fenster erzeugt.
 #endif
 {
-	
-	//********** BURAKS CLIENT TEST SHIT
-#ifdef BURAKTESTSHIT
 	Client* c = Client::get();
 	c->addToErrorCallback(&tc);
 	c->addToNewMessageCallback(&tc);
-	c->connectToServer("localhost",4242);
-	c->beginRead();std::vector<char> testData;
-	Client::get()->write(0,testData);
-
 	
 	
-	/* = new NetworkLogin("Tim");
-	while(NL1->getState() == 0)//Wartet bis ne Nachricht vom Server gekommen ist. Also ob der Name verfügbar oder nicht ist
-	{
-	}
-	cout << "NL1:" << NL1->getState() << endl;
-	delete NL1;*/
-#endif //BURAKTESTSHIT	
-	//********** BURAKS CLIENT TEST SHIT END
-
 
 	cout << endl << "Hallo D45az" << endl << "oeffne Fenster" << endl;
 
@@ -80,7 +64,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	//erlaubte einstiegspunkte für Views::
 	//TESTSCREEN LOGIN LOBBY
-	Game* g = new Game(&window, Views::GAMELOBBY, sf::Vector2f(1280, 850));
+	Game* g = new Game(&window, Views::INGAME, sf::Vector2f(1280, 850));
 	
 	
 	while (window.isOpen())

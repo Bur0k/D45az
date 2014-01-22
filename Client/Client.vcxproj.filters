@@ -88,9 +88,6 @@
     <ClCompile Include="Textbox.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkLogin.cpp">
-      <Filter>Codes\Network\Source</Filter>
-    </ClCompile>
     <ClCompile Include="StandardButton.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
@@ -148,6 +145,12 @@
     <ClCompile Include="GameLobbyView.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Login.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Connect.cpp">
+      <Filter>Codes\Network\Source</Filter>
+    </ClCompile>
     <ClCompile Include="City.cpp">
       <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
@@ -200,9 +203,6 @@
     </ClInclude>
     <ClInclude Include="graphic_globals.h">
       <Filter>Codes\Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkLogin.h">
-      <Filter>Codes\Network</Filter>
     </ClInclude>
     <ClInclude Include="IView.h">
       <Filter>Codes\Graphic</Filter>
@@ -265,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="GameLobbyView.h">
       <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Login.h">
+      <Filter>Codes\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Connect.h">
+      <Filter>Codes\Network</Filter>
     </ClInclude>
     <ClInclude Include="City.h">
       <Filter>Codes\GameLogic</Filter>
@@ -421,6 +427,9 @@
       <Filter>Data\img</Filter>
     </Image>
     <Image Include="Data\Images\unit_artillery.png">
+      <Filter>Data\img</Filter>
+    </Image>
+    <Image Include="Data\Images\gold.png">
       <Filter>Data\img</Filter>
     </Image>
   </ItemGroup>

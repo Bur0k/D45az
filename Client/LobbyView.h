@@ -62,7 +62,7 @@ public:
 
 	void onResize(sf::Vector2u &);
 
-	void update(double elpasedMs);
+	void pt1zyklisch(double elpasedMs);
 
 	virtual Views getType();
 };

@@ -6,7 +6,7 @@ LobbyView::LobbyView():
 	playerName(sf::Vector2f(0,0),sf::Vector2f(500,100),"Name",40),
 	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster:",20),
-	gameLobbyMasterValue(sf::Vector2f(500,300),sf::Vector2f(300,100),"",20)
+	gameLobbyMasterValue(sf::Vector2f(500,400),sf::Vector2f(300,100),"",20)
 {
 	playerName.setPos(sf::Vector2f(0,0));
 	mapName.setPos(sf::Vector2f(500,200));
@@ -22,7 +22,7 @@ LobbyView::LobbyView():
 	creatNewGamelobby->Attach(this);
 	s->Attach(this);
 
-	//playerName.setText(playerData.Name,sf::Vector2f(500,100));
+	playerName.setText(playerData.Name,sf::Vector2f(500,100));
 	mapName.setText("Map Name",sf::Vector2f(300,100));
 	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
 
@@ -56,6 +56,7 @@ void LobbyView::draw(sf::RenderWindow* rw)
 	playerName.draw(rw);
 	mapName.draw(rw);
 	gameLobbyMaster.draw(rw);
+	gameLobbyMasterValue.draw(rw);
 	connect->draw(rw);
 	updateLobbys->draw(rw);
 	creatNewGamelobby->draw(rw);
@@ -96,7 +97,8 @@ void LobbyView::onButtonClick(int id)
 				it->second->LE->unLock();
 			if(it->second->LE->getID() == id)
 			{
-				gameLobbyMasterValue.setText(lobby->gamesCreated[id-10].gameMaster->Name,sf::Vector2f(300,100));
+				gameLobbyMasterValue.setText(lobby->gamesCreated[id-10].gameMaster.Name,sf::Vector2f(300,100));
+				gameLobbyMasterValue.setBackgroundColor(MyColors.White);
 			}
 		}
 	}
@@ -190,16 +192,16 @@ void LobbyView::onResize(Vector2u &)
 
 }
 
-void LobbyView::update(double elpasedMs)
+void LobbyView::pt1zyklisch(double elpasedMs)
 {
 	static double elapsed=0;
 	elapsed+=elpasedMs;
 	if(elapsed>=100)
 	{
 		elapsed=0;
-		if(lobby->updated)
+		if(lobby->pt1zyklischd)
 		{
-			lobby->updated = false;
+			lobby->pt1zyklischd = false;
 			
 			for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 			{

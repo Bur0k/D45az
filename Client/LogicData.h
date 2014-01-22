@@ -3,6 +3,9 @@
 
 #include "NetworkParticipant.h"
 #include "Client.h"
+#include "Ingame.h"
+#include "City.h"
+#include <string>
 
 class LogicData : public NetworkParticipant
 {
@@ -10,9 +13,14 @@ private:
 
 	Client* c;
 
+	vector<string> playersIngame;
+	vector<City*> allCities;
+	vector<City*> ownedCities;
 public:
 	LogicData();
 	~LogicData();
+
+	// Funktionen
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);

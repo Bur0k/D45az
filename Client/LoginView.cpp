@@ -11,10 +11,10 @@ LoginView::LoginView(Vector2u & size)
 
 	m_DrawV.push_back(logintext);
 
-	nameStatus= new Textblock(Vector2f(100,400),Vector2f(500,70),"", 50);
-	nameStatus->setFillColor(MyColors.Black);
-	nameStatus->setBackgroundColor(MyColors.Transparent);
-	m_DrawV.push_back(nameStatus);
+	status= new Textblock(Vector2f(100,600),Vector2f(700,70),"STATUS", 40);
+	status->setFontColor(MyColors.Red);
+	status->setBackgroundColor(MyColors.Transparent);
+	m_DrawV.push_back(status);
 
 	name = new TextBox(200,"Enter name",sf::Vector2f(100,200),false,1);
 	name->Attach(this);
@@ -36,9 +36,9 @@ LoginView::LoginView(Vector2u & size)
 
 	Texture image;
 	/*if(!image.loadFromFile("Data/Images/background.png"))
-		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;*/
+		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;/**/
 	if(!image.loadFromFile("Data/Images/Button.png"))
-		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;
+		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;/**/
 	
 	background.t = image;
 	background.s.setTexture(&background.t);                      
@@ -48,6 +48,9 @@ LoginView::LoginView(Vector2u & size)
 	centering(size);
 	
 	NL = nullptr;
+
+	connected = false;
+	connect = new Connect();
 }
 
 LoginView::~LoginView()
@@ -55,24 +58,26 @@ LoginView::~LoginView()
 	delete name;
 	delete lgoinbutton;
 	delete logintext;
-	delete nameStatus;
+	delete status;
 	if(NL!=nullptr)
 		delete NL;
+	if(connect!=nullptr)
+		delete connect;
 }
 
 void LoginView::onButtonClick(int)
 {
-	std::string s;
-	s = name->getText();
-	if(NL==nullptr)
+	if(connected)
 	{
-		playerData.Name = s;
-		NL = new NetworkLogin(s);
-		nameStatus->setText("",sf::Vector2f());
+		std::string s;
+		s = name->getText();
+		if(NL==nullptr)
+		{
+			playerData.Name = s;
+			NL = new Login(s);
+			status->setText("",sf::Vector2f());
+		}
 	}
-	
-	//BURAK GOES HERE
-
 }
 
 void LoginView::onTextBoxSend(int ID, std::string s)
@@ -157,15 +162,30 @@ Views LoginView::nextState()
 	return next;
 }
 
-void LoginView::update(double elpasedMs)
+void LoginView::pt1zyklisch(double elpasedMs)
 {
-	if(NL != nullptr)
+	if(!connected && connect != nullptr)
+	{
+		if(connect->getState()==1)
+		{
+			connected = true;
+			delete connect;
+			connect = nullptr;
+		}
+		else if(connect->getState()==-1)
+		{
+			status->setText("Network connection failed:\n"+connect->getErrorMsg(),Vector2f(700,70));
+			delete connect;
+			connect = nullptr;
+		}
+	}
+	else if(NL != nullptr)
 	{
 		if(NL->getState() == 1)
 			next = Views::LOBBY;
 		else if(NL->getState() == -1)
 		{
-			nameStatus->setText("Name is already in usage.\nPlease choose a different name.",sf::Vector2f(400,400));
+			status->setText("Name is already in usage.\nPlease choose a different name.",Vector2f(700,70));
 			delete NL;
 			NL = nullptr;
 		}
@@ -184,8 +204,8 @@ void LoginView::centering(Vector2u & size)
 
 	sf::Vector2f pos(size.x / 2 - name->getSize().x / 2, size.y / 2 - name->getSize().y / 2);
 	name->setPos(pos);
-	lgoinbutton->setPosition(size.x / 2 - lgoinbutton->getSize().x / 2, name->getPos().y + name->getSize().y + 0.05 * size.y);
-	logintext->setPos(sf::Vector2f(size.x / 2 - logintext->getSize().x / 2, name->getPos().y - 0.05 * size.y - logintext->getSize().y));
+	lgoinbutton->setPosition(size.x / 2.0f - lgoinbutton->getSize().x / 2.0f, name->getPos().y + name->getSize().y + 0.05f * size.y);
+	logintext->setPos(sf::Vector2f(size.x / 2.0f - logintext->getSize().x / 2.0f, name->getPos().y - 0.05f * size.y - logintext->getSize().y));
 
 	background.s.setPosition(size.x / 2 - background.s.getSize().x / 2, size.y /2 - background.s.getSize().y / 2);
 }
