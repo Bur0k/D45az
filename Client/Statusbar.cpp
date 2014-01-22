@@ -10,7 +10,7 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 	m_BaseRect.setFillColor(MyColors.MenuBackground);
 
 	m_BMenu = new StandardButton(Vector2f(pos.x + AbstandX, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, true, false);
-	m_BMenu->setFillColor(MyColors.Red);
+	m_BMenu->Attach(this); 
 }
 
 
@@ -50,34 +50,12 @@ void Statusbar::Resize(Vector2f new_size)
 //Interface-Funktionen-------------------------------------------------------
 bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 {
-	//checken ob maus nach einer bewegung auf der statusbar ist
-	if( mouse.x >= m_BaseRect.getPosition().x && mouse.x <= m_BaseRect.getPosition().x + m_BaseRect.getSize().x &&
-		mouse.y >= m_BaseRect.getPosition().y && mouse.y <= m_BaseRect.getPosition().y + m_BaseRect.getSize().y)
-	{
-		setMouse(Vector2f(mouse.x, mouse.y));	
-		m_mouseOver = true;
-		cout << "drüber";
-	}
-	else
-	{
-		m_mouseOver = false;
-	}
-
-	return m_mouseOver;
+	return m_BMenu->MouseMoved(mouse);
 }
 
 bool Statusbar::PressedLeft()
 {
-	if(m_mouseOver) //TODO verschiedene objekte müssen anwählbar sein
-	{
-		if(m_MousePos.x >= m_BMenu->getPosition().x && m_MousePos.x <= m_BMenu->getSize().x + m_BMenu->getPosition().x  // Menübutton getroffen
-			&& m_MousePos.y >= m_BMenu->getPosition().y && m_MousePos.y <= m_BMenu->getSize().y + m_BMenu->getPosition().y)
-			m_pOpenMenu->OpenMenu();
-
-		return true;
-	}
-	else 
-		return false;
+	return m_BMenu->PressedLeft();
 }
 
 bool Statusbar::ReleasedLeft(){ return false; }
@@ -86,6 +64,7 @@ bool Statusbar::ReleasedRight(){ return false; }
 
 void Statusbar::animationTick() // IAnimation
 {
+	m_BMenu->animationTick();
 }
 
 void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
@@ -95,4 +74,16 @@ void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 
 	for(int i = 0; i < m_TextboxContainer.size(); i++)
 		m_TextboxContainer[i].draw(rw);
+}
+
+void Statusbar::onButtonClick(int id)
+{
+	switch(id)
+	{
+	case 1: 
+			m_pOpenMenu->OpenMenu();
+			break;
+
+	default: break;
+	}
 }
