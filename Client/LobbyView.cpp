@@ -4,12 +4,11 @@ int LobbyView::GameLobbyData::nextID = 10;
 
 LobbyView::LobbyView():
 	playerName(sf::Vector2f(0,0),sf::Vector2f(500,100),"Name",40),
-	mapName(sf::Vector2f(500,200),sf::Vector2f(300,100),"MapName",20),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster:",20),
-	gameLobbyMasterValue(sf::Vector2f(500,400),sf::Vector2f(300,100),"",20)
+	gameLobbyMasterValue(sf::Vector2f(500,400),sf::Vector2f(300,100),"",20),
+	newGameLobbyName(300,"New Gamelobbyname",sf::Vector2f(500,700),1,0)
 {
 	playerName.setPos(sf::Vector2f(0,0));
-	mapName.setPos(sf::Vector2f(500,200));
 	gameLobbyMaster.setPos(sf::Vector2f(500,300));
 	gameLobbyMasterValue.setPos(sf::Vector2f(800,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
@@ -23,11 +22,10 @@ LobbyView::LobbyView():
 	s->Attach(this);
 
 	playerName.setText(playerData.Name,sf::Vector2f(500,100));
-	mapName.setText("Map Name",sf::Vector2f(300,100));
 	gameLobbyMaster.setText("GameLobby Master",sf::Vector2f(300,100));
 
 
-
+	newGameLobbyName.Attach(this);
 
 	next = Views::NOCHANGE;
 
@@ -54,7 +52,7 @@ LobbyView::~LobbyView()
 void LobbyView::draw(sf::RenderWindow* rw)
 {
 	playerName.draw(rw);
-	mapName.draw(rw);
+	newGameLobbyName.draw(rw);
 	gameLobbyMaster.draw(rw);
 	gameLobbyMasterValue.draw(rw);
 	connect->draw(rw);
@@ -87,7 +85,7 @@ void LobbyView::onButtonClick(int id)
 	}
 	else if( id == 2)
 	{
-		lobby->createNewGameLobby("Buraks Lobby");
+		lobby->createNewGameLobby(newGameLobbyName.getText());
 	}
 	else if(id > 10)
 	{
@@ -112,6 +110,7 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 	connect->MouseMoved(v);
 	updateLobbys->MouseMoved(v);
 	creatNewGamelobby->MouseMoved(v);
+	newGameLobbyName.MouseMoved(v);
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->MouseMoved(v);
 	return false;
@@ -128,6 +127,7 @@ bool LobbyView::PressedLeft()
 	connect->PressedLeft();
 	updateLobbys->PressedLeft();
 	creatNewGamelobby->PressedLeft();
+	newGameLobbyName.PressedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->PressedLeft();
 	return false;
@@ -144,6 +144,7 @@ bool LobbyView::ReleasedLeft()
 	connect->ReleasedLeft();
 	updateLobbys->ReleasedLeft();
 	creatNewGamelobby->ReleasedLeft();
+	newGameLobbyName.ReleasedLeft();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->ReleasedLeft();
 	return false;
@@ -154,23 +155,24 @@ void LobbyView::animationTick()
 	connect->animationTick();
 	updateLobbys->animationTick();
 	creatNewGamelobby->animationTick();
+	newGameLobbyName.animationTick();
 	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		it->second->LE->animationTick();
 }
 	
-void LobbyView::onKeyDown(sf::Event)
+void LobbyView::onKeyDown(sf::Event e)
 {
-
+	newGameLobbyName.onKeyDown(e);
 }
 
-void LobbyView::onKeyUp(sf::Event)
+void LobbyView::onKeyUp(sf::Event e)
 {
-
+	newGameLobbyName.onKeyUp(e);
 }
 
 void LobbyView::onTextInput(std::string s)
 {
-
+	newGameLobbyName.onTextInput(s);
 }
 
 Views LobbyView::nextState()
@@ -230,4 +232,8 @@ void LobbyView::pt1zyklisch(double elpasedMs)
 Views LobbyView::getType()
 {
 	return Views::LOBBY;
+}
+
+void LobbyView::onTextBoxSend(int ID, std::string s)
+{
 }
