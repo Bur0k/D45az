@@ -90,10 +90,10 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					erfg.insert(erfg.end(), tmp.begin(), tmp.end());
 					erfg.push_back('/');
-					}
 				}
 
-			server->write(s, 0x0401, erfg);
+				server->write(s, 0x0401, erfg);
+			}break;
 		case 0x0402:
 			{
 				int length = this->neutralCities.size() + this->startCities.size();
@@ -125,14 +125,28 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						index = i;
 				}
 
-				
+				int length = this->playersIngame[index]->cities.size();
 
-				for(int i = 0; i < this->neutralCities.size(); i++)
+				erfg.push_back(length);
+
+				for(int i = 0; i < this->playersIngame[index]->cities.size(); i++)
 				{
-					erfg.push_back(this->neutralCities[i]->position->x);
-					erfg.push_back(this->neutralCities[i]->position->y);
-					erfg.push_back(this->neutralCities[i]->level);
+					erfg.push_back(this->playersIngame[index]->cities[i]->position->x);
+					erfg.push_back(this->playersIngame[index]->cities[i]->position->y);
+					erfg.push_back(this->playersIngame[index]->cities[i]->level);
 				}
+
+				server->write(s, 0x0405, erfg);
+			}break;
+		case 0x0406:
+			{
+				for(int i = 0; i < this->barricades.size(); i++)
+				{
+					erfg.push_back(this->barricades[i]->x);
+					erfg.push_back(this->barricades[i]->y);
+				}
+
+				server->write(s, 0x0407, erfg);
 			}break;
 	}
 }

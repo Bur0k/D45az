@@ -21,6 +21,7 @@ private:
 	vector<sf::Vector2i> barricades;
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
+
 public:
 	LogicData();
 	~LogicData();

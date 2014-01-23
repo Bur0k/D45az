@@ -26,29 +26,39 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			for (unsigned int i = 0; i < data.size(); i++) 
 				name += data[i];
 
-			for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
-			{
-				if (server->connectedPlayers[i].Name == name)
-				{
-					std::vector<char> erfg;
-					erfg.push_back(0);
-					server->write(s,0x0101,erfg);
 
-					userexists = true;
-					break;
+			if(name.size() > 3 && name.size() < 10)
+			{
+				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
+				{
+					if (server->connectedPlayers[i].Name == name)
+					{
+						std::vector<char> erfg;
+						erfg.push_back(0);
+						server->write(s,0x0101,erfg);
+
+						userexists = true;
+						break;
+					}
+				}
+
+				if (!userexists)
+				{
+					PlayerData newPlayer;
+					newPlayer.Name=name;
+					newPlayer.s=s;
+					server->connectedPlayers.push_back(newPlayer);
+
+					//send 0101 nachricht 1
+					std::vector<char> erfg;
+					erfg.push_back(1);
+					server->write(s,0x0101,erfg);
 				}
 			}
-
-			if (!userexists)
+			else
 			{
-				PlayerData newPlayer;
-				newPlayer.Name=name;
-				newPlayer.s=s;
-				server->connectedPlayers.push_back(newPlayer);
-
-				//send 0101 nachricht 1
 				std::vector<char> erfg;
-				erfg.push_back(1);
+				erfg.push_back(0);
 				server->write(s,0x0101,erfg);
 			}
 		}break;
