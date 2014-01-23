@@ -9,7 +9,7 @@ using namespace std;
 
 class CityLogic : public NetworkParticipant
 {
-private:
+public:
 	Server* server;
 
 	short id;
