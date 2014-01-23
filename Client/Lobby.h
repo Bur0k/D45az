@@ -16,11 +16,12 @@ class Lobby : public NetworkParticipant
 	
 public:
 	mutex m;
-	bool pt1zyklischd;
+	bool updated;
+	bool inGameLobby;
 	map<short, GameData> gamesCreated;
 
 
-	std::atomic<GameLobby*> gameLobby;
+	//std::atomic<bool> gameLobby;
 
 	Lobby();
 	~Lobby();

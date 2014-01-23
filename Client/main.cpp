@@ -16,10 +16,6 @@
 #include "Lobby.h"
 
 
-//DEBUG DEFINES IF DEFINED ENABLED
-
-//#define BURAKTESTSHIT
-
 PlayerData playerData;
 
 
@@ -59,7 +55,6 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	sf::RenderWindow window(sf::VideoMode(1280, 850), "D45az finezt");
 	window.setPosition(sf::Vector2i(400,0));
 	window.setMouseCursorVisible(false);
-
 
 
 

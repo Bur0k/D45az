@@ -111,7 +111,7 @@ void Unit::draw(sf::RenderWindow* rw)
 bool Unit::MouseMoved(sf::Vector2i & mouse)
 {
 	if( mouse.x >= m_dimensions.left && mouse.x <= m_dimensions.left + m_dimensions.width &&
-		mouse.x >= m_dimensions.left && mouse.x <= m_dimensions.left + m_dimensions.width)
+		mouse.y >= m_dimensions.top && mouse.y <= m_dimensions.top + m_dimensions.height)
 		m_mouseOver = true;
 	else
 		m_mouseOver = false;

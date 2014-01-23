@@ -59,90 +59,6 @@ Client::Client()
 	running=true;
 	readThread = NULL;
 
-}
-
-Client::~Client()
-{
-	running = false;
-
-	if(readThread!=NULL)
-	{
-		readThread->join();
-		delete readThread;
-	}
-	if(writeThread!=NULL)
-	{
-		writeThread->join();
-		delete writeThread;
-	}
-
-	closesocket(s);
-	Sleep(1000);
-
-	if(addNewMessageCallbackThread!=NULL)
-	{
-		addNewMessageCallbackThread->join();
-		delete addNewMessageCallbackThread;
-	}
-	if(deleteNewMessageCallbackThread!=NULL)
-	{
-		deleteNewMessageCallbackThread->join();
-		delete deleteNewMessageCallbackThread;
-	}
-	
-	if(addErrorCallbackThread!=NULL)
-	{
-		addErrorCallbackThread->join();
-		delete addErrorCallbackThread;
-	}
-	if(deleteErrorCallbackThread!=NULL)
-	{
-		deleteErrorCallbackThread->join();
-		delete deleteErrorCallbackThread; 
-	}
-
-}
-
-void Client::connectToServer(string ip, int port)
-{
-	WSADATA wsa;
-
-	if(WSAStartup(MAKEWORD(2,0),&wsa))
-	{
-		sendError(-4,"WSAStartup failed: "+to_string(WSAGetLastError()));
-		return ;
-	}
-
-
-	s=socket(AF_INET,SOCK_STREAM,0);
-
-	if(s==INVALID_SOCKET)
-	{
-		sendError(-1,"Socket could not be created: "+to_string(WSAGetLastError()));
-		return ;
-	}
-
-	sockaddr_in si;
-	hostent *hostess_twinkies = gethostbyname(ip.c_str());
-
-	si.sin_family = AF_INET;
-	si.sin_port = htons(port);
-	si.sin_addr = *((in_addr*) hostess_twinkies->h_addr);
-	memset(&(si.sin_zero), 0, 8);
-	if (connect(s, (sockaddr*) &si, sizeof(struct sockaddr)) == -1)
-	{
-		sendError(-2,"Socket could not connect: "+to_string(WSAGetLastError()));
-		return ;
-	}
-
-	u_long nonBlockMode = 1;
-	if (ioctlsocket(s, FIONBIO, &nonBlockMode) != NO_ERROR)
-	{
-		sendError(-5,"Could not set Non-Blocking mode: "+to_string(WSAGetLastError()));
-		return ;
-	}
-
-	sendNewMessage(0x0001,std::vector<char>());
 	
 	writeThread = new thread([=]()
 	{
@@ -251,6 +167,90 @@ void Client::connectToServer(string ip, int port)
 			Sleep(1);
 		}
 	});
+}
+
+Client::~Client()
+{
+	running = false;
+
+	if(readThread!=NULL)
+	{
+		readThread->join();
+		delete readThread;
+	}
+	if(writeThread!=NULL)
+	{
+		writeThread->join();
+		delete writeThread;
+	}
+
+	closesocket(s);
+	Sleep(1000);
+
+	if(addNewMessageCallbackThread!=NULL)
+	{
+		addNewMessageCallbackThread->join();
+		delete addNewMessageCallbackThread;
+	}
+	if(deleteNewMessageCallbackThread!=NULL)
+	{
+		deleteNewMessageCallbackThread->join();
+		delete deleteNewMessageCallbackThread;
+	}
+	
+	if(addErrorCallbackThread!=NULL)
+	{
+		addErrorCallbackThread->join();
+		delete addErrorCallbackThread;
+	}
+	if(deleteErrorCallbackThread!=NULL)
+	{
+		deleteErrorCallbackThread->join();
+		delete deleteErrorCallbackThread; 
+	}
+
+}
+
+void Client::connectToServer(string ip, int port)
+{
+	WSADATA wsa;
+
+	if(WSAStartup(MAKEWORD(2,0),&wsa))
+	{
+		sendError(-4,"WSAStartup failed: "+to_string(WSAGetLastError()));
+		return ;
+	}
+
+
+	s=socket(AF_INET,SOCK_STREAM,0);
+
+	if(s==INVALID_SOCKET)
+	{
+		sendError(-1,"Socket could not be created: "+to_string(WSAGetLastError()));
+		return ;
+	}
+
+	sockaddr_in si;
+	hostent *hostess_twinkies = gethostbyname(ip.c_str());
+
+	si.sin_family = AF_INET;
+	si.sin_port = htons(port);
+	si.sin_addr = *((in_addr*) hostess_twinkies->h_addr);
+	memset(&(si.sin_zero), 0, 8);
+	if (connect(s, (sockaddr*) &si, sizeof(struct sockaddr)) == -1)
+	{
+		sendError(-2,"Socket could not connect: "+to_string(WSAGetLastError()));
+		return ;
+	}
+
+	u_long nonBlockMode = 1;
+	if (ioctlsocket(s, FIONBIO, &nonBlockMode) != NO_ERROR)
+	{
+		sendError(-5,"Could not set Non-Blocking mode: "+to_string(WSAGetLastError()));
+		return ;
+	}
+
+	sendNewMessage(0x0001,std::vector<char>());
 }
 
 

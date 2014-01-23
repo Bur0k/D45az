@@ -36,9 +36,11 @@ private: // soll eigentlich NICHT abgeleitet werden
 	//angezeigte Elemente
 	RectangleShape m_BaseRect; // Hintergrund
 	StandardButton* m_BMenu;
-	Texture m_TGold;
+	Texture m_Ttmp;
 	Sprite* m_SGold;
 	Textblock* m_TBGold;
+	vector<Sprite*> m_vSPictures;
+	vector<Textblock*> m_vTLabels;
 
 	//Zeiger auf andere Klassen
 	StatusBarFunctions* m_pOpenMenu;

@@ -11,8 +11,8 @@ LoginView::LoginView(Vector2u & size)
 
 	m_DrawV.push_back(logintext);
 
-	status= new Textblock(Vector2f(600,100),Vector2f(700,70),"", 40);
-	status->setFillColor(MyColors.Red);
+	status= new Textblock(Vector2f(100,600),Vector2f(700,70),"", 40);
+	status->setFontColor(MyColors.Red);
 	status->setBackgroundColor(MyColors.Transparent);
 	m_DrawV.push_back(status);
 
@@ -35,9 +35,9 @@ LoginView::LoginView(Vector2u & size)
 	
 
 	Texture image;
-	/*if(!image.loadFromFile("Data/Images/background.png"))
+	if(!image.loadFromFile("Data/Images/background.png"))
 		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;/**/
-	if(!image.loadFromFile("Data/Images/Button.png"))
+	/*if(!image.loadFromFile("Data/Images/Button.png"))
 		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;/**/
 	
 	background.t = image;
@@ -164,7 +164,7 @@ Views LoginView::nextState()
 
 void LoginView::pt1zyklisch(double elpasedMs)
 {
-	if(!connected)
+	if(!connected && connect != nullptr)
 	{
 		if(connect->getState()==1)
 		{
@@ -175,6 +175,8 @@ void LoginView::pt1zyklisch(double elpasedMs)
 		else if(connect->getState()==-1)
 		{
 			status->setText("Network connection failed:\n"+connect->getErrorMsg(),Vector2f(700,70));
+			delete connect;
+			connect = nullptr;
 		}
 	}
 	else if(NL != nullptr)

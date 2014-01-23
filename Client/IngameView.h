@@ -14,6 +14,7 @@
 #include "CommitButton.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
+#define INGAMEVIEW_MOUSEOVER_RECT_BORDER 3
 
 enum IngameViewButtonId{
 	COMMIT = 0,
@@ -51,7 +52,9 @@ private:
 	//pixels
 	Vector2i m_mapTotalSize;
 
-	float m_mapspeed;
+	//scrolling the map
+	Vector2i m_scrolldir;
+	Vector2f m_scrollspeed;
 
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
@@ -63,6 +66,8 @@ private:
 	Statusbar* m_SBar;
 
 	InagameViewPhases m_phase;
+	
+	RectangleShape m_mapMouseOver;
 
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function);
@@ -70,7 +75,7 @@ public:
 
 	//param x : -1, 0, +1
 	//param y : same
-	void MoveMap(int x, int y);
+	void setScrollDirection(int x, int y);
 
 	void draw(sf::RenderWindow* rw);
 
@@ -101,6 +106,7 @@ public:
 private:
 	//gets called from Update if nex phase is required 
 	void nextPhase();
+	void moveMap();
 };
 
 
