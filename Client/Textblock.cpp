@@ -24,6 +24,12 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 	m_color = MyColors.Gray;
 	setFillColor(m_color);
 	fixCharsize();
+
+	if(S.isEmpty())
+	{
+		textsize.height = 0;
+		textsize.width = 0;
+	}
 }
 
 Vector2f Textblock::getTBsize()
@@ -67,7 +73,7 @@ void Textblock::fixCharsize()
 	// Charsizes over 23 == problems --> fix
 	if(m_textblockText.getCharacterSize() > 23)
 	{
-		m_textblockText.move(0, -10);
+		m_textblockText.move(0, -3);
 	}
 }
 

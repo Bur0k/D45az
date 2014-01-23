@@ -8,8 +8,9 @@
 #include "Slider.h"
 #include "Lobby.h"
 #include "LobbyEntry.h"
+#include "Textbox.h"
 
-class LobbyView : public IView , public IButtonfunction, public ISliderFunction
+class LobbyView : public IView , public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 	Views next;
 public:
@@ -17,10 +18,10 @@ public:
 	~LobbyView();
 
 	Textblock playerName;
-	Textblock mapName;
+	TextBox newGameLobbyName;
 	Textblock gameLobbyMaster;
 	Textblock gameLobbyMasterValue;
-	StandardButton* pt1zyklischLobbys;
+	StandardButton* updateLobbys;
 	StandardButton* creatNewGamelobby;
 	StandardButton* connect;
 
@@ -65,6 +66,8 @@ public:
 	void pt1zyklisch(double elpasedMs);
 
 	virtual Views getType();
+
+	void onTextBoxSend(int ID, std::string s);
 };
 
 

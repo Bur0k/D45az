@@ -11,6 +11,21 @@
 #include "Unit.h"
 #include "Map.h"
 #include "Statusbar.h"
+#include "CommitButton.h"
+
+#define INGAMEVIEW_MAX_MAPSPEED  20
+#define INGAMEVIEW_MOUSEOVER_RECT_BORDER 3
+
+enum IngameViewButtonId{
+	COMMIT = 0,
+};
+
+enum InagameViewPhases{
+	YOURTURN,
+	WAITFORPLAYERS,
+	WATCHRESULTS,
+	GAMEOVER
+};
 
 
 class IngameView : 
@@ -27,10 +42,19 @@ private:
 	//is filled with the army that is currently selected
 	std::vector<Unit*> UnitVector;
 
+	CommitButton* m_commitB;
+
+	//MAP STUFF
 	Map m_map;
-	Vector2f m_mapSize;
 	IntRect m_mapView;
+	Vector2i m_mapSize;
 	Vector2i m_tileSize;
+	//pixels
+	Vector2i m_mapTotalSize;
+
+	//scrolling the map
+	Vector2i m_scrolldir;
+	Vector2f m_scrollspeed;
 
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
@@ -41,12 +65,17 @@ private:
 
 	Statusbar* m_SBar;
 
+	InagameViewPhases m_phase;
+	
+	RectangleShape m_mapMouseOver;
+
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function);
 	~IngameView();
 
-	
-	
+	//param x : -1, 0, +1
+	//param y : same
+	void setScrollDirection(int x, int y);
 
 	void draw(sf::RenderWindow* rw);
 
@@ -57,7 +86,7 @@ public:
 	bool ReleasedLeft();
 	
 	void animationTick(); 
-	
+	//IKey
 	void onKeyDown(sf::Event);
 	void onKeyUp(sf::Event);
 	void onTextInput(std::string s);
@@ -68,11 +97,16 @@ public:
 	Views getType();
 
 	Views nextState();
-
+	//IClickable
 	void onButtonClick(int);
 	void onSliderValueChange(int ID, double position);
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
+
+private:
+	//gets called from Update if nex phase is required 
+	void nextPhase();
+	void moveMap();
 };
 
 
