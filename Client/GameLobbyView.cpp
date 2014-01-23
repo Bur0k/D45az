@@ -1,17 +1,45 @@
 #include "GameLobbyView.h"
 
-GameLobbyView::GameLobbyView(Vector2u & screensize, GameLobby* game, bool amIGamemaster)
+GameLobbyView::GameLobbyView(Vector2u & screensize)
 {
-	this->game = game;
-	this->amIGamemaster = amIGamemaster;
+	this->game = new GameLobby();
 
-	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), "player1", 30);
+	if (playerData.Name == game->gameMaster)
+	{
+		amIGamemaster = true;
+		//this->playernumber = 1;
+	}
+	else
+	{
+		amIGamemaster = false;
+	}
+
+	for (unsigned int i = 0; i < this->game->players.size(); i++)
+	{
+		if (playerData.Name == this->game->players[i])
+			this->playernumber = i + 1;
+	}
+	// auf gamemaster testen
+	std::string playernames[4];
+	int count = 0;
+	while (this->game->players.size() >  count)
+	{
+		playernames[count] = this->game->players[count];
+		count++;
+	}
+	while (count < 4)
+	{
+		playernames[count] = "";
+		count++;
+	}
+
+	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), playernames[0], 30);
 	m_DrawV.push_back(this->players[0]);
-	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 40), "player2", 30);
+	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 40), playernames[1], 30);
 	m_DrawV.push_back(this->players[1]);
-	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 40), "player3", 30);
+	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 40), playernames[2], 30);
 	m_DrawV.push_back(this->players[2]);
-	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), "", 30);
+	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), playernames[3], 30);
 	m_DrawV.push_back(this->players[3]);
 
 	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(50, 20), "mapname", 30);
@@ -26,6 +54,8 @@ GameLobbyView::GameLobbyView(Vector2u & screensize, GameLobby* game, bool amIGam
 
 	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(100, 50), "leave", LEAVE, false);
 	this->startgame = new StandardButton(sf::Vector2f(50, 280), sf::Vector2f(100, 50), "start", START, false);
+	if (!amIGamemaster)
+		this->startgame->setIsEnabled(false);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -93,6 +123,7 @@ void GameLobbyView::onButtonClick(int id)
 			}
 		case KICKP1:
 			{
+				
 				break;
 			}
 		case KICKP2:
