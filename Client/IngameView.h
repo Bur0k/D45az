@@ -52,6 +52,9 @@ private:
 	//pixels
 	Vector2i m_mapTotalSize;
 
+	//user points at 
+	Vector2i m_pointAt;
+
 	//scrolling the map
 	Vector2i m_scrolldir;
 	Vector2f m_scrollspeed;

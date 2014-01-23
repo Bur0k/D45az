@@ -46,7 +46,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
-	m_mapMouseOver.setSize(Vector2f(m_mapSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_mapSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
+	m_mapMouseOver.setSize(Vector2f(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
 	
 }
 
@@ -95,11 +95,13 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 		if(m_ClickV[i]->MouseMoved(mouse))
 			retValue = true;
 	
+	//where does the user point?
+	m_pointAt.x = (mouse.x + m_mapView.left) / m_tileSize.x;
+	m_pointAt.y = (mouse.y + m_mapView.top) / m_tileSize.y;
 	
-	float newPosx = mouse.x + m_mapView.left - (mouse.x + m_mapView.left) % m_mapSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER;
-	float newPosy = mouse.y + m_mapView.top - (mouse.y + m_mapView.top) % m_mapSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER;
+	
 
-	m_mapMouseOver.setPosition( newPosx, newPosy);
+	m_mapMouseOver.setPosition(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left, m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top);
 	
 	
 	return retValue;
