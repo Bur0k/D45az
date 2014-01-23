@@ -42,6 +42,12 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 	m_DrawV.push_back(m_SBar);
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
+
+	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
+	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+	m_mapMouseOver.setFillColor(MyColors.Transparent);
+	m_mapMouseOver.setSize(Vector2f(m_mapSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_mapSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
+	
 }
 
 IngameView::~IngameView()
@@ -84,10 +90,21 @@ void IngameView::onTextBoxSend(int ID, std::string s)
 
 bool IngameView::MouseMoved(sf::Vector2i & mouse)
 {
+	bool retValue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->MouseMoved(mouse))
-			return true;
-	return false;
+			retValue = true;
+	
+	
+	float newPosx = mouse.x + m_mapView.left - (mouse.x + m_mapView.left) % m_mapSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER;
+	float newPosy = mouse.y + m_mapView.top - (mouse.y + m_mapView.top) % m_mapSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER;
+
+	m_mapMouseOver.setPosition( newPosx, newPosy);
+	
+	
+	return retValue;
+
+	
 }
 
 bool IngameView::PressedRight()
@@ -153,6 +170,8 @@ void IngameView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 	
+	rw->draw(m_mapMouseOver);
+
 	Rect<float> MapView;
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;

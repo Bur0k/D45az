@@ -14,6 +14,7 @@
 #include "CommitButton.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
+#define INGAMEVIEW_MOUSEOVER_RECT_BORDER 3
 
 enum IngameViewButtonId{
 	COMMIT = 0,
@@ -65,6 +66,8 @@ private:
 	Statusbar* m_SBar;
 
 	InagameViewPhases m_phase;
+	
+	RectangleShape m_mapMouseOver;
 
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function);
