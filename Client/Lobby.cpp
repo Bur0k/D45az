@@ -102,6 +102,14 @@ void Lobby::processNewMessage(short id,vector<char> data)
 				game.players = players;
 				game.name = gamename;
 				gamesCreated[id] = game;
+
+				static int blubb = 0;
+				for(int i=0;i<blubb;i++)
+				{
+					game.name = to_string(++id);
+					gamesCreated[id] = game;
+				}
+				blubb++;
 			}
 
 			updated = true;
