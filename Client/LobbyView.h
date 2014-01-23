@@ -36,8 +36,11 @@ public:
 	};
 
 	std::map<short,GameLobbyData*> gameLobbys;
+	std::map<short,GameLobbyData*> toDisplay;
 
 	Lobby* lobby;
+
+	void updateDisplayedGameLobbys();
 
 	//implementing a lot of interfaces
 	Views nextState();

@@ -12,8 +12,9 @@
 #include "StandardButton.h"
 #include "Textblock.h"
 
-#define Elementlength 60
 #define Statusbarheight 50
+#define IconX 150
+#define IconY 5
 
 using namespace std;
 using namespace sf;
@@ -36,11 +37,10 @@ private: // soll eigentlich NICHT abgeleitet werden
 	//angezeigte Elemente
 	RectangleShape m_BaseRect; // Hintergrund
 	StandardButton* m_BMenu;
-	Texture m_Ttmp;
-	Sprite* m_SGold;
-	Textblock* m_TBGold;
-	vector<Sprite*> m_vSPictures;
-	vector<Textblock*> m_vTLabels;
+	vector<String> m_vTexturenames;
+	vector<Texture> m_vTextures;
+	vector<Sprite> m_vSPictures;
+	vector<Textblock> m_vTLabels;
 
 	//Zeiger auf andere Klassen
 	StatusBarFunctions* m_pOpenMenu;
@@ -49,6 +49,7 @@ public:
 	//ctor & dtor
 	Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu);
 	~Statusbar(void);
+	void preload_Textures();
 	//Setter & Getter
 	void setMouse(Vector2f pos);
 	void setPosition(Vector2f pos);

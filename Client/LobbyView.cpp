@@ -58,13 +58,8 @@ void LobbyView::draw(sf::RenderWindow* rw)
 
 	s->draw(rw);
 
-	int y = 200;
-	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
-	{
-		it->second->LE->setPosition(sf::Vector2f(20.0,y));
-		it->second->LE->draw(rw);
-		y+=50;
-	}
+	for(auto it : toDisplay)
+		it.second->LE->draw(rw);
 }
 
 void LobbyView::onButtonClick(int id)
@@ -91,7 +86,7 @@ void LobbyView::onButtonClick(int id)
 		{
 			if(it->second->LE->getID() != id && it->second->LE->getIsEnabled())
 				it->second->LE->unLock();
-			if(it->second->LE->getID() == id)
+			else if(it->second->LE->getID() == id)
 			{
 				gameLobbyMasterValue.setText(lobby->gamesCreated[id-10].gameMaster.Name,sf::Vector2f(300,100));
 				gameLobbyMasterValue.setBackgroundColor(MyColors.White);
@@ -109,7 +104,7 @@ bool LobbyView::MouseMoved(sf::Vector2i & v)
 	updateLobbys->MouseMoved(v);
 	creatNewGamelobby->MouseMoved(v);
 	newGameLobbyName.MouseMoved(v);
-	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+	for(auto it = toDisplay.begin();it!=toDisplay.end();it++)
 		it->second->LE->MouseMoved(v);
 	return false;
 }
@@ -126,7 +121,7 @@ bool LobbyView::PressedLeft()
 	updateLobbys->PressedLeft();
 	creatNewGamelobby->PressedLeft();
 	newGameLobbyName.PressedLeft();
-	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+	for(auto it = toDisplay.begin();it!=toDisplay.end();it++)
 		it->second->LE->PressedLeft();
 	return false;
 }
@@ -143,7 +138,7 @@ bool LobbyView::ReleasedLeft()
 	updateLobbys->ReleasedLeft();
 	creatNewGamelobby->ReleasedLeft();
 	newGameLobbyName.ReleasedLeft();
-	for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+	for(auto it = toDisplay.begin();it!=toDisplay.end();it++)
 		it->second->LE->ReleasedLeft();
 	return false;
 }
@@ -180,7 +175,7 @@ Views LobbyView::nextState()
 
 void LobbyView::onSliderValueChange(int ID, double position)
 {
-
+	updateDisplayedGameLobbys();
 }
 void LobbyView::onSliderReleased(int ID, double position)
 {
@@ -205,7 +200,8 @@ void LobbyView::pt1zyklisch(double elpasedMs)
 
 			if(lobby->inGameLobby)
 			{
-				next = Views::GAMELOBBY;
+				lobby->inGameLobby = false;
+				//next = Views::GAMELOBBY;
 			}
 			else
 			{
@@ -227,8 +223,10 @@ void LobbyView::pt1zyklisch(double elpasedMs)
 					GLA->LE->Attach(this);
 
 					gameLobbys[id] = GLA;
+
 				}
 				lobby->m.unlock();
+				updateDisplayedGameLobbys();
 			}
 		}
 	}
@@ -241,4 +239,37 @@ Views LobbyView::getType()
 
 void LobbyView::onTextBoxSend(int ID, std::string s)
 {
+}
+
+void LobbyView::updateDisplayedGameLobbys()
+{
+	int y = 200;
+
+	int numEntriesOverflow = (gameLobbys.size() > 8)?gameLobbys.size()- 8:0;
+	int startIndex = s->getValue() * numEntriesOverflow + 0.5;
+
+	toDisplay.clear();
+
+	if(numEntriesOverflow!=0)
+	{
+		auto it = gameLobbys.begin();
+		for(int i=0;i<startIndex;i++)
+			it++;
+		for(int i=startIndex;i<startIndex+8;i++)
+		{
+			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			y+=50;
+			toDisplay[it->first]=it->second;
+			it++;
+		}
+	}
+	else
+	{
+		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+		{
+			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			y+=50;
+			toDisplay[it->first]=it->second;
+		}
+	}
 }

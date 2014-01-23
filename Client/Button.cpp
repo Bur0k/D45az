@@ -138,6 +138,8 @@ bool Button::getIsPressed()
 void Button::unLock()
 {
 	m_lockedIn = false;
+	m_mouseOver = false;
+	m_isClicked = false;
 }
 
 

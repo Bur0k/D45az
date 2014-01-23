@@ -4,7 +4,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 {
 	m_nextView = Views::NOCHANGE;
 
-	
+	m_screensize = screensize;
 
 	//debug 
 	
@@ -46,7 +46,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
-	m_mapMouseOver.setSize(Vector2f(m_mapSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_mapSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
+	m_mapMouseOver.setSize(Vector2f(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
 	
 }
 
@@ -95,16 +95,16 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 		if(m_ClickV[i]->MouseMoved(mouse))
 			retValue = true;
 	
+	//where does the user point?
+	m_pointAt.x = (mouse.x + m_mapView.left) / m_tileSize.x;
+	m_pointAt.y = (mouse.y + m_mapView.top) / m_tileSize.y;
 	
-	float newPosx = mouse.x + m_mapView.left - (mouse.x + m_mapView.left) % m_mapSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER;
-	float newPosy = mouse.y + m_mapView.top - (mouse.y + m_mapView.top) % m_mapSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER;
+	
 
-	m_mapMouseOver.setPosition( newPosx, newPosy);
-	
+	m_mapMouseOver.setPosition( m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left, 
+								m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top);
 	
 	return retValue;
-
-	
 }
 
 bool IngameView::PressedRight()
@@ -191,6 +191,7 @@ void IngameView::pt1zyklisch(double elpasedMs)
 
 void IngameView::onResize(Vector2u & size)
 {
+	m_screensize = size;
 	m_SBar->Resize((Vector2f) size);
 	m_commitB->onResize(size);
 	m_mapView.width = size.x;
@@ -239,7 +240,7 @@ void IngameView::moveMap()
 {
 	static int _x;
 	static int _y;
-
+	
 	//X
 	//increase or decrease the scrollspeed
 	m_scrollspeed.x += (m_scrolldir.x != 0)? 1 : -2;
@@ -255,43 +256,50 @@ void IngameView::moveMap()
 		_x = 0;
 
 	//move the map or not move if at border
-	m_mapView.left += m_scrollspeed.x * _x;
-	if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
+
+		m_mapView.left += m_scrollspeed.x * _x;
+	if(m_mapTotalSize.x > m_screensize.x)
 	{
-		m_mapView.left = m_mapTotalSize.x - m_mapView.width;
-		m_scrollspeed.x = 0;
-	}
-	else if(m_mapView.left < 0)
-	{
-		m_mapView.left = 0;
-		m_scrollspeed.x = 0;
+		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
+		{
+			m_mapView.left = m_mapTotalSize.x - m_mapView.width;
+			m_scrollspeed.x = 0;
+		}
+		else if(m_mapView.left < 0)
+		{
+			m_mapView.left = 0;
+			m_scrollspeed.x = 0;
+		}
 	}
 
-	//Y
-	//increase or decrease the scrollspeed
-	m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
-	if(m_scrollspeed.y < 0)
-		m_scrollspeed.y = 0;
-	else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
-		m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
+		//Y
+		//increase or decrease the scrollspeed
+		m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
+		if(m_scrollspeed.y < 0)
+			m_scrollspeed.y = 0;
+		else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
+			m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
 
-	//update the local statics
-	if(m_scrolldir.y != 0)
-		_y = m_scrolldir.y;
-	else if(m_scrollspeed.y == 0)
-		_y = 0;
+		//update the local statics
+		if(m_scrolldir.y != 0)
+			_y = m_scrolldir.y;
+		else if(m_scrollspeed.y == 0)
+			_y = 0;
 
-	//move the map or not move if at border
-	m_mapView.top += m_scrollspeed.y * _y; 
-	if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
-	{
-		m_mapView.top = m_mapTotalSize.y - m_mapView.height;
-		m_scrollspeed.y = 0;
-	}
-	else if(m_mapView.top < 0)
-	{
-		m_mapView.top = 0;
-		m_scrollspeed.y = 0;
+		//move the map or not move if at border
+		m_mapView.top += m_scrollspeed.y * _y; 
+	if(m_mapTotalSize.y > m_screensize.y)
+	{	
+		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
+		{
+			m_mapView.top = m_mapTotalSize.y - m_mapView.height;
+			m_scrollspeed.y = 0;
+		}
+		else if(m_mapView.top < 0)
+		{
+			m_mapView.top = 0;
+			m_scrollspeed.y = 0;
+		}
 	}
 }
 
