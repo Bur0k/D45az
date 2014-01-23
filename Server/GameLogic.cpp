@@ -81,19 +81,59 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 	switch(id)
 	{
-	case 0x0400:
-		{
-			for(int i = 0; i < (signed) this->playersIngame.size(); i++)
+		case 0x0400:
 			{
-				string name = this->playersIngame[i]->owner->Name;
-				vector<char> tmp = code(name);
+				for(int i = 0; i < (signed) this->playersIngame.size(); i++)
+				{
+					string name = this->playersIngame[i]->owner->Name;
+					vector<char> tmp = code(name);
 
-				erfg.insert(erfg.end(), tmp.begin(), tmp.end());
-				erfg.push_back('/');
+					erfg.insert(erfg.end(), tmp.begin(), tmp.end());
+					erfg.push_back('/');
+					}
 				}
-			}
 
-		server->write(s, 0x0401, erfg);
+			server->write(s, 0x0401, erfg);
+		case 0x0402:
+			{
+				int length = this->neutralCities.size() + this->startCities.size();
+
+				erfg.push_back(length);
+
+				for(int i = 0; i < this->neutralCities.size(); i++)
+				{
+					erfg.push_back(this->neutralCities[i]->position->x);
+					erfg.push_back(this->neutralCities[i]->position->y);
+					erfg.push_back(this->neutralCities[i]->level);
+				}
+				for(int i = 0; i < this->startCities.size(); i++)
+				{
+					erfg.push_back(this->startCities[i]->position->x);
+					erfg.push_back(this->startCities[i]->position->y);
+					erfg.push_back(this->startCities[i]->level);
+				}
+
+				server->write(s, 0x0403, erfg);
+			}break;
+		case 0x0404:
+			{
+				int index;
+
+				for(int i = 0; i < this->playersIngame.size(); i++)
+				{
+					if(this->playersIngame[i]->owner->s == s)
+						index = i;
+				}
+
+				
+
+				for(int i = 0; i < this->neutralCities.size(); i++)
+				{
+					erfg.push_back(this->neutralCities[i]->position->x);
+					erfg.push_back(this->neutralCities[i]->position->y);
+					erfg.push_back(this->neutralCities[i]->level);
+				}
+			}break;
 	}
 }
 	

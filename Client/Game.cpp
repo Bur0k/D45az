@@ -187,7 +187,6 @@ Views Game::getView()
 
 void Game::Draw()
 {
-
 	if(m_ViewMode == Views::TESTSCREEN)
 		DrawTest();
 	else
@@ -325,9 +324,9 @@ void Game::onMouseDownLeft()
 void Game::onMouseDownRight()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->PressedRight())
-			break;
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->PressedRight())
+				break;
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->PressedRight();
@@ -337,9 +336,9 @@ void Game::onMouseDownRight()
 void Game::onMouseUpLeft()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
-	for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
-		if(m_clickL[i]->ReleasedLeft())
-			break;
+		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
+			if(m_clickL[i]->ReleasedLeft())
+				break;
 
 	if(m_ViewVect.size() > 0)
 		m_ViewVect[m_ViewVect.size() - 1]->ReleasedLeft();
@@ -585,16 +584,20 @@ void Game::timer()
 	
 	//std::cout<<m_animationTimer.getElapsedTime().asMilliseconds()<<std::endl;
 	
+	int elapsedMicro = m_animationTimer.getElapsedTime().asMicroseconds();
+	m_animationTimer.restart();
+	if(elapsedMicro < 10000)//Render und Hauptthread pausieren, damit der Prozessor entlastet wird. Aber nur wenn das spiel schnell genug läuft
+		sleep(sf::milliseconds(1));
 
-	//ANIMATION//
-	animationtime += m_animationTimer.getElapsedTime().asMicroseconds();
+	animationtime += elapsedMicro;
+
 
 	for(unsigned int i = 0;i<m_ViewVect.size();i++)
-		m_ViewVect[i]->pt1zyklisch(static_cast<double>(m_animationTimer.getElapsedTime().asMicroseconds())/1000.0);
+		m_ViewVect[i]->pt1zyklisch(static_cast<double>(elapsedMicro)/1000.0);
 	
-	m_animationTimer.restart();
-
-	while(animationtime > 1000000 / 33)
+	
+	//ANIMATION//
+	while(animationtime > 1000000 / 33)//Animationtick alle 30 FPS
 	{
 		animationtime -= 1000000 / 33;
 		for(unsigned int i = 0; i < m_animateL.size(); i++)
@@ -607,7 +610,7 @@ void Game::timer()
 
 	//...//
 	fpsCount++;
-	if(m_fpsCounter.getElapsedTime().asMicroseconds() >= 1000000)
+	if(m_fpsCounter.getElapsedTime().asMilliseconds() >= 1000)
 	{
 		m_fpsCounter.restart();
 		m_fpsText.setString(std::to_string(fpsCount));
