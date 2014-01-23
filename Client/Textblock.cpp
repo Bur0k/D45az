@@ -25,7 +25,7 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 	setFillColor(m_color);
 	fixCharsize();
 
-	if(S.isEmpty)
+	if(S.isEmpty())
 	{
 		textsize.height = 0;
 		textsize.width = 0;
