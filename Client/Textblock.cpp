@@ -27,8 +27,7 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 
 	if(S.isEmpty())
 	{
-		textsize.height = 0;
-		textsize.width = 0;
+		this->setSize(Vector2f(0,0));
 	}
 }
 
