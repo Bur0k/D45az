@@ -11,7 +11,9 @@
 #include "Unit.h"
 #include "Map.h"
 #include "GameLobby.h"
+#include "PlayerData.h"
 
+extern PlayerData playerData;
 
 // TODO: Update, nicht gamemaster fall, textblock geht irgendwann?, hintergrund
 
@@ -20,10 +22,10 @@ class GameLobbyView :
 {
 private:
 
-	// auf welchem spiel arbeite ich?
 	GameLobby* game;
 	bool amIGamemaster;
 	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
+	int playernumber;
 
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
@@ -35,7 +37,7 @@ private:
 	void centering(Vector2u & size);
 
 public:
-	GameLobbyView(Vector2u & screensize, GameLobby* game, bool amIGamemaster);
+	GameLobbyView(Vector2u & screensize);
 	~GameLobbyView();
 
 	Textblock* players[4];
