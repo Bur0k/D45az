@@ -24,6 +24,11 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 	m_color = MyColors.Gray;
 	setFillColor(m_color);
 	fixCharsize();
+
+	if(S.isEmpty())
+	{
+		this->setSize(Vector2f(0,0));
+	}
 }
 
 Vector2f Textblock::getTBsize()
