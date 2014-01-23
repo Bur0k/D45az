@@ -5,12 +5,9 @@ int LobbyView::GameLobbyData::nextID = 10;
 LobbyView::LobbyView():
 	playerName(sf::Vector2f(0,0),sf::Vector2f(500,100),"Name",40),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster:",20),
-	gameLobbyMasterValue(sf::Vector2f(500,400),sf::Vector2f(300,100),"",20),
+	gameLobbyMasterValue(sf::Vector2f(700,300),sf::Vector2f(300,100),"",20),
 	newGameLobbyName(300,"New Gamelobbyname",sf::Vector2f(500,700),1,0)
 {
-	playerName.setPos(sf::Vector2f(0,0));
-	gameLobbyMaster.setPos(sf::Vector2f(500,300));
-	gameLobbyMasterValue.setPos(sf::Vector2f(800,300));
 	connect = new StandardButton(sf::Vector2f(500,400),sf::Vector2f(100,75),"Connect",0,false);
 	updateLobbys = new StandardButton(sf::Vector2f(500,500),sf::Vector2f(100,75),"Update",1,false);
 	creatNewGamelobby = new StandardButton(sf::Vector2f(500,600),sf::Vector2f(100,75),"Create New\nGamelobby",2,false);
@@ -82,6 +79,7 @@ void LobbyView::onButtonClick(int id)
 	else if( id == 1)
 	{
 		lobby->askforLobbyData();
+		gameLobbyMasterValue.setText("",sf::Vector2f(0,0));
 	}
 	else if( id == 2)
 	{
@@ -201,30 +199,37 @@ void LobbyView::pt1zyklisch(double elpasedMs)
 	if(elapsed>=100)
 	{
 		elapsed=0;
-		if(lobby->pt1zyklischd)
+		if(lobby->updated)
 		{
-			lobby->pt1zyklischd = false;
-			
-			for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+			lobby->updated = false;
+
+			if(lobby->inGameLobby)
 			{
-				delete it->second->LE;
-				delete it->second;
+				next = Views::GAMELOBBY;
 			}
-			gameLobbys.clear();
-
-			lobby->m.lock();
-
-			for(auto it = lobby->gamesCreated.begin();it!=lobby->gamesCreated.end();it++)
+			else
 			{
-				short id = it->first + 10;
-				GameLobbyData* GLA = new GameLobbyData();
+				for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
+				{
+					delete it->second->LE;
+					delete it->second;
+				}
+				gameLobbys.clear();
 
-				GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.players.size(),it->second.playerlimit,id);
-				GLA->LE->Attach(this);
+				lobby->m.lock();
 
-				gameLobbys[id] = GLA;
+				for(auto it = lobby->gamesCreated.begin();it!=lobby->gamesCreated.end();it++)
+				{
+					short id = it->first + 10;
+					GameLobbyData* GLA = new GameLobbyData();
+
+					GLA->LE = new LobbyEntry(sf::Vector2f(420,50),sf::Vector2f(),it->second.name,it->second.players.size(),it->second.playerlimit,id);
+					GLA->LE->Attach(this);
+
+					gameLobbys[id] = GLA;
+				}
+				lobby->m.unlock();
 			}
-			lobby->m.unlock();
 		}
 	}
 }

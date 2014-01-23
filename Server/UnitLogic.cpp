@@ -11,25 +11,25 @@ UnitLogic::UnitLogic(UnitTypes type)
 
 	switch(type)
 	{
-	case UnitTypes::LIGHT:	
+		case UnitTypes::LIGHT:	
 		{
 			this->attackpower = 3;
 			this->range = 2;
 			break;
 		}
-	case UnitTypes::HEAVY:	
+		case UnitTypes::HEAVY:	
 		{
 			this->attackpower = 6;
 			this->range = 3;
 			break;
 		}
-	case UnitTypes::LONGRANGE:	
+		case UnitTypes::LONGRANGE:	
 		{
 			this->attackpower = 9;
 			this->range = 1;
 			break;
 		}
-	case UnitTypes::ARTILLERY:
+		case UnitTypes::ARTILLERY:
 		{
 			this->attackpower = 300;
 			this->range = 1;
