@@ -432,6 +432,18 @@
     <Image Include="Data\Images\gold.png">
       <Filter>Data\img</Filter>
     </Image>
+    <Image Include="Data\Images\armee.png">
+      <Filter>Data\img</Filter>
+    </Image>
+    <Image Include="Data\Images\runden_1.png">
+      <Filter>Data\img</Filter>
+    </Image>
+    <Image Include="Data\Images\runden_2.png">
+      <Filter>Data\img</Filter>
+    </Image>
+    <Image Include="Data\Images\stadt.png">
+      <Filter>Data\img</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Data\Sounds\sound1.wav">

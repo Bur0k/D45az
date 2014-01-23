@@ -202,6 +202,7 @@
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Data\Images\armee.png" />
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
@@ -211,9 +212,12 @@
     <Image Include="Data\Images\menu_mid.png" />
     <Image Include="Data\Images\menu_top.png" />
     <Image Include="Data\Images\mouse.png" />
+    <Image Include="Data\Images\runden_1.png" />
+    <Image Include="Data\Images\runden_2.png" />
     <Image Include="Data\Images\slider_bar.png" />
     <Image Include="Data\Images\slider_end.png" />
     <Image Include="Data\Images\slider_mover.png" />
+    <Image Include="Data\Images\stadt.png" />
     <Image Include="Data\Images\unit_artillery.png" />
     <Image Include="Data\Images\unit_heavy.png" />
     <Image Include="Data\Images\unit_light.png" />

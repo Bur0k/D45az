@@ -13,30 +13,18 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 	m_BMenu = new StandardButton(Vector2f(pos.x + 5, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, false, false);
 	m_BMenu->Attach(this); 
 
-	m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 100), String("1038"), 40);
+	//m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 100), String("1038"), 40);
 
-/*
-	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
+	preload_Textures(); // texturen laden
+
+	for(int i = 0; i < m_vTextures.size(); i++)
 	{
-		Sprite* Stmp = new Sprite(m_Ttmp);
-		m_vSPictures.push_back(Stmp);
+		Sprite Stp;
+		Stp.setTexture(m_vTextures[i]);
+		Stp.setPosition(100 + IconX * i, IconY);
+		m_vSPictures.push_back(Stp);
 	}
-	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
-	{
-		Sprite* Stmp = new Sprite(m_Ttmp);
-		m_vSPictures.push_back(Stmp);
-	}
-	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
-	{
-		Sprite* Stmp = new Sprite(m_Ttmp);
-		m_vSPictures.push_back(Stmp);
-	}
-	if(m_Ttmp.loadFromFile("Data/Images/gold.png"))
-	{
-		Sprite* Stmp = new Sprite(m_Ttmp);
-		m_vSPictures.push_back(Stmp);
-	}
-	*/
+
 }
 
 
@@ -44,8 +32,23 @@ Statusbar::~Statusbar(void)
 {
 	//Elemente
 	delete m_BMenu;
-	//delete m_SGold;
-	delete m_TBGold;
+}
+
+void Statusbar::preload_Textures()
+{
+	Texture tmp_texture;
+	String Ablageort = "Data/Images/";
+
+	m_vTexturenames.push_back(Ablageort + "armee.png"); //Iconnamen manuell einfügen
+	m_vTexturenames.push_back(Ablageort + "gold.png");
+	m_vTexturenames.push_back(Ablageort + "stadt.png");
+	m_vTexturenames.push_back(Ablageort + "runden_1.png");
+
+	for(int i = 0; i < m_vTexturenames.size(); i++)
+	{
+		tmp_texture.loadFromFile(m_vTexturenames[i]);
+		m_vTextures.push_back(tmp_texture);
+	}
 }
 
 //Getter & Setter-------------------------------------------------------
@@ -103,7 +106,10 @@ void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 {
 	rw->draw(m_BaseRect);
 	m_BMenu->draw(rw);
-	m_TBGold->draw(rw);
+
+	for(int i = 0; i < m_vSPictures.size(); i++)
+		rw->draw(m_vSPictures[i]);
+
 }
 
 void Statusbar::onButtonClick(int id)
