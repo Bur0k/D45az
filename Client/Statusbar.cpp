@@ -23,6 +23,8 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 		m_vSPictures.push_back(Stp);
 
 		Textblock* Tb = new Textblock(Vector2f(LabelOffset + IconX * i, IconY), Vector2f(100, 100), String("0000"), 40);
+		Tb->setFillColor(MyColors.Transparent);
+		Tb->setFontColor(MyColors.White);
 		m_vTLabels.push_back(Tb);
 	}
 
@@ -130,8 +132,7 @@ void Statusbar::onButtonClick(int id)
 	switch(id)
 	{
 	case 1: 
-		setValue(Geld, 100);
-			//m_pOpenMenu->OpenMenu();
+			m_pOpenMenu->OpenMenu();
 			break;
 
 	default: break;
