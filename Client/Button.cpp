@@ -40,7 +40,7 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, uns
 	
 	//std::cout << "textsize x " << textsize.width << " y " << textsize.height << std::endl;
 	
-	m_color = MyColors.White;
+	m_color = Color(0xE0,0xE0,0xE0,0xFF);
 	setFillColor(m_color);
 	m_color_clicked = MyColors.Orange;
 	m_color_mouseOver = MyColors.Red;
@@ -137,9 +137,12 @@ bool Button::getIsPressed()
 
 void Button::unLock()
 {
-	m_lockedIn = false;
-	m_mouseOver = false;
-	m_isClicked = false;
+	if(m_lockedIn)
+	{
+		m_mouseOver = true;
+		PressedLeft();
+		m_mouseOver = false;
+	}
 }
 
 
@@ -175,7 +178,7 @@ bool Button::PressedLeft()
 		m_isClicked = true;
 		clicked();
 		if(m_staysClicked)
-			m_lockedIn = (m_lockedIn)? false : true;
+			m_lockedIn = !m_lockedIn;
 		return true;
 	}
 	else
