@@ -47,8 +47,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	Client* c = Client::get();
 	c->addToErrorCallback(&tc);
 	c->addToNewMessageCallback(&tc);
-	
-	
+
+
 
 	cout << endl << "Hallo D45az" << endl << "oeffne Fenster" << endl;
 

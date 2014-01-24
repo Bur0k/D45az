@@ -1,18 +1,25 @@
 #include "IngameView.h"
 
-IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
+IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
 	m_nextView = Views::NOCHANGE;
 
 	m_screensize = screensize;
 
-	//debug 
+	m_activeAt = Vector2i(-1,-1);
+	m_pointAt = Vector2i(-1,-1);
+	m_scrolldir = Vector2i(0,0);
+	m_scrollspeed = Vector2f(0,0);
+
+	m_phase = startphase
+	//debug
 	
-	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE,120);
+	
+	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE, 120);
 	m_ClickV.push_back(u);
 	m_DrawV.push_back(u);
 
-	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY,17);
+	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY, 17);
 	m_ClickV.push_back(u1);
 	m_DrawV.push_back(u1);
 	//debug end
@@ -64,7 +71,8 @@ void IngameView::onButtonClick(int id)
 	switch (id)
 	{
 	case COMMIT:
-		m_commitB->setIsEnabled(false);
+		if(m_phase == InagameViewPhases::YOURTURN)
+			nextPhase();
 		break;
 	default:
 		break;
@@ -160,6 +168,7 @@ void IngameView::onKeyUp(sf::Event e)
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
 }
+
 void IngameView::onTextInput(std::string s)
 {
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
@@ -186,7 +195,8 @@ Views IngameView::nextState()
 
 void IngameView::pt1zyklisch(double elpasedMs)
 {
-	//LOADING STUFF GOES HERE
+	//GIVE ME INFO DAMMIT!
+
 }
 
 void IngameView::onResize(Vector2u & size)
@@ -208,19 +218,28 @@ void IngameView::nextPhase()
 	switch (m_phase)
 	{
 	case YOURTURN:
+		m_commitB->setIsEnabled(false);
+		//do things..
+		//send moves to server
 		m_phase = WAITFORPLAYERS;
 		break;
 
 	case WAITFORPLAYERS:
+		//do things..
+		//wait till server sends move data
 		m_phase = WATCHRESULTS;
 		break;
 
 	case WATCHRESULTS:
-		m_phase = YOURTURN;
+		//on player button click
 		m_commitB->setIsEnabled(true);
+		//do things..
+		m_phase = YOURTURN;
 		break;
 
 	case GAMEOVER:
+		//do things..
+		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
 		break;
 

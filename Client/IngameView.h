@@ -21,10 +21,10 @@ enum IngameViewButtonId{
 };
 
 enum InagameViewPhases{
-	YOURTURN,
-	WAITFORPLAYERS,
-	WATCHRESULTS,
-	GAMEOVER
+	YOURTURN,			//moving units and building is allowed
+	WAITFORPLAYERS,		//wait till all players have finished their 
+	WATCHRESULTS,		//watch results of the last turn
+	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
 };
 
 
@@ -71,20 +71,25 @@ private:
 
 	Statusbar* m_SBar;
 
+	//gameStatus
 	InagameViewPhases m_phase;
 	
 	RectangleShape m_mapMouseOver;
 
 public:
-	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function);
+	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase);
 	~IngameView();
 
 	//param x : -1, 0, +1
 	//param y : same
 	void setScrollDirection(int x, int y);
 
+
+	////IMPLEMENTING IView/////
+	//IDrawable
 	void draw(sf::RenderWindow* rw);
 
+	//IClickable
 	bool MouseMoved(sf::Vector2i &);
 	bool PressedRight();
 	bool PressedLeft();
@@ -101,7 +106,6 @@ public:
 	void pt1zyklisch(double elpasedMs);
 
 	Views getType();
-
 	Views nextState();
 	//IClickable
 	void onButtonClick(int);
@@ -109,8 +113,10 @@ public:
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
 
+	/////IMPLEMENTING IView end/////
+
 private:
-	//gets called from Update if nex phase is required 
+	//gets called if next phase is required
 	void nextPhase();
 	void moveMap();
 };

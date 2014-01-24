@@ -399,17 +399,12 @@ void Game::onKeyUp(sf::Event e)
 
 	if(e.key.code == Keyboard::Escape)
 		m_menubutton = false;
-
-//#ifdef _DEBUG
-//	if(e.key.code == sf::Keyboard::Escape) 
-//		m_pWindow->close();
-//#endif
 }
 
 void Game::onTextEntered(sf::Event e)
 {
 	Uint32 c = e.text.unicode;
-	//filter input
+	//filter input to all allowed characters
 	if((c >= 32 && c <= 126) || c == 0x00F6 || c == 0x00FC || c == 0x00E4 || c == 0x00C4 || c == 0x00D6	|| c == 0x00DC || c == 0x00DF || c == 0x0FD6 )
 	{
 		std::string s;
@@ -437,7 +432,7 @@ void Game::LoadView(Views v)
 	IView* NewView;
 
 	switch (v)
-{
+	{
 	case Views::NOCHANGE:
 		return;
 		break;
@@ -448,7 +443,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		NewView = new IngameView(m_pWindow->getSize(), this);
+		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::WAITFORPLAYERS);
 		clear = true;
 		break;
 
@@ -582,7 +577,7 @@ void Game::timer()
 	static int fpsCount = 0;
 	static int animationtime = 0;
 	
-	//std::cout<<m_animationTimer.getElapsedTime().asMilliseconds()<<std::endl;
+
 	
 	int elapsedMicro = m_animationTimer.getElapsedTime().asMicroseconds();
 	m_animationTimer.restart();
@@ -597,18 +592,19 @@ void Game::timer()
 	
 	
 	//ANIMATION//
-	while(animationtime > 1000000 / 33)//Animationtick alle 30 FPS
+	while(animationtime > 1000000 / 33)//Animationtick 33 Hz
 	{
 		animationtime -= 1000000 / 33;
-		for(unsigned int i = 0; i < m_animateL.size(); i++)
-			m_animateL[i]->animationTick();
+		if(m_ViewMode == Views::TESTSCREEN)
+			for(unsigned int i = 0; i < m_animateL.size(); i++)
+				m_animateL[i]->animationTick();
 
 		for(unsigned int i = 0; i < m_ViewVect.size(); i++)
 			m_ViewVect[i]->animationTick();
 	}
 
 
-	//...//
+	//frames per second Counter//
 	fpsCount++;
 	if(m_fpsCounter.getElapsedTime().asMilliseconds() >= 1000)
 	{
