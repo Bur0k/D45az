@@ -56,6 +56,7 @@ private:
 
 	//user points at 
 	Vector2i m_pointAt;
+	Vector2i m_activeAt;
 
 	//scrolling the map
 	Vector2i m_scrolldir;

@@ -117,10 +117,12 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
-			return true;
-	return false;
+			retvalue = true;
+
+	return retvalue;
 }
 
 bool IngameView::ReleasedRight()
@@ -175,8 +177,6 @@ void IngameView::draw(sf::RenderWindow* rw)
 	Rect<float> MapView;
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
-
-	
 }
 
 Views IngameView::nextState()
