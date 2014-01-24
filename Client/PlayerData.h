@@ -13,6 +13,8 @@ public:
 	std::string Name;
 };
 
+extern PlayerData playerData;
+
 struct GameData
 {
 	std::vector<PlayerData> players;
