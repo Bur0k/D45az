@@ -201,7 +201,7 @@ void LobbyView::pt1zyklisch(double elpasedMs)
 			if(lobby->inGameLobby)
 			{
 				lobby->inGameLobby = false;
-				//next = Views::GAMELOBBY;
+				next = Views::GAMELOBBY;
 			}
 			else
 			{

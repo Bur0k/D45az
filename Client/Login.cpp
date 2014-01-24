@@ -4,13 +4,17 @@ void Login::processNewMessage(short id,vector<char> data)
 {
 	if(id==0x0101)
 	{
-		if(data[0])
+		if(data[0] == 1)
 		{
 			state = 1;
 		}
-		else
+		else if(data[0] == 0)
 		{ 
 			state = -1;
+		}
+		else if(data[0] == -1)
+		{ 
+			state = -2;
 		}
 	}
 }

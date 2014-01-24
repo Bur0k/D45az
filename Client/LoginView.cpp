@@ -183,6 +183,12 @@ void LoginView::pt1zyklisch(double elpasedMs)
 	{
 		if(NL->getState() == 1)
 			next = Views::LOBBY;
+		else if(NL->getState() == -2)
+		{
+			status->setText("Minimal 4 and maximal 10 characters.\nPlease choose a different name.",Vector2f(700,70));
+			delete NL;
+			NL = nullptr;
+		}
 		else if(NL->getState() == -1)
 		{
 			status->setText("Name is already in usage.\nPlease choose a different name.",Vector2f(700,70));

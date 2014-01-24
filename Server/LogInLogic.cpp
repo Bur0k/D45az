@@ -27,7 +27,7 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				name += data[i];
 
 
-			if(name.size() > 3 && name.size() < 10)
+			if(name.size() > 3 && name.size() <= 10)
 			{
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
 				{
@@ -58,7 +58,7 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 			else
 			{
 				std::vector<char> erfg;
-				erfg.push_back(0);
+				erfg.push_back((char)-1);
 				server->write(s,0x0101,erfg);
 			}
 		}break;
