@@ -3,6 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <string> 
 
 #include "IClickable.h"
 #include "graphic_globals.h"
@@ -13,8 +14,11 @@
 #include "Textblock.h"
 
 #define Statusbarheight 50
-#define IconX 150
+#define IconOffset 150
+#define LabelOffset 200
+#define IconX 170
 #define IconY 5
+
 
 using namespace std;
 using namespace sf;
@@ -28,6 +32,12 @@ public:
 
 class Statusbar : public IClickable, public IDrawable, public IAnimatable, public IButtonfunction
 {
+	
+enum Icons
+ {
+    Geld, Armee, Stadt, Runden
+ } myIcons;
+
 private: // soll eigentlich NICHT abgeleitet werden
 	bool m_mouseOver;
 	Vector2f m_MousePos;
@@ -40,7 +50,7 @@ private: // soll eigentlich NICHT abgeleitet werden
 	vector<String> m_vTexturenames;
 	vector<Texture> m_vTextures;
 	vector<Sprite> m_vSPictures;
-	vector<Textblock> m_vTLabels;
+	vector<Textblock*> m_vTLabels;
 
 	//Zeiger auf andere Klassen
 	StatusBarFunctions* m_pOpenMenu;
@@ -56,6 +66,7 @@ public:
 	Vector2f getPosition();
 	void setBgColor(Color c);
 	void Resize(Vector2f new_size);
+	void setValue(enum Icons, int value);
 	//Containerverwaltung
 	//void Push(
 

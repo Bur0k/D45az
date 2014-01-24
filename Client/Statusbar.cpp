@@ -13,16 +13,17 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 	m_BMenu = new StandardButton(Vector2f(pos.x + 5, pos.y + 5), Vector2f(50, size.y-10),"Menü" , 1, false, false);
 	m_BMenu->Attach(this); 
 
-	//m_TBGold = new Textblock(Vector2f(200,5), Vector2f(100, 100), String("1038"), 40);
-
+	// Icons und LABELS erstellen
 	preload_Textures(); // texturen laden
-
 	for(int i = 0; i < m_vTextures.size(); i++)
 	{
 		Sprite Stp;
 		Stp.setTexture(m_vTextures[i]);
-		Stp.setPosition(100 + IconX * i, IconY);
+		Stp.setPosition(IconOffset + IconX * i, IconY);
 		m_vSPictures.push_back(Stp);
+
+		Textblock* Tb = new Textblock(Vector2f(LabelOffset + IconX * i, IconY), Vector2f(100, 100), String("0000"), 40);
+		m_vTLabels.push_back(Tb);
 	}
 
 }
@@ -32,6 +33,8 @@ Statusbar::~Statusbar(void)
 {
 	//Elemente
 	delete m_BMenu;
+	for(int i = 0; i < m_vTLabels.size(); i ++)
+		delete m_vTLabels[i];
 }
 
 void Statusbar::preload_Textures()
@@ -39,8 +42,9 @@ void Statusbar::preload_Textures()
 	Texture tmp_texture;
 	String Ablageort = "Data/Images/";
 
-	m_vTexturenames.push_back(Ablageort + "armee.png"); //Iconnamen manuell einfügen
+	// Reihenfolge wie Enums 
 	m_vTexturenames.push_back(Ablageort + "gold.png");
+	m_vTexturenames.push_back(Ablageort + "armee.png"); //Iconnamen manuell einfügen
 	m_vTexturenames.push_back(Ablageort + "stadt.png");
 	m_vTexturenames.push_back(Ablageort + "runden_1.png");
 
@@ -77,6 +81,12 @@ void Statusbar::Resize(Vector2f new_size)
 	m_BaseRect.setSize(Vector2f(new_size.x, Statusbarheight));
 }
 
+void Statusbar::setValue(enum Icons, int value)
+{
+	String tmp = to_string(value);
+	m_vTLabels[Geld]->setText(tmp, Vector2f(100,100));
+}
+
 //Hilfsfunktionen-------------------------------------------------------
 
 //Interface-Funktionen-------------------------------------------------------
@@ -108,7 +118,10 @@ void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 	m_BMenu->draw(rw);
 
 	for(int i = 0; i < m_vSPictures.size(); i++)
+	{
 		rw->draw(m_vSPictures[i]);
+		m_vTLabels[i]->draw(rw);
+	}
 
 }
 
@@ -117,7 +130,8 @@ void Statusbar::onButtonClick(int id)
 	switch(id)
 	{
 	case 1: 
-			m_pOpenMenu->OpenMenu();
+		setValue(Geld, 100);
+			//m_pOpenMenu->OpenMenu();
 			break;
 
 	default: break;

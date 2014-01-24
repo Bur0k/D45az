@@ -30,6 +30,7 @@
 using namespace sf;
 
 
+
 //#define MOUSEGRAB
 
 // TODO derive game from renderWindow
