@@ -62,6 +62,7 @@ private:
 	Vector2i m_scrolldir;
 	Vector2f m_scrollspeed;
 
+	//vectors for handling the events
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;

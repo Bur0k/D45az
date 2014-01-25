@@ -178,7 +178,17 @@ bool Button::PressedLeft()
 		m_isClicked = true;
 		clicked();
 		if(m_staysClicked)
+		{
 			m_lockedIn = !m_lockedIn;
+			/*
+			 * a locking button does not send notify on release 
+			 * (since it locks on pressed already)
+			 * to prevent 
+			 * not calling notify when clicked  when mouse over but releasing when not
+			 */
+			if(m_lockedIn)
+				Notify();	
+		}
 		return true;
 	}
 	else
@@ -194,7 +204,7 @@ bool Button::ReleasedLeft()
 			m_isClicked = false;
 			unclicked();
 		}
-		if(m_mouseOver)
+		if(m_mouseOver && !m_staysClicked)
 			Notify();
 	}
 	return false;
@@ -235,6 +245,7 @@ void Button::animation_upadate()
 	if(!m_isEnabled)
 	{
 		setFillColor(m_color_disabled);
+		return;
 	}
 
 	Color c = m_color_mouseOver;
