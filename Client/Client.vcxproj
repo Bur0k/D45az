@@ -85,6 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Army.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="City.cpp" />
     <ClCompile Include="Client.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="UnitGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Army.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="City.h" />
     <ClInclude Include="Client.h" />
