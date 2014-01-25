@@ -11,7 +11,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_scrolldir = Vector2i(0,0);
 	m_scrollspeed = Vector2f(0,0);
 
-	m_phase = startphase
+	m_phase = startphase;
 	//debug
 	
 	

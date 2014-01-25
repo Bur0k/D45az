@@ -1,7 +1,7 @@
 #include "MenuView.h"
 
 
-MenuView::MenuView(Vector2u & screensize, bool extended)
+MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
 {
 	m_animating = true;
 	m_extended = extended;
@@ -58,6 +58,8 @@ MenuView::MenuView(Vector2u & screensize, bool extended)
 	m_pGraphics[2].s.setSize(Vector2f(240,150));
 
 	positionElements(screensize);
+
+	m_pMS = MS;
 }
 
 void MenuView::positionElements(Vector2u & size)
@@ -119,12 +121,12 @@ void MenuView::onButtonClick(int id)
 
 void MenuView::onSliderValueChange(int ID, double position)
 {
-	//DO SOMETHING
+	m_pMS->set_volume(generel_noise, position*100);
 }
 
 void MenuView::onSliderReleased(int ID, double position)
 {
-	//DO SOMETHING
+	std::cout << "Lautstärke jetzt: " << position*100 << std::endl;
 }
 
 
