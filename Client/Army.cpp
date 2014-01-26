@@ -101,9 +101,9 @@ void Army::move(Vector2i delta)
 
 	PositionGraphics();
 }
+Army::animat
 
-bool Army::animatedMove(Vector2i target)
-{
+bool {edMove(Vector2i target)
 	if(m_animating)	//if animation is running return false;
 		return false;
 
