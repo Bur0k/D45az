@@ -8,7 +8,6 @@ void Game::onButtonClick(int index)
 	{
 	case 1:
 		blubb ++;
-		m_pMS->next_song();
 		std::cout << "button click accepted " << blubb << std::endl;
 		break;
 	case 2:
@@ -21,7 +20,6 @@ void Game::onButtonClick(int index)
 		break;
 	default:
 		std::cout << "!! undefined button click !!" << std::endl;
-		m_pMS->pause();
 		break;
 	}
 }
@@ -29,8 +27,6 @@ void Game::onButtonClick(int index)
 void Game::onSliderValueChange(int ID, double position)
 {
 	std::cout << "Slider CHANGED ID: " << ID << " Value: " << position << std::endl;
-	std::cout << "Lautstärke jetzt: " << position*100 << endl;
-	m_pMS->set_volume(generel_noise, position*100);
 }
 
 void Game::onSliderReleased(int ID, double position)
@@ -144,6 +140,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	//Musik
 	m_pMS = new MusikSampler();
+	m_pMS->next_song();
 
 	map.load("Data/Maps/test.tmx");
 	xMap=yMap=0;
@@ -463,7 +460,7 @@ void Game::LoadView(Views v)
 		else 
 		{
 			m_ViewMode = v;
-			NewView = new MenuView(m_pWindow->getSize(),false);
+			NewView = new MenuView(m_pWindow->getSize(),false, m_pMS);
 		}
 		break;
 

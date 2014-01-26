@@ -9,6 +9,7 @@
 #include "StandardButton.h"
 #include "Slider.h"
 #include "Textblock.h"
+#include "MusikSampler.h"
 
 using namespace sf;
 
@@ -33,19 +34,19 @@ private:
 	Textblock* m_volumetext;
 	Slider* m_volumeslider;
 
+	MusikSampler* m_pMS;
+
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
 	KeyInputVect m_KeyV;
 
 public:
-	MenuView(Vector2u & screensize, bool extended);
+	MenuView(Vector2u & screensize, bool extended, MusikSampler* MS);
 	~MenuView(void);
 
 	virtual Views nextState();
 	//implementing a lot of interfaces
-
-	
 
 	virtual void draw(sf::RenderWindow* rw);
 
