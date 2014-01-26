@@ -2,18 +2,28 @@
 
 Army::Army()
 {
-
+	
 }
 
 Army::Army(int i)
 {
+	m_animation = -1;
+	m_mouseOver = false;
+	m_animating = false;
 
+	
 }
 
 Army::~Army()
 {
 
 }
+
+void Army::PositionGraphics()
+{
+	//set the position of graphic objects
+}
+
 
 //IDrawable
 void Army::draw(sf::RenderWindow* rw)
@@ -58,7 +68,19 @@ bool Army::ReleasedLeft(){ return false; }
 
 void Army::animationTick()
 {
-	
+	if(m_animating > 0)
+	{
+		m_animation --;
+		float ratio = m_animation / ARMY_ANIMATIONSTEPS;	
+		Vector2f currentPos = m_oldPos * ratio + m_targetPos * (1 - ratio);
+		m_dimensions.left = currentPos.x;
+		m_dimensions.top = currentPos.y;
+
+		PositionGraphics();
+
+		if(m_animation == 0)
+			m_animating = false;
+	}
 }
 
 Vector2i Army::getPosition()
@@ -68,13 +90,42 @@ Vector2i Army::getPosition()
 
 void Army::setPosition(Vector2i pos)
 {
-	m_dimensions.left = m_Tilesize.x * pos.x -  m_mapViewOffset.x;
-	m_dimensions.top = m_Tilesize.y * pos.y -  m_mapViewOffset.y;
+	move(pos - m_position);
 }
 
-void Army::move(Vector2i pos)
+void Army::move(Vector2i delta)
 {
-	m_animation = ARMY_ANIMATIONSTEPS;
+	m_dimensions.left = m_Tilesize.x * (delta.x + m_position.x) -  m_mapViewOffset.x;
+	m_dimensions.top = m_Tilesize.y * (delta.y + m_position.y) -  m_mapViewOffset.y;
+	m_position += delta;
+
+	PositionGraphics();
+}
+
+bool Army::animatedMove(Vector2i target)
+{
+	if(m_animating)	//if animation is running return false;
+		return false;
+
+	m_animating = ARMY_ANIMATIONSTEPS + 1;
 	m_animating = true;
+	m_oldPos = Vector2f(m_dimensions.left,m_dimensions.top);
+	m_targetPos = Vector2f(target.x * m_Tilesize.x, target.y * m_Tilesize.y );
+
+	return true;
+}
+
+ingameObjectType getType()
+{
+	return ingameObjectType::ARMY;
+}
+
+void /* TODO NOT VOID but info pointer to army*/ getArmy()
+{
+
+}
+
+void /* TODO NOT VOID but info pointer to city*/ getCity()
+{
 
 }
