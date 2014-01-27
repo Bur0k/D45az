@@ -202,6 +202,7 @@
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\germanset.png" />
     <Image Include="Data\Images\armee.png" />
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />

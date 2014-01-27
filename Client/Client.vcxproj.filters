@@ -444,6 +444,9 @@
     <Image Include="Data\Images\stadt.png">
       <Filter>Data\img</Filter>
     </Image>
+    <Image Include="..\..\..\..\Desktop\germanset.png">
+      <Filter>Data\img</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Data\Sounds\sound1.wav">
