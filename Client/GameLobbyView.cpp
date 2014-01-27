@@ -4,53 +4,24 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 {
 	this->game = new GameLobby();
 
-	if (playerData.Name == game->gameMaster)
-	{
-		amIGamemaster = true;
-		//this->playernumber = 1;
-	}
-	else
-	{
-		amIGamemaster = false;
-	}
 
-	for (unsigned int i = 0; i < this->game->players.size(); i++)
-	{
-		if (playerData.Name == this->game->players[i])
-			this->playernumber = i + 1;
-	}
-	// auf gamemaster testen
-	std::string playernames[4];
-	int count = 0;
-	while (this->game->players.size() >  count)
-	{
-		playernames[count] = this->game->players[count];
-		count++;
-	}
-	while (count < 4)
-	{
-		playernames[count] = "";
-		count++;
-	}
-
-	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), playernames[0], 30);
+	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), "", 30);
 	m_DrawV.push_back(this->players[0]);
-	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 40), playernames[1], 30);
+	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 40), "", 30);
 	m_DrawV.push_back(this->players[1]);
-	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 40), playernames[2], 30);
+	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 40), "", 30);
 	m_DrawV.push_back(this->players[2]);
-	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), playernames[3], 30);
+	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), "", 30);
 	m_DrawV.push_back(this->players[3]);
 
 	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(50, 20), "mapname", 30);
 	m_DrawV.push_back(mapName);
 
-	if (amIGamemaster == true)
-	{
-		this->kickPlayer[0] = new StandardButton(sf::Vector2f(10, 250), sf::Vector2f(50, 25), "kick", KICKP1, false, false); 
-		this->kickPlayer[1] = new StandardButton(sf::Vector2f(40, 250), sf::Vector2f(50, 25), "kick", KICKP2, false, false); 
-		this->kickPlayer[2] = new StandardButton(sf::Vector2f(70, 250), sf::Vector2f(50, 25), "kick", KICKP3, false, false); 
-	}
+	
+	this->kickPlayer[0] = new StandardButton(sf::Vector2f(10, 250), sf::Vector2f(50, 25), "kick", KICKP1, false, false); 
+	this->kickPlayer[1] = new StandardButton(sf::Vector2f(40, 250), sf::Vector2f(50, 25), "kick", KICKP2, false, false); 
+	this->kickPlayer[2] = new StandardButton(sf::Vector2f(70, 250), sf::Vector2f(50, 25), "kick", KICKP3, false, false); 
+
 
 	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(100, 50), "leave", LEAVE, false);
 	this->startgame = new StandardButton(sf::Vector2f(50, 280), sf::Vector2f(100, 50), "start", START, false);
@@ -80,8 +51,8 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	m_AnimateV.push_back(startgame);
 	m_ClickV.push_back(startgame);
 	this->startgame->Attach(this);
-	
-	
+
+
 	m_nextView = Views::NOCHANGE;
 
 	centering(screensize);
@@ -92,7 +63,7 @@ GameLobbyView::~GameLobbyView()
 {
 	for (int i = 0; i < 4; i++)
 		delete this->players[i];
-	
+
 	delete this->mapName;
 	if (amIGamemaster == true)
 	{
@@ -109,31 +80,31 @@ void GameLobbyView::onButtonClick(int id)
 {
 	switch(id)
 	{
-		case LEAVE:
-			{
-				this->game->disconnect();
-				this->m_nextView = Views::LOBBY;
-				break;
-			}
-		case START:
-			{
-				this->game->startGame();
-				this->m_nextView = Views::INGAME;
-				break;
-			}
-		case KICKP1:
-			{
-				
-				break;
-			}
-		case KICKP2:
-			{
-				break;
-			}
-		case KICKP3:
-			{
-				break;
-			}
+	case LEAVE:
+		{
+			this->game->disconnect();
+			this->m_nextView = Views::LOBBY;
+			break;
+		}
+	case START:
+		{
+			this->game->startGame();
+			this->m_nextView = Views::INGAME;
+			break;
+		}
+	case KICKP1:
+		{
+
+			break;
+		}
+	case KICKP2:
+		{
+			break;
+		}
+	case KICKP3:
+		{
+			break;
+		}
 	}
 }
 
@@ -193,13 +164,13 @@ bool GameLobbyView::ReleasedLeft()
 			return true;
 	return false;
 }
-	
+
 void GameLobbyView::animationTick()
 {
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 }
-	
+
 void GameLobbyView::onKeyDown(sf::Event e)
 {
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
@@ -229,10 +200,52 @@ Views GameLobbyView::nextState()
 	return m_nextView;
 }
 
-void GameLobbyView::pt1zyklisch(double elpasedMs)
+void GameLobbyView::pt1zyklisch(double elapsedMs)
 {
-	//BURAK GOES HERE
-	//this gets info from the server 
+	static double elapsed = 0;
+	elapsed += elapsedMs;
+
+	if(elapsed >= 250)
+	{
+		elapsed = 0;
+
+		if(game->updated & 1)
+		{
+			game->updated &= ~1;
+			for (unsigned int i = 0; i < this->game->players.size(); i++)
+			{
+				if (playerData.Name == this->game->players[i])
+					this->playernumber = i + 1;
+			}
+			for (unsigned int i = 0; i < this->game->players.size(); i++)
+			{
+				if (playerData.Name == this->game->players[i])
+					this->playernumber = i + 1;
+			}
+			// auf gamemaster testen
+			std::string playernames[4];
+			int count = 0;
+			while (this->game->players.size() >  count)
+			{
+				playernames[count] = this->game->players[count];
+				count++;
+			}
+			while (count < 4)
+			{
+				playernames[count] = "";
+				count++;
+			}
+		}
+		if(game->updated & 2)
+		{
+			game->updated &= ~2;
+		}
+		if(game->updated & 4)
+		{
+			game->updated &= ~4;
+			amIGamemaster = playerData.Name == game->gameMaster;
+		}
+	}
 }
 
 void GameLobbyView::onResize(Vector2u & size)
@@ -257,7 +270,7 @@ void GameLobbyView::centering(Vector2u & size)
 	this->players[1]->setPos(Vector2f(size.x / 2 - this->players[1]->getSize().x / 2, size.y / 2 - this->players[1]->getSize().y - 0.5 * space));	
 	this->players[2]->setPos(Vector2f(size.x / 2 - this->players[2]->getSize().x / 2, size.y / 2 + 0.5 * space));
 	this->players[3]->setPos(Vector2f(size.x / 2 - this->players[3]->getSize().x / 2, size.y / 2 + this->players[3]->getSize().y + 1.5 * space));
-	
+
 	if (amIGamemaster == true)
 	{
 		this->kickPlayer[0]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[0]->getSize().x / 2, this->players[1]->getPosition().y + this->players[1]->getSize().y + space / 4));

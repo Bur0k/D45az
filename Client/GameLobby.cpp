@@ -8,6 +8,8 @@ GameLobby::GameLobby()
 	this->Ingame = false;
 	this->disconnected = false;
 
+	updated = 0;
+
 	vector<char> erfg;
 	this->c->write(0x0330, erfg);
 }
@@ -58,7 +60,7 @@ void GameLobby::processNewMessage(short id,vector<char> data)
 	case 0x0302:
 		{
 			string name;
-
+			players.clear();
 			for(unsigned int i = 0; i < data.size(); i++)
 			{
 				if(data[i] != '/')
@@ -69,6 +71,7 @@ void GameLobby::processNewMessage(short id,vector<char> data)
 					name.clear();
 				}
 			}
+			updated |= 1;
 		}break;
 	case 0x0304:
 		{
@@ -77,10 +80,12 @@ void GameLobby::processNewMessage(short id,vector<char> data)
 	case 0x0305:
 		{
 			this->playerLimit = data[0];
+			updated |= 2;
 		}break;
 	case 0x0306:
 		{
 			this->gameMaster = decodeString(data, 0, data.size());
+			updated |= 4;
 		}break;
 	case 0x0320:
 		{
@@ -89,6 +94,7 @@ void GameLobby::processNewMessage(short id,vector<char> data)
 	case 0x0321:
 		{
 			this->playerLimit = data[0];
+			updated |= 2;
 		}break;
 	}
 }
