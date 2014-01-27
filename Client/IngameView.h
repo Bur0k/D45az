@@ -75,6 +75,8 @@ private:
 	//pixels
 	Vector2i m_mapTotalSize;
 
+	
+
 	//user points at 
 	Vector2i m_pointAt;
 	Vector2i m_activeAt;
