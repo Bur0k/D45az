@@ -39,7 +39,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 
 	//Interface Goes Here
-	m_commitB = new CommitButton(Vector2f(0,0), Vector2f(0,0), "commit", COMMIT,false, screensize);
+	m_commitB = new CommitButton(Vector2f(0,0), Vector2f(0,0), "commit", static_cast<int>(IngameViewButtonId::COMMIT),false, screensize);
 	m_commitB->Attach(this);
 	m_DrawV.push_back(m_commitB);
 	m_ClickV.push_back(m_commitB); 
@@ -72,7 +72,7 @@ void IngameView::onButtonClick(int id)
 {
 	switch (id)
 	{
-	case COMMIT:
+	case IngameViewButtonId::COMMIT:
 		if(m_phase == InagameViewPhases::YOURTURN)
 			nextPhase();
 		break;
@@ -219,27 +219,27 @@ void IngameView::nextPhase()
 {
 	switch (m_phase)
 	{
-	case YOURTURN:
+	case InagameViewPhases::YOURTURN:
 		m_commitB->setIsEnabled(false);
 		//do things..
 		//send moves to server
-		m_phase = WAITFORPLAYERS;
+		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
 
-	case WAITFORPLAYERS:
+	case InagameViewPhases::WAITFORPLAYERS:
 		//do things..
 		//wait till server sends move data
-		m_phase = WATCHRESULTS;
+		m_phase = InagameViewPhases::WATCHRESULTS;
 		break;
 
-	case WATCHRESULTS:
+	case InagameViewPhases::WATCHRESULTS:
 		//on player button click
 		m_commitB->setIsEnabled(true);
 		//do things..
-		m_phase = YOURTURN;
+		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
-	case GAMEOVER:
+	case InagameViewPhases::GAMEOVER:
 		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
