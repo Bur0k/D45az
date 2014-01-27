@@ -27,7 +27,7 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				name += data[i];
 
 
-			if(name.size() > 3 && name.size() <= 10)
+			if(name.size() > 2 && name.size() <= 10)
 			{
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
 				{
