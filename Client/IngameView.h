@@ -13,6 +13,7 @@
 #include "Statusbar.h"
 #include "CommitButton.h"
 #include "Army.h"
+#include "LogicData.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
@@ -51,6 +52,9 @@ private:
 	IntRect m_mapView;
 	Vector2i m_mapSize;
 	Vector2i m_tileSize;
+
+	//logic
+	LogicData m_GameData;
 
 	Vector2u m_screensize;
 	//pixels

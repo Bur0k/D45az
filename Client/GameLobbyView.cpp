@@ -225,7 +225,7 @@ void GameLobbyView::pt1zyklisch(double elapsedMs)
 			// auf gamemaster testen
 			std::string playernames[4];
 			int count = 0;
-			while (this->game->players.size() >  count)
+			while (this->game->players.size() >  static_cast<unsigned int>(count))
 			{
 				playernames[count] = this->game->players[count];
 				count++;

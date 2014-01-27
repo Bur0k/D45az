@@ -91,21 +91,21 @@ void StandardButton::pt1zyklischPosition()
 	//move sprites to position and scale them appropriately
 	Vector2f size = this->getSize();
 
-	m_pST[0].s.setSize(Vector2f(m_buttonTileSize, m_buttonTileSize));
-	m_pST[1].s.move(m_buttonTileSize, 0);
-	m_pST[1].s.setSize(Vector2f(size.x - m_buttonTileSize * 2, m_buttonTileSize));
-	m_pST[2].s.move(size.x - m_buttonTileSize, 0);
-	m_pST[2].s.setSize(Vector2f(m_buttonTileSize, m_buttonTileSize));
-	m_pST[3].s.move(0, m_buttonTileSize);
-	m_pST[3].s.setSize(Vector2f(m_buttonTileSize, size.y - m_buttonTileSize * 2));
-	m_pST[4].s.move(size.x - m_buttonTileSize, m_buttonTileSize);
-	m_pST[4].s.setSize(Vector2f(m_buttonTileSize, size.y - m_buttonTileSize * 2));
-	m_pST[5].s.move(0, size.y - m_buttonTileSize);
-	m_pST[5].s.setSize(Vector2f(m_buttonTileSize, m_buttonTileSize));
-	m_pST[6].s.move( m_buttonTileSize,size.y - m_buttonTileSize);
-	m_pST[6].s.setSize(Vector2f(size.x - m_buttonTileSize * 2, m_buttonTileSize));
-	m_pST[7].s.move(size.x - m_buttonTileSize, size.y - m_buttonTileSize);
-	m_pST[7].s.setSize(Vector2f(m_buttonTileSize, m_buttonTileSize));
+	m_pST[0].s.setSize(Vector2f((static_cast<float>(m_buttonTileSize)), static_cast<float>(m_buttonTileSize)));
+	m_pST[1].s.move(static_cast<float>(m_buttonTileSize), 0);
+	m_pST[1].s.setSize(Vector2f(static_cast<float>(size.x - m_buttonTileSize * 2), static_cast<float>(m_buttonTileSize)));
+	m_pST[2].s.move(static_cast<float>(size.x - m_buttonTileSize), 0);
+	m_pST[2].s.setSize(Vector2f(static_cast<float>(m_buttonTileSize), static_cast<float>(m_buttonTileSize)));
+	m_pST[3].s.move(0, static_cast<float>(m_buttonTileSize));
+	m_pST[3].s.setSize(Vector2f(static_cast<float>(m_buttonTileSize), static_cast<float>(size.y - m_buttonTileSize * 2)));
+	m_pST[4].s.move(static_cast<float>(size.x - m_buttonTileSize), static_cast<float>(m_buttonTileSize));
+	m_pST[4].s.setSize(Vector2f(static_cast<float>(m_buttonTileSize), static_cast<float>(size.y - m_buttonTileSize * 2)));
+	m_pST[5].s.move(0, static_cast<float>(size.y - m_buttonTileSize));
+	m_pST[5].s.setSize(Vector2f(static_cast<float>(m_buttonTileSize), static_cast<float>(m_buttonTileSize)));
+	m_pST[6].s.move( static_cast<float>(m_buttonTileSize), static_cast<float>(size.y - m_buttonTileSize));
+	m_pST[6].s.setSize(Vector2f(static_cast<float>(size.x - m_buttonTileSize * 2), static_cast<float>(m_buttonTileSize)));
+	m_pST[7].s.move(static_cast<float>(size.x - m_buttonTileSize), static_cast<float>(size.y - m_buttonTileSize));
+	m_pST[7].s.setSize(Vector2f(static_cast<float>(m_buttonTileSize), static_cast<float>(m_buttonTileSize)));
 
 	fitText(m_buttonTileSize);
 }

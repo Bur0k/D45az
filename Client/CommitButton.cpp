@@ -2,7 +2,7 @@
 
 
 CommitButton::CommitButton(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, Vector2u winSize, unsigned int characterSize) :
-	Button(Vector2f(winSize.x - 100, winSize.y - 100), Vector2f(100,100), S, ID, lock, static_cast<int>(characterSize))
+	Button(Vector2f(static_cast<float>(winSize.x - 100), static_cast<float>(winSize.y - 100)), Vector2f(100,100), S, ID, lock, static_cast<int>(characterSize))
 {
 	this->windowSize = winSize;
 
