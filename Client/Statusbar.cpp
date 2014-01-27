@@ -15,14 +15,14 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 
 	// Icons und LABELS erstellen
 	preload_Textures(); // texturen laden
-	for(int i = 0; i < m_vTextures.size(); i++)
+	for(unsigned int i = 0; i < m_vTextures.size(); i++)
 	{
 		Sprite Stp;
 		Stp.setTexture(m_vTextures[i]);
-		Stp.setPosition(IconOffset + IconX * i, IconY);
+		Stp.setPosition((float) (IconOffset + IconX * i), (float) IconY);
 		m_vSPictures.push_back(Stp);
 
-		Textblock* Tb = new Textblock(Vector2f(LabelOffset + IconX * i, IconY), Vector2f(100, 100), String("rust"), 40);
+		Textblock* Tb = new Textblock(Vector2f((float) (LabelOffset + IconX * i), (float) IconY), Vector2f(100, 100), String("rust"), 40);
 		//TODO rust in 0000 ändern
 		Tb->setFillColor(MyColors.Transparent);
 		Tb->setFontColor(MyColors.White);
@@ -36,7 +36,7 @@ Statusbar::~Statusbar(void)
 {
 	//Elemente
 	delete m_BMenu;
-	for(int i = 0; i < m_vTLabels.size(); i ++)
+	for(unsigned int i = 0; i < m_vTLabels.size(); i ++)
 		delete m_vTLabels[i];
 }
 
@@ -51,7 +51,7 @@ void Statusbar::preload_Textures()
 	m_vTexturenames.push_back(Ablageort + "stadt.png");
 	m_vTexturenames.push_back(Ablageort + "runden_1.png");
 
-	for(int i = 0; i < m_vTexturenames.size(); i++)
+	for(unsigned int i = 0; i < m_vTexturenames.size(); i++)
 	{
 		tmp_texture.loadFromFile(m_vTexturenames[i]);
 		m_vTextures.push_back(tmp_texture);
@@ -130,7 +130,7 @@ void Statusbar::draw(sf::RenderWindow* rw) // IDrawable
 	rw->draw(m_BaseRect);
 	m_BMenu->draw(rw);
 
-	for(int i = 0; i < m_vSPictures.size(); i++)
+	for(unsigned int i = 0; i < m_vSPictures.size(); i++)
 	{
 		rw->draw(m_vSPictures[i]);
 		m_vTLabels[i]->draw(rw);

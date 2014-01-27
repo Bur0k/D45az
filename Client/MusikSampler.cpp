@@ -25,13 +25,13 @@ MusikSampler::MusikSampler(void)
 MusikSampler::~MusikSampler(void)
 {
 		// Adresslisten freigeben
-	for ( int i = 0; i < m_vSongFiles.size(); i++)
+	for (unsigned int i = 0; i < m_vSongFiles.size(); i++)
 		m_vSongFiles[i].clear();
-	for( int i = 0; i < m_vSoundFiles.size(); i++)
+	for(unsigned int i = 0; i < m_vSoundFiles.size(); i++)
 		m_vSoundFiles[i].clear();
 
 		// Bufferliste freigeben
-	for (int i = 0; i < m_vBuffer.size(); i++)
+	for (unsigned int i = 0; i < m_vBuffer.size(); i++)
 		m_vBuffer.clear();
 
 	for (unsigned int i = 0; i < m_vSound.size() ; i++)	// noch-abspielende Sounds löschen
@@ -42,6 +42,7 @@ MusikSampler::~MusikSampler(void)
 		}
 		catch(int e)
 		{
+			cout << "FehlerKarre " << e << '\n';
 		}
 	}
 }
@@ -151,7 +152,7 @@ void MusikSampler::set_volume(int type, float volume)
 	switch(type)
 	{
 		case sounds: m_SoVolume = volume; // für neue ändern
-			for (int i = 0; i < m_vSound.size() ; i++) // alle aktiven ändern
+			for (unsigned int i = 0; i < m_vSound.size() ; i++) // alle aktiven ändern
 			{
 				m_vSound[i]->setVolume(volume);
 			}	break;
