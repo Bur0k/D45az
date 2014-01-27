@@ -14,6 +14,8 @@ class UnitGroupLogic
 private:
 	Server* server;
 
+public:
+
 	vector<UnitLogic*> units;
 	vector<UnitGroupLogic*>* unitGroups;
 	
