@@ -58,7 +58,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 		std::cout << "game.cpp can't load image Data/Images/mouse.png" << std::endl;
 	m_falseMouse.t.loadFromImage(mouse);
 	m_falseMouse.s.setTexture(& m_falseMouse.t);
-	m_falseMouse.s.setPosition(m_lastMousePosition.x, m_lastMousePosition.y);
+	m_falseMouse.s.setPosition(static_cast<float>(m_lastMousePosition.x), static_cast<float>(m_lastMousePosition.y));
 	m_falseMouse.s.setSize(Vector2f(35,35));
 
 	//timers
@@ -87,7 +87,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	b3->Attach(this);
 	
-	b4 = new CommitButton(Vector2f(m_pWindow->getSize().x - 100, m_pWindow->getSize().y - 100 - 100),Vector2f(100,100),"mybutton",5,false, m_pWindow->getSize(), 20);
+	b4 = new CommitButton(Vector2f(static_cast<float>(m_pWindow->getSize().x - 100), static_cast<float>(m_pWindow->getSize().y - 100 - 100)),Vector2f(100,100),"mybutton",5,false, m_pWindow->getSize(), 20);
 	b4->Attach((IButtonfunction*)this);
 
 	s = new Slider(true, Vector2f(400,50), 0.5, Vector2f(30, 500), 1);
@@ -237,7 +237,7 @@ void Game::onMouseMove()
 		return; //return if mouse was resetted to the center of the screen
 	}
 
-	Vector2f delta = Vector2f(mousePos.x - m_lastMousePosition.x , mousePos.y - m_lastMousePosition.y);
+	Vector2f delta = Vector2f(static_cast<float>(mousePos.x - m_lastMousePosition.x) , static_cast<float>(mousePos.y - m_lastMousePosition.y));
 	m_falseMouse.s.move(delta); //move displayed mouse
 
 	m_lastMousePosition = mousePos;
@@ -273,10 +273,10 @@ void Game::onMouseMove()
 
 
 	if(borderColisionX)
-		m_falseMouse.s.setPosition((xp)? m_pWindow->getSize().x : 0, m_falseMouse.s.getPosition().y);
+		m_falseMouse.s.setPosition(static_cast<float>((xp)? m_pWindow->getSize().x : 0), static_cast<float>(m_falseMouse.s.getPosition().y));
 	
 	if(borderColisionY)
-		m_falseMouse.s.setPosition(m_falseMouse.s.getPosition().x, (yp)? m_pWindow->getSize().y : 0 );
+		m_falseMouse.s.setPosition(static_cast<float>(m_falseMouse.s.getPosition().x), static_cast<float>((yp)? m_pWindow->getSize().y : 0 ));
 
 	ResetMouse();
 
@@ -572,11 +572,11 @@ void Game::Input()
 void Game::timer()
 {
 	static int fpsCount = 0;
-	static int animationtime = 0;
+	static sf::Int64 animationtime = 0;
 	
 
 	
-	int elapsedMicro = m_animationTimer.getElapsedTime().asMicroseconds();
+	sf::Int64 elapsedMicro = m_animationTimer.getElapsedTime().asMicroseconds();
 	m_animationTimer.restart();
 	if(elapsedMicro < 10000)//Render und Hauptthread pausieren, damit der Prozessor entlastet wird. Aber nur wenn das spiel schnell genug läuft
 		sleep(sf::milliseconds(1));

@@ -74,4 +74,29 @@ struct SpriteTex
 };
 
 typedef std::vector<SpriteTex>SpriteTexVect;
+
+
+
+
+//types of objects that can be on a game map
+enum class ingameObjectType{
+	ARMY,
+	CITY
+};
+
+//interface for all objects that are displayed on the game map
+class IIngameObjects
+{
+	virtual ingameObjectType getType()=0;
+	virtual void /* TODO NOT VOID but info pointer to army*/ getArmy()=0;
+	virtual void /* TODO NOT VOID but info pointer to city*/ getCity()=0;
+};
+
+
+
+
+
+
+
+
 #endif
