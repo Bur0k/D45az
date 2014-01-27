@@ -16,7 +16,7 @@ Background::Background(std::string path)
 {
 	Texture image;
 	if(!image.loadFromFile(path))
-		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;
+		std::cout << "LoginView.cpp:  couldn't load " << path << std::endl;
 
 	bgimage.t = image;
 	bgimage.s.setTexture(& bgimage.t);                      

@@ -105,3 +105,13 @@ int LobbyEntry::getMaxPlayers()
 {
 	return m_maxPlayers;
 }
+
+void LobbyEntry::setWidth(float width)
+{
+	this->setSize(Vector2f(width, this->getSize().y));
+	m_numberText.move(width - m_dimensions.width, 0);
+	
+	m_dimensions.width = width;
+	
+}
+
