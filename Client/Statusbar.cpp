@@ -22,7 +22,8 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 		Stp.setPosition(IconOffset + IconX * i, IconY);
 		m_vSPictures.push_back(Stp);
 
-		Textblock* Tb = new Textblock(Vector2f(LabelOffset + IconX * i, IconY), Vector2f(100, 100), String("0000"), 40);
+		Textblock* Tb = new Textblock(Vector2f(LabelOffset + IconX * i, IconY), Vector2f(100, 100), String("rust"), 40);
+		//TODO rust in 0000 ändern
 		Tb->setFillColor(MyColors.Transparent);
 		Tb->setFontColor(MyColors.White);
 		m_vTLabels.push_back(Tb);
@@ -87,8 +88,15 @@ void Statusbar::setValue(enum Icons icon, int value)
 {
 	String tmp = to_string(value);
 	Rect<float> textwidth = m_vTLabels[icon]->getLocalBounds();
-	textwidth.width = 100;
-	m_vTLabels[icon]->setText(tmp, Vector2f(100,100));
+
+	Vector2f* curpos = new Vector2f( m_vTLabels[icon]->getPosition().x + textwidth.width, IconY); // normale pos bestimmen
+
+	m_vTLabels[icon]->setText(tmp, Vector2f(100,100)); // neuen text eintragen
+	Rect<float> newtextwidth = m_vTLabels[icon]->getLocalBounds(); // neue länge des neuen strings
+
+	m_vTLabels[icon]->setPos(Vector2f(curpos->x - newtextwidth.width, IconY)); // bündigkeit erwirken
+
+	delete curpos;
 }
 
 //Hilfsfunktionen-------------------------------------------------------
@@ -101,13 +109,13 @@ bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 
 bool Statusbar::PressedLeft()
 {
+	setValue(Geld, 38);
 	return m_BMenu->PressedLeft();
 }
 
 bool Statusbar::ReleasedLeft()
 { 
 	return m_BMenu->ReleasedLeft(); 
-	setValue(Geld, 5);
 }
 bool Statusbar::PressedRight(){ return false; }
 bool Statusbar::ReleasedRight(){ return false; }
