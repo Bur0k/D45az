@@ -12,19 +12,22 @@
 #include "Map.h"
 #include "Statusbar.h"
 #include "CommitButton.h"
+#include "Army.h"
+#include "LogicData.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
+
 
 enum IngameViewButtonId{
 	COMMIT = 0,
 };
 
 enum InagameViewPhases{
-	YOURTURN,
-	WAITFORPLAYERS,
-	WATCHRESULTS,
-	GAMEOVER
+	YOURTURN,			//moving units and building is allowed
+	WAITFORPLAYERS,		//wait till all players have finished their 
+	WATCHRESULTS,		//watch results of the last turn
+	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
 };
 
 
@@ -50,17 +53,22 @@ private:
 	Vector2i m_mapSize;
 	Vector2i m_tileSize;
 
+	//logic
+	LogicData m_GameData;
+
 	Vector2u m_screensize;
 	//pixels
 	Vector2i m_mapTotalSize;
 
 	//user points at 
 	Vector2i m_pointAt;
+	Vector2i m_activeAt;
 
 	//scrolling the map
 	Vector2i m_scrolldir;
 	Vector2f m_scrollspeed;
 
+	//vectors for handling the events
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
 	ClickVect m_ClickV;
@@ -70,20 +78,25 @@ private:
 
 	Statusbar* m_SBar;
 
+	//gameStatus
 	InagameViewPhases m_phase;
 	
 	RectangleShape m_mapMouseOver;
 
 public:
-	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function);
+	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase);
 	~IngameView();
 
 	//param x : -1, 0, +1
 	//param y : same
 	void setScrollDirection(int x, int y);
 
+
+	////IMPLEMENTING IView/////
+	//IDrawable
 	void draw(sf::RenderWindow* rw);
 
+	//IClickable
 	bool MouseMoved(sf::Vector2i &);
 	bool PressedRight();
 	bool PressedLeft();
@@ -97,10 +110,9 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	void pt1zyklisch(double elpasedMs);
+	void pt1zyklisch(double elapsedMs);
 
 	Views getType();
-
 	Views nextState();
 	//IClickable
 	void onButtonClick(int);
@@ -108,8 +120,10 @@ public:
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
 
+	/////IMPLEMENTING IView end/////
+
 private:
-	//gets called from Update if nex phase is required 
+	//gets called if next phase is required
 	void nextPhase();
 	void moveMap();
 };

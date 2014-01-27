@@ -33,16 +33,18 @@ void Map::load(std::string MapLocation)
 		for(TiXmlElement* element = root->FirstChildElement("layer");element;element=element->NextSiblingElement("layer"))
 		{
 			std::string LayerName(element->Attribute("name"));
-			bool isCityLayer=false,isBarricadeLayer=false;
+			bool isCityLayer=false,isBarricadeLayer=false,isCityTerrainLayer=false;
 			if(std::string::npos != LayerName.find("CityLayer"))
 				isCityLayer=true;
 			else if(std::string::npos != LayerName.find("BarricadeLayer"))
 				isBarricadeLayer=true;
+			else if(std::string::npos != LayerName.find("CityTerrain"))
+				isCityTerrainLayer=true;
 
 			const char* temptt = element->FirstChildElement()->GetText();
 			int tempii = std::atoi(root->Attribute("width"));
 
-			layers.push_back(new MapLayer(temptt,tempii,isCityLayer,isBarricadeLayer));
+			layers.push_back(new MapLayer(temptt,tempii,isCityLayer,isBarricadeLayer,isCityTerrainLayer));
 		}
 	}
 }

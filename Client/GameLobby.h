@@ -3,6 +3,7 @@
 
 #include "Client.h"
 #include "NetworkParticipant.h"
+#include <atomic>
 
 class GameLobby : public NetworkParticipant
 {
@@ -14,6 +15,7 @@ public:
 	vector<string> players;
 	short playerLimit;
 	string gameMaster;
+	std::atomic<short> updated;//Bit 0 = players, 1=playerLimit,2=gameMaster
 	//Map current Map;
 
 private:

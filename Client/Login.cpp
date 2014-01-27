@@ -4,13 +4,17 @@ void Login::processNewMessage(short id,vector<char> data)
 {
 	if(id==0x0101)
 	{
-		if(data[0])
+		if(data[0] == 1)
 		{
 			state = 1;
 		}
-		else
+		else if(data[0] == 0)
 		{ 
 			state = -1;
+		}
+		else if(data[0] == -1)
+		{ 
+			state = -2;
 		}
 	}
 }
@@ -25,14 +29,12 @@ Login::Login(string Name)
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
-	if(Name.size() < 10)
-	{
-		vector<char> charName;
-		for(unsigned int i=0;i<Name.size();i++)
-			charName.push_back(Name.at(i));
+	vector<char> charName;
+	for(unsigned int i=0;i<Name.size();i++)
+		charName.push_back(Name.at(i));
 
-		c->write(0x0100,charName);
-	}
+	c->write(0x0100,charName);
+
 }
 
 Login::~Login()

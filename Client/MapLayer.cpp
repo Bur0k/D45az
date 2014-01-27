@@ -1,9 +1,11 @@
 #include <vld.h>
 #include "MapLayer.h"
 
-MapLayer::MapLayer(std::string LI,int RowNum,TileSets* TileSets,bool IsCityLayer)
+MapLayer::MapLayer(std::string LI,int RowNum,TileSets* TileSets,bool IsCityLayer,bool IsBarricadeLayer,bool IsCityTerrainLayer)
 {
 	isCityLayer=IsCityLayer;
+	isBarricadeLayer=IsBarricadeLayer;
+	isCityTerrainLayer=IsCityTerrainLayer;
 	tilesets=TileSets;
 	
 	std::stringstream stream(LI);
@@ -32,6 +34,8 @@ MapLayer::~MapLayer()
 
 void MapLayer::render(sf::RenderTarget& RT,sf::IntRect OnScreen)
 {
+	if(isCityTerrainLayer)
+		return;
 	/*int firstX=OnScreen.left/TileWidth;
 	int firstY=OnScreen.top/TileHeight;*/
 

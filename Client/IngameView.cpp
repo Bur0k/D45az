@@ -1,25 +1,34 @@
 #include "IngameView.h"
 
-IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
+IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
 	m_nextView = Views::NOCHANGE;
 
 	m_screensize = screensize;
 
-	//debug 
+	m_activeAt = Vector2i(-1,-1);
+	m_pointAt = Vector2i(-1,-1);
+	m_scrolldir = Vector2i(0,0);
+	m_scrollspeed = Vector2f(0,0);
+
+	m_phase = startphase;
+	//debug
+
 	
-	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE,120);
+	
+	
+	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE, 120);
 	m_ClickV.push_back(u);
 	m_DrawV.push_back(u);
 
-	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY,17);
+	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY, 17);
 	m_ClickV.push_back(u1);
 	m_DrawV.push_back(u1);
 	//debug end
 	
 	m_map.load("Data/Maps/test.tmx");
-	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight);
-	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size());
+	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
+	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size()) / 2;
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
 	
 	//GET STARTING Mapview POSITION
@@ -38,7 +47,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 
 	
 	//SBAR 
-	m_SBar = new Statusbar(Vector2f(0, 0), Vector2f(screensize.x, Statusbarheight), SBar_Function); 
+	m_SBar = new Statusbar(Vector2f(0, 0), Vector2f(static_cast<float>(screensize.x), Statusbarheight), SBar_Function); 
 	m_DrawV.push_back(m_SBar);
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
@@ -46,7 +55,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function)
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
-	m_mapMouseOver.setSize(Vector2f(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
+	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
 }
 
@@ -64,7 +73,8 @@ void IngameView::onButtonClick(int id)
 	switch (id)
 	{
 	case COMMIT:
-		m_commitB->setIsEnabled(false);
+		if(m_phase == InagameViewPhases::YOURTURN)
+			nextPhase();
 		break;
 	default:
 		break;
@@ -101,8 +111,8 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	
 	
 
-	m_mapMouseOver.setPosition( m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left, 
-								m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top);
+	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
 	
 	return retValue;
 }
@@ -117,10 +127,12 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
-			return true;
-	return false;
+			retvalue = true;
+
+	return retvalue;
 }
 
 bool IngameView::ReleasedRight()
@@ -158,6 +170,7 @@ void IngameView::onKeyUp(sf::Event e)
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
 }
+
 void IngameView::onTextInput(std::string s)
 {
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
@@ -175,8 +188,6 @@ void IngameView::draw(sf::RenderWindow* rw)
 	Rect<float> MapView;
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
-
-	
 }
 
 Views IngameView::nextState()
@@ -184,9 +195,10 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::pt1zyklisch(double elpasedMs)
+void IngameView::pt1zyklisch(double elapsedMs)
 {
-	//LOADING STUFF GOES HERE
+	//GIVE ME INFO DAMMIT!
+
 }
 
 void IngameView::onResize(Vector2u & size)
@@ -208,19 +220,28 @@ void IngameView::nextPhase()
 	switch (m_phase)
 	{
 	case YOURTURN:
+		m_commitB->setIsEnabled(false);
+		//do things..
+		//send moves to server
 		m_phase = WAITFORPLAYERS;
 		break;
 
 	case WAITFORPLAYERS:
+		//do things..
+		//wait till server sends move data
 		m_phase = WATCHRESULTS;
 		break;
 
 	case WATCHRESULTS:
-		m_phase = YOURTURN;
+		//on player button click
 		m_commitB->setIsEnabled(true);
+		//do things..
+		m_phase = YOURTURN;
 		break;
 
 	case GAMEOVER:
+		//do things..
+		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
 		break;
 
@@ -256,9 +277,9 @@ void IngameView::moveMap()
 		_x = 0;
 
 	//move the map or not move if at border
+	m_mapView.left += static_cast<int>(m_scrollspeed.x * _x);
 
-		m_mapView.left += m_scrollspeed.x * _x;
-	if(m_mapTotalSize.x > m_screensize.x)
+	if(m_mapTotalSize.x > static_cast<int>(m_screensize.x))
 	{
 		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
 		{
@@ -272,23 +293,24 @@ void IngameView::moveMap()
 		}
 	}
 
-		//Y
-		//increase or decrease the scrollspeed
-		m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
-		if(m_scrollspeed.y < 0)
-			m_scrollspeed.y = 0;
-		else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
-			m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
+	//Y
+	//increase or decrease the scrollspeed
+	m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
+	if(m_scrollspeed.y < 0)
+		m_scrollspeed.y = 0;
+	else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
+		m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
 
-		//update the local statics
-		if(m_scrolldir.y != 0)
-			_y = m_scrolldir.y;
-		else if(m_scrollspeed.y == 0)
-			_y = 0;
+	//update the local statics
+	if(m_scrolldir.y != 0)
+		_y = m_scrolldir.y;
+	else if(m_scrollspeed.y == 0)
+		_y = 0;
 
-		//move the map or not move if at border
-		m_mapView.top += m_scrollspeed.y * _y; 
-	if(m_mapTotalSize.y > m_screensize.y)
+	//move the map or not move if at border
+	m_mapView.top += static_cast<int>(m_scrollspeed.y * _y); 
+
+	if(m_mapTotalSize.y > static_cast<int>(m_screensize.y))
 	{	
 		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
 		{

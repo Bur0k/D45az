@@ -16,6 +16,7 @@
 #include "Lobby.h"
 
 
+
 PlayerData playerData;
 
 
@@ -46,8 +47,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	Client* c = Client::get();
 	c->addToErrorCallback(&tc);
 	c->addToNewMessageCallback(&tc);
-	
-	
+
+
 
 	cout << endl << "Hallo D45az" << endl << "oeffne Fenster" << endl;
 
@@ -60,7 +61,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 	//erlaubte einstiegspunkte für Views::
 	//TESTSCREEN LOGIN LOBBY
-	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
+	Game* g = new Game(&window, Views::INGAME, sf::Vector2f(1280, 850));
 	
 	
 	while (window.isOpen())

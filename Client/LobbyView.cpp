@@ -187,10 +187,10 @@ void LobbyView::onResize(Vector2u &)
 
 }
 
-void LobbyView::pt1zyklisch(double elpasedMs)
+void LobbyView::pt1zyklisch(double elapsedMs)
 {
 	static double elapsed=0;
-	elapsed+=elpasedMs;
+	elapsed+=elapsedMs;
 	if(elapsed>=100)
 	{
 		elapsed=0;
@@ -201,7 +201,7 @@ void LobbyView::pt1zyklisch(double elpasedMs)
 			if(lobby->inGameLobby)
 			{
 				lobby->inGameLobby = false;
-				//next = Views::GAMELOBBY;
+				next = Views::GAMELOBBY;
 			}
 			else
 			{

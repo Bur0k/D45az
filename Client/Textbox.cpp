@@ -163,7 +163,7 @@ void TextBox::moveCursor(bool left)
 	}
 	else //right
 	{
-		if(m_cursorPosition + m_CharacterDisplayOffset < m_text.size())
+		if(m_cursorPosition + m_CharacterDisplayOffset < static_cast<int>(m_text.size()))
 		{
 			//if cursor would be off to the right dont move cursor at all instead offset the string
 			if(m_cursorRight)
@@ -198,7 +198,7 @@ void TextBox::fitText()
 	int index = 0;
 	bool cursorLast = false;
 	m_cursorRight = false;
-	while(index < cut.size()) 
+	while(index < static_cast<int>(cut.size())) 
 	{
 		dispStr.append(cut.substr(index, 1));
 		index++;

@@ -66,7 +66,7 @@ public:
 
 	void onResize(sf::Vector2u &);
 
-	void pt1zyklisch(double elpasedMs);
+	void pt1zyklisch(double elapsedMs);
 
 	virtual Views getType();
 

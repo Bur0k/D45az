@@ -25,7 +25,6 @@ private:
 	GameLobby* game;
 	bool amIGamemaster;
 	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
-	int playernumber;
 
 	DrawVect m_DrawV;
 	AnimateVect m_AnimateV;
@@ -64,7 +63,7 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	void pt1zyklisch(double elpasedMs);
+	void pt1zyklisch(double elapsedMs);
 
 	Views getType();
 

@@ -163,6 +163,9 @@
     <ClCompile Include="LogicData.cpp">
       <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Army.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -228,7 +231,6 @@
     <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h" />
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
@@ -283,6 +285,9 @@
     </ClInclude>
     <ClInclude Include="LogicData.h">
       <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="Army.h">
+      <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

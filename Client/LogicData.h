@@ -21,11 +21,20 @@ private:
 	vector<sf::Vector2i> barricades;
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
+
 public:
 	LogicData();
 	~LogicData();
 
 	// Funktionen
+
+	void updateGameData();
+	void requestPlayers();
+	void requestAllCities();
+	void requestOwnedCities();
+	void requestBarricades();
+	void requestAllUnits();
+	void requestOwnedUnits();
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);

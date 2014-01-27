@@ -1,10 +1,11 @@
 #include <vld.h>
 #include "MapLayer.h"
 
-MapLayer::MapLayer(std::string LI,int RowNum,bool IsCityLayer, bool IsBarricadeLayer)
+MapLayer::MapLayer(std::string LI,int RowNum,bool IsCityLayer,bool IsBarricadeLayer,bool IsCityTerrainLayer)
 {
 	isCityLayer=IsCityLayer;
 	isBarricadeLayer=IsBarricadeLayer;
+	isCityTerrainLayer=IsCityTerrainLayer;
 
 	std::stringstream stream(LI);
 	std::string temp;
