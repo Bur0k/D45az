@@ -5,13 +5,58 @@ LogicData::LogicData()
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
-	vector<char> erfg;
-	c->write(0x0400, erfg);		//Spielernamen anfordern
+	this->updateGameData();
 }
 
 LogicData::~LogicData()
 {
 	c->deleteFromNewMessageCallback(this);
+}
+
+void LogicData::updateGameData()
+{
+	this->requestAllCities();
+	this->requestAllUnits();
+	this->requestBarricades();
+	this->requestOwnedCities();
+	this->requestOwnedUnits();
+	this->requestPlayers();
+}
+
+void LogicData::requestPlayers()
+{
+	vector<char> erfg;
+	c->write(0x0400, erfg);
+}
+
+void LogicData::requestAllCities()
+{
+	vector<char> erfg;
+	c->write(0x0402, erfg);
+}
+
+void LogicData::requestOwnedCities()
+{
+	vector<char> erfg;
+	c->write(0x0404, erfg);
+}
+
+void LogicData::requestBarricades()
+{
+	vector<char> erfg;
+	c->write(0x0406, erfg);
+}
+
+void LogicData::requestAllUnits()
+{
+	vector<char> erfg;
+	c->write(0x0400, erfg);
+}
+
+void LogicData::requestOwnedUnits()
+{
+	vector<char> erfg;
+	c->write(0x0400, erfg);
 }
 
 void LogicData::processNewMessage(short id,vector<char> data)
