@@ -30,11 +30,26 @@ enum class InagameViewPhases{
 	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
 };
 
+class turn
+{
+public:
+	sf::Vector2i pos;
+	bool valid;
+	turn(){};
+	turn(sf::Vector2i Pos){pos=Pos;}
+};
+
 
 class IngameView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+	bool turnOn;
+	short maxLen;
+	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
+	RectangleShape rsTurn;
+	MapLayer* collisionLayer;
+
 
 	//debug
 

@@ -258,10 +258,10 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 
 void LobbyView::updateDisplayedGameLobbys()
 {
-	int y = lobbyStartPos.y;
+	int y = static_cast<int>(lobbyStartPos.y);
 
 	int numEntriesOverflow = (gameLobbys.size() > 8)?gameLobbys.size()- 8:0;
-	int startIndex = s->getValue() * numEntriesOverflow + 0.5;
+	int startIndex = static_cast<int>(s->getValue() * numEntriesOverflow + 0.5);
 
 	toDisplay.clear();
 
@@ -272,7 +272,7 @@ void LobbyView::updateDisplayedGameLobbys()
 			it++;
 		for(int i=startIndex;i<startIndex+8;i++)
 		{
-			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			it->second->LE->setPosition(sf::Vector2f(20.0,static_cast<float>(y)));
 			it->second->LE->setWidth(currentSize.x/2.0f-50);
 			y+=50;
 			toDisplay[it->first]=it->second;
@@ -283,7 +283,7 @@ void LobbyView::updateDisplayedGameLobbys()
 	{
 		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		{
-			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			it->second->LE->setPosition(sf::Vector2f(20.0,static_cast<float>(y)));
 			it->second->LE->setWidth(currentSize.x/2.0f-50);
 			y+=50;
 			toDisplay[it->first]=it->second;

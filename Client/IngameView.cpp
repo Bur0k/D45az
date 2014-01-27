@@ -26,7 +26,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_DrawV.push_back(u1);
 	//debug end
 	
-	m_map.load("Data/Maps/test.tmx");
+	m_map.load("Data/Maps/TestMap.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
 	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size()) / 2;
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
@@ -57,6 +57,15 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
 	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
+
+	turnOn=true;
+	rsTurn.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+	rsTurn.setFillColor(MyColors.Transparent);
+	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
+
+	for(auto it : m_map.layers)
+		if(it->isBarricadeLayer)
+			collisionLayer=it;
 }
 
 IngameView::~IngameView()
@@ -109,16 +118,78 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	m_pointAt.x = (mouse.x + m_mapView.left) / m_tileSize.x;
 	m_pointAt.y = (mouse.y + m_mapView.top) / m_tileSize.y;
 	
-	
+	m_pointAt.x = (m_pointAt.x>=m_mapSize.x)?m_mapSize.x-1:m_pointAt.x;
+	m_pointAt.y = (m_pointAt.y>=m_mapSize.y)?m_mapSize.y-1:m_pointAt.y;
+	m_pointAt.x = (m_pointAt.x<0)?0:m_pointAt.x;
+	m_pointAt.y = (m_pointAt.y<0)?0:m_pointAt.y;
 
 	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
-	
+	/*if(pressedTurn)
+	{
+		sf::Vector2i lastTurn = currentTurn.turns.back();
+		if(m_pointAt != lastTurn)
+		{
+			sf::Vector2i diff=m_pointAt-lastTurn;
+			int diffLen = std::abs(diff.x)+std::abs(diff.y);
+			if(diffLen == 1)
+			{
+				if(std::find(currentTurn.turns.begin(), currentTurn.turns.end(), m_pointAt) == currentTurn.turns.end())
+				{
+					currentTurn.turns.push_back(m_pointAt);
+					std::cout<<"Len: "<<currentTurn.turns.size()<<std::endl;
+				}
+			}
+		}
+	}*/
 	return retValue;
 }
 
 bool IngameView::PressedRight()
 {
+	if(turnOn)
+	{
+		if(currentTurn.size() == 0)
+		{
+			maxLen=5;
+			currentTurn.push_back(turn(m_pointAt));
+		}
+		else
+		{
+			sf::Vector2i lastTurn = currentTurn.back().pos;
+			if(m_pointAt != lastTurn)
+			{
+				sf::Vector2i diff;
+				while(lastTurn != m_pointAt && maxLen > static_cast<short>(currentTurn.size()))
+				{
+					diff=m_pointAt-lastTurn;
+					if(diff.x != 0)
+					{
+						lastTurn+=sf::Vector2i(diff.x>0?1:-1,0);
+						currentTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							currentTurn.back().valid=false;
+						}
+					}
+					if( maxLen <= static_cast<short>(currentTurn.size()))
+						break;
+					if(diff.y != 0)
+					{
+						lastTurn+=sf::Vector2i(0,diff.y>0?1:-1);
+						currentTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							currentTurn.back().valid=false;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
 			return true;
@@ -131,7 +202,6 @@ bool IngameView::PressedLeft()
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
 			retvalue = true;
-
 	return retvalue;
 }
 
@@ -183,6 +253,23 @@ void IngameView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 	
+	for(auto it : currentTurn)
+	{
+		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+							static_cast<float>(it.pos.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+		if(it.valid)
+		{
+			rsTurn.setOutlineColor(Color(0x0F,0x99,0x00,0xFF));
+			rsTurn.setFillColor(Color(0x0F,0x99,0x00,0x77));
+		}
+		else
+		{
+			rsTurn.setOutlineColor(Color(0xFF,0x1F,0x1F,0xFF));
+			rsTurn.setFillColor(Color(0xFF,0x1F,0x1F,0x77));
+		}
+		rw->draw(rsTurn);
+	}
+
 	rw->draw(m_mapMouseOver);
 
 	Rect<float> MapView;
