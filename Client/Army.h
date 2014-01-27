@@ -28,6 +28,7 @@ private:
 	bool m_inCity;
 	Vector2i m_position;
 	Rect<float> m_dimensions;
+	Vector2f m_scrollPos;
 
 	CircleShape m_markedIndicator;
 	Sprite m_body; // TODO buraks klasse anwenden

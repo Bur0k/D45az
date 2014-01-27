@@ -31,10 +31,12 @@ public:
 	void setMaxPlayers(int);
 	int getMaxPlayers();
 
+
 	Vector2f getSize();
 	Vector2f getPosition();
 	void setPosition(Vector2f pos);
 	virtual void draw(RenderWindow* rw);
+	void setWidth(float);
 
 	int getID(){return m_ID;}
 };

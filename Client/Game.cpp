@@ -140,7 +140,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	//Musik
 	m_pMS = new MusikSampler();
-	m_pMS->next_song();
+	//m_pMS->next_song();
 
 	map.load("Data/Maps/test.tmx");
 	xMap=yMap=0;
@@ -465,7 +465,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::LOBBY:
-		NewView = new LobbyView();
+		NewView = new LobbyView(m_pWindow->getSize());
 		clear = true;
 		break;
 
