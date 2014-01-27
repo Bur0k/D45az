@@ -19,11 +19,11 @@
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
 
 
-enum IngameViewButtonId{
+enum class IngameViewButtonId{
 	COMMIT = 0,
 };
 
-enum InagameViewPhases{
+enum class InagameViewPhases{
 	YOURTURN,			//moving units and building is allowed
 	WAITFORPLAYERS,		//wait till all players have finished their 
 	WATCHRESULTS,		//watch results of the last turn
@@ -59,6 +59,8 @@ private:
 	Vector2u m_screensize;
 	//pixels
 	Vector2i m_mapTotalSize;
+
+	
 
 	//user points at 
 	Vector2i m_pointAt;
