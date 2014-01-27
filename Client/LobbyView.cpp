@@ -273,6 +273,7 @@ void LobbyView::updateDisplayedGameLobbys()
 		for(int i=startIndex;i<startIndex+8;i++)
 		{
 			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			it->second->LE->setWidth(currentSize.x/2.0f-50);
 			y+=50;
 			toDisplay[it->first]=it->second;
 			it++;
@@ -283,6 +284,7 @@ void LobbyView::updateDisplayedGameLobbys()
 		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		{
 			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			it->second->LE->setWidth(currentSize.x/2.0f-50);
 			y+=50;
 			toDisplay[it->first]=it->second;
 		}
