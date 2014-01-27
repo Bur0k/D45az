@@ -4,6 +4,7 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 {
 	this->game = new GameLobby();
 
+	m_DrawV.push_back(&bg);
 
 	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), "", 30);
 	m_DrawV.push_back(this->players[0]);
@@ -40,9 +41,9 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	}
 
 
-		this->kickPlayer[0]->Attach(this);
-		this->kickPlayer[1]->Attach(this);
-		this->kickPlayer[2]->Attach(this);
+	this->kickPlayer[0]->Attach(this);
+	this->kickPlayer[1]->Attach(this);
+	this->kickPlayer[2]->Attach(this);
 
 
 	m_DrawV.push_back(leave);
@@ -54,6 +55,8 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	m_AnimateV.push_back(startgame);
 	m_ClickV.push_back(startgame);
 	this->startgame->Attach(this);
+
+
 
 
 	m_nextView = Views::NOCHANGE;
@@ -255,6 +258,9 @@ Views GameLobbyView::getType()
 void GameLobbyView::centering(Vector2u & size)
 {
 	int space = (size.y / 100) * 10;
+
+	
+	bg.onResize(size);
 
 	if (space < 50)
 		space = 50;
