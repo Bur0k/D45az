@@ -166,6 +166,9 @@
     <ClCompile Include="Army.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -231,7 +234,6 @@
     <ClInclude Include="GameLobby.h">
       <Filter>Codes\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h" />
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
@@ -288,6 +290,9 @@
       <Filter>Codes\GameLogic</Filter>
     </ClInclude>
     <ClInclude Include="Army.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -448,6 +453,9 @@
       <Filter>Data\img</Filter>
     </Image>
     <Image Include="Data\Images\stadt.png">
+      <Filter>Data\img</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\germanset.png">
       <Filter>Data\img</Filter>
     </Image>
   </ItemGroup>

@@ -83,10 +83,12 @@ void Statusbar::Resize(Vector2f new_size)
 	m_BaseRect.setSize(Vector2f(new_size.x, Statusbarheight));
 }
 
-void Statusbar::setValue(enum Icons, int value)
+void Statusbar::setValue(enum Icons icon, int value)
 {
 	String tmp = to_string(value);
-	m_vTLabels[Geld]->setText(tmp, Vector2f(100,100));
+	Rect<float> textwidth = m_vTLabels[icon]->getLocalBounds();
+	textwidth.width = 100;
+	m_vTLabels[icon]->setText(tmp, Vector2f(100,100));
 }
 
 //Hilfsfunktionen-------------------------------------------------------
@@ -105,6 +107,7 @@ bool Statusbar::PressedLeft()
 bool Statusbar::ReleasedLeft()
 { 
 	return m_BMenu->ReleasedLeft(); 
+	setValue(Geld, 5);
 }
 bool Statusbar::PressedRight(){ return false; }
 bool Statusbar::ReleasedRight(){ return false; }
