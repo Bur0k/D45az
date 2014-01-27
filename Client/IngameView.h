@@ -13,23 +13,11 @@
 #include "Statusbar.h"
 #include "CommitButton.h"
 #include "Army.h"
+#include "LogicData.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
 
-//types of objects that can be on a game map
-enum class ingameObjectType{
-	ARMY,
-	CITY
-};
-
-//interface for all objects that are displayed on the game map
-class IIngameObjects
-{
-	virtual ingameObjectType getType()=0;
-	virtual void /* TODO NOT VOID but info pointer to army*/ getArmy()=0;
-	virtual void /* TODO NOT VOID but info pointer to city*/ getCity()=0;
-};
 
 enum IngameViewButtonId{
 	COMMIT = 0,
@@ -64,6 +52,9 @@ private:
 	IntRect m_mapView;
 	Vector2i m_mapSize;
 	Vector2i m_tileSize;
+
+	//logic
+	LogicData m_GameData;
 
 	Vector2u m_screensize;
 	//pixels
@@ -119,7 +110,7 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	void pt1zyklisch(double elpasedMs);
+	void pt1zyklisch(double elapsedMs);
 
 	Views getType();
 	Views nextState();

@@ -13,10 +13,12 @@ class MapLayer
 public:
 	std::vector<std::vector<short>> layer;
 	bool isCityLayer;
+	bool isBarricadeLayer;
+	bool isCityTerrainLayer;
 	const static int TileWidth=32;
 	const static int TileHeight=32;
-
-	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCityLayer=false);
+	
+	MapLayer(std::string LayerInformation,int RowNum,TileSets* TileSets,bool IsCityLayer=false,bool IsBarricadeLayer=false,bool IsCityTerrainLayer=false);
 	~MapLayer();
 
 	void render(sf::RenderTarget& RT,sf::IntRect OnScreen);

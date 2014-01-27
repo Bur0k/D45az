@@ -7,7 +7,6 @@
 #include "IKeyboardInput.h"
 #include "IAnimatable.h"
 #include "IDrawable.h"
-#include "IngameView.h"
 
 using namespace sf;
 

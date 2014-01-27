@@ -13,6 +13,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	m_phase = startphase;
 	//debug
+
+	
 	
 	
 	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE, 120);
@@ -25,8 +27,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	//debug end
 	
 	m_map.load("Data/Maps/test.tmx");
-	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight);
-	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size());
+	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
+	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size()) / 2;
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
 	
 	//GET STARTING Mapview POSITION
@@ -45,7 +47,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	
 	//SBAR 
-	m_SBar = new Statusbar(Vector2f(0, 0), Vector2f(screensize.x, Statusbarheight), SBar_Function); 
+	m_SBar = new Statusbar(Vector2f(0, 0), Vector2f(static_cast<float>(screensize.x), Statusbarheight), SBar_Function); 
 	m_DrawV.push_back(m_SBar);
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
@@ -53,7 +55,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
-	m_mapMouseOver.setSize(Vector2f(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2, m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2));
+	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
 }
 
@@ -109,8 +111,8 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	
 	
 
-	m_mapMouseOver.setPosition( m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left, 
-								m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top);
+	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
 	
 	return retValue;
 }
@@ -193,7 +195,7 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::pt1zyklisch(double elpasedMs)
+void IngameView::pt1zyklisch(double elapsedMs)
 {
 	//GIVE ME INFO DAMMIT!
 
@@ -275,9 +277,9 @@ void IngameView::moveMap()
 		_x = 0;
 
 	//move the map or not move if at border
+	m_mapView.left += static_cast<int>(m_scrollspeed.x * _x);
 
-		m_mapView.left += m_scrollspeed.x * _x;
-	if(m_mapTotalSize.x > m_screensize.x)
+	if(m_mapTotalSize.x > static_cast<int>(m_screensize.x))
 	{
 		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
 		{
@@ -291,23 +293,24 @@ void IngameView::moveMap()
 		}
 	}
 
-		//Y
-		//increase or decrease the scrollspeed
-		m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
-		if(m_scrollspeed.y < 0)
-			m_scrollspeed.y = 0;
-		else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
-			m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
+	//Y
+	//increase or decrease the scrollspeed
+	m_scrollspeed.y += (m_scrolldir.y != 0)? 1 : -2;
+	if(m_scrollspeed.y < 0)
+		m_scrollspeed.y = 0;
+	else if(m_scrollspeed.y > INGAMEVIEW_MAX_MAPSPEED)
+		m_scrollspeed.y = INGAMEVIEW_MAX_MAPSPEED;
 
-		//update the local statics
-		if(m_scrolldir.y != 0)
-			_y = m_scrolldir.y;
-		else if(m_scrollspeed.y == 0)
-			_y = 0;
+	//update the local statics
+	if(m_scrolldir.y != 0)
+		_y = m_scrolldir.y;
+	else if(m_scrollspeed.y == 0)
+		_y = 0;
 
-		//move the map or not move if at border
-		m_mapView.top += m_scrollspeed.y * _y; 
-	if(m_mapTotalSize.y > m_screensize.y)
+	//move the map or not move if at border
+	m_mapView.top += static_cast<int>(m_scrollspeed.y * _y); 
+
+	if(m_mapTotalSize.y > static_cast<int>(m_screensize.y))
 	{	
 		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
 		{
