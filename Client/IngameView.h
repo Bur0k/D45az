@@ -119,7 +119,7 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	void pt1zyklisch(double elpasedMs);
+	void pt1zyklisch(double elapsedMs);
 
 	Views getType();
 	Views nextState();

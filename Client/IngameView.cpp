@@ -193,7 +193,7 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::pt1zyklisch(double elpasedMs)
+void IngameView::pt1zyklisch(double elapsedMs)
 {
 	//GIVE ME INFO DAMMIT!
 
