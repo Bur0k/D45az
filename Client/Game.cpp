@@ -465,7 +465,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::LOBBY:
-		NewView = new LobbyView();
+		NewView = new LobbyView(m_pWindow->getSize());
 		clear = true;
 		break;
 
