@@ -22,10 +22,14 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	this->kickPlayer[1] = new StandardButton(sf::Vector2f(40, 250), sf::Vector2f(50, 25), "kick", KICKP2, false, false); 
 	this->kickPlayer[2] = new StandardButton(sf::Vector2f(70, 250), sf::Vector2f(50, 25), "kick", KICKP3, false, false); 
 
+	this->kickPlayer[0]->setIsEnabled(false);
+	this->kickPlayer[0]->setIsEnabled(false);
+	this->kickPlayer[0]->setIsEnabled(false);
+
 
 	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(100, 50), "leave", LEAVE, false);
 	this->startgame = new StandardButton(sf::Vector2f(50, 280), sf::Vector2f(100, 50), "start", START, false);
-	if (!amIGamemaster)
+
 		this->startgame->setIsEnabled(false);
 
 	for (int i = 0; i < 3; i++)
@@ -35,12 +39,11 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 		m_ClickV.push_back(kickPlayer[i]);
 	}
 
-	if (amIGamemaster == true)
-	{
+
 		this->kickPlayer[0]->Attach(this);
 		this->kickPlayer[1]->Attach(this);
 		this->kickPlayer[2]->Attach(this);
-	}
+
 
 	m_DrawV.push_back(leave);
 	m_AnimateV.push_back(leave);
@@ -65,12 +68,12 @@ GameLobbyView::~GameLobbyView()
 		delete this->players[i];
 
 	delete this->mapName;
-	if (amIGamemaster == true)
-	{
+	delete this->game;
+
 		delete this->kickPlayer[0];
 		delete this->kickPlayer[1];
 		delete this->kickPlayer[2];	
-	}
+
 	delete this->leave;
 	delete this->startgame;
 }
@@ -209,41 +212,31 @@ void GameLobbyView::pt1zyklisch(double elapsedMs)
 	{
 		elapsed = 0;
 
-		if(game->updated & 1)
+		if(game->updated & 1)	//player update
 		{
 			game->updated &= ~1;
+
 			for (unsigned int i = 0; i < this->game->players.size(); i++)
 			{
-				if (playerData.Name == this->game->players[i])
-					this->playernumber = i + 1;
+				this->players[i]->setText(this->game->players[i], sf::Vector2f(100, 100));
 			}
-			for (unsigned int i = 0; i < this->game->players.size(); i++)
-			{
-				if (playerData.Name == this->game->players[i])
-					this->playernumber = i + 1;
 			}
-			// auf gamemaster testen
-			std::string playernames[4];
-			int count = 0;
-			while (this->game->players.size() >  static_cast<unsigned int>(count))
-			{
-				playernames[count] = this->game->players[count];
-				count++;
-			}
-			while (count < 4)
-			{
-				playernames[count] = "";
-				count++;
-			}
-		}
-		if(game->updated & 2)
+		if(game->updated & 2)	//playerlimit updated
 		{
 			game->updated &= ~2;
 		}
-		if(game->updated & 4)
+		if(game->updated & 4)	// gamemaster update
 		{
 			game->updated &= ~4;
 			amIGamemaster = playerData.Name == game->gameMaster;
+
+			if (amIGamemaster == true)
+			{
+				this->kickPlayer[0]->setIsEnabled(true);
+				this->kickPlayer[1]->setIsEnabled(true);
+				this->kickPlayer[2]->setIsEnabled(true);
+				this->startgame->setIsEnabled(true);
+			}
 		}
 	}
 }
@@ -271,12 +264,9 @@ void GameLobbyView::centering(Vector2u & size)
 	this->players[2]->setPos(Vector2f(size.x / 2 - this->players[2]->getSize().x / 2, size.y / 2 + 0.5 * space));
 	this->players[3]->setPos(Vector2f(size.x / 2 - this->players[3]->getSize().x / 2, size.y / 2 + this->players[3]->getSize().y + 1.5 * space));
 
-	if (amIGamemaster == true)
-	{
 		this->kickPlayer[0]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[0]->getSize().x / 2, this->players[1]->getPosition().y + this->players[1]->getSize().y + space / 4));
 		this->kickPlayer[1]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[1]->getSize().x / 2, this->players[2]->getPosition().y + this->players[2]->getSize().y + space / 4));
 		this->kickPlayer[2]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[2]->getSize().x / 2, this->players[3]->getPosition().y + this->players[3]->getSize().y + space / 4));
-	}
 
 	this->leave->setPosition(size.x / 2 - this->players[3]->getSize().x, this->players[3]->getPosition().y + this->players[3]->getSize().y + space);
 
