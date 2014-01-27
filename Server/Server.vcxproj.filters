@@ -121,6 +121,7 @@
     <ClInclude Include="MapLayer.h">
       <Filter>Codes\GameLogic\Map</Filter>
     </ClInclude>
+    <ClInclude Include="..\Client\Textblock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">

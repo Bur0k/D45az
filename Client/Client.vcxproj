@@ -158,7 +158,6 @@
     <ClInclude Include="SplittedSprite.h" />
     <ClInclude Include="StandardButton.h" />
     <ClInclude Include="Statusbar.h" />
-    <ClInclude Include="Textblock.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileSets.h" />
     <ClInclude Include="tinystr.h" />
@@ -206,6 +205,7 @@
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\germanset.png" />
     <Image Include="Data\Images\armee.png" />
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
