@@ -125,23 +125,6 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	
 	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
-	/*if(pressedTurn)
-	{
-		sf::Vector2i lastTurn = currentTurn.turns.back();
-		if(m_pointAt != lastTurn)
-		{
-			sf::Vector2i diff=m_pointAt-lastTurn;
-			int diffLen = std::abs(diff.x)+std::abs(diff.y);
-			if(diffLen == 1)
-			{
-				if(std::find(currentTurn.turns.begin(), currentTurn.turns.end(), m_pointAt) == currentTurn.turns.end())
-				{
-					currentTurn.turns.push_back(m_pointAt);
-					std::cout<<"Len: "<<currentTurn.turns.size()<<std::endl;
-				}
-			}
-		}
-	}*/
 	return retValue;
 }
 
@@ -198,6 +181,7 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	currentTurn.clear();
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
@@ -205,7 +189,6 @@ bool IngameView::PressedLeft()
 
 	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
 		if(m_pointAt == m_GameData.ownedCities[i]->position)
-
 
 	return retvalue;
 }

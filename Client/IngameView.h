@@ -35,8 +35,8 @@ class turn
 public:
 	sf::Vector2i pos;
 	bool valid;
-	turn(){};
-	turn(sf::Vector2i Pos){pos=Pos;}
+	turn(){valid=true;};
+	turn(sf::Vector2i Pos){pos=Pos;valid=true;}
 };
 
 
