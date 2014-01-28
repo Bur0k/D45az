@@ -14,7 +14,7 @@ class LogicData : public NetworkParticipant
 private:
 
 	Client* c;
-
+public:
 	vector<string> playersIngame;
 	vector<City*> allCities;
 	vector<City*> ownedCities;
@@ -22,7 +22,7 @@ private:
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
 
-public:
+
 	LogicData();
 	~LogicData();
 

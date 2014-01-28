@@ -56,7 +56,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
 	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
-	
+
 }
 
 IngameView::~IngameView()
@@ -130,7 +130,11 @@ bool IngameView::PressedLeft()
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
-			retvalue = true;
+			return true;
+
+	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
+		if(m_pointAt == m_GameData.ownedCities[i]->position)
+
 
 	return retvalue;
 }
@@ -325,3 +329,12 @@ void IngameView::moveMap()
 	}
 }
 
+void IngameView::displayCityInfo(City &)
+{
+	//TODO DISPLAY CITY STUFF
+}
+
+void IngameView::displayArmyInfo(Unit &)
+{
+	//TODO DISPLAY ARMY
+}
