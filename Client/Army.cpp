@@ -133,3 +133,8 @@ void /* TODO NOT VOID but info pointer to city*/ Army::getCity()
 {
 
 }
+
+Army* Army::split(int selection, std::vector<UnitGroup> & newUnits)
+{
+	return NULL;
+}

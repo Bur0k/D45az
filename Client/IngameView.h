@@ -44,8 +44,9 @@ class IngameView :
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
-	bool turnOn;
-	short maxLen;
+	//path drawing
+	bool m_turnOn;
+	short m_maxLen;
 	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
 	RectangleShape rsTurn;
 	MapLayer* collisionLayer;
@@ -145,6 +146,7 @@ private:
 	void moveMap();
 	void displayCityInfo(City &);
 	void displayArmyInfo(Unit &);
+	void drawPath();
 };
 
 

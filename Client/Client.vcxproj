@@ -199,9 +199,6 @@
     <None Include="sfml-window-d-2.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="client_Grafik.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <ItemGroup>
