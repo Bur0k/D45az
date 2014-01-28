@@ -21,6 +21,7 @@ Army::~Army()
 
 void Army::PositionGraphics()
 {
+	
 	//set the position of graphic objects
 }
 

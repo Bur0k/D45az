@@ -19,15 +19,24 @@
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
 
 
-enum IngameViewButtonId{
+enum class IngameViewButtonId{
 	COMMIT = 0,
 };
 
-enum InagameViewPhases{
+enum class InagameViewPhases{
 	YOURTURN,			//moving units and building is allowed
 	WAITFORPLAYERS,		//wait till all players have finished their 
 	WATCHRESULTS,		//watch results of the last turn
 	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
+};
+
+class turn
+{
+public:
+	sf::Vector2i pos;
+	bool valid;
+	turn(){valid=true;};
+	turn(sf::Vector2i Pos){pos=Pos;valid=true;}
 };
 
 
@@ -35,6 +44,12 @@ class IngameView :
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+	bool turnOn;
+	short maxLen;
+	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
+	RectangleShape rsTurn;
+	MapLayer* collisionLayer;
+
 
 	//debug
 
@@ -59,6 +74,8 @@ private:
 	Vector2u m_screensize;
 	//pixels
 	Vector2i m_mapTotalSize;
+
+	
 
 	//user points at 
 	Vector2i m_pointAt;
@@ -126,6 +143,8 @@ private:
 	//gets called if next phase is required
 	void nextPhase();
 	void moveMap();
+	void displayCityInfo(City &);
+	void displayArmyInfo(Unit &);
 };
 
 

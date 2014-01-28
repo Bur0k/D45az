@@ -12,6 +12,7 @@
 #include "Map.h"
 #include "GameLobby.h"
 #include "PlayerData.h"
+#include "Background.h"
 
 extern PlayerData playerData;
 
@@ -24,6 +25,7 @@ private:
 
 	GameLobby* game;
 	bool amIGamemaster;
+	Background bg;
 	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
 
 	DrawVect m_DrawV;

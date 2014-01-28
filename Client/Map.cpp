@@ -58,7 +58,7 @@ void Map::load(std::string MapLocation)
 			const char* temptt = element->FirstChildElement()->GetText();
 			int tempii = std::atoi(root->Attribute("width"));
 
-			layers.push_back(new MapLayer(temptt,tempii,tilesets,isCityLayer));
+			layers.push_back(new MapLayer(temptt,tempii,tilesets,isCityLayer,isBarricadeLayer,isCityTerrainLayer));
 		}
 	}
 }

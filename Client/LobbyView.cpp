@@ -2,7 +2,7 @@
 
 int LobbyView::GameLobbyData::nextID = 10;
 
-LobbyView::LobbyView():
+LobbyView::LobbyView(sf::Vector2u currentView):
 	playerName(sf::Vector2f(0,0),sf::Vector2f(500,100),"Name",40),
 	gameLobbyMaster(sf::Vector2f(500,300),sf::Vector2f(300,100),"GameLobbyMaster:",20),
 	gameLobbyMasterValue(sf::Vector2f(700,300),sf::Vector2f(300,100),"",20),
@@ -28,6 +28,8 @@ LobbyView::LobbyView():
 
 	lobby = new Lobby();
 	lobby->askforLobbyData();
+
+	onResize(currentView);
 }
 
 LobbyView::~LobbyView()
@@ -182,9 +184,22 @@ void LobbyView::onSliderReleased(int ID, double position)
 
 }
 
-void LobbyView::onResize(Vector2u &)
+void LobbyView::onResize(Vector2u & newSize)
 {
+	currentSize = sf::Vector2f(newSize);
+	lobbyStartPos = sf::Vector2f(0,120);
+	
+	float currentSizeXHalf = currentSize.x/2.0f;
+	
+	playerName.setPos(sf::Vector2f(50,25));
+	s->setPosition(sf::Vector2f(currentSizeXHalf-25,lobbyStartPos.y));
 
+	gameLobbyMaster.setPos(lobbyStartPos+sf::Vector2f(currentSizeXHalf,0));
+	gameLobbyMasterValue.setPos(lobbyStartPos+sf::Vector2f(currentSizeXHalf,50));
+	connect->setPosition(lobbyStartPos+sf::Vector2f(currentSizeXHalf,100));
+	updateLobbys->setPosition(lobbyStartPos+sf::Vector2f(currentSizeXHalf,200));
+	creatNewGamelobby->setPosition(lobbyStartPos+sf::Vector2f(currentSizeXHalf,300));
+	newGameLobbyName.setPos(lobbyStartPos+sf::Vector2f(currentSizeXHalf,400));
 }
 
 void LobbyView::pt1zyklisch(double elapsedMs)
@@ -243,10 +258,10 @@ void LobbyView::onTextBoxSend(int ID, std::string s)
 
 void LobbyView::updateDisplayedGameLobbys()
 {
-	int y = 200;
+	int y = static_cast<int>(lobbyStartPos.y);
 
 	int numEntriesOverflow = (gameLobbys.size() > 8)?gameLobbys.size()- 8:0;
-	int startIndex = s->getValue() * numEntriesOverflow + 0.5;
+	int startIndex = static_cast<int>(s->getValue() * numEntriesOverflow + 0.5);
 
 	toDisplay.clear();
 
@@ -257,7 +272,8 @@ void LobbyView::updateDisplayedGameLobbys()
 			it++;
 		for(int i=startIndex;i<startIndex+8;i++)
 		{
-			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			it->second->LE->setPosition(sf::Vector2f(20.0,static_cast<float>(y)));
+			it->second->LE->setWidth(currentSize.x/2.0f-50);
 			y+=50;
 			toDisplay[it->first]=it->second;
 			it++;
@@ -267,7 +283,8 @@ void LobbyView::updateDisplayedGameLobbys()
 	{
 		for(auto it = gameLobbys.begin();it!=gameLobbys.end();it++)
 		{
-			it->second->LE->setPosition(sf::Vector2f(20.0,y));
+			it->second->LE->setPosition(sf::Vector2f(20.0,static_cast<float>(y)));
+			it->second->LE->setWidth(currentSize.x/2.0f-50);
 			y+=50;
 			toDisplay[it->first]=it->second;
 		}

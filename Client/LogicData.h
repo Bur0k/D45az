@@ -25,7 +25,7 @@ public:
 	vector<UnitGroup*> ownedUnits;
 	bool turnOver;
 
-public:
+
 	LogicData();
 	~LogicData();
 
