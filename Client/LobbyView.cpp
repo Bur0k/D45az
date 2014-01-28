@@ -50,6 +50,7 @@ LobbyView::~LobbyView()
 
 void LobbyView::draw(sf::RenderWindow* rw)
 {
+	bg.draw(rw);
 	playerName.draw(rw);
 	newGameLobbyName.draw(rw);
 	gameLobbyMaster.draw(rw);
@@ -200,6 +201,8 @@ void LobbyView::onResize(Vector2u & newSize)
 	updateLobbys->setPosition(lobbyStartPos+sf::Vector2f(currentSizeXHalf,200));
 	creatNewGamelobby->setPosition(lobbyStartPos+sf::Vector2f(currentSizeXHalf,300));
 	newGameLobbyName.setPos(lobbyStartPos+sf::Vector2f(currentSizeXHalf,400));
+
+	bg.onResize(newSize);
 }
 
 void LobbyView::pt1zyklisch(double elapsedMs)
