@@ -18,7 +18,7 @@ private:
 	int m_players;
 	int m_ID;
 
-	void pt1zyklischPlayers();
+	void updatePlayers();
 	LobbyEntry();
 public:
 	LobbyEntry(Vector2f size, Vector2f pos, std::string name, int players, int maxplayers, int id);

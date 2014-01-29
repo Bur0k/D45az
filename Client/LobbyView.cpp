@@ -205,7 +205,7 @@ void LobbyView::onResize(Vector2u & newSize)
 	bg.onResize(newSize);
 }
 
-void LobbyView::pt1zyklisch(double elapsedMs)
+void LobbyView::update(double elapsedMs)
 {
 	static double elapsed=0;
 	elapsed+=elapsedMs;

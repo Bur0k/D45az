@@ -235,7 +235,7 @@ public:
 	when the DOM was created from operator>>.
 
 	The values reflect the initial load. Once the DOM is modified programmatically
-	(by adding or changing nodes and attributes) the new values will NOT pt1zyklisch to
+	(by adding or changing nodes and attributes) the new values will NOT update to
 	reflect changes in the document.
 
 	There is a minor performance cost to computing the row and column. Computation

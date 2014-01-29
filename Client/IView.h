@@ -17,7 +17,7 @@ class IView
 public:
 	virtual ~IView(){};
 	virtual void onResize(sf::Vector2u &)=0;
-	virtual void pt1zyklisch(double elapsedMs)=0;
+	virtual void update(double elapsedMs)=0;
 	virtual Views nextState()=0;
 	//needed for View Management in class game
 	virtual Views getType()=0;

@@ -51,7 +51,7 @@ void UnitLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
 	switch(id)
 	{
-
+		default: break;
 	}
 }
 
@@ -59,6 +59,6 @@ void UnitLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 	switch(errCode)
 	{
-
+		default: break;
 	}
 }

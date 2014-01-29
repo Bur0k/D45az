@@ -181,6 +181,7 @@
     <None Include="Data\Images\unit_heavy.psd" />
     <None Include="Data\Images\unit_light.psd" />
     <None Include="Data\Images\unit_ranged.psd" />
+    <None Include="Data\Maps\Map1.tmx" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />
@@ -198,9 +199,6 @@
     <None Include="sfml-system-d-2.dll" />
     <None Include="sfml-window-2.dll" />
     <None Include="sfml-window-d-2.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="client_Grafik.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf" />
