@@ -30,7 +30,6 @@ enum class InagameViewPhases{
 	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
 };
 
-
 class IngameView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
@@ -47,7 +46,8 @@ private:
 
 	CommitButton* m_commitB;
 
-	//MAP STUFF
+	//Visible STUFF
+	Statusbar* m_SBar;	
 	Map m_map;
 	IntRect m_mapView;
 	Vector2i m_mapSize;
@@ -77,8 +77,6 @@ private:
 	KeyInputVect m_KeyV;
 
 	Views m_nextView;
-
-	Statusbar* m_SBar;
 
 	//gameStatus
 	InagameViewPhases m_phase;
