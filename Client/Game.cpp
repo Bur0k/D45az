@@ -142,7 +142,6 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_pMS = new MusikSampler();
 	//m_pMS->next_song();
 
-	map.load("Data/Maps/test.tmx");
 	xMap=yMap=0;
 }
 

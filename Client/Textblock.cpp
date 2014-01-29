@@ -31,7 +31,7 @@ Textblock::~Textblock()
 //	}
 //}
 
-Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)+
+Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 {
 	setPosition(pos);
 
