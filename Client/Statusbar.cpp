@@ -22,13 +22,12 @@ Statusbar::Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu)
 		Stp.setPosition((float) (IconOffset + IconX * i), (float) IconY);
 		m_vSPictures.push_back(Stp);
 
-		Textblock* Tb = new Textblock(Vector2f((float) (LabelOffset + IconX * i), (float) IconY), Vector2f(100, 100), String("rust"), 40);
-		//TODO rust in 0000 ändern
+		Textblock* Tb = new Textblock(Vector2f((float) (LabelOffset + IconX * i), (float) IconY), Vector2f(100, 100), String("0000"), 40);
+		m_vValue.push_back(0); // inhalt speichern
 		Tb->setFillColor(MyColors.Transparent);
 		Tb->setFontColor(MyColors.White);
 		m_vTLabels.push_back(Tb);
 	}
-
 }
 
 
@@ -84,17 +83,54 @@ void Statusbar::Resize(Vector2f new_size)
 	m_BaseRect.setSize(Vector2f(new_size.x, Statusbarheight));
 }
 
-void Statusbar::setValue(enum Icons icon, int value)
+void Statusbar::setValue(Icons icon, int value)
 {
 	String tmp = to_string(value);
-	Rect<float> textwidth = m_vTLabels[icon]->getLocalBounds();
+	Rect<float> textwidth = m_vTLabels[static_cast<int>(icon)]->getLocalBounds();
 
-	Vector2f* curpos = new Vector2f( m_vTLabels[icon]->getPosition().x + textwidth.width, IconY); // normale pos bestimmen
+	Vector2f* curpos = new Vector2f( m_vTLabels[static_cast<int>(icon)]->getPosition().x + textwidth.width, IconY); // normale pos bestimmen
 
-	m_vTLabels[icon]->setText(tmp, Vector2f(100,100)); // neuen text eintragen
-	Rect<float> newtextwidth = m_vTLabels[icon]->getLocalBounds(); // neue länge des neuen strings
+	m_vTLabels[static_cast<int>(icon)]->setText(tmp, Vector2f(100,100)); // neuen text eintragen
+	m_vValue[static_cast<int>(icon)] = value; // inhalt ändern
+	Rect<float> newtextwidth = m_vTLabels[static_cast<int>(icon)]->getLocalBounds(); // neue länge des neuen strings
 
-	m_vTLabels[icon]->setPos(Vector2f(curpos->x - newtextwidth.width, IconY)); // bündigkeit erwirken
+	m_vTLabels[static_cast<int>(icon)]->setPos(Vector2f(curpos->x - newtextwidth.width, IconY)); // bündigkeit erwirken
+
+	delete curpos;
+}
+
+void Statusbar::increaseValue(Icons icon, int value)
+{
+	value += m_vValue[static_cast<int>(icon)]; // addiert
+
+	String tmp = to_string(value);
+	Rect<float> textwidth = m_vTLabels[static_cast<int>(icon)]->getLocalBounds();
+
+	Vector2f* curpos = new Vector2f( m_vTLabels[static_cast<int>(icon)]->getPosition().x + textwidth.width, IconY); // normale pos bestimmen
+
+	m_vTLabels[static_cast<int>(icon)]->setText(tmp, Vector2f(100,100)); // neuen text eintragen
+	m_vValue[static_cast<int>(icon)] = value; // inhalt ändern
+	Rect<float> newtextwidth = m_vTLabels[static_cast<int>(icon)]->getLocalBounds(); // neue länge des neuen strings
+
+	m_vTLabels[static_cast<int>(icon)]->setPos(Vector2f(curpos->x - newtextwidth.width, IconY)); // bündigkeit erwirken
+
+	delete curpos;
+}
+
+void Statusbar::decreaseValue(Icons icon, int value)
+{
+	value -= m_vValue[static_cast<int>(icon)]; // subtrahiert
+
+	String tmp = to_string(value);
+	Rect<float> textwidth = m_vTLabels[static_cast<int>(icon)]->getLocalBounds();
+
+	Vector2f* curpos = new Vector2f( m_vTLabels[static_cast<int>(icon)]->getPosition().x + textwidth.width, IconY); // normale pos bestimmen
+
+	m_vTLabels[static_cast<int>(icon)]->setText(tmp, Vector2f(100,100)); // neuen text eintragen
+	m_vValue[static_cast<int>(icon)] = value; // inhalt ändern
+	Rect<float> newtextwidth = m_vTLabels[static_cast<int>(icon)]->getLocalBounds(); // neue länge des neuen strings
+
+	m_vTLabels[static_cast<int>(icon)]->setPos(Vector2f(curpos->x - newtextwidth.width, IconY)); // bündigkeit erwirken
 
 	delete curpos;
 }
@@ -109,7 +145,6 @@ bool Statusbar::MouseMoved(sf::Vector2i & mouse)
 
 bool Statusbar::PressedLeft()
 {
-	setValue(Geld, 38);
 	return m_BMenu->PressedLeft();
 }
 
