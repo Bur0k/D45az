@@ -7,7 +7,7 @@ UnitGroupLogic::UnitGroupLogic(short units, UnitTypes type, POINT pos,  vector<U
 
 	this->unitGroups = unitGroups;
 
-	for(signed int i = 0; i < units; i++)
+	for(int i = 0; i < units; i++)
 	{
 		UnitLogic* unit = new UnitLogic(type);
 

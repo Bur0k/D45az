@@ -43,6 +43,6 @@ void CityLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 	switch(errCode)
 	{
-		default: break;
+
 	}
 }

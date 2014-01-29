@@ -95,7 +95,7 @@ void GameLobbyLogic::addPlayer(PlayerData* player)
 
 bool GameLobbyLogic::isAlreadyConnected(SOCKET s)
 {
-	for(unsigned int i = 0; i < this->players.size(); i++)
+	for(int i = 0; i < this->players.size(); i++)
 	{
 		if(this->players[i]->s == s)
 			return true;
