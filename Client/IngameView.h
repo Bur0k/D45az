@@ -18,6 +18,12 @@
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
 
+#define INGAMEVIEW_LIGHT_SIGHT 8
+#define INGAMEVIEW_HEAVY_SIGHT 8
+#define INGAMEVIEW_RANGED_SIGHT 8
+#define INGAMEVIEW_ARTILLERY_SIGHT 8
+
+
 
 enum class IngameViewButtonId{
 	COMMIT = 0,
@@ -72,6 +78,7 @@ private:
 
 	//logic
 	LogicData m_GameData;
+
 
 	Vector2u m_screensize;
 	//pixels
