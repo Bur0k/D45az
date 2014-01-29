@@ -23,7 +23,7 @@ public:
 
 	soldiers* units;
 
-	UnitGroup(POINT pos, short countLight, short countHeavy, short countLongrange, short countArtillery);
+	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16]);
 	~UnitGroup();
 
 	void processNewMessage(short id,vector<char> data);
