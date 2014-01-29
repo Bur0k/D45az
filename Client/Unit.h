@@ -13,6 +13,7 @@
 
 using namespace sf;
 
+enum class UnitStrategy{DEFENSIVE, OFFENSIVE, RUNNING};
 enum class UnitTypes{LIGHT, HEAVY, LONGRANGE, ARTILLERY};
 
 class Unit : public IDrawable, public IClickable

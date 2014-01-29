@@ -182,7 +182,7 @@
     <None Include="Data\Maps\TestMap.tmx">
       <Filter>Data</Filter>
     </None>
-    <None Include="..\..\..\..\Desktop\Map1.tmx">
+    <None Include="Data\Maps\Map1.tmx">
       <Filter>Data</Filter>
     </None>
   </ItemGroup>

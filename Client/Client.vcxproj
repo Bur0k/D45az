@@ -168,7 +168,6 @@
     <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\Desktop\Map1.tmx" />
     <None Include="Data\Images\button_small.psd" />
     <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Images\menu_bot.psd" />
@@ -182,6 +181,7 @@
     <None Include="Data\Images\unit_heavy.psd" />
     <None Include="Data\Images\unit_light.psd" />
     <None Include="Data\Images\unit_ranged.psd" />
+    <None Include="Data\Maps\Map1.tmx" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_example.ogg" />

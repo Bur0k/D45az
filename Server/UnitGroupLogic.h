@@ -9,6 +9,8 @@
 
 using namespace std;
 
+enum class UnitStrategy{DEFENSIVE, OFFENSIVE, RUNNING};
+
 class UnitGroupLogic
 {
 private:
@@ -18,6 +20,8 @@ public:
 
 	vector<UnitLogic*> units;
 	vector<UnitGroupLogic*>* unitGroups;
+
+	UnitStrategy strategy;
 	
 	POINT pos;
 
@@ -30,6 +34,7 @@ public:
 	void removeUnit(short units, UnitTypes type); 
 	void move(POINT moves[], int arrlen);
 	void splitandMove(short units[], UnitTypes types[], POINT moves[], int arrlen);
+	void changeStrategy(UnitStrategy strategy);
 
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
