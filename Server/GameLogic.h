@@ -26,8 +26,7 @@ private:
 	vector<IngameLogic*> playersIngame;
 	Map* map;
 	vector<CityLogic*> startCities;
-	vector<CityLogic*> neutralCities;
-	vector<POINT*> barricades; 
+	vector<CityLogic*> neutralCities; 
 
 public:
 	GameLogic::GameLogic(vector<PlayerData*> players, Map* map);
