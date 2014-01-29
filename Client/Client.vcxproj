@@ -165,6 +165,7 @@
     <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\Desktop\Map1.tmx" />
     <None Include="Data\Images\button_small.psd" />
     <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Images\menu_bot.psd" />

@@ -234,7 +234,6 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h" />
     <ClInclude Include="TileSets.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
@@ -377,6 +376,9 @@
       <Filter>Data\map</Filter>
     </None>
     <None Include="Data\Maps\test.tmx">
+      <Filter>Data\map</Filter>
+    </None>
+    <None Include="..\..\..\..\Desktop\Map1.tmx">
       <Filter>Data\map</Filter>
     </None>
   </ItemGroup>
