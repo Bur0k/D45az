@@ -237,7 +237,6 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h" />
     <ClInclude Include="TileSets.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
@@ -293,6 +292,9 @@
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="Background.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Textblock.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
