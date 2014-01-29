@@ -1,5 +1,6 @@
 #include "IngameView.h"
 
+//TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
 	m_nextView = Views::NOCHANGE;
@@ -14,19 +15,20 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_phase = startphase;
 	//debug
 
+	m_turnOn = false;
 	
 	
 	
-	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE, 120);
+	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
 	m_DrawV.push_back(u);
 
-	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY, 17);
+	u1 = new Unit(Vector2f(570,500),UnitTypes::LIGHT, 17);
 	m_ClickV.push_back(u1);
 	m_DrawV.push_back(u1);
 	//debug end
 	
-	m_map.load("Data/Maps/test.tmx");
+	m_map.load("Data/Maps/TestMap.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
 	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size()) / 2;
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
@@ -39,7 +41,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 
 	//Interface Goes Here
-	m_commitB = new CommitButton(Vector2f(0,0), Vector2f(0,0), "commit", COMMIT,false, screensize);
+	m_commitB = new CommitButton(Vector2f(0,0), Vector2f(0,0), "commit", static_cast<int>(IngameViewButtonId::COMMIT),false, screensize);
 	m_commitB->Attach(this);
 	m_DrawV.push_back(m_commitB);
 	m_ClickV.push_back(m_commitB); 
@@ -57,6 +59,15 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
 	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
+
+	m_turnOn=true;
+	rsTurn.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+	rsTurn.setFillColor(MyColors.Transparent);
+	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
+
+	for(auto it : m_map.layers)
+		if(it->isBarricadeLayer)
+			collisionLayer=it;
 }
 
 IngameView::~IngameView()
@@ -72,7 +83,7 @@ void IngameView::onButtonClick(int id)
 {
 	switch (id)
 	{
-	case COMMIT:
+	case IngameViewButtonId::COMMIT:
 		if(m_phase == InagameViewPhases::YOURTURN)
 			nextPhase();
 		break;
@@ -109,16 +120,20 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	m_pointAt.x = (mouse.x + m_mapView.left) / m_tileSize.x;
 	m_pointAt.y = (mouse.y + m_mapView.top) / m_tileSize.y;
 	
+	m_pointAt.x = (m_pointAt.x>=m_mapSize.x)?m_mapSize.x-1:m_pointAt.x;
+	m_pointAt.y = (m_pointAt.y>=m_mapSize.y)?m_mapSize.y-1:m_pointAt.y;
+	m_pointAt.x = (m_pointAt.x<0)?0:m_pointAt.x;
+	m_pointAt.y = (m_pointAt.y<0)?0:m_pointAt.y;
 	
-
 	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
-	
 	return retValue;
 }
 
 bool IngameView::PressedRight()
 {
+	drawPath();
+
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
 			return true;
@@ -127,11 +142,15 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	currentTurn.clear();
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
-			retvalue = true;
+			return true;
 
+	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
+		if(m_pointAt == m_GameData.ownedCities[i]->position)
+			displayCityInfo(*m_GameData.ownedCities[i]);
 	return retvalue;
 }
 
@@ -183,6 +202,23 @@ void IngameView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 	
+	for(auto it : currentTurn)
+	{
+		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+							static_cast<float>(it.pos.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+		if(it.valid)
+		{
+			rsTurn.setOutlineColor(Color(0x0F,0x99,0x00,0xFF));
+			rsTurn.setFillColor(Color(0x0F,0x99,0x00,0x77));
+		}
+		else
+		{
+			rsTurn.setOutlineColor(Color(0xFF,0x1F,0x1F,0xFF));
+			rsTurn.setFillColor(Color(0xFF,0x1F,0x1F,0x77));
+		}
+		rw->draw(rsTurn);
+	}
+
 	rw->draw(m_mapMouseOver);
 
 	Rect<float> MapView;
@@ -195,7 +231,7 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::pt1zyklisch(double elapsedMs)
+void IngameView::update(double elapsedMs)
 {
 	//GIVE ME INFO DAMMIT!
 
@@ -219,27 +255,27 @@ void IngameView::nextPhase()
 {
 	switch (m_phase)
 	{
-	case YOURTURN:
+	case InagameViewPhases::YOURTURN:
 		m_commitB->setIsEnabled(false);
 		//do things..
 		//send moves to server
-		m_phase = WAITFORPLAYERS;
+		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
 
-	case WAITFORPLAYERS:
+	case InagameViewPhases::WAITFORPLAYERS:
 		//do things..
 		//wait till server sends move data
-		m_phase = WATCHRESULTS;
+		m_phase = InagameViewPhases::WATCHRESULTS;
 		break;
 
-	case WATCHRESULTS:
+	case InagameViewPhases::WATCHRESULTS:
 		//on player button click
 		m_commitB->setIsEnabled(true);
 		//do things..
-		m_phase = YOURTURN;
+		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
-	case GAMEOVER:
+	case InagameViewPhases::GAMEOVER:
 		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
@@ -325,3 +361,62 @@ void IngameView::moveMap()
 	}
 }
 
+void IngameView::displayCityInfo(City &c)
+{
+	std::cout << " stadt Income : " << c.generatedIncome << std::endl;
+	std::cout << " stadt level  : " << c.level << std::endl;
+}
+
+void IngameView::displayArmyInfo(Unit &)
+{
+	std::cout << " clicked on army! " << std::endl;
+}
+
+void IngameView::drawPath()
+{
+	if(m_turnOn)
+	{
+		m_is_turn_valid = true;
+
+		if(currentTurn.size() == 0)
+		{
+			m_maxLen=10;
+			currentTurn.push_back(turn(m_pointAt));
+		}
+		else
+		{
+			sf::Vector2i lastTurn = currentTurn.back().pos;
+			if(m_pointAt != lastTurn)
+			{
+				sf::Vector2i diff;
+				while(lastTurn != m_pointAt && m_maxLen > static_cast<short>(currentTurn.size()))
+				{
+					diff=m_pointAt-lastTurn;
+					if(diff.x != 0)
+					{
+						lastTurn+=sf::Vector2i(diff.x>0?1:-1,0);
+						currentTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							currentTurn.back().valid = false;
+							m_is_turn_valid = false;
+						}
+					}
+					if( m_maxLen <= static_cast<short>(currentTurn.size()))
+						break;
+					if(diff.y != 0)
+					{
+						lastTurn+=sf::Vector2i(0,diff.y>0?1:-1);
+						currentTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							currentTurn.back().valid=false;
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -166,6 +166,9 @@
     <ClCompile Include="Army.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -288,6 +291,12 @@
     <ClInclude Include="Army.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Textblock.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -381,11 +390,6 @@
     <None Include="..\..\..\..\Desktop\Map1.tmx">
       <Filter>Data\map</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="client_Grafik.txt">
-      <Filter>Codes\Graphic\Source</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">

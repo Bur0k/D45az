@@ -11,6 +11,7 @@
 #include "Login.h"
 #include "PlayerData.h"
 #include "Connect.h"
+#include "Background.h"
 
 class LoginView : public IView , public IButtonfunction, public ITextBoxFunction
 {
@@ -30,7 +31,7 @@ private:
 	Textblock* status;
 	TextBox* name;
 	Button* lgoinbutton;
-	SpriteTex background;
+	Background bg;
 
 	void centering(Vector2u & size);
 
@@ -59,7 +60,7 @@ public:
 	virtual void onTextInput(std::string s);
 
 	virtual void onResize(sf::Vector2u &);
-	virtual void pt1zyklisch(double elapsedMs);
+	virtual void update(double elapsedMs);
 
 	virtual Views getType();
 

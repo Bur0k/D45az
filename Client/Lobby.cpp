@@ -42,7 +42,7 @@ void Lobby::createNewGameLobby(std::string gamename)
 
 	tmp = code(gamename);
 
-	for (int i = 0; i < gamename.length(); i++)
+	for (unsigned int i = 0; i < gamename.length(); i++)
 		msg.push_back(tmp[i]);
 
 	c->write(0x0204, msg);

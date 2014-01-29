@@ -13,11 +13,11 @@
 #include "StandardButton.h"
 #include "Textblock.h"
 
-#define Statusbarheight 50
-#define IconOffset 150
-#define LabelOffset 200
-#define IconX 170
-#define IconY 5
+#define Statusbarheight 50.0
+#define IconOffset 150.0
+#define LabelOffset 200.0
+#define IconX 170.0
+#define IconY 5.0
 
 
 using namespace std;

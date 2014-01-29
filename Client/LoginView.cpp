@@ -33,17 +33,12 @@ LoginView::LoginView(Vector2u & size)
 
 	next = Views::NOCHANGE;
 	
-
-	Texture image;
-	if(!image.loadFromFile("Data/Images/background.png"))
-		std::cout << "LoginView.cpp:  couldn't load background.png" << std::endl;/**/
+	bg.onResize(size);
+	
 	/*if(!image.loadFromFile("Data/Images/Button.png"))
 		std::cout << "LoginView.cpp:  couldn't load Button.png" << std::endl;/**/
 	
-	background.t = image;
-	background.s.setTexture(&background.t);                      
-	background.s.setPosition(0,0);
-	background.s.setSize((sf::Vector2f)image.getSize());
+	
 
 	centering(size);
 	
@@ -151,7 +146,7 @@ void LoginView::onTextInput(std::string s)
 
 void LoginView::draw(sf::RenderWindow* rw)
 {
-	rw->draw(this->background.s);
+	bg.draw(rw);
 
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
@@ -162,7 +157,7 @@ Views LoginView::nextState()
 	return next;
 }
 
-void LoginView::pt1zyklisch(double elapsedMs)
+void LoginView::update(double elapsedMs)
 {
 	if(!connected && connect != nullptr)
 	{
@@ -213,7 +208,7 @@ void LoginView::centering(Vector2u & size)
 	lgoinbutton->setPosition(size.x / 2.0f - lgoinbutton->getSize().x / 2.0f, name->getPos().y + name->getSize().y + 0.05f * size.y);
 	logintext->setPos(sf::Vector2f(size.x / 2.0f - logintext->getSize().x / 2.0f, name->getPos().y - 0.05f * size.y - logintext->getSize().y));
 
-	background.s.setPosition(size.x / 2 - background.s.getSize().x / 2, size.y /2 - background.s.getSize().y / 2);
+	bg.onResize(size);
 }
 
 Views LoginView::getType()

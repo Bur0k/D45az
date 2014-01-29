@@ -21,6 +21,7 @@ Army::~Army()
 
 void Army::PositionGraphics()
 {
+	
 	//set the position of graphic objects
 }
 
@@ -131,4 +132,10 @@ void /* TODO NOT VOID but info pointer to army*/ Army::getArmy()
 void /* TODO NOT VOID but info pointer to city*/ Army::getCity()
 {
 
+}
+
+Army* Army::split(int selection, std::vector<UnitGroup> & newUnits)
+{
+	//UnitGroup* p = new UnitGroup(;
+	return NULL;
 }

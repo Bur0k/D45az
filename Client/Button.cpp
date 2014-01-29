@@ -257,10 +257,10 @@ void Button::animation_upadate()
 						(Uint8)(c.b * ratio1 + m_color.b * ratio2),
 						(Uint8)(c.a * ratio1 + m_color.a * ratio2)));
 	
-	pt1zyklischVisuals();
+	updateVisuals();
 }
 
-void Button::pt1zyklischVisuals()
+void Button::updateVisuals()
 {
 	//implementation in derived classes
 }
@@ -270,7 +270,7 @@ void Button::clicked()
 	if(m_isClicked)
 	{
 		setFillColor(m_color_clicked);
-		pt1zyklischVisuals();
+		updateVisuals();
 	}
 }
 

@@ -18,16 +18,31 @@
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
 
+#define INGAMEVIEW_LIGHT_SIGHT 8
+#define INGAMEVIEW_HEAVY_SIGHT 8
+#define INGAMEVIEW_RANGED_SIGHT 8
+#define INGAMEVIEW_ARTILLERY_SIGHT 8
 
-enum IngameViewButtonId{
+
+
+enum class IngameViewButtonId{
 	COMMIT = 0,
 };
 
-enum InagameViewPhases{
+enum class InagameViewPhases{
 	YOURTURN,			//moving units and building is allowed
 	WAITFORPLAYERS,		//wait till all players have finished their 
 	WATCHRESULTS,		//watch results of the last turn
 	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
+};
+
+class turn
+{
+public:
+	sf::Vector2i pos;
+	bool valid;
+	turn(){valid=true;};
+	turn(sf::Vector2i Pos){pos=Pos;valid=true;}
 };
 
 
@@ -35,6 +50,14 @@ class IngameView :
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+	//path drawing
+	bool m_turnOn;
+	short m_maxLen;
+	bool m_is_turn_valid;
+	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
+	RectangleShape rsTurn;
+	MapLayer* collisionLayer;
+
 
 	//debug
 
@@ -56,9 +79,12 @@ private:
 	//logic
 	LogicData m_GameData;
 
+
 	Vector2u m_screensize;
 	//pixels
 	Vector2i m_mapTotalSize;
+
+	
 
 	//user points at 
 	Vector2i m_pointAt;
@@ -110,7 +136,7 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	void pt1zyklisch(double elapsedMs);
+	void update(double elapsedMs);
 
 	Views getType();
 	Views nextState();
@@ -126,6 +152,9 @@ private:
 	//gets called if next phase is required
 	void nextPhase();
 	void moveMap();
+	void displayCityInfo(City &);
+	void displayArmyInfo(Unit &);
+	void drawPath();
 };
 
 

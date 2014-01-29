@@ -2,11 +2,13 @@
 #define ARMY_H
 
 #include <SFML\Graphics.hpp>
+#include <vector>
 #include "graphic_globals.h"
 #include "IClickable.h"
 #include "IKeyboardInput.h"
 #include "IAnimatable.h"
 #include "IDrawable.h"
+#include "UnitGroup.h"
 
 using namespace sf;
 
@@ -28,6 +30,7 @@ private:
 	bool m_inCity;
 	Vector2i m_position;
 	Rect<float> m_dimensions;
+	Vector2f m_scrollPos;
 
 	CircleShape m_markedIndicator;
 	Sprite m_body; // TODO buraks klasse anwenden
@@ -37,7 +40,9 @@ private:
 	void PositionGraphics();
 	Army();
 public:
-	
+	std::vector<Vector2i> moves;
+	UnitGroup* units;
+
 	//IDrawable
 	void draw(sf::RenderWindow* rw);
 	//IClickable
@@ -75,6 +80,8 @@ public:
 	//moves the army with an animation of x ticks to position
 	void move(Vector2i);
 	bool animatedMove(Vector2i);
+
+	Army* split(int seletion, std::vector<UnitGroup> & newUnits);
 
 };
 

@@ -49,12 +49,12 @@ StandardButton::StandardButton(Vector2f pos, Vector2f size, sf::String S, int ID
 		m_pST[i].s.setTexture(&m_pST[i].t, true);
 	}
 
-	//pt1zyklischPosition();
+	//updatePosition();
 
 
 	// positioning
 	
-	pt1zyklischPosition();
+	updatePosition();
 	
 
 	//define backgroundrect
@@ -69,13 +69,13 @@ StandardButton::~StandardButton()
 	delete[] m_pST;
 }
 
-void StandardButton::pt1zyklischVisuals()
+void StandardButton::updateVisuals()
 {
 
 	m_Rect.setFillColor(getFillColor());
 }
 
-void StandardButton::pt1zyklischPosition()
+void StandardButton::updatePosition()
 {
 
 	m_Rect.setPosition(getPosition().x + m_buttonTileSize / 2,
@@ -117,7 +117,7 @@ void StandardButton::draw(RenderWindow* rw)
 		this->getPosition().y != m_Rect.getPosition().y - m_buttonTileSize / 2 ||
 		this->getSize().x != m_Rect.getSize().x - m_buttonTileSize * 2 ||
 		this->getSize().y != m_Rect.getSize().y - m_buttonTileSize * 2)
-		pt1zyklischPosition();
+		updatePosition();
 
 	rw->draw(m_Rect);
 

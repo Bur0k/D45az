@@ -7,6 +7,8 @@ UnitLogic::UnitLogic(UnitTypes type)
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
 
+	this->living = maxlivingsoldiers;
+
 	this->type = type;
 
 	switch(type)
@@ -48,7 +50,7 @@ void UnitLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
 	switch(id)
 	{
-
+		default: break;
 	}
 }
 
@@ -56,6 +58,6 @@ void UnitLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 	switch(errCode)
 	{
-
+		default: break;
 	}
 }

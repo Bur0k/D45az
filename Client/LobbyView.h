@@ -9,14 +9,12 @@
 #include "Lobby.h"
 #include "LobbyEntry.h"
 #include "Textbox.h"
+#include "Background.h"
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
+	Background bg;
 	Views next;
-public:
-	LobbyView();
-	~LobbyView();
-
 	Textblock playerName;
 	TextBox newGameLobbyName;
 	Textblock gameLobbyMaster;
@@ -24,7 +22,6 @@ public:
 	StandardButton* updateLobbys;
 	StandardButton* creatNewGamelobby;
 	StandardButton* connect;
-
 	Slider* s;
 	class GameLobbyData
 	{
@@ -35,12 +32,20 @@ public:
 		{}
 	};
 
+	sf::Vector2f lobbyStartPos;
+	sf::Vector2f currentSize;
+
+
 	std::map<short,GameLobbyData*> gameLobbys;
 	std::map<short,GameLobbyData*> toDisplay;
 
 	Lobby* lobby;
-
 	void updateDisplayedGameLobbys();
+public:
+	LobbyView(sf::Vector2u currentView);
+	~LobbyView();
+
+
 
 	//implementing a lot of interfaces
 	Views nextState();
@@ -66,7 +71,7 @@ public:
 
 	void onResize(sf::Vector2u &);
 
-	void pt1zyklisch(double elapsedMs);
+	void update(double elapsedMs);
 
 	virtual Views getType();
 
