@@ -103,7 +103,6 @@
     <ClCompile Include="UnitLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Client\Textblock.h" />
     <ClInclude Include="CityLogic.h" />
     <ClInclude Include="GameLobbyLogic.h" />
     <ClInclude Include="GameLogic.h" />
