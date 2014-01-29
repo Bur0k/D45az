@@ -387,11 +387,9 @@
     <None Include="Data\Maps\test.tmx">
       <Filter>Data\map</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="client_Grafik.txt">
-      <Filter>Codes\Graphic\Source</Filter>
-    </Text>
+    <None Include="..\..\..\..\Desktop\Map1.tmx">
+      <Filter>Data\map</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">

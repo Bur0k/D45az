@@ -216,7 +216,7 @@ Views MenuView::nextState()
 	return m_nextView;
 }
 
-void MenuView::pt1zyklisch(double elapsedMs)
+void MenuView::update(double elapsedMs)
 {
 	//BURAK GOES HERE
 }

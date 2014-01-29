@@ -157,7 +157,7 @@ Views LoginView::nextState()
 	return next;
 }
 
-void LoginView::pt1zyklisch(double elapsedMs)
+void LoginView::update(double elapsedMs)
 {
 	if(!connected && connect != nullptr)
 	{
