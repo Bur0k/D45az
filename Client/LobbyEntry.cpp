@@ -27,10 +27,10 @@ LobbyEntry::LobbyEntry(Vector2f size, Vector2f pos, std::string name, int player
 	m_numberText.setFont(MyFonts::getFont(GameFonts::ARIAL));
 	m_numberText.setColor(MyColors.Black);
 	
-	pt1zyklischPlayers();
+	updatePlayers();
 }
 
-void LobbyEntry::pt1zyklischPlayers()
+void LobbyEntry::updatePlayers()
 {
 	std::string s;
 	s = std::to_string(m_players);
@@ -87,7 +87,7 @@ std::string LobbyEntry::getName()
 void LobbyEntry::setPlayers(int players)
 {
 	m_players = players;
-	pt1zyklischPlayers();
+	updatePlayers();
 }
 
 int LobbyEntry::getPlayers()
@@ -98,7 +98,7 @@ int LobbyEntry::getPlayers()
 void LobbyEntry::setMaxPlayers(int maxPlayers)
 {
 	m_maxPlayers = maxPlayers;
-	pt1zyklischPlayers();
+	updatePlayers();
 }
 
 int LobbyEntry::getMaxPlayers()

@@ -10,17 +10,14 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 	this->map = map;
 
 	MapLayer* v = this->map->layers[0];
-	MapLayer* w = this->map->layers[0];
 	int id = 1;
 
-	for(signed int i = 0; i < map->layers.size();i++)
+	for(int i = 0; i < map->layers.size();	i++)
 		if(map->layers[i]->isCityLayer)
 			v = map->layers[i];
-		else if(map->layers[i]->isBarricadeLayer)
-			w = map->layers[i];
 	
-	for( int i = 0; i < v->layer.size();i++)
-		for( int j = 0; j < v->layer[i].size();j++)
+	for( int i = 0; i < v->layer.size(); i += 2)
+		for( int j = 0; j < v->layer[i].size(); i += 2)
 		{
 			if( v->layer[i][j] == STARTCITY)
 			{
@@ -33,18 +30,6 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 				CityLogic* c = new CityLogic(id, i, j);
 				this->neutralCities.push_back(c);
 				id++;
-			}
-		}
-
-	for(unsigned int i = 0; i < w->layer.size(); i++)
-		for(unsigned int j = 0; j < w->layer[i].size(); j++)
-		{
-			if(w->layer[i][j] == BARRICADE1 || w->layer[i][j] == BARRICADE2 || w->layer[i][j] == STARTCITY || w->layer[i][j] == NEUTRALCITY)
-			{
-				POINT* p = new POINT();
-				p->x = j;
-				p->y = i;
-				this->barricades.push_back(p);
 			}
 		}
 
@@ -67,9 +52,6 @@ GameLogic::~GameLogic()
 
 	for(unsigned int i = 0; i < this->neutralCities.size(); i++)
 		delete this->neutralCities[i];
-
-	for(unsigned int i = 0; i < this->barricades.size(); i++)
-		delete this->barricades[i];
 
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
@@ -138,85 +120,61 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				server->write(s, 0x0405, erfg);
 			}break;
-		case 0x0406:
-			{
-				for(int i = 0; i < this->barricades.size(); i++)
-				{
-					erfg.push_back(this->barricades[i]->x);
-					erfg.push_back(this->barricades[i]->y);
-				}
-
-				server->write(s, 0x0407, erfg);
-			}break;
 		case 0x0408:
 			{	
 				// sende alle einheitengruppen
+				//umschreiben TODO
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
 					for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 					{
-						short light = 0;
-						short heavy = 0;
-						short longrange = 0;
-						short artillery = 0;
+							//send pos
+								std::vector<char> tmp;
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
+								for (unsigned int l = 0; l < tmp.size(); l++)
+									erfg.push_back(tmp[l]);
+						
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
+								for (unsigned int l = 0; l < tmp.size(); l++)
+									erfg.push_back(tmp[l]);
 
-						for (unsigned int k = 0; k < this->playersIngame[i]->unitGroups[j]->units.size(); k++)
-						{
-							switch (this->playersIngame[i]->unitGroups[j]->units[k]->type)
-							{
-							case UnitTypes::LIGHT:
-								{
-									light++;
-									break;
-								}
-							case UnitTypes::HEAVY:
-								{
-									heavy++;
-									break;
-								}
-							case UnitTypes::LONGRANGE:
-								{
-									longrange++;
-									break;
-								}
-							case UnitTypes::ARTILLERY:
-								{
-									artillery++;
-									break;
-								}
-							}
-						}
+								// send strategy
 
-						std::vector<char> tmp;
-						tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
-						for (unsigned int l = 0; l < tmp.size(); l++)
-							erfg.push_back(tmp[l]);
-						
-						tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
-						for (unsigned int l = 0; l < tmp.size(); l++)
-							erfg.push_back(tmp[l]);
+								tmp = code((short)this->playersIngame[i]->unitGroups[j]->strategy);
+								erfg.push_back(tmp[0]);
+								erfg.push_back(tmp[1]);
 
-						tmp = code(light);
-						erfg.push_back(tmp[0]);
-						erfg.push_back(tmp[1]);
-						
-						tmp = code(heavy);
-						erfg.push_back(tmp[0]);
-						erfg.push_back(tmp[1]);
-						
-						tmp = code(longrange);
-						erfg.push_back(tmp[0]);
-						erfg.push_back(tmp[1]);
-						
-						tmp = code(artillery);
-						erfg.push_back(tmp[0]);
-						erfg.push_back(tmp[1]);
+								//send shorts living, type abwechselnd (16)
+								unsigned int k;
+								for (k = 0; k < this->playersIngame[i]->unitGroups[j]->units.size();k++)
+								{
+									tmp = code(this->playersIngame[i]->unitGroups[j]->units[k]->living);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
+
+									tmp = code((short)this->playersIngame[i]->unitGroups[j]->units[k]->type);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
+								}
+								while (k < 16)
+								{
+									tmp = code((short) 0);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
+
+									tmp = code((short) 0);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
+
+									k++;
+								}
+
 					}
 				}
 					
 				server->write(s, 0x0409, erfg);
 			}break;
-			case 0x0410:	//sende eigene Einheiten
+			case 0x0410:	//sende eigene Einheiten // umschreiben TODO
 			{
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
@@ -224,62 +182,46 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 						for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 						{
-							short light = 0;
-							short heavy = 0;
-							short longrange = 0;
-							short artillery = 0;
+								//send pos
+								std::vector<char> tmp;
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
+								for (unsigned int l = 0; l < tmp.size(); l++)
+									erfg.push_back(tmp[l]);
+						
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
+								for (unsigned int l = 0; l < tmp.size(); l++)
+									erfg.push_back(tmp[l]);
 
-							for (unsigned int k = 0; k < this->playersIngame[i]->unitGroups[j]->units.size(); k++)
-							{
-								switch (this->playersIngame[i]->unitGroups[j]->units[k]->type)
+								// send strategy
+
+								tmp = code((short)this->playersIngame[i]->unitGroups[j]->strategy);
+								erfg.push_back(tmp[0]);
+								erfg.push_back(tmp[1]);
+
+								//send shorts living, type abwechselnd (16)
+								unsigned int k;
+								for (k = 0; k < this->playersIngame[i]->unitGroups[j]->units.size();k++)
 								{
-								case UnitTypes::LIGHT:
-									{
-										light++;
-										break;
-									}
-								case UnitTypes::HEAVY:
-									{
-										heavy++;
-										break;
-									}
-								case UnitTypes::LONGRANGE:
-									{
-										longrange++;
-										break;
-									}
-								case UnitTypes::ARTILLERY:
-									{
-										artillery++;
-										break;
-									}
+									tmp = code(this->playersIngame[i]->unitGroups[j]->units[k]->living);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
+
+									tmp = code((short)this->playersIngame[i]->unitGroups[j]->units[k]->type);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
 								}
-							}
+								while (k < 16)
+								{
+									tmp = code((short) 0);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
 
-							std::vector<char> tmp;
-							tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
-							for (unsigned int l = 0; l < tmp.size(); l++)
-								erfg.push_back(tmp[l]);
-						
-							tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
-							for (unsigned int l = 0; l < tmp.size(); l++)
-								erfg.push_back(tmp[l]);
+									tmp = code((short) 0);
+									erfg.push_back(tmp[0]);
+									erfg.push_back(tmp[1]);
 
-							tmp = code(light);
-							erfg.push_back(tmp[0]);
-							erfg.push_back(tmp[1]);
-						
-							tmp = code(heavy);
-							erfg.push_back(tmp[0]);
-							erfg.push_back(tmp[1]);
-						
-							tmp = code(longrange);
-							erfg.push_back(tmp[0]);
-							erfg.push_back(tmp[1]);
-						
-							tmp = code(artillery);
-							erfg.push_back(tmp[0]);
-							erfg.push_back(tmp[1]);
+									k++;
+								}
 						}
 					}
 				}

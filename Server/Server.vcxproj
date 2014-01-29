@@ -103,7 +103,6 @@
     <ClCompile Include="UnitLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Client\Textblock.h" />
     <ClInclude Include="CityLogic.h" />
     <ClInclude Include="GameLobbyLogic.h" />
     <ClInclude Include="GameLogic.h" />
@@ -121,6 +120,7 @@
     <ClInclude Include="UnitLogic.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Maps\Map1.tmx" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
   </ItemGroup>

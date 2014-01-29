@@ -142,7 +142,6 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_pMS = new MusikSampler();
 	//m_pMS->next_song();
 
-	map.load("Data/Maps/test.tmx");
 	xMap=yMap=0;
 }
 
@@ -585,7 +584,7 @@ void Game::timer()
 
 
 	for(unsigned int i = 0;i<m_ViewVect.size();i++)
-		m_ViewVect[i]->pt1zyklisch(static_cast<double>(elapsedMicro)/1000.0);
+		m_ViewVect[i]->update(static_cast<double>(elapsedMicro)/1000.0);
 	
 	
 	//ANIMATION//

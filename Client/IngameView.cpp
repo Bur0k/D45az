@@ -1,5 +1,6 @@
 #include "IngameView.h"
 
+//TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
 	m_nextView = Views::NOCHANGE;
@@ -14,19 +15,20 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_phase = startphase;
 	//debug
 
+	m_turnOnPathDraw = false;
 	
 	
 	
-	u = new Unit(Vector2f(500,500),UnitTypes::LONGRANGE, 120);
+	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
 	m_DrawV.push_back(u);
 
-	u1 = new Unit(Vector2f(570,500),UnitTypes::ARTILLERY, 17);
+	u1 = new Unit(Vector2f(570,500),UnitTypes::LIGHT, 17);
 	m_ClickV.push_back(u1);
 	m_DrawV.push_back(u1);
 	//debug end
 	
-	m_map.load("Data/Maps/test.tmx");
+	m_map.load("Data/Maps/Map1.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
 	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size()) / 2;
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
@@ -57,6 +59,18 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setFillColor(MyColors.Transparent);
 	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
+
+	m_turnOnPathDraw=true;
+	rsTurn.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+	rsTurn.setFillColor(MyColors.Transparent);
+	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
+
+	for(auto it : m_map.layers)
+		if(it->isBarricadeLayer)
+			collisionLayer=it;
+
+	updateNewFogOfWar = true;
+	turnOnFogOfWar = true;
 }
 
 IngameView::~IngameView()
@@ -109,16 +123,20 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	m_pointAt.x = (mouse.x + m_mapView.left) / m_tileSize.x;
 	m_pointAt.y = (mouse.y + m_mapView.top) / m_tileSize.y;
 	
+	m_pointAt.x = (m_pointAt.x>=m_mapSize.x)?m_mapSize.x-1:m_pointAt.x;
+	m_pointAt.y = (m_pointAt.y>=m_mapSize.y)?m_mapSize.y-1:m_pointAt.y;
+	m_pointAt.x = (m_pointAt.x<0)?0:m_pointAt.x;
+	m_pointAt.y = (m_pointAt.y<0)?0:m_pointAt.y;
 	
-
 	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
-	
 	return retValue;
 }
 
 bool IngameView::PressedRight()
 {
+	drawPath();
+
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
 			return true;
@@ -127,11 +145,15 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	currentTurn.clear();
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
-			retvalue = true;
+			return true;
 
+	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
+		if(m_pointAt == m_GameData.ownedCities[i]->position)
+			displayCityInfo(*m_GameData.ownedCities[i]);
 	return retvalue;
 }
 
@@ -180,9 +202,49 @@ void IngameView::onTextInput(std::string s)
 void IngameView::draw(sf::RenderWindow* rw)
 {
 	m_map.render(*rw,m_mapView);
+
+	if(turnOnFogOfWar)
+	{
+		rsTurn.setFillColor(Color(0x00,0x00,0x00,0x20));
+		rsTurn.setOutlineColor(Color(0x00,0x00,0x00,0x20));
+		for(int i=0;i<toDraw.size();i++)
+			for(int j=0;j<toDraw[0].size();j++)
+				if(toDraw[i][j])
+				{
+					rsTurn.setPosition( static_cast<float>(j * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+							static_cast<float>(i * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+					rw->draw(rsTurn);
+				}
+			
+		for(auto it:toDraw)
+			for(auto it2:it)
+				if(!it2)
+				{
+					//Hier ist FOG OF WAR
+					
+				}
+	}
+
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 	
+	for(auto it : currentTurn)
+	{
+		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+							static_cast<float>(it.pos.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+		if(it.valid)
+		{
+			rsTurn.setOutlineColor(Color(0x0F,0x99,0x00,0xFF));
+			rsTurn.setFillColor(Color(0x0F,0x99,0x00,0x77));
+		}
+		else
+		{
+			rsTurn.setOutlineColor(Color(0xFF,0x1F,0x1F,0xFF));
+			rsTurn.setFillColor(Color(0xFF,0x1F,0x1F,0x77));
+		}
+		rw->draw(rsTurn);
+	}
+
 	rw->draw(m_mapMouseOver);
 
 	Rect<float> MapView;
@@ -195,7 +257,7 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::pt1zyklisch(double elapsedMs)
+void IngameView::update(double elapsedMs)
 {
 	//GIVE ME INFO DAMMIT!
 
@@ -325,3 +387,110 @@ void IngameView::moveMap()
 	}
 }
 
+void IngameView::displayCityInfo(City &c)
+{
+	std::cout << " stadt Income : " << c.generatedIncome << std::endl;
+	std::cout << " stadt level  : " << c.level << std::endl;
+}
+
+void IngameView::displayArmyInfo(Unit &)
+{
+	std::cout << " clicked on army! " << std::endl;
+}
+
+void IngameView::drawPath()
+{
+	if(m_turnOnPathDraw)
+	{
+		m_is_turn_valid = true;
+
+		if(currentTurn.size() == 0)
+		{
+			m_maxLen=10;
+			currentTurn.push_back(turn(m_pointAt));
+			if(	collisionLayer->layer[currentTurn.back().pos.y*2][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2][currentTurn.back().pos.x*2+1] != 0 ||
+				collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2+1] != 0)
+			{
+				currentTurn.back().valid = false;
+				m_is_turn_valid = false;
+			}
+		}
+		else
+		{
+			sf::Vector2i lastTurn = currentTurn.back().pos;
+			if(m_pointAt != lastTurn)
+			{
+				sf::Vector2i diff;
+				while(lastTurn != m_pointAt && m_maxLen > static_cast<short>(currentTurn.size()))
+				{
+					diff=m_pointAt-lastTurn;
+					if(diff.x != 0)
+					{
+						lastTurn+=sf::Vector2i(diff.x>0?1:-1,0);
+						currentTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							currentTurn.back().valid = false;
+							m_is_turn_valid = false;
+						}
+					}
+					if( m_maxLen <= static_cast<short>(currentTurn.size()))
+						break;
+					if(diff.y != 0)
+					{
+						lastTurn+=sf::Vector2i(0,diff.y>0?1:-1);
+						currentTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							currentTurn.back().valid=false;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void IngameView::updateFogOfWar()
+{
+	updateNewFogOfWar = false;
+
+	toDraw.clear();
+	std::vector<bool> temp;
+	temp.resize(m_map.layers[0]->layer[0].size(),true);//X Values
+	for(int i=0;i<m_map.layers[0]->layer.size();i++)//Y Values
+		toDraw.push_back(temp);
+
+	for(auto it:m_GameData.ownedUnits)
+	{
+		short maxRange = 0;
+		switch(it->units->type)
+		{
+		case UnitTypes::ARTILLERY:
+			maxRange=INGAMEVIEW_ARTILLERY_SIGHT>maxRange?INGAMEVIEW_ARTILLERY_SIGHT:maxRange;
+		case UnitTypes::HEAVY:
+			maxRange=INGAMEVIEW_HEAVY_SIGHT>maxRange?INGAMEVIEW_HEAVY_SIGHT:maxRange;
+		case UnitTypes::LIGHT:
+			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
+		case UnitTypes::LONGRANGE:
+			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
+		}
+		for(int i=0;i<m_map.layers[0]->layer.size();i++)
+			for(int j=0;j<m_map.layers[0]->layer[0].size();j++)
+				if((j-it->pos.x)*(j-it->pos.x) + 
+					(i-it->pos.y)*(i-it->pos.y) <= maxRange*maxRange)
+					toDraw[i][j]=true;
+	}
+	for(auto it2:m_map.layers)
+		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
+			for(auto it3:m_GameData.ownedCities)
+			{
+				int id = it2->layer[it3->position.y][it3->position.x];
+				for(int i=0;i<it2->layer.size();i++)
+					for(int j=0;j<it2->layer[0].size();j++)
+						if(id == it2->layer[i][j])
+							toDraw[i][j]=true;
+			}
+}

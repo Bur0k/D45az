@@ -9,9 +9,11 @@
 #include "Lobby.h"
 #include "LobbyEntry.h"
 #include "Textbox.h"
+#include "Background.h"
 
 class LobbyView : public IView , public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
+	Background bg;
 	Views next;
 	Textblock playerName;
 	TextBox newGameLobbyName;
@@ -69,7 +71,7 @@ public:
 
 	void onResize(sf::Vector2u &);
 
-	void pt1zyklisch(double elapsedMs);
+	void update(double elapsedMs);
 
 	virtual Views getType();
 

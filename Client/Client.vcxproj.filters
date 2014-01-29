@@ -167,7 +167,7 @@
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
     <ClCompile Include="Background.cpp">
-      <Filter>Codes\Graphic\Source</Filter>
+      <Filter>Codes\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,7 +237,6 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Codes\PlayerData</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h" />
     <ClInclude Include="TileSets.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
@@ -290,6 +289,9 @@
       <Filter>Codes\GameLogic</Filter>
     </ClInclude>
     <ClInclude Include="Army.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Textblock.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="Background.h">
@@ -385,11 +387,9 @@
     <None Include="Data\Maps\test.tmx">
       <Filter>Data\map</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="client_Grafik.txt">
-      <Filter>Codes\Graphic\Source</Filter>
-    </Text>
+    <None Include="Data\Maps\Map1.tmx">
+      <Filter>Data\map</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">

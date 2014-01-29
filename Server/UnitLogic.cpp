@@ -7,6 +7,9 @@ UnitLogic::UnitLogic(UnitTypes type)
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
 
+	this->living = maxlivingsoldiers;
+
+
 	this->type = type;
 
 	switch(type)

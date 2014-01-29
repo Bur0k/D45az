@@ -121,7 +121,6 @@
     <ClInclude Include="MapLayer.h">
       <Filter>Codes\GameLogic\Map</Filter>
     </ClInclude>
-    <ClInclude Include="..\Client\Textblock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -181,6 +180,9 @@
       <Filter>Data</Filter>
     </None>
     <None Include="Data\Maps\TestMap.tmx">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="Data\Maps\Map1.tmx">
       <Filter>Data</Filter>
     </None>
   </ItemGroup>

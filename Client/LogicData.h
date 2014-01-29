@@ -15,14 +15,14 @@ private:
 
 	Client* c;
 
+public:
+
 	vector<string> playersIngame;
 	vector<City*> allCities;
 	vector<City*> ownedCities;
-	vector<sf::Vector2i> barricades;
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
 
-public:
 	LogicData();
 	~LogicData();
 
@@ -32,7 +32,6 @@ public:
 	void requestPlayers();
 	void requestAllCities();
 	void requestOwnedCities();
-	void requestBarricades();
 	void requestAllUnits();
 	void requestOwnedUnits();
 

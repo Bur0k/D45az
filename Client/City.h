@@ -6,10 +6,12 @@
 
 class City
 {
+public:
 	sf::Vector2i position;
 	int level;
+	int generatedIncome;
 
-public:
+
 	City(sf::Vector2i position, int level);
 	~City();
 };

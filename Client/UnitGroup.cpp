@@ -1,18 +1,18 @@
 #include "UnitGroup.h"
 
-UnitGroup::UnitGroup(POINT pos, short countLight, short countHeavy, short countLongrange, short countArtillery)
+// umschreiben
+UnitGroup::UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy)
 {
-	this->units = new soldiers[4];
+	this->strategy = strategy;
+	this->units = new soldiers[16];
 	this->pos = pos;
 
-	this->units[0].count = countLight;
-	this->units[0].type = UnitTypes::LIGHT;
-	this->units[1].count = countHeavy;
-	this->units[1].type = UnitTypes::HEAVY;
-	this->units[2].count = countLongrange;
-	this->units[2].type = UnitTypes::LONGRANGE;
-	this->units[3].count = countArtillery;
-	this->units[3].type = UnitTypes::ARTILLERY;
+	for (int i = 0; i < 16; i++)
+	{
+		this->units[i].count = livingsoldiers[i];
+		if (livingsoldiers[i] != 0)
+			this->units[i].type = types[i];
+	}
 
 }
 
