@@ -36,6 +36,18 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 			}
 		}
 
+	for(int i = 0; i < w->layer.size(); i++)
+		for(int j = 0; j < w->layer[i].size(); j++)
+		{
+			if(w->layer[i][j] == BARRICADE1 || w->layer[i][j] == BARRICADE2 || w->layer[i][j] == STARTCITY || w->layer[i][j] == NEUTRALCITY)
+			{
+				POINT* p = new POINT();
+				p->x = j;
+				p->y = i;
+				this->barricades.push_back(p);
+			}
+		}
+
 	for(unsigned int i = 0; i < players.size(); i++)
 	{
 		IngameLogic* ingame = new IngameLogic(players[i], this->startCities[i]);
@@ -47,14 +59,17 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 
 GameLogic::~GameLogic()
 {
-	for(int i = 0; i < this->playersIngame.size(); i++)
+	for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 		delete this->playersIngame[i];
 
-	for(int i = 0; i < this->startCities.size(); i++)
+	for(unsigned int i = 0; i < this->startCities.size(); i++)
 		delete this->startCities[i];
 
-	for(int i = 0; i < this->neutralCities.size(); i++)
+	for(unsigned int i = 0; i < this->neutralCities.size(); i++)
 		delete this->neutralCities[i];
+
+	for(int i = 0; i < this->barricades.size(); i++)
+		delete this->barricades[i];
 
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
@@ -85,13 +100,13 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				erfg.push_back(length);
 
-				for(int i = 0; i < this->neutralCities.size(); i++)
+				for(unsigned int i = 0; i < this->neutralCities.size(); i++)
 				{
 					erfg.push_back(this->neutralCities[i]->position->x);
 					erfg.push_back(this->neutralCities[i]->position->y);
 					erfg.push_back(this->neutralCities[i]->level);
 				}
-				for(int i = 0; i < this->startCities.size(); i++)
+				for(unsigned int i = 0; i < this->startCities.size(); i++)
 				{
 					erfg.push_back(this->startCities[i]->position->x);
 					erfg.push_back(this->startCities[i]->position->y);
