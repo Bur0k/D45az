@@ -36,18 +36,6 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 			}
 		}
 
-	for(int i = 0; i < w->layer.size(); i++)
-		for(int j = 0; j < w->layer[i].size(); j++)
-		{
-			if(w->layer[i][j] == BARRICADE1 || w->layer[i][j] == BARRICADE2 || w->layer[i][j] == STARTCITY || w->layer[i][j] == NEUTRALCITY)
-			{
-				POINT* p = new POINT();
-				p->x = j;
-				p->y = i;
-				this->barricades.push_back(p);
-			}
-		}
-
 	for(unsigned int i = 0; i < players.size(); i++)
 	{
 		IngameLogic* ingame = new IngameLogic(players[i], this->startCities[i]);
