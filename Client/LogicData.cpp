@@ -132,6 +132,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0409:
 		{
+			// umschreiben
 			for (unsigned int i = 0; i < data.size(); i+=16)
 			{
 				allUnits.clear();
@@ -145,12 +146,13 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				short longrange = decodeShort(data, i + 12);
 				short artillery = decodeShort(data, i + 14);
 
-				UnitGroup* ugroup = new UnitGroup(pos,light, heavy, longrange, artillery);
-				allUnits.push_back(ugroup);
+				// UnitGroup* ugroup = new UnitGroup(pos,light, heavy, longrange, artillery);
+				// allUnits.push_back(ugroup);
 			}	
 		}break;
 	case 0x0411:
 		{
+			//umschreiben
 			for (unsigned int i = 0; i < data.size(); i+=16)
 			{
 				this->ownedUnits.clear();
@@ -164,8 +166,8 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				short longrange = decodeShort(data, i + 12);
 				short artillery = decodeShort(data, i + 14);
 
-				UnitGroup* ugroup = new UnitGroup(pos,light, heavy, longrange, artillery);
-				ownedUnits.push_back(ugroup);
+				// UnitGroup* ugroup = new UnitGroup(pos,light, heavy, longrange, artillery);
+				// ownedUnits.push_back(ugroup);
 			}
 		}break;
 }

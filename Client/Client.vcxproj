@@ -158,6 +158,7 @@
     <ClInclude Include="SplittedSprite.h" />
     <ClInclude Include="StandardButton.h" />
     <ClInclude Include="Statusbar.h" />
+    <ClInclude Include="Textblock.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TileSets.h" />
     <ClInclude Include="tinystr.h" />

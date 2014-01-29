@@ -151,6 +151,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		case 0x0408:
 			{	
 				// sende alle einheitengruppen
+				//umschreiben TODO
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
 					for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
@@ -216,7 +217,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					
 				server->write(s, 0x0409, erfg);
 			}break;
-			case 0x0410:	//sende eigene Einheiten
+			case 0x0410:	//sende eigene Einheiten // umschreiben TODO
 			{
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{

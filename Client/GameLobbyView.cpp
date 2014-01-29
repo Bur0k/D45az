@@ -15,7 +15,7 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), "", 30);
 	m_DrawV.push_back(this->players[3]);
 
-	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(50, 20), "mapname", 30);
+	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(5000, 50000), "mapname", 30);
 	m_DrawV.push_back(mapName);
 
 	
@@ -221,9 +221,9 @@ void GameLobbyView::update(double elapsedMs)
 
 			for (unsigned int i = 0; i < this->game->players.size(); i++)
 			{
-				this->players[i]->setText(this->game->players[i], sf::Vector2f(100, 100));
+				this->players[i]->setText(this->game->players[i], sf::Vector2f(5555, 5555));
 			}
-			}
+		}
 		if(game->updated & 2)	//playerlimit updated
 		{
 			game->updated &= ~2;

@@ -294,6 +294,9 @@
     <ClInclude Include="Background.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="Textblock.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
