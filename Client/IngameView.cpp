@@ -1,5 +1,6 @@
 #include "IngameView.h"
 
+//TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
 	m_nextView = Views::NOCHANGE;
@@ -14,6 +15,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_phase = startphase;
 	//debug
 
+	m_turnOn = false;
 	
 	
 	
@@ -148,7 +150,7 @@ bool IngameView::PressedLeft()
 
 	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
 		if(m_pointAt == m_GameData.ownedCities[i]->position)
-
+			displayCityInfo(*m_GameData.ownedCities[i]);
 	return retvalue;
 }
 
@@ -229,7 +231,7 @@ Views IngameView::nextState()
 	return m_nextView;
 }
 
-void IngameView::pt1zyklisch(double elapsedMs)
+void IngameView::update(double elapsedMs)
 {
 	//GIVE ME INFO DAMMIT!
 
@@ -359,20 +361,23 @@ void IngameView::moveMap()
 	}
 }
 
-void IngameView::displayCityInfo(City &)
+void IngameView::displayCityInfo(City &c)
 {
-	//TODO DISPLAY CITY STUFF
+	std::cout << " stadt Income : " << c.generatedIncome << std::endl;
+	std::cout << " stadt level  : " << c.level << std::endl;
 }
 
 void IngameView::displayArmyInfo(Unit &)
 {
-	//TODO DISPLAY ARMY
+	std::cout << " clicked on army! " << std::endl;
 }
 
 void IngameView::drawPath()
 {
 	if(m_turnOn)
 	{
+		m_is_turn_valid = true;
+
 		if(currentTurn.size() == 0)
 		{
 			m_maxLen=10;
@@ -394,7 +399,8 @@ void IngameView::drawPath()
 						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
 							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
 						{
-							currentTurn.back().valid=false;
+							currentTurn.back().valid = false;
+							m_is_turn_valid = false;
 						}
 					}
 					if( m_maxLen <= static_cast<short>(currentTurn.size()))

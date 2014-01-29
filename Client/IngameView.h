@@ -47,6 +47,7 @@ private:
 	//path drawing
 	bool m_turnOn;
 	short m_maxLen;
+	bool m_is_turn_valid;
 	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
 	RectangleShape rsTurn;
 	MapLayer* collisionLayer;
@@ -128,7 +129,7 @@ public:
 	void onTextInput(std::string s);
 
 	void onResize(sf::Vector2u &);
-	void pt1zyklisch(double elapsedMs);
+	void update(double elapsedMs);
 
 	Views getType();
 	Views nextState();

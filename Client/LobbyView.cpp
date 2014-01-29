@@ -202,7 +202,7 @@ void LobbyView::onResize(Vector2u & newSize)
 	newGameLobbyName.setPos(lobbyStartPos+sf::Vector2f(currentSizeXHalf,400));
 }
 
-void LobbyView::pt1zyklisch(double elapsedMs)
+void LobbyView::update(double elapsedMs)
 {
 	static double elapsed=0;
 	elapsed+=elapsedMs;

@@ -62,11 +62,11 @@ protected:
 	//fits text to button
 	virtual void fitText(int border);
 
-	//is called by animatioTick() to pt1zyklisch the button color
+	//is called by animatioTick() to update the button color
 	virtual void animation_upadate();
 
-	//for derived classes to pt1zyklisch their visuals
-	virtual void pt1zyklischVisuals();
+	//for derived classes to update their visuals
+	virtual void updateVisuals();
 
 	void setScale(Vector2f);
 	void setScale(float x, float y);

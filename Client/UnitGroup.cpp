@@ -13,6 +13,8 @@ UnitGroup::UnitGroup(POINT pos, short countLight, short countHeavy, short countL
 	this->units[2].type = UnitTypes::LONGRANGE;
 	this->units[3].count = countArtillery;
 	this->units[3].type = UnitTypes::ARTILLERY;
+	this->units[4].count = countArtillery;
+	this->units[4].type = UnitTypes::ARTILLERY;
 
 }
 

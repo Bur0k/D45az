@@ -206,7 +206,7 @@ Views GameLobbyView::nextState()
 	return m_nextView;
 }
 
-void GameLobbyView::pt1zyklisch(double elapsedMs)
+void GameLobbyView::update(double elapsedMs)
 {
 	static double elapsed = 0;
 	elapsed += elapsedMs;

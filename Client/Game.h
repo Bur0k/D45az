@@ -118,7 +118,7 @@ public:
 
 	void DrawTest();
 
-	void pt1zyklisch();
+	void update();
 
 	void LoadView();
 

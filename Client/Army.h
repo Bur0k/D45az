@@ -41,6 +41,7 @@ private:
 	Army();
 public:
 	std::vector<Vector2i> moves;
+	UnitGroup* units;
 
 	//IDrawable
 	void draw(sf::RenderWindow* rw);
