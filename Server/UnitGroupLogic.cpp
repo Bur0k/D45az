@@ -7,6 +7,8 @@ UnitGroupLogic::UnitGroupLogic(short units, UnitTypes type, POINT pos,  vector<U
 
 	this->unitGroups = unitGroups;
 
+	this->strategy = UnitStrategy::DEFENSIVE;
+
 	for(int i = 0; i < units; i++)
 	{
 		UnitLogic* unit = new UnitLogic(type);
@@ -75,6 +77,11 @@ void UnitGroupLogic::splitandMove(short units[], UnitTypes types[], POINT moves[
 
 	splittedGroup->move(moves, arrlen);
 
+}
+
+void UnitGroupLogic::changeStrategy(UnitStrategy strategy)
+{
+	this->strategy = strategy;
 }
 
 

@@ -132,42 +132,54 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0409:
 		{
-			// umschreiben
-			for (unsigned int i = 0; i < data.size(); i+=16)
+			for (unsigned int i = 0; i < data.size(); i+=74)
 			{
 				allUnits.clear();
 				
+				UnitStrategy strategy;
+				UnitTypes types[16];
+				short livingsoldiers[16];
 				POINT pos;
+				//pos auslesen
 				pos.x = decodeInt(data, i);
 				pos.y = decodeInt(data, i + 4);
+				// strategy(short) auslesen
+				strategy = (UnitStrategy) decodeShort(data, i + 8);
+				// 32 shorts abwechselnd living und type
+				for (int j = 0; j < 16; j++)
+				{
+					types[j] = (UnitTypes) decodeShort(data, i + 10 + 4*j);
+					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
+				}
 
-				short light = decodeShort(data, i + 8);
-				short heavy = decodeShort(data, i + 10);
-				short longrange = decodeShort(data, i + 12);
-				short artillery = decodeShort(data, i + 14);
-
-				// UnitGroup* ugroup = new UnitGroup(pos,light, heavy, longrange, artillery);
-				// allUnits.push_back(ugroup);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy);
+				 allUnits.push_back(ugroup);
 			}	
 		}break;
 	case 0x0411:
 		{
-			//umschreiben
-			for (unsigned int i = 0; i < data.size(); i+=16)
+			for (unsigned int i = 0; i < data.size(); i+=74)
 			{
-				this->ownedUnits.clear();
-
+				ownedUnits.clear();
+				
+				UnitStrategy strategy;
+				UnitTypes types[16];
+				short livingsoldiers[16];
 				POINT pos;
+				//pos auslesen
 				pos.x = decodeInt(data, i);
 				pos.y = decodeInt(data, i + 4);
+				// strategy(short) auslesen
+				strategy = (UnitStrategy) decodeShort(data, i + 8);
+				// 32 shorts abwechselnd living und type
+				for (int j = 0; j < 16; j++)
+				{
+					types[j] = (UnitTypes) decodeShort(data, i + 10 + 4*j);
+					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
+				}
 
-				short light = decodeShort(data, i + 8);
-				short heavy = decodeShort(data, i + 10);
-				short longrange = decodeShort(data, i + 12);
-				short artillery = decodeShort(data, i + 14);
-
-				// UnitGroup* ugroup = new UnitGroup(pos,light, heavy, longrange, artillery);
-				// ownedUnits.push_back(ugroup);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy);
+				ownedUnits.push_back(ugroup);
 			}
 		}break;
 }
