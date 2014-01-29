@@ -55,6 +55,7 @@ private:
 	short m_maxLen;
 	bool m_is_turn_valid;
 	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn.clear().
+	std::vector<turn> mouseOverTurn;
 	RectangleShape rsTurn;
 	MapLayer* collisionLayer;
 

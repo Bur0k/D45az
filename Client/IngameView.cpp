@@ -71,6 +71,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
+
+	updateFogOfWar();
 }
 
 IngameView::~IngameView()
@@ -130,6 +132,49 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	
 	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+
+	if(currentTurn.size() != 0)
+	{
+		if(m_turnOnPathDraw)
+		{
+
+			m_is_turn_valid = true;
+
+			mouseOverTurn.clear();
+			sf::Vector2i lastTurn = currentTurn.back().pos;
+			if(m_pointAt != lastTurn)
+			{
+				sf::Vector2i diff;
+				while(lastTurn != m_pointAt && m_maxLen > static_cast<short>(mouseOverTurn.size()+currentTurn.size()))
+				{
+					diff=m_pointAt-lastTurn;
+					if(diff.x != 0)
+					{
+						lastTurn+=sf::Vector2i(diff.x>0?1:-1,0);
+						mouseOverTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							mouseOverTurn.back().valid = false;
+							m_is_turn_valid = false;
+						}
+					}
+					if( m_maxLen <= static_cast<short>(mouseOverTurn.size()+currentTurn.size()))
+						break;
+					if(diff.y != 0)
+					{
+						lastTurn+=sf::Vector2i(0,diff.y>0?1:-1);
+						mouseOverTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							mouseOverTurn.back().valid=false;
+						}
+					}
+				}
+			}
+		}
+	}
 	return retValue;
 }
 
@@ -146,6 +191,8 @@ bool IngameView::PressedRight()
 bool IngameView::PressedLeft()
 {
 	currentTurn.clear();
+	mouseOverTurn.clear();
+
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
@@ -205,28 +252,53 @@ void IngameView::draw(sf::RenderWindow* rw)
 
 	if(turnOnFogOfWar)
 	{
-		rsTurn.setFillColor(Color(0x00,0x00,0x00,0x20));
-		rsTurn.setOutlineColor(Color(0x00,0x00,0x00,0x20));
-		for(int i=0;i<toDraw.size();i++)
-			for(int j=0;j<toDraw[0].size();j++)
-				if(toDraw[i][j])
+		rsTurn.setFillColor(Color(0x00,0x00,0x00,0xAA));
+		rsTurn.setOutlineColor(Color(0x00,0x00,0x00,0xAA));
+
+		int width=m_mapView.width / m_tileSize.x + 1 +
+		((m_mapView.top+m_mapView.width % m_tileSize.x  > 0)? 1 : 0);
+
+		int height=m_mapView.height / m_tileSize.y + 1 +
+			((m_mapView.left+m_mapView.height  % m_tileSize.y > 0)? 1 : 0) ;
+
+		int firstY=m_mapView.top/m_tileSize.y;
+		int firstX=m_mapView.left/m_tileSize.x;
+
+		if(firstX<0)
+		{
+			width-=firstX;
+			firstX=0;
+		}
+	#pragma warning( push )
+	#pragma warning( disable: 4018 )//Hier stimmt alles
+		while(firstX > m_map.layers[0]->layer[0].size())
+			firstX--;
+		while(firstX+width > m_map.layers[0]->layer[0].size())
+			width--;
+
+		if(firstY<0)
+		{
+			height-=firstY;
+			firstY=0;
+		}
+		while(firstY > m_map.layers[0]->layer.size())
+			firstY--;
+		while(firstY+height > m_map.layers[0]->layer.size())
+			height--;
+	 #pragma warning( pop )
+
+		for(int y=firstY ; y!=firstY+height ; y++)
+		{
+			for(int x=firstX ; x!=firstX+width ; x++)
+			{
+				if(toDraw[y][x])
 				{
-					rsTurn.setPosition( static_cast<float>(j * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
-							static_cast<float>(i * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+					rsTurn.setPosition((float)x*m_tileSize.x-m_mapView.left,(float)y*m_tileSize.y-m_mapView.top);
 					rw->draw(rsTurn);
 				}
-			
-		for(auto it:toDraw)
-			for(auto it2:it)
-				if(!it2)
-				{
-					//Hier ist FOG OF WAR
-					
-				}
+			}
+		}
 	}
-
-	for(unsigned int i = 0; i < m_DrawV.size(); i++)
-		m_DrawV[i]->draw(rw);	
 	
 	for(auto it : currentTurn)
 	{
@@ -244,6 +316,27 @@ void IngameView::draw(sf::RenderWindow* rw)
 		}
 		rw->draw(rsTurn);
 	}
+	for(auto it : mouseOverTurn)
+	{
+		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+							static_cast<float>(it.pos.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+		if(it.valid)
+		{
+			rsTurn.setOutlineColor(Color(0x0F,0x99,0x00,0x77));
+			rsTurn.setFillColor(Color(0x0F,0x99,0x00,0x22));
+		}
+		else
+		{
+			rsTurn.setOutlineColor(Color(0xFF,0x1F,0x1F,0x77));
+			rsTurn.setFillColor(Color(0xFF,0x1F,0x1F,0x22));
+		}
+		rw->draw(rsTurn);
+	}
+
+	
+
+	for(unsigned int i = 0; i < m_DrawV.size(); i++)
+		m_DrawV[i]->draw(rw);	
 
 	rw->draw(m_mapMouseOver);
 
@@ -403,6 +496,7 @@ void IngameView::drawPath()
 	if(m_turnOnPathDraw)
 	{
 		m_is_turn_valid = true;
+		mouseOverTurn.clear();
 
 		if(currentTurn.size() == 0)
 		{
