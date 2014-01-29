@@ -10,17 +10,14 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 	this->map = map;
 
 	MapLayer* v = this->map->layers[0];
-	MapLayer* w = this->map->layers[0];
 	int id = 1;
 
-	for(int i = 0; i < map->layers.size();i++)
+	for(int i = 0; i < map->layers.size();	i++)
 		if(map->layers[i]->isCityLayer)
 			v = map->layers[i];
-		else if(map->layers[i]->isBarricadeLayer)
-			w = map->layers[i];
 	
-	for( int i = 0; i < v->layer.size();i++)
-		for( int j = 0; j < v->layer[i].size();j++)
+	for( int i = 0; i < v->layer.size(); i += 2)
+		for( int j = 0; j < v->layer[i].size(); i += 2)
 		{
 			if( v->layer[i][j] == STARTCITY)
 			{
