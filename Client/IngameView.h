@@ -51,12 +51,20 @@ class IngameView :
 {
 private:
 	//path drawing
-	bool m_turnOn;
+	bool m_turnOnPathDraw;
 	short m_maxLen;
 	bool m_is_turn_valid;
-	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
+	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn.clear().
 	RectangleShape rsTurn;
 	MapLayer* collisionLayer;
+
+
+	//Fog of war
+	bool turnOnFogOfWar;
+	bool updateNewFogOfWar;
+	std::vector<std::vector<bool>> toDraw;
+	void updateFogOfWar();
+
 
 
 	//debug

@@ -166,7 +166,9 @@
     <ClCompile Include="Army.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp" />
+    <ClCompile Include="Background.cpp">
+      <Filter>Codes\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -289,8 +291,12 @@
     <ClInclude Include="Army.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Background.h" />
-    <ClInclude Include="Textblock.h" />
+    <ClInclude Include="Textblock.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
