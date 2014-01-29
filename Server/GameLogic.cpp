@@ -53,9 +53,6 @@ GameLogic::~GameLogic()
 	for(unsigned int i = 0; i < this->neutralCities.size(); i++)
 		delete this->neutralCities[i];
 
-	for(int i = 0; i < this->barricades.size(); i++)
-		delete this->barricades[i];
-
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
 }
