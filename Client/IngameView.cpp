@@ -30,6 +30,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	
 	m_map.load("Data/Maps/Map1.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
+	m_mapTileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight);
 	m_mapSize = Vector2i(m_map.layers[0]->layer[0].size(), m_map.layers[0]->layer.size()) / 2;
 	m_mapTotalSize = Vector2i(m_tileSize.x * m_mapSize.x, m_tileSize.x * m_mapSize.x); 
 	
@@ -71,6 +72,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
+
+	m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
 
 	updateFogOfWar();
 }
@@ -253,16 +256,17 @@ void IngameView::draw(sf::RenderWindow* rw)
 	if(turnOnFogOfWar)
 	{
 		rsTurn.setFillColor(Color(0x00,0x00,0x00,0xAA));
-		rsTurn.setOutlineColor(Color(0x00,0x00,0x00,0xAA));
+		rsTurn.setOutlineColor(Color(0x00,0x00,0x00,0x00));
+		rsTurn.setSize(Vector2f(static_cast<float>(m_mapTileSize.x), static_cast<float>(m_mapTileSize.y)));
 
-		int width=m_mapView.width / m_tileSize.x + 1 +
-		((m_mapView.top+m_mapView.width % m_tileSize.x  > 0)? 1 : 0);
+		int width=m_mapView.width / m_mapTileSize.x + 1 +
+		((m_mapView.top+m_mapView.width % m_mapTileSize.x  > 0)? 1 : 0);
 
-		int height=m_mapView.height / m_tileSize.y + 1 +
-			((m_mapView.left+m_mapView.height  % m_tileSize.y > 0)? 1 : 0) ;
+		int height=m_mapView.height / m_mapTileSize.y + 1 +
+			((m_mapView.left+m_mapView.height  % m_mapTileSize.y > 0)? 1 : 0) ;
 
-		int firstY=m_mapView.top/m_tileSize.y;
-		int firstX=m_mapView.left/m_tileSize.x;
+		int firstY=m_mapView.top/m_mapTileSize.y;
+		int firstX=m_mapView.left/m_mapTileSize.x;
 
 		if(firstX<0)
 		{
@@ -293,7 +297,7 @@ void IngameView::draw(sf::RenderWindow* rw)
 			{
 				if(toDraw[y][x])
 				{
-					rsTurn.setPosition((float)x*m_tileSize.x-m_mapView.left,(float)y*m_tileSize.y-m_mapView.top);
+					rsTurn.setPosition((float)x*m_mapTileSize.x-m_mapView.left,(float)y*m_mapTileSize.y-m_mapView.top);
 					rw->draw(rsTurn);
 				}
 			}
@@ -575,7 +579,7 @@ void IngameView::updateFogOfWar()
 			for(int j=0;j<m_map.layers[0]->layer[0].size();j++)
 				if((j-it->pos.x)*(j-it->pos.x) + 
 					(i-it->pos.y)*(i-it->pos.y) <= maxRange*maxRange)
-					toDraw[i][j]=true;
+					toDraw[i][j]=false;
 	}
 	for(auto it2:m_map.layers)
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
@@ -585,6 +589,6 @@ void IngameView::updateFogOfWar()
 				for(int i=0;i<it2->layer.size();i++)
 					for(int j=0;j<it2->layer[0].size();j++)
 						if(id == it2->layer[i][j])
-							toDraw[i][j]=true;
+							toDraw[i][j]=false;
 			}
 }

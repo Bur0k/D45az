@@ -85,6 +85,7 @@ private:
 	IntRect m_mapView;
 	Vector2i m_mapSize;
 	Vector2i m_tileSize;
+	Vector2i m_mapTileSize;
 
 	//logic
 	LogicData m_GameData;
