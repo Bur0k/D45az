@@ -665,6 +665,11 @@ void IngameView::loadGamestate()
 		delete army;
 	
 	short my_ID;
+
+	if(m_GameData.ownedCities.size > 0)
+		my_ID = m_GameData.ownedCities[0]->player_ID;
+
+	
 	
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
 		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i]));
