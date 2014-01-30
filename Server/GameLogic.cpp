@@ -35,7 +35,12 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 
 	for(unsigned int i = 0; i < players.size(); i++)
 	{
-		IngameLogic* ingame = new IngameLogic(players[i], this->startCities[i]);
+		this->startCities[i]->player_ID = i;
+	}
+
+	for(unsigned int i = 0; i < players.size(); i++)
+	{
+		IngameLogic* ingame = new IngameLogic(i, players[i], this->startCities[i]);
 		this->playersIngame.push_back(ingame);
 	}
 
@@ -117,6 +122,9 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(this->playersIngame[index]->cities[i]->position->y);
 					erfg.push_back(this->playersIngame[index]->cities[i]->level);
 				}
+
+				erfg.push_back(this->playersIngame[index]->cities[0]->player_ID);
+		
 
 				server->write(s, 0x0405, erfg);
 			}break;

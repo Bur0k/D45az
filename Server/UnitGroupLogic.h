@@ -24,6 +24,7 @@ public:
 	UnitStrategy strategy;
 	
 	POINT pos;
+	short player_ID;
 
 
 public:
