@@ -134,6 +134,9 @@ bool IngameView::PressedRight()
 {
 	drawPath();
 
+	if(m_is_turn_valid)
+		addPathToArmy();
+
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
 			return true;
@@ -298,6 +301,8 @@ void IngameView::moveMap()
 	static int _x;
 	static int _y;
 	
+	Rect<int> tmpView = m_mapView;
+
 	//X
 	//increase or decrease the scrollspeed
 	m_scrollspeed.x += (m_scrolldir.x != 0)? 1 : -2;
@@ -315,16 +320,16 @@ void IngameView::moveMap()
 	//move the map or not move if at border
 	m_mapView.left += static_cast<int>(m_scrollspeed.x * _x);
 
-	if(m_mapTotalSize.x > static_cast<int>(m_screensize.x))
+	if(m_mapTotalSize.x  + INGAMEVIEW_SCROLLEXESS * 2 > static_cast<int>(m_screensize.x))
 	{
-		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
+		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x + INGAMEVIEW_SCROLLEXESS)
 		{
-			m_mapView.left = m_mapTotalSize.x - m_mapView.width;
+			m_mapView.left = m_mapTotalSize.x - m_mapView.width + INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.x = 0;
 		}
-		else if(m_mapView.left < 0)
+		else if(m_mapView.left + INGAMEVIEW_SCROLLEXESS < 0)
 		{
-			m_mapView.left = 0;
+			m_mapView.left = - INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.x = 0;
 		}
 	}
@@ -346,18 +351,27 @@ void IngameView::moveMap()
 	//move the map or not move if at border
 	m_mapView.top += static_cast<int>(m_scrollspeed.y * _y); 
 
-	if(m_mapTotalSize.y > static_cast<int>(m_screensize.y))
+	if(m_mapTotalSize.y + INGAMEVIEW_SCROLLEXESS * 2 > static_cast<int>(m_screensize.y))
 	{	
-		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
+		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y + INGAMEVIEW_SCROLLEXESS)
 		{
-			m_mapView.top = m_mapTotalSize.y - m_mapView.height;
+			m_mapView.top = m_mapTotalSize.y - m_mapView.height + INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.y = 0;
 		}
-		else if(m_mapView.top < 0)
+		else if(m_mapView.top + INGAMEVIEW_SCROLLEXESS < 0)
 		{
-			m_mapView.top = 0;
+			m_mapView.top = - INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.y = 0;
 		}
+	}
+
+	//update armys
+	if(tmpView != m_mapView)
+	{
+		for(unsigned int i = 0; i < m_owned_armys.size(); i++)
+			m_owned_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
+		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
+			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
 }
 
@@ -420,3 +434,49 @@ void IngameView::drawPath()
 		}
 	}
 }
+
+void IngameView::addPathToArmy()
+{
+	for(auto turns : army_moves)
+	{
+		if(currentTurn[0].pos == turns[0])
+		{
+			turns.clear();
+			for(auto turn : currentTurn)
+				turns.push_back(turn.pos);
+			return;
+		}
+	}
+	
+	std::vector<sf::Vector2i> newturn;
+		
+	for(auto turn : currentTurn)
+		newturn.push_back(turn.pos);
+	army_moves.push_back(newturn);
+}
+
+void IngameView::loadPath(Vector2i pos)
+{
+	for(auto turns : army_moves)
+	{
+		if(turns[0] ==  pos)
+		{
+			currentTurn.clear();
+			for(auto move : turns)
+				currentTurn.push_back(turn(move));
+			break;
+		}
+	}
+}
+
+void IngameView::loadArmys()
+{
+	for(Army* army : m_owned_armys)
+		delete army;
+	
+	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
+		m_owned_armys.push_back(new Army(1));
+
+}
+
+

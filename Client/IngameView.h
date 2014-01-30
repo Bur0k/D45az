@@ -18,6 +18,8 @@
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
 
+#define INGAMEVIEW_SCROLLEXESS 150
+
 #define INGAMEVIEW_LIGHT_SIGHT 8
 #define INGAMEVIEW_HEAVY_SIGHT 8
 #define INGAMEVIEW_RANGED_SIGHT 8
@@ -45,6 +47,12 @@ public:
 	turn(sf::Vector2i Pos){pos=Pos;valid=true;}
 };
 
+struct buildOrders
+{
+
+};
+
+
 
 class IngameView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
@@ -57,6 +65,14 @@ private:
 	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
 	RectangleShape rsTurn;
 	MapLayer* collisionLayer;
+
+	//vector of all moves the player made
+	std::vector<std::vector<sf::Vector2i>> army_moves;
+	//vector of all units built;
+	
+	//vector of all owned armys
+	std::vector<Army*> m_owned_armys;
+	std::vector<Army*> m_enemy_armys;
 
 
 	//debug
@@ -155,6 +171,12 @@ private:
 	void displayCityInfo(City &);
 	void displayArmyInfo(Unit &);
 	void drawPath();
+	//saves path to army at path[0]
+	void addPathToArmy();
+	//loads path from army at pos
+	void loadPath(Vector2i pos);
+
+	void loadArmys();
 };
 
 
