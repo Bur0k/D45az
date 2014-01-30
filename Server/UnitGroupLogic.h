@@ -21,6 +21,7 @@ public:
 	
 	POINT pos;
 
+
 public:
 	UnitGroupLogic(short units, UnitTypes type, POINT p, vector<UnitGroupLogic*>* unitGroups);
 	~UnitGroupLogic();
