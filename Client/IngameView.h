@@ -184,8 +184,16 @@ private:
 	void addPathToArmy();
 	//loads path from army at pos
 	void loadPath(Vector2i pos);
+	void drawMouseOverPath();
+	//returns true if object is not covered by fog of war
+	bool isVisible(Vector2i pos);
 
-	void loadArmys();
+	void loadGamestate();
+
+
+	void fogOfWardraw(RenderWindow* rw);
+	//renders the path on screen
+	void pathDraw(RenderWindow* rw);
 };
 
 

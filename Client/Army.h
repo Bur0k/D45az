@@ -71,7 +71,7 @@ public:
 	Vector2i m_Tilesize;
 	
 
-	Army(int i);
+	Army(UnitGroup* ug);
 	~Army();
 
 	
