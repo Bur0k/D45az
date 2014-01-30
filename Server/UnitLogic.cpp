@@ -9,6 +9,7 @@ UnitLogic::UnitLogic(UnitTypes type)
 
 	this->living = maxlivingsoldiers;
 
+
 	this->type = type;
 
 	switch(type)

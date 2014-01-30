@@ -29,14 +29,14 @@ public:
 	virtual void OpenMenu()=0;
 };
 
+enum class Icons
+{
+    MONEY, ARMIES, CITIES, ROUNDS
+};
 
 class Statusbar : public IClickable, public IDrawable, public IAnimatable, public IButtonfunction
 {
 	
-enum Icons
- {
-    Geld, Armee, Stadt, Runden
- } myIcons;
 
 private: // soll eigentlich NICHT abgeleitet werden
 	bool m_mouseOver;
@@ -51,6 +51,7 @@ private: // soll eigentlich NICHT abgeleitet werden
 	vector<Texture> m_vTextures;
 	vector<Sprite> m_vSPictures;
 	vector<Textblock*> m_vTLabels;
+	vector<int> m_vValue;
 
 	//Zeiger auf andere Klassen
 	StatusBarFunctions* m_pOpenMenu;
@@ -66,7 +67,9 @@ public:
 	Vector2f getPosition();
 	void setBgColor(Color c);
 	void Resize(Vector2f new_size);
-	void setValue(enum Icons, int value);
+	void setValue(Icons icon, int value);
+	void increaseValue(Icons icon, int value);
+	void decreaseValue(Icons icon, int value);
 	//Containerverwaltung
 	//void Push(
 

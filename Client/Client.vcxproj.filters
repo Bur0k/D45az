@@ -167,7 +167,7 @@
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
     <ClCompile Include="Background.cpp">
-      <Filter>Codes\Graphic\Source</Filter>
+      <Filter>Codes\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,10 +291,10 @@
     <ClInclude Include="Army.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Background.h">
+    <ClInclude Include="Textblock.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Textblock.h">
+    <ClInclude Include="Background.h">
       <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -385,6 +385,9 @@
       <Filter>Data\map</Filter>
     </None>
     <None Include="Data\Maps\test.tmx">
+      <Filter>Data\map</Filter>
+    </None>
+    <None Include="Data\Maps\Map1.tmx">
       <Filter>Data\map</Filter>
     </None>
   </ItemGroup>

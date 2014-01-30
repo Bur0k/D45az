@@ -10,6 +10,7 @@ using namespace std;
 
 enum class UnitTypes{LIGHT, HEAVY, LONGRANGE, ARTILLERY};
 
+
 class UnitLogic : public NetworkParticipant
 {
 private:
@@ -23,6 +24,7 @@ public:
 	int range;
 	UnitTypes type;
 	short living;
+
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

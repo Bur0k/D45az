@@ -14,9 +14,6 @@ using namespace std;
 
 #define STARTCITY 51
 #define NEUTRALCITY 49
-#define BARRICADE1 13
-#define BARRICADE2 10
-
 
 class GameLogic : public NetworkParticipant
 {
@@ -26,8 +23,7 @@ private:
 	vector<IngameLogic*> playersIngame;
 	Map* map;
 	vector<CityLogic*> startCities;
-	vector<CityLogic*> neutralCities;
-	vector<POINT*> barricades; 
+	vector<CityLogic*> neutralCities; 
 
 public:
 	GameLogic::GameLogic(vector<PlayerData*> players, Map* map);

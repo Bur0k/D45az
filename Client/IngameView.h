@@ -59,10 +59,11 @@ class IngameView :
 {
 private:
 	//path drawing
-	bool m_turnOn;
+	bool m_turnOnPathDraw;
 	short m_maxLen;
 	bool m_is_turn_valid;
-	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn=std::vector<turn>().
+	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn.clear().
+	std::vector<turn> mouseOverTurn;
 	RectangleShape rsTurn;
 	MapLayer* collisionLayer;
 
@@ -73,6 +74,14 @@ private:
 	//vector of all owned armys
 	std::vector<Army*> m_owned_armys;
 	std::vector<Army*> m_enemy_armys;
+
+
+	//Fog of war
+	bool turnOnFogOfWar;
+	bool updateNewFogOfWar;
+	std::vector<std::vector<bool>> toDraw;
+	void updateFogOfWar();
+
 
 
 	//debug
@@ -86,11 +95,13 @@ private:
 
 	CommitButton* m_commitB;
 
-	//MAP STUFF
+	//Visible STUFF
+	Statusbar* m_SBar;	
 	Map m_map;
 	IntRect m_mapView;
 	Vector2i m_mapSize;
 	Vector2i m_tileSize;
+	Vector2i m_mapTileSize;
 
 	//logic
 	LogicData m_GameData;
@@ -117,8 +128,6 @@ private:
 	KeyInputVect m_KeyV;
 
 	Views m_nextView;
-
-	Statusbar* m_SBar;
 
 	//gameStatus
 	InagameViewPhases m_phase;

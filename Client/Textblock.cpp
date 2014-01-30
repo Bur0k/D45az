@@ -34,16 +34,20 @@ Textblock::~Textblock()
 Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 {
 	setPosition(pos);
+
 	m_Font = Font(MyFonts::getFont(GameFonts::ARIAL));
 	m_textblockText.setFont(m_Font);
 	m_textblockText.setPosition(getPosition());
 	m_textblockText.setColor(MyColors.Black);
 	m_textblockText.setCharacterSize(CharSize);
 	m_textblockText.setString(lineBreak(S, size));
+
 	textsize = m_textblockText.getLocalBounds();
 	setSize(Vector2f(textsize.width + 5, textsize.height + 10));
+
 	m_color = MyColors.Gray;
 	setFillColor(m_color);
+
 	fixCharsize();
 
 	if(S.isEmpty())
