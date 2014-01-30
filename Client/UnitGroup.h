@@ -4,6 +4,8 @@
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include "Unit.h"
+#include "Ingame.h"
+#include "City.h"
 
 struct soldiers
 {
@@ -20,12 +22,12 @@ private:
 
 public:
 	POINT pos;
-
+	short player_ID;
 	soldiers* units;
 
 	UnitStrategy strategy;
 
-	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy);
+	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, City* producer);
 	~UnitGroup();
 
 	void processNewMessage(short id,vector<char> data);
