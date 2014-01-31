@@ -40,7 +40,7 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 
 	for(unsigned int i = 0; i < players.size(); i++)
 	{
-		IngameLogic* ingame = new IngameLogic(i, players[i], this->startCities[i]);
+		IngameLogic* ingame = new IngameLogic(players[i], this->startCities[i]);
 		this->playersIngame.push_back(ingame);
 	}
 

@@ -134,7 +134,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
 				}
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, this->ownedCities[0]);
 				 allUnits.push_back(ugroup);
 			}	
 		}break;
@@ -160,7 +160,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
 				}
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
 				ownedUnits.push_back(ugroup);
 			}
 		}break;
