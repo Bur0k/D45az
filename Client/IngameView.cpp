@@ -666,7 +666,7 @@ void IngameView::loadGamestate()
 	
 	short my_ID;
 
-	if(m_GameData.ownedCities.size > 0)
+	if(m_GameData.ownedCities.size() > 0)
 		my_ID = m_GameData.ownedCities[0]->player_ID;
 
 	
