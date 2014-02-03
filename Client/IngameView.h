@@ -59,6 +59,9 @@ class IngameView :
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+
+	Client* c;
+
 	//path drawing
 	bool m_turnOnPathDraw;
 	short m_maxLen;
@@ -135,6 +138,9 @@ private:
 	InagameViewPhases m_phase;
 	
 	RectangleShape m_mapMouseOver;
+
+	//rectangles behind cities in playercolor
+	vector<sf::RectangleShape> m_RectangleShapes;
 
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase);

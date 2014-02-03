@@ -26,11 +26,8 @@ public:
 	Color Gold;
 	Color Silver;
 	Color Bronze;
-
-	Color player1;
-	Color player2;
-	Color player3;
-	Color player4;
+	Color player[4];
+	
 
 	MyColors() {
 		Orange = Color(0xFF, 0xA2, 0x00, 0xFF);
@@ -49,10 +46,11 @@ public:
 		White = Color::White;
 		Red = Color::Red;
 
-		player1 = Red;
-		player2 = Color::Blue;
-		player3 = Color(0x0C,0xED,0x00,0xFF);	//green
-		player4 = Color(0xFF,0xFB,0x00,0xFF);	//yellow
+		player[0] = Red;
+		player[1] = Color::Blue;
+		player[2] = Color(0x0C,0xED,0x00,0xFF);	//green
+		player[3] = Color(0xFF,0xFB,0x00,0xFF);	//yellow
+		player[5] = Color::White;	//neutral color
 
 		Transparent = Color::Transparent;
 	}
@@ -99,8 +97,7 @@ enum class ingameObjectType{
 class IIngameObjects
 {
 	virtual ingameObjectType getType()=0;
-	virtual void /* TODO NOT VOID but info pointer to army*/ getArmy()=0;
-	virtual void /* TODO NOT VOID but info pointer to city*/ getCity()=0;
+	virtual void onMapMove(Rect<int>)=0;
 };
 
 

@@ -1,6 +1,8 @@
 #ifndef UNITGROUP_H
 #define UNITGROUP_H
 
+#define maxlivingsoldiers 20
+
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include "Unit.h"
@@ -32,6 +34,7 @@ public:
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);
+	float getUnitgroupStrength();
 };
 
 

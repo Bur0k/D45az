@@ -25,6 +25,7 @@ void LogicData::updateGameData()
 void LogicData::requestPlayers()
 {
 	vector<char> erfg;
+	erfg.push_back(0);
 	c->write(0x0400, erfg);
 }
 

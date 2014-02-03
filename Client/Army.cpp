@@ -5,58 +5,114 @@ Army::Army()
 	
 }
 
-Army::Army(UnitGroup* ug)
+Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible)
 {
 	m_animation = -1;
 	m_mouseOver = false;
 	m_animating = false;
 
+	m_isVisible = isVisible;
+
+	m_playerColor = MyColors.player[ug->player_ID];
+
 	units = ug;
 	m_position = Vector2i(ug->pos.x, ug->pos.y);
+
+	Image img;
+	if(!img.loadFromFile("Data/Images/germanset.png"))
+		std::cout << "Army.cpp : loading of Data/Images/germanset.png failed" << std::endl;
+	m_texture = new Texture();
+	m_texture->loadFromImage(img);
+	m_armySprite = new SplittedSprite(m_texture, ARMY_SPRITE_WIDTH, ARMY_SPRITE_HEIGHT);
+	m_armySprite->setFrame(1);
+
+	m_markedIndicator.setRadius((float)ARMY_TILESIZE / 2);
+	m_markedIndicator.setPointCount(30);
+	
+	m_powerBar.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, static_cast<float>(64 * units->getUnitgroupStrength())));
+	m_powerBar.setFillColor(MyColors.player[units->player_ID]);
+	
+	m_pBarBg.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, ARMY_TILESIZE));
+	Color c = MyColors.player[units->player_ID];
+	c.a = 100;
+	m_pBarBg.setFillColor(c);
+
+
+	m_markedIndicator.setFillColor(MyColors.Transparent);
+
+	PositionGraphics();
 }
 
 Army::~Army()
 {
-
+	delete m_armySprite;
+	delete m_texture;
 }
 
 void Army::PositionGraphics()
 {
+	Vector2f pos;
+	if(!m_animating)
+		pos = (Vector2f)m_position;
+	else
+		pos = Vector2f(m_dimensions.left, m_dimensions.top);
+
+	pos = pos * (float)ARMY_TILESIZE - (Vector2f)m_mapViewOffset;
+	m_armySprite->setPosition(pos.x - 2, pos.y);
+
+	m_markedIndicator.setPosition(pos);
+	m_pBarBg.setPosition(pos);
+	m_powerBar.setPosition(pos.x, pos.y + 64 - m_powerBar.getSize().y);
 	
+
 	//set the position of graphic objects
 }
-
 
 //IDrawable
 void Army::draw(sf::RenderWindow* rw)
 {
+	if(!m_isVisible)
+		return;
 	if(!m_inCity)
 	{
 		if(m_marked)
 			rw->draw(m_markedIndicator);
-		rw->draw(m_body);
+		rw->draw(*m_armySprite);
 	}
 	rw->draw(m_powerBar);
-	rw->draw(m_flag);
+	rw->draw(m_pBarBg);
 }
 
 //IClickable
 bool Army::MouseMoved(sf::Vector2i & mouse)
 {
+	if(!m_isVisible)
+		return false;
+
 	if( mouse.x > m_dimensions.left && mouse.x < m_dimensions.left + m_dimensions.width &&
 		mouse.x > m_dimensions.left && mouse.x < m_dimensions.left + m_dimensions.width)
+	{
+		Color tmp = m_playerColor;
+		tmp.a = 100;
+		m_markedIndicator.setFillColor(tmp);
 		m_mouseOver = true;
+	}
 	else	
-		m_mouseOver = true;
-	
+	{
+		m_markedIndicator.setFillColor(MyColors.Transparent);
+		m_mouseOver = false;
+	}
 	return m_mouseOver;
 }
 
 bool Army::PressedLeft()
 {
+	if(!m_isVisible)
+		return false;
 	if(m_mouseOver)
 	{
 		m_marked = !m_marked;
+		m_markedIndicator.setFillColor(m_playerColor);
 		return true;
 	}
 	else 
@@ -75,7 +131,7 @@ void Army::animationTick()
 	{
 		m_animation --;
 		float ratio = static_cast<float>(m_animation) / ARMY_ANIMATIONSTEPS;	
-		Vector2f currentPos = m_oldPos * ratio + m_targetPos * (1 - ratio);
+		Vector2f currentPos = m_a_oldPos * ratio + m_a_targetPos * (1 - ratio);
 		m_dimensions.left = currentPos.x;
 		m_dimensions.top = currentPos.y;
 
@@ -113,8 +169,8 @@ bool Army::animatedMove(Vector2i target)
 
 	m_animation = ARMY_ANIMATIONSTEPS + 1;
 	m_animating = true;
-	m_oldPos = Vector2f(m_dimensions.left,m_dimensions.top);
-	m_targetPos = Vector2f( static_cast<float>(target.x * m_Tilesize.x),
+	m_a_oldPos = Vector2f(m_dimensions.left,m_dimensions.top);
+	m_a_targetPos = Vector2f( static_cast<float>(target.x * m_Tilesize.x),
 							static_cast<float>(target.y * m_Tilesize.y));
 
 
@@ -126,18 +182,25 @@ ingameObjectType Army::getType()
 	return ingameObjectType::ARMY;
 }
 
-void /* TODO NOT VOID but info pointer to army*/ Army::getArmy()
-{
-
-}
-
-void /* TODO NOT VOID but info pointer to city*/ Army::getCity()
-{
-
-}
-
 Army* Army::split(int selection, std::vector<UnitGroup> & newUnits)
 {
 	//UnitGroup* p = new UnitGroup(;
 	return NULL;
+}
+
+
+void Army::onMapMove(Rect<int> mapv)
+{
+	m_mapViewOffset = Vector2i(mapv.left, mapv.top);
+}
+
+int Army::getPlayerID()
+{
+	return this->m_playerID;
+}
+
+void Army::setPower(float power)
+{
+	m_powerBar.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, ARMY_TILESIZE * power));
+	PositionGraphics();
 }

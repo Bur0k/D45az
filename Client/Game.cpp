@@ -140,7 +140,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	//Musik
 	m_pMS = new MusikSampler();
-	//m_pMS->next_song();
+	m_pMS->next_song();
 
 	xMap=yMap=0;
 }
@@ -439,7 +439,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::WAITFORPLAYERS);
+		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::YOURTURN);
 		clear = true;
 		break;
 
