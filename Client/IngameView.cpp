@@ -696,5 +696,9 @@ bool IngameView::isVisible(Vector2i pos)
 
 void IngameView::commitMessage()
 {
+	vector<char> erfg;
 
+	erfg.push_back(this->m_owned_armys[0]->getPlayerID());
+
+	c->write(0x0412, erfg);
 }

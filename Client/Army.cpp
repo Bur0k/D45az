@@ -141,3 +141,8 @@ Army* Army::split(int selection, std::vector<UnitGroup> & newUnits)
 	//UnitGroup* p = new UnitGroup(;
 	return NULL;
 }
+
+int Army::getPlayerID()
+{
+	return this->m_playerID;
+}

@@ -43,7 +43,7 @@ public:
 	std::vector<Vector2i> moves;
 	UnitGroup* units;
 
-	
+	int getPlayerID();
 
 	//IDrawable
 	void draw(sf::RenderWindow* rw);
