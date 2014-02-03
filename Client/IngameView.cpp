@@ -75,6 +75,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
 
+
 	updateFogOfWar();
 }
 
@@ -228,6 +229,9 @@ void IngameView::draw(sf::RenderWindow* rw)
 	Rect<float> MapView;
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
+
+	for (unsigned int i = 0; i < m_RectangleShapes.size(); i++)
+		rw->draw(m_RectangleShapes[i]);
 }
 
 void IngameView::fogOfWardraw(RenderWindow* rw)
@@ -470,6 +474,12 @@ void IngameView::moveMap()
 		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
+	//update rectanglescity
+	for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
+	{
+		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+}
 }
 
 void IngameView::displayCityInfo(City &c)
@@ -676,14 +686,28 @@ void IngameView::loadGamestate()
 	
 	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true));
 
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 	{
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			if(isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)))
-				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView));
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x))));
+	}
+
+	//fill RectangleVector
+	for (auto city: m_GameData.allCities)
+	{
+		RectangleShape r;
+		Color c = MyColors.player[city->player_ID];
+		c.a = 100;
+		r.setOutlineColor(c);
+		r.setFillColor(MyColors.Transparent);
+		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+		r.setPosition((float)(city->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+						(float)(city->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
+		m_RectangleShapes.push_back(r);
 	}
 }
 

@@ -50,6 +50,7 @@ public:
 		player[1] = Color::Blue;
 		player[2] = Color(0x0C,0xED,0x00,0xFF);	//green
 		player[3] = Color(0xFF,0xFB,0x00,0xFF);	//yellow
+		player[5] = Color::White;	//neutral color
 
 		Transparent = Color::Transparent;
 	}

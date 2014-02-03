@@ -1,6 +1,8 @@
 #ifndef UNITGROUP_H
 #define UNITGROUP_H
 
+#define maxlivingsoldiers 20
+
 #include "NetworkParticipant.h"
 #include "Client.h"
 #include "Unit.h"
