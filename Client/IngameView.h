@@ -58,6 +58,9 @@ class IngameView :
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+
+	Client* c;
+
 	//path drawing
 	bool m_turnOnPathDraw;
 	short m_maxLen;
@@ -170,6 +173,8 @@ public:
 	void onSliderValueChange(int ID, double position);
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
+
+	void commitMessage();
 
 	/////IMPLEMENTING IView end/////
 

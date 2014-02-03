@@ -7,8 +7,11 @@
 struct pArmy
 {
 	POINT* position;
+	
 	int playerID;
 	UnitGroupLogic* army;
+
+	pArmy(int playerID, POINT* position, UnitGroupLogic* army);
 };
 
 #endif

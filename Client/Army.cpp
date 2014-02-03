@@ -54,7 +54,7 @@ void Army::PositionGraphics()
 	m_markedIndicator.setPosition(pos);
 
 	
-
+	
 
 	//set the position of graphic objects
 }
@@ -83,7 +83,7 @@ bool Army::MouseMoved(sf::Vector2i & mouse)
 		m_markedIndicator.setFillColor(tmp);
 		m_mouseOver = true;
 	}
-	else
+	else	
 	{
 		m_markedIndicator.setFillColor(MyColors.Transparent);
 		m_mouseOver = false;
@@ -176,4 +176,9 @@ Army* Army::split(int selection, std::vector<UnitGroup> & newUnits)
 void Army::onMapMove(Rect<int> mapv)
 {
 	m_mapViewOffset = Vector2i(mapv.left, mapv.top);
+}
+
+int Army::getPlayerID()
+{
+	return this->m_playerID;
 }

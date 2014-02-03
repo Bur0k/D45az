@@ -6,17 +6,19 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 
 	m_DrawV.push_back(&bg);
 
-	this->players[0] = new Textblock(sf::Vector2f(10, 10),sf::Vector2f(100, 40), "", 30);
-	m_DrawV.push_back(this->players[0]);
-	this->players[1] = new Textblock(sf::Vector2f(10,50),sf::Vector2f(100, 40), "", 30);
-	m_DrawV.push_back(this->players[1]);
-	this->players[2] = new Textblock(sf::Vector2f(10,100),sf::Vector2f(100, 40), "", 30);
-	m_DrawV.push_back(this->players[2]);
-	this->players[3] = new Textblock(sf::Vector2f(10,150),sf::Vector2f(10000, 40), "", 30);
-	m_DrawV.push_back(this->players[3]);
+	
+	this->players[0] = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
+	this->players[1] = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
+	this->players[2] = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
+	this->players[3] = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
+	
+	this->mapName = new Text("mapname", MyFonts::getFont(GameFonts::ARIAL), 35);
+	//m_DrawV.push_back(mapName);
+	for (int i = 0; i < 4; i++)
+		this->players[i]->setColor(MyColors.White);
 
-	this->mapName = new Textblock(sf::Vector2f(10, 200), sf::Vector2f(5000, 50000), "mapname", 30);
-	m_DrawV.push_back(mapName);
+	this->mapName->setColor(MyColors.White);
+
 
 	
 	this->kickPlayer[0] = new StandardButton(sf::Vector2f(10, 250), sf::Vector2f(50, 25), "kick", KICKP1, false, false); 
@@ -31,7 +33,7 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(100, 50), "leave", LEAVE, false);
 	this->startgame = new StandardButton(sf::Vector2f(50, 280), sf::Vector2f(100, 50), "start", START, false);
 
-		this->startgame->setIsEnabled(false);
+	this->startgame->setIsEnabled(false);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -67,15 +69,15 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 
 GameLobbyView::~GameLobbyView()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) 
 		delete this->players[i];
 
 	delete this->mapName;
 	delete this->game;
 
-		delete this->kickPlayer[0];
-		delete this->kickPlayer[1];
-		delete this->kickPlayer[2];	
+	delete this->kickPlayer[0];
+	delete this->kickPlayer[1];
+	delete this->kickPlayer[2];	
 
 	delete this->leave;
 	delete this->startgame;
@@ -100,15 +102,41 @@ void GameLobbyView::onButtonClick(int id)
 		}
 	case KICKP1:
 		{
-
+			for (unsigned int i = 0; i < this->game->players.size(); i++)
+			{
+				if (this->game->players[i] == this->players[1]->getString())
+				{
+					this->game->players[i] = "";
+					//muss vermutlich noch an den Server gesendet werden
+					this->players[1]->setString("");
+				}
+			}
 			break;
 		}
 	case KICKP2:
 		{
+			for (unsigned int i = 0; i < this->game->players.size(); i++)
+			{
+				if (this->game->players[i] == this->players[2]->getString())
+				{
+					this->game->players[i] = "";
+					//muss vermutlich noch an den Server gesendet werden
+					this->players[2]->setString("");
+				}
+			}
 			break;
 		}
 	case KICKP3:
 		{
+			for (unsigned int i = 0; i < this->game->players.size(); i++)
+			{
+				if (this->game->players[i] == this->players[3]->getString())
+				{
+					this->game->players[i] = "";
+					//muss vermutlich noch an den Server gesendet werden
+					this->players[3]->setString("");
+				}
+			}
 			break;
 		}
 	}
@@ -199,6 +227,11 @@ void GameLobbyView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 
+	rw->draw(*players[0]);
+	rw->draw(*players[1]);
+	rw->draw(*players[2]);
+	rw->draw(*players[3]);
+	rw->draw(*this->mapName);
 }
 
 Views GameLobbyView::nextState()
@@ -221,7 +254,7 @@ void GameLobbyView::update(double elapsedMs)
 
 			for (unsigned int i = 0; i < this->game->players.size(); i++)
 			{
-				this->players[i]->setText(this->game->players[i], sf::Vector2f(5555, 5555));
+				this->players[i]->setString(this->game->players[i]);
 			}
 		}
 		if(game->updated & 2)	//playerlimit updated
@@ -265,17 +298,22 @@ void GameLobbyView::centering(Vector2u & size)
 	if (space < 50)
 		space = 50;
 
-	this->players[0]->setPos(Vector2f(size.x / 2 - this->players[0]->getSize().x / 2, size.y / 2 - 2 * this->players[0]->getSize().y - 1.5 * space));
-	this->players[1]->setPos(Vector2f(size.x / 2 - this->players[1]->getSize().x / 2, size.y / 2 - this->players[1]->getSize().y - 0.5 * space));	
-	this->players[2]->setPos(Vector2f(size.x / 2 - this->players[2]->getSize().x / 2, size.y / 2 + 0.5 * space));
-	this->players[3]->setPos(Vector2f(size.x / 2 - this->players[3]->getSize().x / 2, size.y / 2 + this->players[3]->getSize().y + 1.5 * space));
 
-		this->kickPlayer[0]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[0]->getSize().x / 2, this->players[1]->getPosition().y + this->players[1]->getSize().y + space / 4));
-		this->kickPlayer[1]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[1]->getSize().x / 2, this->players[2]->getPosition().y + this->players[2]->getSize().y + space / 4));
-		this->kickPlayer[2]->setPosition(Vector2f(size.x / 2 - this->kickPlayer[2]->getSize().x / 2, this->players[3]->getPosition().y + this->players[3]->getSize().y + space / 4));
+	Rect<float> r = players[3]->getLocalBounds();
 
-	this->leave->setPosition(size.x / 2 - this->players[3]->getSize().x, this->players[3]->getPosition().y + this->players[3]->getSize().y + space);
+	this->players[0]->setPosition(Vector2f((float)(size.x / 2 + 30),(float)(size.y / 2 - 2 * r.height - 1.5 * space)));
+	this->players[1]->setPosition(Vector2f((float)(size.x / 2 + 30), (float)(size.y / 2 - r.height - 0.5 * space)));	
+	this->players[2]->setPosition(Vector2f((float)(size.x / 2 + 30), (float)(size.y / 2 + 0.5 * space)));
+	this->players[3]->setPosition(Vector2f((float)(size.x / 2 + 30), (float)(size.y / 2 + r.height + 1.5 * space)));
 
-	this->startgame->setPosition(this->players[3]->getPosition().x + this->players[3]->getSize().x - this->startgame->getSize().x, this->players[3]->getPosition().y + this->players[3]->getSize().y + space);
+	this->kickPlayer[0]->setPosition(Vector2f((float)(size.x / 2 + 20), (float)(this->players[1]->getPosition().y + r.height + space / 4)));
+	this->kickPlayer[1]->setPosition(Vector2f((float)(size.x / 2 + 20), (float)(this->players[2]->getPosition().y + r.height + space / 4)));
+	this->kickPlayer[2]->setPosition(Vector2f((float)(size.x / 2 + 20), (float)(this->players[3]->getPosition().y + r.height + space / 4)));
+
+	this->leave->setPosition((float)(size.x / 2 - 200), (float)(this->players[3]->getPosition().y + r.height + space));
+
+	this->startgame->setPosition((float)(this->players[3]->getPosition().x + r.width - this->startgame->getSize().x), (float)(this->players[3]->getPosition().y + r.height + space));
+
+	this->mapName->setPosition(Vector2f((float)(size.x / 2 - 200), (float)(this->players[3]->getPosition().y)));
 }
 
