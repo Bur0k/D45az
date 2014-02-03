@@ -470,6 +470,8 @@ void IngameView::moveMap()
 		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
+
+	
 }
 
 void IngameView::displayCityInfo(City &c)
@@ -597,14 +599,14 @@ void IngameView::addPathToArmy()
 				turns.push_back(turn.pos);
 			return;
 		}
-					}
+	}
 	
 	std::vector<sf::Vector2i> newturn;
 		
 	for(auto turn : currentTurn)
 		newturn.push_back(turn.pos);
 	army_moves.push_back(newturn);
-				}
+}
 
 void IngameView::loadPath(Vector2i pos)
 {
@@ -676,14 +678,13 @@ void IngameView::loadGamestate()
 	
 	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true));
 
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 	{
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			if(isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)))
-				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView));
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x))));
 	}
 }
 
