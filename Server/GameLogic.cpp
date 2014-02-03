@@ -16,8 +16,8 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 		if(map->layers[i]->isCityLayer)
 			v = map->layers[i];
 	
-	for(unsigned int i = 0; i < v->layer.size(); i += 2)
-		for(unsigned int j = 0; j < v->layer[i].size(); i += 2)
+	for(unsigned int i = 1; i < v->layer.size(); i += 2)
+		for(unsigned int j = 1; j < v->layer[i].size(); j += 2)
 		{
 			if( v->layer[i][j] == STARTCITY)
 			{
