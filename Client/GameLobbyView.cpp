@@ -3,6 +3,7 @@
 GameLobbyView::GameLobbyView(Vector2u & screensize)
 {
 	this->game = new GameLobby();
+	this->windowsize = screensize;
 
 	m_DrawV.push_back(&bg);
 
@@ -57,9 +58,6 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	m_AnimateV.push_back(startgame);
 	m_ClickV.push_back(startgame);
 	this->startgame->Attach(this);
-
-
-
 
 	m_nextView = Views::NOCHANGE;
 
@@ -256,6 +254,7 @@ void GameLobbyView::update(double elapsedMs)
 			{
 				this->players[i]->setString(this->game->players[i]);
 			}
+			centering(windowsize);
 		}
 		if(game->updated & 2)	//playerlimit updated
 		{
@@ -279,6 +278,7 @@ void GameLobbyView::update(double elapsedMs)
 
 void GameLobbyView::onResize(Vector2u & size)
 {
+	this->windowsize = size;
 	centering(size);
 }
 
@@ -299,7 +299,7 @@ void GameLobbyView::centering(Vector2u & size)
 		space = 50;
 
 
-	Rect<float> r = players[3]->getLocalBounds();
+	Rect<float> r = players[0]->getLocalBounds();
 
 	this->players[0]->setPosition(Vector2f((float)(size.x / 2 + 30),(float)(size.y / 2 - 2 * r.height - 1.5 * space)));
 	this->players[1]->setPosition(Vector2f((float)(size.x / 2 + 30), (float)(size.y / 2 - r.height - 0.5 * space)));	
@@ -312,7 +312,7 @@ void GameLobbyView::centering(Vector2u & size)
 
 	this->leave->setPosition((float)(size.x / 2 - 200), (float)(this->players[3]->getPosition().y + r.height + space));
 
-	this->startgame->setPosition((float)(this->players[3]->getPosition().x + r.width - this->startgame->getSize().x), (float)(this->players[3]->getPosition().y + r.height + space));
+	this->startgame->setPosition((float)(this->players[0]->getPosition().x + r.width - this->startgame->getSize().x), (float)(this->players[3]->getPosition().y + r.height + space));
 
 	this->mapName->setPosition(Vector2f((float)(size.x / 2 - 200), (float)(this->players[3]->getPosition().y)));
 }
