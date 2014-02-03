@@ -43,7 +43,7 @@ float UnitGroup::getUnitgroupStrength()
 
 	for (int i = 0; i < 16; i++)
 	{
-		strength += (0.9/16.0) * (this->units->count / maxlivingsoldiers);
+		strength += (float)((0.9/16.0) * (this->units->count / maxlivingsoldiers));
 		switch (this->units->type)
 		{
 		case UnitTypes::LIGHT:
@@ -64,13 +64,13 @@ float UnitGroup::getUnitgroupStrength()
 	}
 
 	if (countlight != 0)
-		strength += 0.1/4.0;
+		strength += (float)0.1/4.0;
 	if (countheavy != 0)
-		strength += 0.1/4.0;
+		strength += (float)0.1/4.0;
 	if (countlongrange != 0)
-		strength += 0.1/4.0;
+		strength += (float)0.1/4.0;
 	if (countartillery != 0)
-		strength += 0.1/4.0;
+		strength += (float)0.1/4.0;
 
 	return strength;
 }
