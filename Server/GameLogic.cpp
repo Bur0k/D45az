@@ -235,6 +235,10 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}
 				server->write(s, 0x0411, erfg);
 			}break;
+			case 0x0412:
+				{
+					
+				}break;
 	}
 
 }

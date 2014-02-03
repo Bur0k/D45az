@@ -353,6 +353,9 @@ void IngameView::nextPhase()
 	case InagameViewPhases::YOURTURN:
 		m_commitB->setIsEnabled(false);
 		//do things..
+
+		commitMessage();
+
 		//send moves to server
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
@@ -691,4 +694,7 @@ bool IngameView::isVisible(Vector2i pos)
 		return false;
 }
 
+void IngameView::commitMessage()
+{
 
+}
