@@ -121,7 +121,7 @@ void MenuView::onButtonClick(int id)
 
 void MenuView::onSliderValueChange(int ID, double position)
 {
-	m_pMS->set_volume(generel_noise, position*100);
+	m_pMS->set_volume(generel_noise, static_cast<float>(position*100));
 }
 
 void MenuView::onSliderReleased(int ID, double position)
