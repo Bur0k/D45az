@@ -105,14 +105,15 @@ Server::Server()
 		while(running)
 		{
 			addNewMessageCallbackMutex.lock();
-			for(unsigned int i=0;i<addNewMessageCallbackList.size();i++)
-			{
-				newMessageCallbackMutex.lock();
-				newMessageCallback.push_back(addNewMessageCallbackList[i]);
-				newMessageCallbackMutex.unlock();
-			}
+			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(addNewMessageCallbackList);
 			addNewMessageCallbackList.clear();
 			addNewMessageCallbackMutex.unlock();
+			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				newMessageCallback.push_back(AVOIDING_DEADLOCK_KAK[i]);
+				newMessageCallbackMutex.unlock();
+			}
 
 			Sleep(1);
 		}
@@ -122,19 +123,20 @@ Server::Server()
 		while(running)
 		{
 			deleteNewMessageCallbackMutex.lock();
-			for(unsigned int i=0;i<deleteNewMessageCallbackList.size();i++)
+			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(deleteNewMessageCallbackList);
+			deleteNewMessageCallbackList.clear();
+			deleteNewMessageCallbackMutex.unlock();
+			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
 			{
 				newMessageCallbackMutex.lock();
 				for(unsigned int j=0;j<newMessageCallback.size();j++)
-					if(newMessageCallback[j] == deleteNewMessageCallbackList[i])
+					if(newMessageCallback[j] == AVOIDING_DEADLOCK_KAK[i])
 					{
 						newMessageCallback.erase(newMessageCallback.begin()+j);
 						break;
 					}
 				newMessageCallbackMutex.unlock();
 			}
-			deleteNewMessageCallbackList.clear();
-			deleteNewMessageCallbackMutex.unlock();
 
 			Sleep(1);
 		}
@@ -145,14 +147,15 @@ Server::Server()
 		while(running)
 		{
 			addErrorCallbackMutex.lock();
-			for(unsigned int i=0;i<addErrorCallbackList.size();i++)
-			{
-				errorCallbackMutex.lock();
-				errorCallback.push_back(addErrorCallbackList[i]);
-				errorCallbackMutex.unlock();
-			}
+			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(addErrorCallbackList);
 			addErrorCallbackList.clear();
 			addErrorCallbackMutex.unlock();
+			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
+			{
+				errorCallbackMutex.lock();
+				errorCallback.push_back(AVOIDING_DEADLOCK_KAK[i]);
+				errorCallbackMutex.unlock();
+			}
 
 			Sleep(1);
 		}
@@ -162,19 +165,20 @@ Server::Server()
 		while(running)
 		{
 			deleteErrorCallbackMutex.lock();
-			for(unsigned int i=0;i<deleteErrorCallbackList.size();i++)
+			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(deleteErrorCallbackList);
+			deleteErrorCallbackList.clear();
+			deleteErrorCallbackMutex.unlock();
+			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
 			{
 				errorCallbackMutex.lock();
 				for(unsigned int j=0;j<errorCallback.size();j++)
-					if(errorCallback[j] == deleteErrorCallbackList[i])
+					if(errorCallback[j] == AVOIDING_DEADLOCK_KAK[i])
 					{
 						errorCallback.erase(errorCallback.begin()+j);
 						break;
 					}
 				errorCallbackMutex.unlock();
 			}
-			deleteErrorCallbackList.clear();
-			deleteErrorCallbackMutex.unlock();
 
 			Sleep(1);
 		}

@@ -724,7 +724,7 @@ void IngameView::commitMessage()
 {
 	vector<char> erfg;
 
-	erfg.push_back(this->m_owned_armys[0]->getPlayerID());
+	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
 
 	c->write(0x0412, erfg);
 }
