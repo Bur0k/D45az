@@ -439,7 +439,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::WAITFORPLAYERS);
+		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::YOURTURN);
 		clear = true;
 		break;
 
