@@ -16,8 +16,6 @@
 
 extern PlayerData playerData;
 
-// TODO: Update, nicht gamemaster fall, textblock geht irgendwann?, hintergrund
-
 class GameLobbyView : 
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
@@ -41,9 +39,11 @@ public:
 	GameLobbyView(Vector2u & screensize);
 	~GameLobbyView();
 
-	Textblock* players[4];
+	//Textblock* players[4];
+	Text* players[4];
+	Text* mapName;
 
-	Textblock* mapName;
+	//Textblock* mapName;
 
 	StandardButton* kickPlayer[3];
 	StandardButton* leave;
