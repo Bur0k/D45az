@@ -1,10 +1,11 @@
 #include "IngameLogic.h"
 
-IngameLogic::IngameLogic(PlayerData* owner, CityLogic* startCity)
+IngameLogic::IngameLogic(int id, PlayerData* owner, CityLogic* startCity)
 {
 	this->server = Server::get();
 
 	this->cities.push_back(startCity);
+	this->player_ID = id;
 
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
