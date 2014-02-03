@@ -239,6 +239,22 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				{
 					
 				}break;
+
+			case 0x1000://Chat empfangen
+				{
+					for(auto it : playersIngame)
+					{
+						if(s == it->owner->s)//Ist der Spieler in DIESER Lobby?
+						{
+							string chatToSend = it->owner->Name + ": "+decodeString(data,0,data.size());
+							std::vector<char> toSend = code(chatToSend);
+
+							for(auto it2 : playersIngame)
+								server->write(it2->owner->s,0x1001,toSend);
+							break;
+						}
+					}
+				}break;
 	}
 
 }

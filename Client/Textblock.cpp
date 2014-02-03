@@ -40,10 +40,11 @@ Textblock::Textblock(Vector2f pos, Vector2f size, String S, int CharSize)
 	m_textblockText.setPosition(getPosition());
 	m_textblockText.setColor(MyColors.Black);
 	m_textblockText.setCharacterSize(CharSize);
-	m_textblockText.setString(lineBreak(S, size));
-
+	
+	m_textblockText.setString("|"+lineBreak(S, size)+"|");
 	textsize = m_textblockText.getLocalBounds();
 	setSize(Vector2f(textsize.width + 5, textsize.height + 10));
+	m_textblockText.setString(lineBreak(S, size));
 
 	m_color = MyColors.Gray;
 	setFillColor(m_color);
@@ -63,9 +64,10 @@ Vector2f Textblock::getTBsize()
 
 void Textblock::setText(String text, Vector2f size)
 {
-	m_textblockText.setString(lineBreak(text, size));
+	m_textblockText.setString("|"+lineBreak(text, size)+"|");
 	textsize = m_textblockText.getLocalBounds();
-	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
+	setSize(Vector2f(textsize.width + 5, textsize.height + 10));
+	m_textblockText.setString(lineBreak(text, size));
 	if(text.isEmpty())
 	{
 		this->setSize(Vector2f(0,0));
@@ -76,7 +78,6 @@ void Textblock::setPos(Vector2f pos)
 {
 	this->setPosition(pos);
 	textsize = m_textblockText.getLocalBounds();
-	this->setSize(Vector2f(textsize.width + 5, textsize.height + 10));
 	m_textblockText.setPosition(pos);
 	fixCharsize();
 }
