@@ -32,6 +32,7 @@ public:
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);
+	float getUnitgroupStrength();
 };
 
 

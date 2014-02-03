@@ -58,6 +58,9 @@ class IngameView :
 	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
 {
 private:
+
+	Client* c;
+
 	//path drawing
 	bool m_turnOnPathDraw;
 	short m_maxLen;

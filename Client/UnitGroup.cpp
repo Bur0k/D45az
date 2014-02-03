@@ -31,3 +31,9 @@ void UnitGroup::processNetworkError(int id, std::string msg)
 {
 
 }
+
+float UnitGroup::getUnitgroupStrength()
+{
+	
+	return 1.0;
+}
