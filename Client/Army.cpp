@@ -5,12 +5,13 @@ Army::Army()
 	
 }
 
-Army::Army(UnitGroup* ug, Rect<int> & mapView)
+Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible)
 {
 	m_animation = -1;
 	m_mouseOver = false;
 	m_animating = false;
 
+	m_isVisible = isVisible;
 
 	m_playerColor = MyColors.player[ug->player_ID];
 
@@ -25,9 +26,17 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView)
 	m_armySprite = new SplittedSprite(m_texture, ARMY_SPRITE_WIDTH, ARMY_SPRITE_HEIGHT);
 	m_armySprite->setFrame(1);
 
-	m_markedIndicator.setRadius(32.0f);
+	m_markedIndicator.setRadius((float)ARMY_TILESIZE / 2);
 	m_markedIndicator.setPointCount(30);
 	
+	m_powerBar.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, static_cast<float>(64 * units->getUnitgroupStrength())));
+	m_powerBar.setFillColor(MyColors.player[units->player_ID]);
+	
+	m_pBarBg.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, ARMY_TILESIZE));
+	Color c = MyColors.player[units->player_ID];
+	c.a = 100;
+	m_pBarBg.setFillColor(c);
+
 
 	m_markedIndicator.setFillColor(MyColors.Transparent);
 
@@ -48,12 +57,12 @@ void Army::PositionGraphics()
 	else
 		pos = Vector2f(m_dimensions.left, m_dimensions.top);
 
-	pos = pos * 64.0f - (Vector2f)m_mapViewOffset;
+	pos = pos * (float)ARMY_TILESIZE - (Vector2f)m_mapViewOffset;
 	m_armySprite->setPosition(pos.x - 2, pos.y);
 
 	m_markedIndicator.setPosition(pos);
-
-	
+	m_pBarBg.setPosition(pos);
+	m_powerBar.setPosition(pos.x, pos.y + 64 - m_powerBar.getSize().y);
 	
 
 	//set the position of graphic objects
@@ -62,6 +71,8 @@ void Army::PositionGraphics()
 //IDrawable
 void Army::draw(sf::RenderWindow* rw)
 {
+	if(!m_isVisible)
+		return;
 	if(!m_inCity)
 	{
 		if(m_marked)
@@ -69,12 +80,15 @@ void Army::draw(sf::RenderWindow* rw)
 		rw->draw(*m_armySprite);
 	}
 	rw->draw(m_powerBar);
-	rw->draw(m_flag);
+	rw->draw(m_pBarBg);
 }
 
 //IClickable
 bool Army::MouseMoved(sf::Vector2i & mouse)
 {
+	if(!m_isVisible)
+		return false;
+
 	if( mouse.x > m_dimensions.left && mouse.x < m_dimensions.left + m_dimensions.width &&
 		mouse.x > m_dimensions.left && mouse.x < m_dimensions.left + m_dimensions.width)
 	{
@@ -93,6 +107,8 @@ bool Army::MouseMoved(sf::Vector2i & mouse)
 
 bool Army::PressedLeft()
 {
+	if(!m_isVisible)
+		return false;
 	if(m_mouseOver)
 	{
 		m_marked = !m_marked;
@@ -181,4 +197,10 @@ void Army::onMapMove(Rect<int> mapv)
 int Army::getPlayerID()
 {
 	return this->m_playerID;
+}
+
+void Army::setPower(float power)
+{
+	m_powerBar.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, ARMY_TILESIZE * power));
+	PositionGraphics();
 }

@@ -137,6 +137,9 @@ private:
 	
 	RectangleShape m_mapMouseOver;
 
+	//rectangles behind cities in playercolor
+	vector<sf::RectangleShape> m_RectangleShapes;
+
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase);
 	~IngameView();
