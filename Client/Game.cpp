@@ -65,6 +65,10 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_animationTimer.restart();
 	m_fpsCounter.restart();
 
+	
+	//Musik
+	m_pMS = new MusikSampler();
+
 	LoadView(Viewmode);
 
 	//TESTSCREEN stuff
@@ -136,11 +140,6 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	m_animateL.push_back(tb);
 
 	m_keyInputL.push_back(tb);
-
-
-	//Musik
-	m_pMS = new MusikSampler();
-	m_pMS->next_song();
 
 	xMap=yMap=0;
 }
@@ -284,7 +283,6 @@ void Game::onMouseMove()
 
 	if(m_ViewMode == Views::TESTSCREEN)
 	{
-		//SBar->MouseMoved(mousePos); // Maus auf Statusbar?
 		for(int i = (signed)m_clickL.size() - 1; i >= 0; i--)
 			m_clickL[i]->MouseMoved((Vector2i)m_falseMouse.s.getPosition());
 	}
@@ -439,11 +437,13 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
+		m_pMS->next_song();
 		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::YOURTURN);
 		clear = true;
 		break;
 
 	case Views::LOGIN:
+		m_pMS->play_music(login);
 		NewView = new LoginView(m_pWindow->getSize());
 		clear = true;
 		break;
@@ -451,6 +451,7 @@ void Game::LoadView(Views v)
 	case Views::MENU:
 		if(m_ViewMode == Views::MENU)
 		{
+			m_pMS->next_song();
 			delete m_ViewVect[m_ViewVect.size() -1 ];
 			m_ViewVect.pop_back();
 			m_ViewMode = m_ViewVect[m_ViewVect.size() -1]->getType();
@@ -458,6 +459,7 @@ void Game::LoadView(Views v)
 		}
 		else 
 		{
+			m_pMS->play_music(menu);
 			m_ViewMode = v;
 			NewView = new MenuView(m_pWindow->getSize(),false, m_pMS);
 		}

@@ -54,6 +54,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_DrawV.push_back(m_SBar);
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
+	
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);

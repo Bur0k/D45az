@@ -50,6 +50,9 @@
     <Filter Include="Codes\GameLogic\Source">
       <UniqueIdentifier>{c3749aa9-d962-486c-a32b-4d2e09c29105}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\songs">
+      <UniqueIdentifier>{a9e5e736-8e26-4dad-a1ef-66de28e90e04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SplittedSprite.cpp">
@@ -384,8 +387,23 @@
     <None Include="Data\Maps\Map1.tmx">
       <Filter>Data\map</Filter>
     </None>
+    <None Include="Data\Songs\4_Requium.ogg">
+      <Filter>Data\songs</Filter>
+    </None>
+    <None Include="Data\Songs\login.ogg">
+      <Filter>Data\songs</Filter>
+    </None>
+    <None Include="Data\Songs\menu.ogg">
+      <Filter>Data\songs</Filter>
+    </None>
     <None Include="Data\Songs\1_Steps.ogg">
-      <Filter>Data\sound</Filter>
+      <Filter>Data\songs</Filter>
+    </None>
+    <None Include="Data\Songs\2_Fallen.ogg">
+      <Filter>Data\songs</Filter>
+    </None>
+    <None Include="Data\Songs\3_Pearl.ogg">
+      <Filter>Data\songs</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

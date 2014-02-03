@@ -4,12 +4,15 @@
 MusikSampler::MusikSampler(void)
 {
 	m_SongPath = "Data/Songs/";
+	m_vSongFiles.push_back("login.ogg");
+	m_vSongFiles.push_back("menu.ogg");
+	m_vSongFiles.push_back("menu.ogg");
 	m_vSongFiles.push_back("1_Steps.ogg"); //songnamen manuell einfügen
 	m_vSongFiles.push_back("2_Fallen.ogg");
 	m_vSongFiles.push_back("3_Pearl.ogg");
 	m_vSongFiles.push_back("4_Requium.ogg");
 
-	m_Songnumber = 0; // vorinitialisieren, dann 1. track gespielt
+	m_Songnumber = 3; // vorinitialisieren, dann 1. track gespielt
 
 	m_Soundpath = "Data/Sounds/";
 	m_vSoundFiles.push_back("sound1.wav");
@@ -141,12 +144,12 @@ void MusikSampler::next_song()
 		return;
 	*/
 
-	if(static_cast<unsigned int>(m_Songnumber) >= m_vSongFiles.size() ) // wenn letzter song gespielt wurde zurück
-		m_Songnumber = 1;
+	if(static_cast<unsigned int>(m_Songnumber) >= m_vSongFiles.size() - 1) // wenn letzter song gespielt wurde zurück
+		m_Songnumber = 3;
 	else 
 		m_Songnumber ++;
 
-	play_music(m_Songnumber-1);
+	play_music(m_Songnumber);
 }
 
 void MusikSampler::set_volume(int type, float volume)
