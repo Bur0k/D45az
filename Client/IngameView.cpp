@@ -610,7 +610,7 @@ void IngameView::loadPath(Vector2i pos)
 {
 	for(auto turns : army_moves)
 	{
-		if(turns[0] ==  pos)
+		if(turns[0] == pos)
 		{
 			currentTurn.clear();
 			for(auto move : turns)
@@ -619,7 +619,6 @@ void IngameView::loadPath(Vector2i pos)
 		}
 	}
 }
-
 
 void IngameView::updateFogOfWar()
 {
@@ -675,14 +674,16 @@ void IngameView::loadGamestate()
 
 	
 	
+	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i]));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView));
+
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 	{
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
 			if(isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)))
-				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i]));
+				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView));
 	}
 }
 
