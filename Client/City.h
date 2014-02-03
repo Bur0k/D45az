@@ -10,9 +10,10 @@ public:
 	sf::Vector2i position;
 	int level;
 	int generatedIncome;
+	short player_ID;
 
 
-	City(sf::Vector2i position, int level);
+	City(sf::Vector2i position, int level, short id);
 	~City();
 };
 

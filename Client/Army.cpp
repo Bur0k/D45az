@@ -5,13 +5,14 @@ Army::Army()
 	
 }
 
-Army::Army(int i)
+Army::Army(UnitGroup* ug)
 {
 	m_animation = -1;
 	m_mouseOver = false;
 	m_animating = false;
 
-	
+	units = ug;
+	m_position = Vector2i(ug->pos.x, ug->pos.y);
 }
 
 Army::~Army()
@@ -38,6 +39,7 @@ void Army::draw(sf::RenderWindow* rw)
 	rw->draw(m_powerBar);
 	rw->draw(m_flag);
 }
+
 //IClickable
 bool Army::MouseMoved(sf::Vector2i & mouse)
 {

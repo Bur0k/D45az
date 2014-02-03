@@ -85,7 +85,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				pos.y = data[2];
 				level = data[3];
 
-				City* c = new City(pos, level);
+				City* c = new City(pos, level, 0);
 
 				this->allCities.push_back(c);
 
@@ -94,6 +94,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0405:
 		{
+			short player_ID = data[4];
 			int length = data[0];
 			sf::Vector2i pos;
 			int level;
@@ -104,7 +105,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				pos.y = data[2];
 				level = data[3];
 
-				City* c = new City(pos, level);
+				City* c = new City(pos, level, player_ID);
 
 				this->ownedCities.push_back(c);
 
@@ -133,7 +134,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
 				}
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, this->ownedCities[0]);
 				 allUnits.push_back(ugroup);
 			}	
 		}break;
@@ -159,7 +160,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
 				}
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
 				ownedUnits.push_back(ugroup);
 			}
 		}break;

@@ -12,12 +12,12 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 	MapLayer* v = this->map->layers[0];
 	int id = 1;
 
-	for(int i = 0; i < map->layers.size();	i++)
+	for(unsigned int i = 0; i < map->layers.size();	i++)
 		if(map->layers[i]->isCityLayer)
 			v = map->layers[i];
 	
-	for( int i = 0; i < v->layer.size(); i += 2)
-		for( int j = 0; j < v->layer[i].size(); i += 2)
+	for(unsigned int i = 0; i < v->layer.size(); i += 2)
+		for(unsigned int j = 0; j < v->layer[i].size(); i += 2)
 		{
 			if( v->layer[i][j] == STARTCITY)
 			{
@@ -32,6 +32,11 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 				id++;
 			}
 		}
+
+	for(unsigned int i = 0; i < players.size(); i++)
+	{
+		this->startCities[i]->player_ID = i;
+	}
 
 	for(unsigned int i = 0; i < players.size(); i++)
 	{
@@ -111,12 +116,15 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				erfg.push_back(length);
 
-				for(int i = 0; i < this->playersIngame[index]->cities.size(); i++)
+				for(unsigned int i = 0; i < this->playersIngame[index]->cities.size(); i++)
 				{
 					erfg.push_back(this->playersIngame[index]->cities[i]->position->x);
 					erfg.push_back(this->playersIngame[index]->cities[i]->position->y);
 					erfg.push_back(this->playersIngame[index]->cities[i]->level);
 				}
+
+				erfg.push_back(this->playersIngame[index]->cities[0]->player_ID);
+		
 
 				server->write(s, 0x0405, erfg);
 			}break;

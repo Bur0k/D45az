@@ -13,6 +13,7 @@ public:
 	Server* server;
 
 	short id;
+	short player_ID;
 	POINT* position;
 	int level;
 	int generatedIncome;

@@ -43,6 +43,8 @@ public:
 	std::vector<Vector2i> moves;
 	UnitGroup* units;
 
+	
+
 	//IDrawable
 	void draw(sf::RenderWindow* rw);
 	//IClickable
@@ -69,7 +71,7 @@ public:
 	Vector2i m_Tilesize;
 	
 
-	Army(int i);
+	Army(UnitGroup* ug);
 	~Army();
 
 	
