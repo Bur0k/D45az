@@ -73,7 +73,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
 
-	m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
+	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
 
 	updateFogOfWar();
 }
@@ -136,54 +136,17 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
 
-	if(currentTurn.size() != 0)
-	{
-		if(m_turnOnPathDraw)
-		{
-
-			m_is_turn_valid = true;
-
-			mouseOverTurn.clear();
-			sf::Vector2i lastTurn = currentTurn.back().pos;
-			if(m_pointAt != lastTurn)
-			{
-				sf::Vector2i diff;
-				while(lastTurn != m_pointAt && m_maxLen > static_cast<short>(mouseOverTurn.size()+currentTurn.size()))
-				{
-					diff=m_pointAt-lastTurn;
-					if(diff.x != 0)
-					{
-						lastTurn+=sf::Vector2i(diff.x>0?1:-1,0);
-						mouseOverTurn.push_back(lastTurn);
-						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
-							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
-						{
-							mouseOverTurn.back().valid = false;
-							m_is_turn_valid = false;
-						}
-					}
-					if( m_maxLen <= static_cast<short>(mouseOverTurn.size()+currentTurn.size()))
-						break;
-					if(diff.y != 0)
-					{
-						lastTurn+=sf::Vector2i(0,diff.y>0?1:-1);
-						mouseOverTurn.push_back(lastTurn);
-						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
-							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
-						{
-							mouseOverTurn.back().valid=false;
-						}
-					}
-				}
-			}
-		}
-	}
+	drawMouseOverPath();
+	
 	return retValue;
 }
 
 bool IngameView::PressedRight()
 {
 	drawPath();
+
+	if(m_is_turn_valid)
+		addPathToArmy();
 
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
@@ -253,6 +216,22 @@ void IngameView::draw(sf::RenderWindow* rw)
 {
 	m_map.render(*rw,m_mapView);
 
+	fogOfWardraw(rw);
+	
+	pathDraw(rw);
+	
+	for(unsigned int i = 0; i < m_DrawV.size(); i++)
+		m_DrawV[i]->draw(rw);	
+
+	rw->draw(m_mapMouseOver);
+
+	Rect<float> MapView;
+	m_mapView.width= rw->getSize().x;
+	m_mapView.height = rw->getSize().y;
+}
+
+void IngameView::fogOfWardraw(RenderWindow* rw)
+{
 	if(turnOnFogOfWar)
 	{
 		rsTurn.setFillColor(Color(0x00,0x00,0x00,0xAA));
@@ -303,7 +282,10 @@ void IngameView::draw(sf::RenderWindow* rw)
 			}
 		}
 	}
-	
+}
+
+void IngameView::pathDraw(RenderWindow * rw)
+{
 	for(auto it : currentTurn)
 	{
 		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
@@ -336,18 +318,8 @@ void IngameView::draw(sf::RenderWindow* rw)
 		}
 		rw->draw(rsTurn);
 	}
-
-	
-
-	for(unsigned int i = 0; i < m_DrawV.size(); i++)
-		m_DrawV[i]->draw(rw);	
-
-	rw->draw(m_mapMouseOver);
-
-	Rect<float> MapView;
-	m_mapView.width= rw->getSize().x;
-	m_mapView.height = rw->getSize().y;
 }
+
 
 Views IngameView::nextState()
 {
@@ -394,6 +366,7 @@ void IngameView::nextPhase()
 	case InagameViewPhases::WATCHRESULTS:
 		//on player button click
 		m_commitB->setIsEnabled(true);
+		loadGamestate();
 		//do things..
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
@@ -421,6 +394,8 @@ void IngameView::moveMap()
 	static int _x;
 	static int _y;
 	
+	Rect<int> tmpView = m_mapView;
+
 	//X
 	//increase or decrease the scrollspeed
 	m_scrollspeed.x += (m_scrolldir.x != 0)? 1 : -2;
@@ -438,16 +413,16 @@ void IngameView::moveMap()
 	//move the map or not move if at border
 	m_mapView.left += static_cast<int>(m_scrollspeed.x * _x);
 
-	if(m_mapTotalSize.x > static_cast<int>(m_screensize.x))
+	if(m_mapTotalSize.x  + INGAMEVIEW_SCROLLEXESS * 2 > static_cast<int>(m_screensize.x))
 	{
-		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x)
+		if(m_mapView.left + m_mapView.width > m_mapTotalSize.x + INGAMEVIEW_SCROLLEXESS)
 		{
-			m_mapView.left = m_mapTotalSize.x - m_mapView.width;
+			m_mapView.left = m_mapTotalSize.x - m_mapView.width + INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.x = 0;
 		}
-		else if(m_mapView.left < 0)
+		else if(m_mapView.left + INGAMEVIEW_SCROLLEXESS < 0)
 		{
-			m_mapView.left = 0;
+			m_mapView.left = - INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.x = 0;
 		}
 	}
@@ -469,18 +444,27 @@ void IngameView::moveMap()
 	//move the map or not move if at border
 	m_mapView.top += static_cast<int>(m_scrollspeed.y * _y); 
 
-	if(m_mapTotalSize.y > static_cast<int>(m_screensize.y))
+	if(m_mapTotalSize.y + INGAMEVIEW_SCROLLEXESS * 2 > static_cast<int>(m_screensize.y))
 	{	
-		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y)
+		if(m_mapView.top + m_mapView.height > m_mapTotalSize.y + INGAMEVIEW_SCROLLEXESS)
 		{
-			m_mapView.top = m_mapTotalSize.y - m_mapView.height;
+			m_mapView.top = m_mapTotalSize.y - m_mapView.height + INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.y = 0;
 		}
-		else if(m_mapView.top < 0)
+		else if(m_mapView.top + INGAMEVIEW_SCROLLEXESS < 0)
 		{
-			m_mapView.top = 0;
+			m_mapView.top = - INGAMEVIEW_SCROLLEXESS;
 			m_scrollspeed.y = 0;
 		}
+	}
+
+	//update armys
+	if(tmpView != m_mapView)
+	{
+		for(unsigned int i = 0; i < m_owned_armys.size(); i++)
+			m_owned_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
+		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
+			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
 }
 
@@ -551,6 +535,88 @@ void IngameView::drawPath()
 	}
 }
 
+void IngameView::drawMouseOverPath()
+{
+	if(currentTurn.size() != 0)
+	{
+		if(m_turnOnPathDraw)
+		{
+
+			m_is_turn_valid = true;
+
+			mouseOverTurn.clear();
+			sf::Vector2i lastTurn = currentTurn.back().pos;
+			if(m_pointAt != lastTurn)
+			{
+				sf::Vector2i diff;
+				while(lastTurn != m_pointAt && m_maxLen > static_cast<short>(mouseOverTurn.size()+currentTurn.size()))
+				{
+					diff=m_pointAt-lastTurn;
+					if(diff.x != 0)
+					{
+						lastTurn+=sf::Vector2i(diff.x>0?1:-1,0);
+						mouseOverTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							mouseOverTurn.back().valid = false;
+							m_is_turn_valid = false;
+						}
+					}
+					if( m_maxLen <= static_cast<short>(mouseOverTurn.size()+currentTurn.size()))
+						break;
+					if(diff.y != 0)
+					{
+						lastTurn+=sf::Vector2i(0,diff.y>0?1:-1);
+						mouseOverTurn.push_back(lastTurn);
+						if(	collisionLayer->layer[lastTurn.y*2][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2][lastTurn.x*2+1] != 0 ||
+							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
+						{
+							mouseOverTurn.back().valid=false;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+void IngameView::addPathToArmy()
+{
+	for(auto turns : army_moves)
+	{
+		if(currentTurn[0].pos == turns[0])
+		{
+			turns.clear();
+			for(auto turn : currentTurn)
+				turns.push_back(turn.pos);
+			return;
+		}
+					}
+	
+	std::vector<sf::Vector2i> newturn;
+		
+	for(auto turn : currentTurn)
+		newturn.push_back(turn.pos);
+	army_moves.push_back(newturn);
+				}
+
+void IngameView::loadPath(Vector2i pos)
+{
+	for(auto turns : army_moves)
+	{
+		if(turns[0] ==  pos)
+		{
+			currentTurn.clear();
+			for(auto move : turns)
+				currentTurn.push_back(turn(move));
+			break;
+		}
+	}
+}
+
+
 void IngameView::updateFogOfWar()
 {
 	updateNewFogOfWar = false;
@@ -574,13 +640,13 @@ void IngameView::updateFogOfWar()
 			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
-		}
+			}
 		for(int i=0;i<m_map.layers[0]->layer.size();i++)
 			for(int j=0;j<m_map.layers[0]->layer[0].size();j++)
 				if((j-it->pos.x)*(j-it->pos.x) + 
 					(i-it->pos.y)*(i-it->pos.y) <= maxRange*maxRange)
 					toDraw[i][j]=false;
-	}
+		}
 	for(auto it2:m_map.layers)
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
 			for(auto it3:m_GameData.ownedCities)
@@ -590,5 +656,39 @@ void IngameView::updateFogOfWar()
 					for(int j=0;j<it2->layer[0].size();j++)
 						if(id == it2->layer[i][j])
 							toDraw[i][j]=false;
-			}
+	}
 }
+
+void IngameView::loadGamestate()
+{
+	for(Army* army : m_owned_armys)
+		delete army;
+	
+	short my_ID;
+
+	if(m_GameData.ownedCities.size() > 0)
+		my_ID = m_GameData.ownedCities[0]->player_ID;
+
+	
+	
+	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i]));
+
+	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
+	{
+		if(m_GameData.allUnits[i]->player_ID != my_ID)
+			if(isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)))
+				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i]));
+	}
+}
+
+bool IngameView::isVisible(Vector2i pos)
+{
+	pos *= 2;
+	if(toDraw[pos.y][pos.x] || toDraw[pos.y + 1][pos.x] || toDraw[pos.y][pos.x + 1] || toDraw[pos.y + 1][pos.x + 1])
+		return true;
+	else	
+		return false;
+}
+
+

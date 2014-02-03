@@ -27,6 +27,11 @@ public:
 	Color Silver;
 	Color Bronze;
 
+	Color player1;
+	Color player2;
+	Color player3;
+	Color player4;
+
 	MyColors() {
 		Orange = Color(0xFF, 0xA2, 0x00, 0xFF);
 		Azure = Color(0x00, 0xFF, 0x6A, 0xFF);
@@ -43,6 +48,12 @@ public:
 		Black = Color::Black;
 		White = Color::White;
 		Red = Color::Red;
+
+		player1 = Red;
+		player2 = Color::Blue;
+		player3 = Color(0x0C,0xED,0x00,0xFF);	//green
+		player4 = Color(0xFF,0xFB,0x00,0xFF);	//yellow
+
 		Transparent = Color::Transparent;
 	}
 } static MyColors;
