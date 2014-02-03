@@ -286,6 +286,7 @@ void IngameView::fogOfWardraw(RenderWindow* rw)
 
 void IngameView::pathDraw(RenderWindow * rw)
 {
+	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	for(auto it : currentTurn)
 	{
 		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
@@ -627,7 +628,7 @@ void IngameView::updateFogOfWar()
 	toDraw.clear();
 	std::vector<bool> temp;
 	temp.resize(m_map.layers[0]->layer[0].size(),true);//X Values
-	for(int i=0;i<m_map.layers[0]->layer.size();i++)//Y Values
+	for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)//Y Values
 		toDraw.push_back(temp);
 
 	for(auto it:m_GameData.ownedUnits)
@@ -644,8 +645,8 @@ void IngameView::updateFogOfWar()
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
 			}
-		for(int i=0;i<m_map.layers[0]->layer.size();i++)
-			for(int j=0;j<m_map.layers[0]->layer[0].size();j++)
+		for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)
+			for(unsigned int j=0;j<m_map.layers[0]->layer[0].size();j++)
 				if((j-it->pos.x)*(j-it->pos.x) + 
 					(i-it->pos.y)*(i-it->pos.y) <= maxRange*maxRange)
 					toDraw[i][j]=false;
@@ -655,8 +656,8 @@ void IngameView::updateFogOfWar()
 			for(auto it3:m_GameData.ownedCities)
 			{
 				int id = it2->layer[it3->position.y][it3->position.x];
-				for(int i=0;i<it2->layer.size();i++)
-					for(int j=0;j<it2->layer[0].size();j++)
+				for(unsigned int i=0;i<it2->layer.size();i++)
+					for(unsigned int j=0;j<it2->layer[0].size();j++)
 						if(id == it2->layer[i][j])
 							toDraw[i][j]=false;
 	}

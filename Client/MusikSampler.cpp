@@ -104,7 +104,7 @@ bool MusikSampler::play_sound(int index)
 {
 	sf::Sound* tmp_sound = new sf::Sound();
 	
-	if (index >= m_vBuffer.size() ) // sicher gehen, dass index innerhalb gültigen bereichs
+	if (static_cast<unsigned int>(index) >= m_vBuffer.size() ) // sicher gehen, dass index innerhalb gültigen bereichs
 		return 0;
 
 	tmp_sound->setBuffer(m_vBuffer[index]); // sound abholen
@@ -112,7 +112,7 @@ bool MusikSampler::play_sound(int index)
 	tmp_sound->setVolume(m_SoVolume);
 	tmp_sound->play();	
 
-	for (int i = 0; i < m_vSound.size() ; i++)
+	for (unsigned int i = 0; i < m_vSound.size() ; i++)
 		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
 		{
 			//cout << "vector size vorher:" << m_vSound.size() << endl;
@@ -139,7 +139,7 @@ void MusikSampler::next_song()
 		return;
 	*/
 
-	if(m_Songnumber >= m_vSongFiles.size() ) // wenn letzter song gespielt wurde zurück
+	if(static_cast<unsigned int>(m_Songnumber) >= m_vSongFiles.size() ) // wenn letzter song gespielt wurde zurück
 		m_Songnumber = 1;
 	else 
 		m_Songnumber ++;
