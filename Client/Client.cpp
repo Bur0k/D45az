@@ -171,6 +171,7 @@ Client::Client()
 			Sleep(1);
 		}
 	});
+
 }
 
 Client::~Client()
