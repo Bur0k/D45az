@@ -237,7 +237,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			}break;
 			case 0x0412:
 				{
-					
+					cout << "___________________________________________________________________________________";
+					cout << "Socket:" << s;
+					for( int  i = 0; i < erfg.size(); i++)
+						cout << erfg[i];
+					cout << "___________________________________________________________________________________";
 				}break;
 	}
 
