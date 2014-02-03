@@ -607,14 +607,14 @@ void IngameView::addPathToArmy()
 				turns.push_back(turn.pos);
 			return;
 		}
-					}
+	}
 	
 	std::vector<sf::Vector2i> newturn;
 		
 	for(auto turn : currentTurn)
 		newturn.push_back(turn.pos);
 	army_moves.push_back(newturn);
-				}
+}
 
 void IngameView::loadPath(Vector2i pos)
 {
