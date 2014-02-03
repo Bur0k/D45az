@@ -171,6 +171,8 @@ public:
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
 
+	void commitMessage();
+
 	/////IMPLEMENTING IView end/////
 
 private:
