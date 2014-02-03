@@ -204,12 +204,12 @@
     <Font Include="Data\Fonts\arial.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\germanset.png" />
     <Image Include="Data\Images\armee.png" />
     <Image Include="Data\Images\background.png" />
     <Image Include="Data\Images\Button.png" />
     <Image Include="Data\Images\Button_small.png" />
     <Image Include="Data\Images\commit-Button.png" />
+    <Image Include="Data\Images\germanset.png" />
     <Image Include="Data\Images\gold.png" />
     <Image Include="Data\Images\menu_bot.png" />
     <Image Include="Data\Images\menu_mid.png" />
