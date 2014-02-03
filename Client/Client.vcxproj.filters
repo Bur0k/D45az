@@ -375,12 +375,6 @@
     <None Include="Data\Images\unit_artillery.psd">
       <Filter>Data\img</Filter>
     </None>
-    <None Include="Data\Songs\1_example.ogg">
-      <Filter>Data\sound</Filter>
-    </None>
-    <None Include="Data\Songs\2_bullet.ogg">
-      <Filter>Data\sound</Filter>
-    </None>
     <None Include="Data\Maps\TestMap.tmx">
       <Filter>Data\map</Filter>
     </None>
@@ -389,6 +383,9 @@
     </None>
     <None Include="Data\Maps\Map1.tmx">
       <Filter>Data\map</Filter>
+    </None>
+    <None Include="Data\Songs\1_Steps.ogg">
+      <Filter>Data\sound</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -479,7 +479,7 @@ void IngameView::moveMap()
 	{
 		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
-	}
+}
 }
 
 void IngameView::displayCityInfo(City &c)
@@ -686,14 +686,13 @@ void IngameView::loadGamestate()
 	
 	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true));
 
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 	{
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			if(isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)))
-				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView));
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x))));
 	}
 
 	//fill RectangleVector
