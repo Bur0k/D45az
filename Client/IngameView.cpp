@@ -286,6 +286,7 @@ void IngameView::fogOfWardraw(RenderWindow* rw)
 
 void IngameView::pathDraw(RenderWindow * rw)
 {
+	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	for(auto it : currentTurn)
 	{
 		rsTurn.setPosition( static_cast<float>(it.pos.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
@@ -353,6 +354,9 @@ void IngameView::nextPhase()
 	case InagameViewPhases::YOURTURN:
 		m_commitB->setIsEnabled(false);
 		//do things..
+
+		commitMessage();
+
 		//send moves to server
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
@@ -691,4 +695,7 @@ bool IngameView::isVisible(Vector2i pos)
 		return false;
 }
 
+void IngameView::commitMessage()
+{
 
+}

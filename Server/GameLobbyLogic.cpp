@@ -89,7 +89,7 @@ Map* GameLobbyLogic::getMap()
 
 void GameLobbyLogic::addPlayer(PlayerData* player)
 {
-	if(this->players.size() < this->playerlimit)
+	if(this->players.size() < static_cast<unsigned int>(this->playerlimit))
 		this->players.push_back(player);
 }
 
@@ -209,7 +209,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					this->setPlayerlimit(anz);
 
 					std::vector<char> erfg;
-					char playerCount = anz;
+					char playerCount = static_cast<char>(anz);
 					erfg.push_back(playerCount);
 					this->server->write(s, 0x0321, erfg);
 				}

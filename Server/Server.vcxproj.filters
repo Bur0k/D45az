@@ -74,6 +74,9 @@
     <Filter Include="Codes\GameLogic\Map">
       <UniqueIdentifier>{831c05b4-6781-4e61-b08f-dcc64fbb55cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Codes\pArmy">
+      <UniqueIdentifier>{f585490d-91d6-46ce-b4f0-15cf9e7e269b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -120,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="MapLayer.h">
       <Filter>Codes\GameLogic\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="pArmy.h">
+      <Filter>Codes\pArmy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="MapLayer.cpp">
       <Filter>Codes\GameLogic\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="pArmy.cpp">
+      <Filter>Codes\pArmy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

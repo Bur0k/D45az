@@ -40,7 +40,7 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 
 	for(unsigned int i = 0; i < players.size(); i++)
 	{
-		IngameLogic* ingame = new IngameLogic(players[i], this->startCities[i]);
+		IngameLogic* ingame = new IngameLogic(this->startCities[i]->player_ID, players[i], this->startCities[i]);
 		this->playersIngame.push_back(ingame);
 	}
 
@@ -89,14 +89,14 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				for(unsigned int i = 0; i < this->neutralCities.size(); i++)
 				{
-					erfg.push_back(this->neutralCities[i]->position->x);
-					erfg.push_back(this->neutralCities[i]->position->y);
+					erfg.push_back(static_cast<char>(this->neutralCities[i]->position->x));
+					erfg.push_back(static_cast<char>(this->neutralCities[i]->position->y));
 					erfg.push_back(this->neutralCities[i]->level);
 				}
 				for(unsigned int i = 0; i < this->startCities.size(); i++)
 				{
-					erfg.push_back(this->startCities[i]->position->x);
-					erfg.push_back(this->startCities[i]->position->y);
+					erfg.push_back(static_cast<char>(this->startCities[i]->position->x));
+					erfg.push_back(static_cast<char>(this->startCities[i]->position->y));
 					erfg.push_back(this->startCities[i]->level);
 				}
 
@@ -106,7 +106,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			{
 				int index;
 
-				for(int i = 0; i < this->playersIngame.size(); i++)
+				for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
 					if(this->playersIngame[i]->owner->s == s)
 						index = i;
@@ -118,12 +118,12 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				for(unsigned int i = 0; i < this->playersIngame[index]->cities.size(); i++)
 				{
-					erfg.push_back(this->playersIngame[index]->cities[i]->position->x);
-					erfg.push_back(this->playersIngame[index]->cities[i]->position->y);
+					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x));
+					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y));
 					erfg.push_back(this->playersIngame[index]->cities[i]->level);
 				}
 
-				erfg.push_back(this->playersIngame[index]->cities[0]->player_ID);
+				erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
 		
 
 				server->write(s, 0x0405, erfg);
@@ -235,6 +235,10 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}
 				server->write(s, 0x0411, erfg);
 			}break;
+			case 0x0412:
+				{
+					
+				}break;
 	}
 
 }
