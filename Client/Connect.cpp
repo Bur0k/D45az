@@ -27,6 +27,7 @@ Connect::Connect()
 	c = Client::get();
 	c->addToErrorCallback(this);
 	c->addToNewMessageCallback(this);
+	//c->connectToServer("10.10.10.85",4242);//Burak IP
 	c->connectToServer("localhost",4242);
 
 }
