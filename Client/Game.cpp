@@ -52,6 +52,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 	ResetMouse();
 	m_lastMousePosition = Mouse::getPosition(*m_pWindow);
 
+	m_audioCheck.restart();
 
 	Image mouse;
 	if(!mouse.loadFromFile("Data/Images/mouse.png"))
@@ -611,6 +612,12 @@ void Game::timer()
 		m_fpsText.setString(std::to_string(fpsCount));
 		fpsCount = 0;
 	}
+
+	if(m_audioCheck.getElapsedTime().asSeconds() > 5)
+	{
+
+	}
+
 
 	//more timers ...
 }
