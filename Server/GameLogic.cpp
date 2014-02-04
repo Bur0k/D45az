@@ -102,7 +102,7 @@ void GameLogic::computeTurns()
 
 void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 {
-	UnitGroupLogic* currentArmy;
+	UnitGroupLogic* currentArmy = armies[0];
 
 	for(int i = 0; i < armies.size(); i++)
 	{
