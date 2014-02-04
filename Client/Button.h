@@ -72,6 +72,11 @@ protected:
 	void setScale(float x, float y);
 
 public:
+	Color m_color;
+	Color m_color_mouseOver;
+	Color m_color_clicked;
+	Color m_color_disabled;
+
 	void setText(std::string s);
 	void setIsEnabled(bool enable);
 	bool getIsEnabled();
