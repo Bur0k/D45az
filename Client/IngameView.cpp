@@ -54,6 +54,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_DrawV.push_back(m_SBar);
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
+	
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -120,6 +121,7 @@ void IngameView::onTextBoxSend(int ID, std::string s)
 
 bool IngameView::MouseMoved(sf::Vector2i & mouse)
 {
+	chat.MouseMoved(mouse);
 	bool retValue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->MouseMoved(mouse))
@@ -138,6 +140,7 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
 
 	drawMouseOverPath();
+	chat.MouseMoved(mouse);
 	
 	return retValue;
 }
@@ -157,6 +160,7 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	chat.PressedLeft();
 	currentTurn.clear();
 	mouseOverTurn.clear();
 
@@ -181,6 +185,7 @@ bool IngameView::ReleasedRight()
 
 bool IngameView::ReleasedLeft()
 {
+	chat.ReleasedLeft();
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->ReleasedLeft())
 			return true;
@@ -189,6 +194,7 @@ bool IngameView::ReleasedLeft()
 	
 void IngameView::animationTick()
 {
+	chat.animationTick();
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 
@@ -197,18 +203,21 @@ void IngameView::animationTick()
 	
 void IngameView::onKeyDown(sf::Event e)
 {
+	chat.onKeyDown(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyDown(e);
 }
 
 void IngameView::onKeyUp(sf::Event e)
 {
+	chat.onKeyUp(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
 }
 
 void IngameView::onTextInput(std::string s)
 {
+	chat.onTextInput(s);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onTextInput(s);
 }
@@ -225,7 +234,8 @@ void IngameView::draw(sf::RenderWindow* rw)
 		m_DrawV[i]->draw(rw);	
 
 	rw->draw(m_mapMouseOver);
-
+	
+	chat.draw(rw);
 	Rect<float> MapView;
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
@@ -475,11 +485,11 @@ void IngameView::moveMap()
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
 	//update rectanglescity
-	for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
+	/*for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
 	{
 		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
-}
+	}*/
 }
 
 void IngameView::displayCityInfo(City &c)

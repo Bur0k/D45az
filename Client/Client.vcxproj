@@ -88,6 +88,7 @@
     <ClCompile Include="Army.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Chat.cpp" />
     <ClCompile Include="City.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CommitButton.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Army.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Chat.h" />
     <ClInclude Include="City.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="CommitButton.h" />
@@ -185,6 +187,11 @@
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_Steps.ogg" />
+    <None Include="Data\Songs\2_Fallen.ogg" />
+    <None Include="Data\Songs\3_Pearl.ogg" />
+    <None Include="Data\Songs\4_Requium.ogg" />
+    <None Include="Data\Songs\login.ogg" />
+    <None Include="Data\Songs\menu.ogg" />
     <None Include="libsndfile-1.dll" />
     <None Include="openal32.dll" />
     <None Include="Projektplanung.doc" />
