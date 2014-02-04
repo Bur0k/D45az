@@ -8,6 +8,8 @@
 #include "CityLogic.h"
 #include <vector>
 #include <math.h>
+#include "pArmy.h"
+
 
 using namespace std;
 
@@ -20,14 +22,19 @@ class GameLogic : public NetworkParticipant
 private:
 	Server* server;
 
+	vector<pArmy*> movingArmies;
 	vector<IngameLogic*> playersIngame;
-	Map* map;
 	vector<CityLogic*> startCities;
-	vector<CityLogic*> neutralCities; 
+	vector<CityLogic*> neutralCities;
+	short playerCommits;
+	Map* map;
 
 public:
 	GameLogic::GameLogic(vector<PlayerData*> players, Map* map);
 	GameLogic::~GameLogic();
+
+	void computeTurns();
+	void isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

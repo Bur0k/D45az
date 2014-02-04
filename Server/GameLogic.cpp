@@ -62,6 +62,82 @@ GameLogic::~GameLogic()
 	server->deleteFromErrorCallback(this);
 }
 
+void GameLogic::computeTurns()
+{
+	vector<UnitGroupLogic*> armies;
+	
+	for(int i = 0; i < this->movingArmies.size(); i++)
+	{
+		for(int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
+		{
+			if(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos == this->movingArmies[i]->move[0])
+			{
+				armies.push_back(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]);
+			}
+		}
+
+		this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
+	}
+
+	while(this->movingArmies.size() > 0)
+	{
+		for(int i = 0; i < this->movingArmies.size(); i++)
+		{
+			armies[i]->pos = this->movingArmies[i]->move[0];
+			this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
+			
+			this->isCollision(armies[i]->pos, armies);
+		}
+
+		for(int i = 0; i < this->movingArmies.size(); i++)
+		{
+			if(this->movingArmies[i]->move.size() == 0)
+			{
+				this->movingArmies.erase(this->movingArmies.begin() + i);
+				armies.erase(armies.begin() + i);
+			}
+		}
+	}
+}
+
+void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
+{
+	UnitGroupLogic* currentArmy;
+
+	for(int i = 0; i < armies.size(); i++)
+	{
+		if(armies[i]->pos == pos)
+		{
+			currentArmy = armies[i];
+			armies.erase(armies.begin() + i);
+		}
+	}
+
+	for(auto it=armies.begin();it!=armies.end();it++)
+	{
+		POINT p1 = (*(*it)->pos);
+		for(auto it2=it+1;it2!=armies.end();it2++)
+		{
+			POINT p2 = (*(*it)->pos);
+			POINT p3;
+			p3.x=std::abs(p1.x-p2.x);
+			p3.y=std::abs(p1.y-p2.y);
+			const int RANGE = 2;
+			if(p3.x <= RANGE && p3.y <= RANGE)
+			{
+				if(currentArmy->player_ID == (*it)->player_ID)
+				{
+					// Abfrage Einheitenmerge
+				}
+				else
+				{
+					// Kampf
+				}
+			}
+		}
+	}
+}
+
 void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
 	std::vector<char> erfg;
@@ -138,11 +214,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 							//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -192,11 +268,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						{
 								//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -237,11 +313,40 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			}break;
 			case 0x0412:
 				{
-					cout << "___________________________________________________________________________________";
-					cout << "Socket:" << s;
-					for( int  i = 0; i < erfg.size(); i++)
-						cout << erfg[i];
-					cout << "___________________________________________________________________________________";
+					vector<POINT*> vp;
+					POINT* p = new POINT();
+
+					int player_ID = data[0];
+
+					for(int i = 1; i < data.size(); i++)
+					{
+						if(data[i] == '/')
+						{
+							pArmy* movingArmy = new pArmy(player_ID, vp);
+							this->movingArmies.push_back(movingArmy);
+						}
+						else
+						{
+							if( i % 2 != 0)
+							{
+								p->x = data[i];
+							}
+							else
+							{
+								p->y = data[i];
+								vp.push_back(p);							
+							}
+						}
+						
+					}
+
+					this->playerCommits++;
+
+					if(this->playerCommits == this->playersIngame.size())
+					{
+						this->computeTurns();
+						this->playerCommits = 0;
+					}
 				}break;
 
 			case 0x1000://Chat empfangen

@@ -738,7 +738,13 @@ void IngameView::commitMessage()
 
 	for(int i = 0; i < this->army_moves.size(); i++)
 	{
+		for(int j = 0; j < this->army_moves[i].size(); j++)
+		{
+			erfg.push_back(this->army_moves[i][j].x);
+			erfg.push_back(this->army_moves[i][j].y);
+		}
 
+		erfg.push_back('/');
 	}
 
 	c->write(0x0412, erfg);
