@@ -267,3 +267,15 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 
 }
+
+UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
+{
+	while(army1.unitGroups->size() != 0 && army2.unitGroups->size() != 0)
+	{
+	}
+
+	if(army1.unitGroups->size() == 0)
+		return army2;
+	if(army2.unitGroups->size() == 0)
+		return army1;
+}
