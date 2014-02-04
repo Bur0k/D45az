@@ -452,7 +452,6 @@ void Game::LoadView(Views v)
 	case Views::MENU:
 		if(m_ViewMode == Views::MENU)
 		{
-			m_pMS->next_song();
 			delete m_ViewVect[m_ViewVect.size() -1 ];
 			m_ViewVect.pop_back();
 			m_ViewMode = m_ViewVect[m_ViewVect.size() -1]->getType();
@@ -615,7 +614,7 @@ void Game::timer()
 
 	if(m_audioCheck.getElapsedTime().asSeconds() > 5)
 	{
-
+		m_pMS->next_song();
 	}
 
 

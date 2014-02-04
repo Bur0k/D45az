@@ -41,7 +41,6 @@ public:
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-
 };
 
 #endif

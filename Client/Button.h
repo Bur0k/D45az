@@ -49,7 +49,6 @@ protected:
 	Font m_Font;
 	unsigned int m_characterSize;
 
-
 	//is called when button is clicked to change the buttons appearance
 	virtual void clicked();
 	virtual void unclicked();
