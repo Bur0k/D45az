@@ -49,11 +49,6 @@ protected:
 	Font m_Font;
 	unsigned int m_characterSize;
 
-	Color m_color;
-	Color m_color_mouseOver;
-	Color m_color_clicked;
-	Color m_color_disabled;
-
 
 	//is called when button is clicked to change the buttons appearance
 	virtual void clicked();
