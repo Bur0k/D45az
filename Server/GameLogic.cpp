@@ -372,3 +372,218 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 
 }
+
+UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
+{
+	while(army1.unitGroups->size() != 0 && army2.unitGroups->size() != 0) // Armeen haben noch Kompanien?
+	{
+		if(army1.unitGroups->size() > army2.unitGroups->size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
+		{
+			for(int a = 0; a < army2.unitGroups->size(); a ++)
+			{
+				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				{
+					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+						for(int k = 0; k < army2.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 + def; break;
+							case UnitStrategy::OFFENSIVE: atk1 + off; break;
+							case UnitStrategy::RUNNING:   atk1 + run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 + def; break;
+							case UnitStrategy::OFFENSIVE: atk2 + off; break;
+							case UnitStrategy::RUNNING:   atk2 + run; break;
+							}
+							switch(army1.units[k]->type) // Einheitentyp 1 anrechnen
+							{
+							case UnitTypes::LIGHT: atk1 + light; break; 
+							case UnitTypes::HEAVY: atk1 + heavy; break;
+							case UnitTypes::LONGRANGE: atk1 + longrange; break;
+							case UnitTypes::ARTILLERY: atk1 + artillery; break;
+							}
+							switch(army2.units[k]->type) // Einheitentyp 2 anrechnen
+							{
+							case UnitTypes::LIGHT: atk2 + light; break; 
+							case UnitTypes::HEAVY: atk2 + heavy; break;
+							case UnitTypes::LONGRANGE: atk2 + longrange; break;
+							case UnitTypes::ARTILLERY: atk2 + artillery; break;
+							}
+
+							atk1 += ceil(rand()*10); // kein plan obs FUNZT
+							atk2 += ceil(rand()*10);
+
+							if(atk1 > atk2)
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+					else 
+					for(int k = 0; k < army1.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 + def; break;
+							case UnitStrategy::OFFENSIVE: atk1 + off; break;
+							case UnitStrategy::RUNNING:   atk1 + run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 + def; break;
+							case UnitStrategy::OFFENSIVE: atk2 + off; break;
+							case UnitStrategy::RUNNING:   atk2 + run; break;
+							}
+							switch(army1.units[k]->type) // Einheitentyp 1 anrechnen
+							{
+							case UnitTypes::LIGHT: atk1 + light; break; 
+							case UnitTypes::HEAVY: atk1 + heavy; break;
+							case UnitTypes::LONGRANGE: atk1 + longrange; break;
+							case UnitTypes::ARTILLERY: atk1 + artillery; break;
+							}
+							switch(army2.units[k]->type) // Einheitentyp 2 anrechnen
+							{
+							case UnitTypes::LIGHT: atk2 + light; break; 
+							case UnitTypes::HEAVY: atk2 + heavy; break;
+							case UnitTypes::LONGRANGE: atk2 + longrange; break;
+							case UnitTypes::ARTILLERY: atk2 + artillery; break;
+							}
+
+							atk1 += ceil(rand()*10); // kein plan obs FUNZT
+							atk2 += ceil(rand()*10);
+
+							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+				}
+				
+			// kein Plan ob richtige Stelle
+				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				else
+					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+
+			}
+		}
+		else
+		{
+			for(int a = 0; a < army1.unitGroups->size(); a ++)
+			{
+				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				{
+					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+					{
+						for(int k = 0; k < army2.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 + def; break;
+							case UnitStrategy::OFFENSIVE: atk1 + off; break;
+							case UnitStrategy::RUNNING:   atk1 + run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 + def; break;
+							case UnitStrategy::OFFENSIVE: atk2 + off; break;
+							case UnitStrategy::RUNNING:   atk2 + run; break;
+							}
+							switch(army1.units[k]->type) // Einheitentyp 1 anrechnen
+							{
+							case UnitTypes::LIGHT: atk1 + light; break; 
+							case UnitTypes::HEAVY: atk1 + heavy; break;
+							case UnitTypes::LONGRANGE: atk1 + longrange; break;
+							case UnitTypes::ARTILLERY: atk1 + artillery; break;
+							}
+							switch(army2.units[k]->type) // Einheitentyp 2 anrechnen
+							{
+							case UnitTypes::LIGHT: atk2 + light; break; 
+							case UnitTypes::HEAVY: atk2 + heavy; break;
+							case UnitTypes::LONGRANGE: atk2 + longrange; break;
+							case UnitTypes::ARTILLERY: atk2 + artillery; break;
+							}
+
+							atk1 += ceil(rand()*10); // kein plan obs FUNZT
+							atk2 += ceil(rand()*10);
+
+							if(atk1 > atk2)
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+					}
+					else 
+					{
+					for(int k = 0; k < army1.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 + def; break;
+							case UnitStrategy::OFFENSIVE: atk1 + off; break;
+							case UnitStrategy::RUNNING:   atk1 + run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 + def; break;
+							case UnitStrategy::OFFENSIVE: atk2 + off; break;
+							case UnitStrategy::RUNNING:   atk2 + run; break;
+							}
+							switch(army1.units[k]->type) // Einheitentyp 1 anrechnen
+							{
+							case UnitTypes::LIGHT: atk1 + light; break; 
+							case UnitTypes::HEAVY: atk1 + heavy; break;
+							case UnitTypes::LONGRANGE: atk1 + longrange; break;
+							case UnitTypes::ARTILLERY: atk1 + artillery; break;
+							}
+							switch(army2.units[k]->type) // Einheitentyp 2 anrechnen
+							{
+							case UnitTypes::LIGHT: atk2 + light; break; 
+							case UnitTypes::HEAVY: atk2 + heavy; break;
+							case UnitTypes::LONGRANGE: atk2 + longrange; break;
+							case UnitTypes::ARTILLERY: atk2 + artillery; break;
+							}
+
+							atk1 += ceil(rand()*10); // kein plan obs FUNZT
+							atk2 += ceil(rand()*10);
+
+							if(atk1 > atk2)
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+					}
+				}
+							
+				// kein Plan ob richtige Stelle
+				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				else
+					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+			}		
+		}
+
+	if(army1.unitGroups->size() == 0)
+		return army2;
+	if(army2.unitGroups->size() == 0)
+		return army1;
+	}
+}

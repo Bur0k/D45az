@@ -7,6 +7,10 @@
 #include <math.h>
 #include <vector>
 
+#define def 1.2
+#define off 1
+#define run 0
+
 using namespace std;
 
 enum class UnitStrategy{DEFENSIVE, OFFENSIVE, RUNNING};
@@ -41,7 +45,6 @@ public:
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-
 };
 
 #endif

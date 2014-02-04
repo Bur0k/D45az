@@ -1,5 +1,7 @@
 #include "UnitLogic.h"
 
+#define maxlivingsoldiers 25
+
 UnitLogic::UnitLogic(UnitTypes type)
 {
 	this->server = Server::get();
@@ -16,25 +18,25 @@ UnitLogic::UnitLogic(UnitTypes type)
 	{
 		case UnitTypes::LIGHT:	
 		{
-			this->attackpower = 3;
+			this->attackpower = light;
 			this->range = 2;
 			break;
 		}
 		case UnitTypes::HEAVY:	
 		{
-			this->attackpower = 6;
+			this->attackpower = heavy;
 			this->range = 3;
 			break;
 		}
 		case UnitTypes::LONGRANGE:	
 		{
-			this->attackpower = 9;
+			this->attackpower = longrange;
 			this->range = 1;
 			break;
 		}
 		case UnitTypes::ARTILLERY:
 		{
-			this->attackpower = 300;
+			this->attackpower = artillery;
 			this->range = 1;
 			break;
 		}

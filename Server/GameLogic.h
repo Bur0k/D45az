@@ -38,6 +38,7 @@ public:
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
+	UnitGroupLogic fight(UnitGroupLogic army1, UnitGroupLogic army2);
 };
 
 #endif
