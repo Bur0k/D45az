@@ -66,6 +66,7 @@ private:
 
 	Clock m_fpsCounter;
 	Clock m_animationTimer;
+	Clock m_audioCheck;
 
 	RenderWindow* m_pWindow;
 	
