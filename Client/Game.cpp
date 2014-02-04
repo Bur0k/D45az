@@ -489,6 +489,7 @@ void Game::LoadView(Views v)
 	}
 
 	m_ViewVect.push_back(NewView);
+	m_ViewMode = m_ViewVect[m_ViewVect.size() -1]->getType();
 }
 
 
