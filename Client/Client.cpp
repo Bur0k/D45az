@@ -86,7 +86,10 @@ Client::Client()
 
 			delete[] buffer;
 		}
+		int bla=4;
+		bla++;
 	});
+	cout<<writeThread->get_id()<<endl;
 
 	addNewMessageCallbackThread = new thread([=]()
 	{
