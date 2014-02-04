@@ -24,6 +24,9 @@ public:
 	~UnitLogic();
 
 	UnitTypes type;
+	short living;
+	int attackpower;
+	int range;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
