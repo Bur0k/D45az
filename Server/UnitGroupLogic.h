@@ -7,6 +7,10 @@
 #include <math.h>
 #include <vector>
 
+#define def 1.2
+#define off 1
+#define run 0
+
 using namespace std;
 
 enum class UnitStrategy{DEFENSIVE, OFFENSIVE, RUNNING};

@@ -6,6 +6,8 @@
 #define longrange 2.8
 #define artillery 1.0
 
+#define maxlivingsoldiers 25
+
 #include "NetworkParticipant.h"
 #include "Server.h"
 
@@ -24,6 +26,10 @@ public:
 	~UnitLogic();
 
 	UnitTypes type;
+		
+	short living;
+	int range;
+	int attackpower;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
