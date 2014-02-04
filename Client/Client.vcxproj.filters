@@ -490,7 +490,7 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf">
-      <Filter>Data\sound</Filter>
+      <Filter>Data</Filter>
     </Font>
   </ItemGroup>
 </Project>
