@@ -3,6 +3,8 @@
 //TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
+	c = Client::get();
+
 	m_nextView = Views::NOCHANGE;
 
 	m_screensize = screensize;
@@ -16,8 +18,6 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	//debug
 
 	m_turnOnPathDraw = false;
-	
-	
 	
 	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
@@ -735,6 +735,11 @@ void IngameView::commitMessage()
 	vector<char> erfg;
 
 	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
+
+	for(int i = 0; i < this->army_moves.size(); i++)
+	{
+
+	}
 
 	c->write(0x0412, erfg);
 }

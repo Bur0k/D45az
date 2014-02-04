@@ -10,6 +10,8 @@
 
 #define login 0
 #define menu 1
+#define test 2
+#define menumusiken 3
 
 
 using namespace std;
