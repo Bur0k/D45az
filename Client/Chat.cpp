@@ -4,7 +4,8 @@
 Chat::Chat():
 	displayedChatLines(sf::Vector2f(0,300),sf::Vector2f(400,200),"",14),
 	toSend(400,"Chat here",sf::Vector2f(0,500),true,0),
-	b(sf::Vector2f(400,500),sf::Vector2f(26,toSend.getSize().y),"<",0,false,14)
+	//b(sf::Vector2f(400,500),sf::Vector2f(26,toSend.getSize().y),"<",0,false,14)
+	b(sf::Vector2f(400,500), sf::Vector2f(26,toSend.getSize().y), "<", 0, false, false)
 {
 	displayedChatLines.setBackgroundColor(MyColors.Transparent);
 	toSend.Attach(this);
