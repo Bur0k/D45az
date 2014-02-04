@@ -16,8 +16,7 @@ class Chat : public ISliderFunction, public ITextBoxFunction, public NetworkPart
 	TextBox toSend;
 	Slider* s;
 	RectangleShape rs;
-	//Button b;//Aussagekräftiger braucht man das nicht
-	StandardButton b;
+	StandardButton b;//Aussagekräftiger braucht man das nicht
 
 	Textblock displayedChatLines;
 	std::deque<std::string> chatLines;
