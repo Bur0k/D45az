@@ -3,18 +3,25 @@
 
 Chat::Chat():
 	displayedChatLines(sf::Vector2f(0,300),sf::Vector2f(400,200),"",14),
-	toSend(400,"Chat here",sf::Vector2f(0,500),true,0)
+	toSend(400,"Chat here",sf::Vector2f(0,500),true,0),
+	b(sf::Vector2f(400,500),sf::Vector2f(26,toSend.getSize().y),"<",0,false,14)
 {
-	s = new Slider(false,sf::Vector2f(14,200),1.0,sf::Vector2f(405,300),0);
+	displayedChatLines.setBackgroundColor(MyColors.Transparent);
+	toSend.Attach(this);
+	s = new Slider(false,sf::Vector2f(20,200),1.0,sf::Vector2f(405,300),0);
 	s->Attach(this);
 
 	c = Client::get();
 	c->addToNewMessageCallback(this);
-	active=true;
 
-	for(int i=0;i<5;i++)
-		chatLines.push_front(to_string(i)+"te Zeile. Wuhuuuuuuuu");
-	updateDisplayedChatLines();
+	b.Attach(this);
+
+	rs.setFillColor(sf::Color(255,255,255,200));
+	rs.setPosition(0,300);
+	rs.setSize(sf::Vector2f(426,200));
+	
+	active=true;
+	onButtonClick(0);//Set to false and Position
 }
 
 Chat::~Chat()
@@ -27,19 +34,39 @@ void Chat::draw(sf::RenderWindow* rw)
 {
 	if(active)
 	{
+		rw->draw(rs);
 		displayedChatLines.draw(rw);
 		toSend.draw(rw);
 		s->draw(rw);
 	}
+	b.draw(rw);
+}
+
+void Chat::onButtonClick(int id)
+{
+	active=!active;
+	if(active)
+	{
+		b.setPosition(400,500);
+		b.setText("<");
+		b.setFillColor(MyColors.White);
+	}
 	else
 	{
+		b.setPosition(0,500);
+		b.setText(">");
 	}
 }
 
 bool Chat::MouseMoved(sf::Vector2i & v)
 {
-	s->MouseMoved(v);
-	return toSend.MouseMoved(v);
+	if(active)
+	{
+		s->MouseMoved(v);
+		toSend.MouseMoved(v);
+	}
+	b.MouseMoved(v);
+	return false;
 }
 
 bool Chat::PressedRight()
@@ -49,8 +76,12 @@ bool Chat::PressedRight()
 
 bool Chat::PressedLeft()
 {
-	s->PressedLeft();
-	toSend.PressedLeft();
+	if(active)
+	{
+		s->PressedLeft();
+		toSend.PressedLeft();
+	}
+	b.PressedLeft();
 	return false;
 }
 
@@ -61,41 +92,69 @@ bool Chat::ReleasedRight()
 
 bool Chat::ReleasedLeft()
 {
-	s->ReleasedLeft();
-	toSend.ReleasedLeft();
+	if(active)
+	{
+		s->ReleasedLeft();
+		toSend.ReleasedLeft();
+	}
+	b.ReleasedLeft();
 	return false;
 }
 	
 void Chat::animationTick()
 {
-	toSend.animationTick();
+	if(active)
+	{
+		toSend.animationTick();
+	}
+	b.animationTick();
 }
 	
 void Chat::onKeyDown(sf::Event e)
 {
-	toSend.onKeyDown(e);
+	if(active)
+	{
+		toSend.onKeyDown(e);
+	}
+	else
+	{
+	}
 }
 
 void Chat::onKeyUp(sf::Event e)
 {
-	toSend.onKeyUp(e);
+	if(active)
+	{
+		toSend.onKeyUp(e);
+	}
+	else
+	{
+	}
 }
 
 void Chat::onTextInput(std::string s)
 {
+	if(active)
+	{
 	if(toSend.getText().length()<40)
 		toSend.onTextInput(s);
+	}
+	else
+	{
+	}
 }
 
 void Chat::onSliderValueChange(int ID, double position)
-{/*
-	static double lastPos = 0.0;
-	if(lastPos == position)
-		return;
-	lastPos = position;*/
-	updateDisplayedChatLinesMutex.lock();
-	updateDisplayedChatLines();
-	updateDisplayedChatLinesMutex.unlock();
+{
+	if(active)
+	{
+		updateDisplayedChatLinesMutex.lock();
+		updateDisplayedChatLines();
+		updateDisplayedChatLinesMutex.unlock();
+	}
+	else
+	{
+	}
 }
 void Chat::onSliderReleased(int ID, double position)
 {
@@ -108,8 +167,14 @@ void Chat::update(double elapsedMs)
 
 void Chat::onTextBoxSend(int ID, std::string s)
 {
-	c->write(0x1000,code(s));
-	toSend.clear();
+	if(active)
+	{
+		c->write(0x1000,code(s));
+		toSend.clear();
+	}
+	else
+	{
+	}
 }
 
 void Chat::updateDisplayedChatLines()
@@ -146,6 +211,8 @@ void Chat::processNewMessage(short id,vector<char> data)
 				chatLines.pop_back();
 			updateDisplayedChatLines();
 			updateDisplayedChatLinesMutex.unlock();
+			if(!active)
+				b.setFillColor(MyColors.Chartreuse);
 		}break;
 	}
 }

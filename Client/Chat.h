@@ -11,10 +11,12 @@
 #include "Client.h"
 #include <mutex>
 
-class Chat : public ISliderFunction, public ITextBoxFunction, public NetworkParticipant
+class Chat : public ISliderFunction, public ITextBoxFunction, public NetworkParticipant, public IButtonfunction
 {
 	TextBox toSend;
 	Slider* s;
+	RectangleShape rs;
+	Button b;//Aussagekräftiger braucht man das nicht
 
 	Textblock displayedChatLines;
 	std::deque<std::string> chatLines;
@@ -51,6 +53,8 @@ public:
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);
+
+	void onButtonClick(int);
 };
 
 
