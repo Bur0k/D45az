@@ -24,6 +24,7 @@ private:
 	GameLobby* game;
 	bool amIGamemaster;
 	Background bg;
+	Vector2u windowsize;
 	enum click	{LEAVE, START, KICKP1, KICKP2, KICKP3};
 
 	DrawVect m_DrawV;

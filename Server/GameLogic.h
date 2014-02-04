@@ -12,7 +12,7 @@
 using namespace std;
 
 
-#define STARTCITY 51
+#define STARTCITY 53
 #define NEUTRALCITY 49
 
 class GameLogic : public NetworkParticipant

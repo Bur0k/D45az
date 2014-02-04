@@ -17,7 +17,7 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 			v = map->layers[i];
 	
 	for(unsigned int i = 0; i < v->layer.size(); i += 2)
-		for(unsigned int j = 0; j < v->layer[i].size(); i += 2)
+		for(unsigned int j = 0; j < v->layer[i].size(); j += 2)
 		{
 			if( v->layer[i][j] == STARTCITY)
 			{
@@ -242,6 +242,22 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					for( int  i = 0; i < erfg.size(); i++)
 						cout << erfg[i];
 					cout << "___________________________________________________________________________________";
+				}break;
+
+			case 0x1000://Chat empfangen
+				{
+					for(auto it : playersIngame)
+					{
+						if(s == it->owner->s)//Ist der Spieler in DIESER Lobby?
+						{
+							string chatToSend = it->owner->Name + ": "+decodeString(data,0,data.size());
+							std::vector<char> toSend = code(chatToSend);
+
+							for(auto it2 : playersIngame)
+								server->write(it2->owner->s,0x1001,toSend);
+							break;
+						}
+					}
 				}break;
 	}
 

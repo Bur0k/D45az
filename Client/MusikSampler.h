@@ -8,6 +8,10 @@
 #define songs  1 
 #define generel_noise 2 
 
+#define login 0
+#define menu 1
+
+
 using namespace std;
 
 class MusikSampler

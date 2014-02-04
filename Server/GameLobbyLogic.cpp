@@ -11,7 +11,7 @@ GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName
 	this->gameLobbyName = GameLobbyName;
 
 	Map* map = new Map();
-	map->load("Data/Maps/TestMap.tmx");
+	map->load("Data/Maps/Map1.tmx");
 	this->currentMap = map;
 
 	server->addToNewMessageCallback(this);

@@ -14,6 +14,7 @@
 #include "CommitButton.h"
 #include "Army.h"
 #include "LogicData.h"
+#include "Chat.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
@@ -85,7 +86,8 @@ private:
 	std::vector<std::vector<bool>> toDraw;
 	void updateFogOfWar();
 
-
+	//CHAT
+	Chat chat;
 
 	//debug
 
@@ -136,6 +138,9 @@ private:
 	InagameViewPhases m_phase;
 	
 	RectangleShape m_mapMouseOver;
+
+	//rectangles behind cities in playercolor
+	vector<sf::RectangleShape> m_RectangleShapes;
 
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase);

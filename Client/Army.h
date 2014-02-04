@@ -9,10 +9,16 @@
 #include "IAnimatable.h"
 #include "IDrawable.h"
 #include "UnitGroup.h"
+#include "SplittedSprite.h"
 
 using namespace sf;
 
 #define ARMY_ANIMATIONSTEPS 10
+#define ARMY_SPRITE_WIDTH 62
+#define ARMY_SPRITE_HEIGHT 64
+#define ARMY_POWERBAR_THICKNESS 5
+
+#define ARMY_TILESIZE 64
 
 class Army
 	: public IDrawable, public IClickable, public IAnimatable, public IIngameObjects
@@ -23,19 +29,25 @@ private:
 
 	//animation variables;
 	int m_animation;
-	Vector2f m_oldPos;
-	Vector2f m_targetPos;
+	Vector2f m_a_oldPos;
+	Vector2f m_a_targetPos;
 
 	//if army is in a city only its power flag will be drawn
 	bool m_inCity;
+	
 	Vector2i m_position;
 	Rect<float> m_dimensions;
-	Vector2f m_scrollPos;
+
 
 	CircleShape m_markedIndicator;
+	Color m_playerColor;
 	Sprite m_body; // TODO buraks klasse anwenden
 	RectangleShape m_powerBar;
-	Sprite m_flag;
+	RectangleShape m_pBarBg;
+
+	Texture* m_texture;
+	SplittedSprite* m_armySprite;
+	//62 breit 64 hoch
 
 	void PositionGraphics();
 	Army();
@@ -58,20 +70,21 @@ public:
 
 	//IInagameObject
 	ingameObjectType getType();
-	void /* TODO NOT VOID but info pointer to army*/ getArmy();
-	void /* TODO NOT VOID but info pointer to city*/ getCity();
+	void onMapMove(Rect<int>);
+	
+	void setPower(float power);
 
-	//ArmyObject from space	
-
+	//if army is in the fow
+	bool m_isVisible;
 
 	bool m_marked;
 	bool m_animating;
-
+	
 	Vector2i m_mapViewOffset;
 	Vector2i m_Tilesize;
 	
 
-	Army(UnitGroup* ug);
+	Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible);
 	~Army();
 
 	

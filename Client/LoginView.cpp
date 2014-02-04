@@ -16,7 +16,7 @@ LoginView::LoginView(Vector2u & size)
 	status->setBackgroundColor(MyColors.Transparent);
 	m_DrawV.push_back(status);
 
-	name = new TextBox(200,"Enter name",sf::Vector2f(100,200),false,1);
+	name = new TextBox(200,"Enter name",sf::Vector2f(100,200),true,1);
 	name->Attach(this);
 
 	m_DrawV.push_back(name);
@@ -180,7 +180,7 @@ void LoginView::update(double elapsedMs)
 			next = Views::LOBBY;
 		else if(NL->getState() == -2)
 		{
-			status->setText("Minimal 4 and maximal 10 characters.\nPlease choose a different name.",Vector2f(700,70));
+			status->setText("Minimal 3 and maximal 10 characters.\nPlease choose a different name.",Vector2f(700,70));
 			delete NL;
 			NL = nullptr;
 		}

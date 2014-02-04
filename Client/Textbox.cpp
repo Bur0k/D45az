@@ -340,7 +340,7 @@ void  TextBox::setText(std::string){}
 
 void TextBox::clear()
 {
-	m_cursorPosition = 0;
+	m_cursorPosition = m_CharacterDisplayOffset = 0;
 	m_text.clear();
 	fitText();
 	m_cursorRight = false;

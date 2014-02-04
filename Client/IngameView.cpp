@@ -54,6 +54,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_DrawV.push_back(m_SBar);
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
+	
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -74,6 +75,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
+
 
 	updateFogOfWar();
 }
@@ -119,6 +121,7 @@ void IngameView::onTextBoxSend(int ID, std::string s)
 
 bool IngameView::MouseMoved(sf::Vector2i & mouse)
 {
+	chat.MouseMoved(mouse);
 	bool retValue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->MouseMoved(mouse))
@@ -137,6 +140,7 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
 
 	drawMouseOverPath();
+	chat.MouseMoved(mouse);
 	
 	return retValue;
 }
@@ -156,6 +160,7 @@ bool IngameView::PressedRight()
 
 bool IngameView::PressedLeft()
 {
+	chat.PressedLeft();
 	currentTurn.clear();
 	mouseOverTurn.clear();
 
@@ -180,6 +185,7 @@ bool IngameView::ReleasedRight()
 
 bool IngameView::ReleasedLeft()
 {
+	chat.ReleasedLeft();
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->ReleasedLeft())
 			return true;
@@ -188,6 +194,7 @@ bool IngameView::ReleasedLeft()
 	
 void IngameView::animationTick()
 {
+	chat.animationTick();
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 
@@ -196,18 +203,21 @@ void IngameView::animationTick()
 	
 void IngameView::onKeyDown(sf::Event e)
 {
+	chat.onKeyDown(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyDown(e);
 }
 
 void IngameView::onKeyUp(sf::Event e)
 {
+	chat.onKeyUp(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
 }
 
 void IngameView::onTextInput(std::string s)
 {
+	chat.onTextInput(s);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onTextInput(s);
 }
@@ -224,10 +234,14 @@ void IngameView::draw(sf::RenderWindow* rw)
 		m_DrawV[i]->draw(rw);	
 
 	rw->draw(m_mapMouseOver);
-
+	
+	chat.draw(rw);
 	Rect<float> MapView;
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
+
+	for (unsigned int i = 0; i < m_RectangleShapes.size(); i++)
+		rw->draw(m_RectangleShapes[i]);
 }
 
 void IngameView::fogOfWardraw(RenderWindow* rw)
@@ -470,6 +484,12 @@ void IngameView::moveMap()
 		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
+	//update rectanglescity
+	/*for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
+	{
+		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+	}*/
 }
 
 void IngameView::displayCityInfo(City &c)
@@ -597,20 +617,20 @@ void IngameView::addPathToArmy()
 				turns.push_back(turn.pos);
 			return;
 		}
-					}
+	}
 	
 	std::vector<sf::Vector2i> newturn;
 		
 	for(auto turn : currentTurn)
 		newturn.push_back(turn.pos);
 	army_moves.push_back(newturn);
-				}
+}
 
 void IngameView::loadPath(Vector2i pos)
 {
 	for(auto turns : army_moves)
 	{
-		if(turns[0] ==  pos)
+		if(turns[0] == pos)
 		{
 			currentTurn.clear();
 			for(auto move : turns)
@@ -619,7 +639,6 @@ void IngameView::loadPath(Vector2i pos)
 		}
 	}
 }
-
 
 void IngameView::updateFogOfWar()
 {
@@ -675,14 +694,30 @@ void IngameView::loadGamestate()
 
 	
 	
+	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i]));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true));
+
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 	{
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			if(isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)))
-				m_enemy_armys.push_back(new Army(m_GameData.allUnits[i]));
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x))));
+	}
+
+	//fill RectangleVector
+	for (auto city: m_GameData.allCities)
+	{
+		RectangleShape r;
+		Color c = MyColors.player[city->player_ID];
+		c.a = 100;
+		r.setOutlineColor(c);
+		r.setFillColor(MyColors.Transparent);
+		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+		r.setPosition((float)(city->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+						(float)(city->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
+		m_RectangleShapes.push_back(r);
 	}
 }
 
@@ -699,7 +734,7 @@ void IngameView::commitMessage()
 {
 	vector<char> erfg;
 
-	erfg.push_back(this->m_owned_armys[0]->getPlayerID());
+	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
 
 	c->write(0x0412, erfg);
 }
