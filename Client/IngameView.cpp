@@ -775,7 +775,6 @@ void IngameView::loadGamestate()
 
 bool IngameView::isInCity(UnitGroup* u)
 {
-	return false;
 	for(City* c : m_GameData.allCities)
 		if(Vector2i(u->pos.x, u->pos.y) == c->position)
 			return true;
