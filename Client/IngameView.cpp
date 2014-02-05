@@ -498,9 +498,9 @@ void IngameView::moveMap()
 	if (tmpView != m_mapView)
 	{
 		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
-	{
-		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
-						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+		{
+			m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * (m_tileSize.x / 2) - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+							(float)(m_GameData.allCities[i]->position.y * (m_tileSize.y / 2)- m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		}
 	}
 }
@@ -727,8 +727,8 @@ void IngameView::loadGamestate()
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);
 		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
-		r.setPosition((float)(city->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
-						(float)(city->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+		r.setPosition((float)(city->position.x * (m_tileSize.x / 2) - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+						(float)(city->position.y * (m_tileSize.y / 2) - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleShapes.push_back(r);
 	}

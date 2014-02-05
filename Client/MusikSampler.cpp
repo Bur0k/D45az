@@ -6,7 +6,7 @@ MusikSampler::MusikSampler(void)
 	m_SongPath = "Data/Songs/";
 	m_vSongFiles.push_back("login.ogg");
 	m_vSongFiles.push_back("menu.ogg");
-	m_vSongFiles.push_back("menu.ogg");
+	m_vSongFiles.push_back("menu2.ogg");
 	m_vSongFiles.push_back("1_Steps.ogg"); //songnamen manuell einfügen
 	m_vSongFiles.push_back("2_Fallen.ogg");
 	m_vSongFiles.push_back("3_Pearl.ogg");
@@ -140,21 +140,18 @@ void MusikSampler::pause()
 
 void MusikSampler::next_song()
 {
-	if(m_Music.getStatus() == 2) // nur Song wechseln, wenn alter fertig
-		return;
-
-	if(m_Songnumber < menumusiken) // menümusiken wiederholen
-	{
-		play_music(m_Songnumber);
-		return;
-	}
-
-	if(static_cast<unsigned int>(m_Songnumber) >= m_vSongFiles.size() - 1) // wenn letzter song gespielt wurde zurück
+	if(static_cast<unsigned int>(m_Songnumber) >= m_vSongFiles.size() - 1 || static_cast<unsigned int>(m_Songnumber) < menumusiken) // wenn letzter song gespielt wurde zurück
 		m_Songnumber = menumusiken; // dann dahinter gestellt
 	else 
 		m_Songnumber ++;
 
 	play_music(m_Songnumber);
+}
+
+void MusikSampler::play_song_again()
+{
+	if(m_Music.getStatus() != 2) // nur Song wechseln, wenn alter fertig
+		play_music(m_Songnumber);
 }
 
 void MusikSampler::set_volume(int type, float volume)
