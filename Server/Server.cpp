@@ -176,6 +176,8 @@ Server::Server()
 				newMessageCallbackMutex.unlock();
 			}
 			//********** END DELETE
+
+			Sleep(1);
 		}
 	});
 
@@ -255,6 +257,8 @@ Server::Server()
 				errorCallbackMutex.unlock();
 			}
 			//********** END DELETE
+
+			Sleep(1);
 		}
 	});
 
