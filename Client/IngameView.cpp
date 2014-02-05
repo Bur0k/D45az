@@ -695,13 +695,13 @@ void IngameView::drawMouseOverPath()
 
 void IngameView::addPathToArmy()
 {
-	for(auto turns : army_moves)
+	for(unsigned int i=0;i<army_moves.size();i++)
 	{
-		if(currentTurn[0].pos == turns[0])
+		if(currentTurn[0].pos == army_moves[i][0])
 		{
-			turns.clear();
+			army_moves[i].clear();
 			for(auto turn : currentTurn)
-				turns.push_back(turn.pos);
+				army_moves[i].push_back(turn.pos);
 			currentTurn.clear();
 			mouseOverTurn.clear();
 			m_turnOnPathDraw = false;
