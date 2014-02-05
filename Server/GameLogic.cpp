@@ -176,6 +176,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(this->startCities[i]->level);
 				}
 
+				erfg.push_back(5);
+
 				server->write(s, 0x0403, erfg);
 			}break;
 		case 0x0404:
@@ -407,8 +409,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -438,8 +440,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
 								army1.units.erase(army1.units.begin()+k);
@@ -486,8 +488,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -519,8 +521,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0; 
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
