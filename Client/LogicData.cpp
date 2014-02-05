@@ -91,7 +91,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 
 				this->allCities.push_back(c);
 
-				data.erase(data.begin() + 1, data.begin() + 4);	//achtung
+				data.erase(data.begin() + 1, data.begin() + 5);	//achtung
 			}
 		}break;
 	case 0x0405:
@@ -132,8 +132,9 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				// 32 shorts abwechselnd living und type
 				for (int j = 0; j < 16; j++)
 				{
-					types[j] = (UnitTypes) decodeShort(data, i + 10 + 4*j);
-					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
+					//vertauscht
+					types[j] = (UnitTypes)decodeShort(data, i + 10 + 4 * j + 2);
+					livingsoldiers[j] =  decodeShort(data, i + 10 + 4*j);				
 				}
 
 				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, this->ownedCities[0]);
@@ -158,8 +159,10 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				// 32 shorts abwechselnd living und type
 				for (int j = 0; j < 16; j++)
 				{
-					types[j] = (UnitTypes) decodeShort(data, i + 10 + 4*j);
-					livingsoldiers[j] = decodeShort(data, i + 10 + 4 * j + 2);
+
+					types[j] = (UnitTypes)decodeShort(data, i + 10 + 4 * j + 2);
+					livingsoldiers[j] =  decodeShort(data, i + 10 + 4*j);
+
 				}
 
 				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);

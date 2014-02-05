@@ -16,6 +16,7 @@
 #include "LogicData.h"
 #include "Chat.h"
 #include "mainGui.h"
+#include "MusikSampler.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
@@ -101,6 +102,7 @@ private:
 
 
 	CommitButton* m_commitB;
+	MusikSampler* m_pMS; 
 
 	//Visible STUFF
 	Statusbar* m_SBar;	

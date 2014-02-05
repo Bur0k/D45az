@@ -220,11 +220,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 							//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -274,11 +274,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						{
 								//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 

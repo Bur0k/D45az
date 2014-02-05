@@ -73,7 +73,7 @@ void Army::draw(sf::RenderWindow* rw)
 {
 	if(!m_isVisible)
 		return;
-	if(!m_inCity)
+	if(m_inCity)
 	{
 		if(m_marked)
 			rw->draw(m_markedIndicator);

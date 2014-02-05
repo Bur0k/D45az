@@ -20,7 +20,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_turnOnPathDraw = false;
 	
 	
-	
+	m_pMS = MusikSampler::getInstance(); // singleton!
 	
 	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
@@ -106,7 +106,10 @@ void IngameView::onButtonClick(int id)
 	{
 	case IngameViewButtonId::COMMIT:
 		if(m_phase == InagameViewPhases::YOURTURN)
+		{
+			m_pMS->play_sound(COMMIT_SOUND);
 			nextPhase();
+		}
 		break;
 	default:
 		break;
@@ -778,7 +781,6 @@ void IngameView::loadGamestate()
 
 bool IngameView::isInCity(UnitGroup* u)
 {
-	return false;
 	for(City* c : m_GameData.allCities)
 		if(Vector2i(u->pos.x, u->pos.y) == c->position)
 			return true;
