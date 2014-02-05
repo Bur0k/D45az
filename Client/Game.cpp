@@ -68,7 +68,7 @@ Game::Game(RenderWindow* rw, Views Viewmode, Vector2f windowSize)
 
 	
 	//Musik
-	m_pMS = new MusikSampler();
+	m_pMS = MusikSampler::getInstance(); // singleton
 
 	LoadView(Viewmode);
 

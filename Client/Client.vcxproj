@@ -239,6 +239,9 @@
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="Data\Sounds\chat_close.wav" />
+    <Media Include="Data\Sounds\chat_open.wav" />
+    <Media Include="Data\Sounds\commit.wav" />
     <Media Include="Data\Sounds\sound1.wav" />
     <Media Include="Data\Sounds\sound2.wav" />
   </ItemGroup>
