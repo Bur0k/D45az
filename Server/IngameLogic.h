@@ -6,6 +6,7 @@
 #include "PlayerData.h"
 #include "CityLogic.h"
 #include "UnitGroupLogic.h"
+#include "UnitLogic.h"
 #include <vector>
 
 using namespace std;

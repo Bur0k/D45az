@@ -176,6 +176,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(this->startCities[i]->level);
 				}
 
+				erfg.push_back(5);
+
 				server->write(s, 0x0403, erfg);
 			}break;
 		case 0x0404:
@@ -393,33 +395,22 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
 							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk1 + def; break;
-							case UnitStrategy::OFFENSIVE: atk1 + off; break;
-							case UnitStrategy::RUNNING:   atk1 + run; break;
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
 							}
 							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk2 + def; break;
-							case UnitStrategy::OFFENSIVE: atk2 + off; break;
-							case UnitStrategy::RUNNING:   atk2 + run; break;
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
 							}
-							switch(army1.units[k]->type) // Einheitentyp 1 anrechnen
-							{
-							case UnitTypes::LIGHT: atk1 + light; break; 
-							case UnitTypes::HEAVY: atk1 + heavy; break;
-							case UnitTypes::LONGRANGE: atk1 + longrange; break;
-							case UnitTypes::ARTILLERY: atk1 + artillery; break;
-							}
-							switch(army2.units[k]->type) // Einheitentyp 2 anrechnen
-							{
-							case UnitTypes::LIGHT: atk2 + light; break; 
-							case UnitTypes::HEAVY: atk2 + heavy; break;
-							case UnitTypes::LONGRANGE: atk2 + longrange; break;
-							case UnitTypes::ARTILLERY: atk2 + artillery; break;
-							}
+							
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -435,33 +426,22 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
 							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk1 + def; break;
-							case UnitStrategy::OFFENSIVE: atk1 + off; break;
-							case UnitStrategy::RUNNING:   atk1 + run; break;
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
 							}
 							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk2 + def; break;
-							case UnitStrategy::OFFENSIVE: atk2 + off; break;
-							case UnitStrategy::RUNNING:   atk2 + run; break;
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
 							}
-							switch(army1.units[k]->type) // Einheitentyp 1 anrechnen
-							{
-							case UnitTypes::LIGHT: atk1 + light; break; 
-							case UnitTypes::HEAVY: atk1 + heavy; break;
-							case UnitTypes::LONGRANGE: atk1 + longrange; break;
-							case UnitTypes::ARTILLERY: atk1 + artillery; break;
-							}
-							switch(army2.units[k]->type) // Einheitentyp 2 anrechnen
-							{
-							case UnitTypes::LIGHT: atk2 + light; break; 
-							case UnitTypes::HEAVY: atk2 + heavy; break;
-							case UnitTypes::LONGRANGE: atk2 + longrange; break;
-							case UnitTypes::ARTILLERY: atk2 + artillery; break;
-							}
+							
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
 								army1.units.erase(army1.units.begin()+k);
@@ -494,22 +474,22 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
 							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk1 + def; break;
-							case UnitStrategy::OFFENSIVE: atk1 + off; break;
-							case UnitStrategy::RUNNING:   atk1 + run; break;
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
 							}
 							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk2 + def; break;
-							case UnitStrategy::OFFENSIVE: atk2 + off; break;
-							case UnitStrategy::RUNNING:   atk2 + run; break;
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
 							}
 
-							atk1 + army1.units[k]->attackpower;
-							atk2 + army2.units[k]->attackpower;
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -527,22 +507,22 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
 							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk1 + def; break;
-							case UnitStrategy::OFFENSIVE: atk1 + off; break;
-							case UnitStrategy::RUNNING:   atk1 + run; break;
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
 							}
 							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
 							{
-							case UnitStrategy::DEFENSIVE: atk2 + def; break;
-							case UnitStrategy::OFFENSIVE: atk2 + off; break;
-							case UnitStrategy::RUNNING:   atk2 + run; break;
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
 							}
 							
-							atk1 + army1.units[k]->attackpower;
-							atk2 + army2.units[k]->attackpower;
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0; 
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -559,10 +539,9 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 					army2.unitGroups->erase(army2.unitGroups->begin()+a);
 			}		
 		}
-
+	}
 	if(army1.unitGroups->size() == 0)
 		return army2;
-	if(army2.unitGroups->size() == 0)
+	else
 		return army1;
-	}
 }

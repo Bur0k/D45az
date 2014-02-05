@@ -4,7 +4,7 @@
 #define light 2.0
 #define heavy 2.4
 #define longrange 2.8
-#define artillery 1.0
+#define artillery 3.0
 
 #define maxlivingsoldiers 25
 
@@ -29,7 +29,7 @@ public:
 
 	short living;
 	int range;
-	int attackpower;
+	double attackpower;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

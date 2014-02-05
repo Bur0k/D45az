@@ -15,11 +15,12 @@ LogicData::~LogicData()
 
 void LogicData::updateGameData()
 {
-	this->requestAllCities();
-	this->requestAllUnits();
+	this->requestPlayers();
 	this->requestOwnedCities();
 	this->requestOwnedUnits();
-	this->requestPlayers();
+	this->requestAllCities();
+	this->requestAllUnits();
+	
 }
 
 void LogicData::requestPlayers()
@@ -86,7 +87,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				pos.y = data[2];
 				level = data[3];
 
-				City* c = new City(pos, level, 0);
+				City* c = new City(pos, level, 5);
 
 				this->allCities.push_back(c);
 
