@@ -191,8 +191,8 @@ private:
 	//gets called if next phase is required
 	void nextPhase();
 	void moveMap();
-	void displayCityInfo(City &);
-	void displayArmyInfo(Unit &);
+	void displayCityInfo(City*);
+	void displayArmyInfo(UnitGroup*);
 	void drawPath();
 	//saves path to army at path[0]
 	void addPathToArmy();
