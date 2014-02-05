@@ -21,13 +21,13 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 		{
 			if( v->layer[i][j] == STARTCITY)
 			{
-				CityLogic* c = new CityLogic(id, i, j);
+				CityLogic* c = new CityLogic(id, j, i);
 				this->startCities.push_back(c);
 				id++;
 			}
 			else if( v->layer[i][j] == NEUTRALCITY)
 			{
-				CityLogic* c = new CityLogic(id, i, j);
+				CityLogic* c = new CityLogic(id, j, i);
 				this->neutralCities.push_back(c);
 				id++;
 			}
