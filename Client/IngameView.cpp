@@ -550,7 +550,6 @@ void IngameView::displayCityInfo(City &c)
 
 void IngameView::displayArmyInfo(Unit &)
 {
-
 	std::cout << " clicked on army! " << std::endl;
 }
 
@@ -714,12 +713,17 @@ void IngameView::updateFogOfWar()
 			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
-			}
+		default:
+			maxRange=2>maxRange?2:maxRange;
+		}
 		for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)
 			for(unsigned int j=0;j<m_map.layers[0]->layer[0].size();j++)
-				if((j-it->pos.x)*(j-it->pos.x) + 
-					(i-it->pos.y)*(i-it->pos.y) <= maxRange*maxRange)
+			{
+				float xdiff=std::abs(it->pos.x*2.0f-j);
+				float ydiff=std::abs(it->pos.y*2.0f-i);
+				if(xdiff*xdiff + ydiff*ydiff <= maxRange*maxRange)
 					toDraw[i][j]=false;
+			}
 		}
 	for(auto it2:m_map.layers)
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
