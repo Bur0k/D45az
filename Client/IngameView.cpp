@@ -576,7 +576,7 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 	{
 		if(it[0] == sf::Vector2i(u->pos.x, u->pos.y))
 {
-			for(int i=0;i<it.size();i++)
+			for(unsigned int i=0;i<it.size();i++)
 				currentTurn.push_back(turn(it[i]));
 			break;
 		}
@@ -833,7 +833,7 @@ void IngameView::commitMessage()
 {
 	vector<char> erfg;
 
-	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
+	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{

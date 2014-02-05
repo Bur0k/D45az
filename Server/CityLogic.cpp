@@ -33,16 +33,8 @@ void CityLogic::upgradeCity()
 
 void CityLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
-	switch(id)
-	{
-
-	}
 }
 
 void CityLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
-	switch(errCode)
-	{
-		default: break;
-	}
 }
