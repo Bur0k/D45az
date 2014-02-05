@@ -807,9 +807,9 @@ void IngameView::commitMessage()
 
 	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
 
-	for(int i = 0; i < this->army_moves.size(); i++)
+	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
-		for(int j = 0; j < this->army_moves[i].size(); j++)
+		for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
 		{
 			erfg.push_back(this->army_moves[i][j].x);
 			erfg.push_back(this->army_moves[i][j].y);

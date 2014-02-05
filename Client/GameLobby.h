@@ -35,6 +35,7 @@ public:
 	void startGame();
 	void mapChange(short mapID);
 	void maxPlayerChange(short value);
+	void kickPlayer(string name);
 };
 
 #endif

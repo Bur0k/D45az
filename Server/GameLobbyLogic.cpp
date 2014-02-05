@@ -219,7 +219,19 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					char playerCount = static_cast<char>(anz);
 					erfg.push_back(playerCount);
 					this->server->write(s, 0x0321, erfg);
+				}break;
+		case 0x0312:
+			{
+				short len = data[0];
+				string name = decodeString(data, 2, len);
+
+				for (unsigned int i = 0; i < this->players.size(); i++)
+				{
+					if (this->players[i]->Name == name)
+						this->players.erase(players.begin() + i);
 				}
+
+			}break;
 		case 0x0330:
 
 			{

@@ -194,6 +194,9 @@
     <None Include="Data\Maps\Map1.tmx">
       <Filter>Data</Filter>
     </None>
+    <None Include="Data\Maps\Map2.tmx">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Maps\TileSheets\test.png">

@@ -104,7 +104,7 @@ void GameLobbyView::onButtonClick(int id)
 				if (this->game->players[i] == this->players[1]->getString())
 				{
 					this->game->players[i] = "";
-					//muss vermutlich noch an den Server gesendet werden
+					this->game->kickPlayer(this->players[1]->getString());
 					this->players[1]->setString("");
 				}
 			}
@@ -117,7 +117,7 @@ void GameLobbyView::onButtonClick(int id)
 				if (this->game->players[i] == this->players[2]->getString())
 				{
 					this->game->players[i] = "";
-					//muss vermutlich noch an den Server gesendet werden
+					this->game->kickPlayer(this->players[2]->getString());
 					this->players[2]->setString("");
 				}
 			}
@@ -130,7 +130,7 @@ void GameLobbyView::onButtonClick(int id)
 				if (this->game->players[i] == this->players[3]->getString())
 				{
 					this->game->players[i] = "";
-					//muss vermutlich noch an den Server gesendet werden
+					this->game->kickPlayer(this->players[3]->getString());
 					this->players[3]->setString("");
 				}
 			}
