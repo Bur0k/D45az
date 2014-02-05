@@ -105,6 +105,7 @@
     <ClCompile Include="LogicData.cpp" />
     <ClCompile Include="LoginView.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainGui.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLayer.cpp" />
     <ClCompile Include="MenuView.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="LobbyView.h" />
     <ClInclude Include="LogicData.h" />
     <ClInclude Include="LoginView.h" />
+    <ClInclude Include="mainGui.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLayer.h" />
     <ClInclude Include="MenuView.h" />

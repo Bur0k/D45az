@@ -175,6 +175,9 @@
     <ClCompile Include="Chat.cpp">
       <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="mainGui.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -305,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="Chat.h">
       <Filter>Codes\GameLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="mainGui.h">
+      <Filter>Codes\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,9 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	m_turnOnPathDraw = false;
 	
+	
+	
+	
 	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
 	m_DrawV.push_back(u);
@@ -73,6 +76,12 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
+
+	mainGui.y_offset = static_cast<float>(screensize.y);
+	m_DrawV.push_back(&mainGui);
+	m_ClickV.push_back(&mainGui);
+	m_AnimateV.push_back(&mainGui);
+
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
 
@@ -489,9 +498,9 @@ void IngameView::moveMap()
 	if (tmpView != m_mapView)
 	{
 		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
-		{
-			m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
-							(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
+	{
+		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
+						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		}
 	}
 }
@@ -753,3 +762,4 @@ void IngameView::commitMessage()
 
 	c->write(0x0412, erfg);
 }
+
