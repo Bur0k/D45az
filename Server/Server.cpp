@@ -100,30 +100,68 @@ Server::Server()
 		}
 	});
 
-	addNewMessageCallbackThread = new thread([=]()
+	addDeleteProcessNewMessageCallback = new thread([&]()
 	{
 		while(running)
 		{
+			//ADD 
 			addNewMessageCallbackMutex.lock();
 			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(addNewMessageCallbackList);
 			addNewMessageCallbackList.clear();
 			addNewMessageCallbackMutex.unlock();
 			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
-			{
-				newMessageCallbackMutex.lock();
 				newMessageCallback.push_back(AVOIDING_DEADLOCK_KAK[i]);
-				newMessageCallbackMutex.unlock();
-			}
+			//********* END ADD
 
-			Sleep(1);
-		}
-	});
-	deleteNewMessageCallbackThread = new thread([=]()
-	{
-		while(running)
-		{
+			//PROCESS
+
+			newMessageQueueMutex.lock();
+			for(auto it : newMessageQueue)
+			{
+				std::unique_ptr<NetworkParticipant*> callback (new NetworkParticipant*[newMessageCallback.size()]);
+				int callbackSize = newMessageCallback.size();
+				for(int i=0;i<newMessageCallback.size();i++)
+					callback[i]=newMessageCallback[i];
+				for(int i=0;i<callbackSize;i++)
+				{
+					if(callback[i]!=nullptr)
+					{
+						callback[i]->processNewMessage(it.s,it.id,it.data);
+
+						//DELETE
+						deleteNewMessageCallbackMutex.lock();
+						AVOIDING_DEADLOCK_KAK = deleteNewMessageCallbackList;
+						deleteNewMessageCallbackList.clear();
+						deleteNewMessageCallbackMutex.unlock();
+						for(unsigned int j=0;j<AVOIDING_DEADLOCK_KAK.size();j++)
+						{
+							for(unsigned int k=0;k<newMessageCallback.size();k++)
+							{
+								if(newMessageCallback[k] == AVOIDING_DEADLOCK_KAK[j])//Aus newMessageCallback LÖSChEN
+								{
+									for(int l=0;l<callbackSize;l++)//Callback eintrag auf nullptr setzen
+									{
+										if(newMessageCallback[k] == callback[l])
+										{
+											callback[l] = nullptr;
+											break;
+										}
+									}//*****************************END CALLBACK EINTRAG
+									newMessageCallback.erase(newMessageCallback.begin()+k);
+									break;
+								}//***************************************************END AUS newMessageCallback LÖSCHEN
+							}
+						}
+						//**********END DELETE
+					}
+				}
+			}//**************** END PROCESS
+			newMessageQueue.clear();
+			newMessageQueueMutex.unlock();
+
+			//DELETE
 			deleteNewMessageCallbackMutex.lock();
-			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(deleteNewMessageCallbackList);
+			AVOIDING_DEADLOCK_KAK = deleteNewMessageCallbackList;
 			deleteNewMessageCallbackList.clear();
 			deleteNewMessageCallbackMutex.unlock();
 			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
@@ -137,35 +175,72 @@ Server::Server()
 					}
 				newMessageCallbackMutex.unlock();
 			}
-
-			Sleep(1);
+			//********** END DELETE
 		}
 	});
 
-	addErrorCallbackThread = new thread([=]()
+	addDeleteProcessErrorCallback = new thread([&]()
 	{
 		while(running)
 		{
+			//ADD 
 			addErrorCallbackMutex.lock();
 			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(addErrorCallbackList);
 			addErrorCallbackList.clear();
 			addErrorCallbackMutex.unlock();
 			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
-			{
-				errorCallbackMutex.lock();
 				errorCallback.push_back(AVOIDING_DEADLOCK_KAK[i]);
-				errorCallbackMutex.unlock();
-			}
+			//********* END ADD
 
-			Sleep(1);
-		}
-	});
-	deleteErrorCallbackThread = new thread([=]()
-	{
-		while(running)
-		{
+			//PROCESS
+
+			errorQueueMutex.lock();
+			for(auto it : errorQueue)
+			{
+				std::unique_ptr<NetworkParticipant*> callback (new NetworkParticipant*[errorCallback.size()]);
+				int callbackSize = errorCallback.size();
+				for(int i=0;i<errorCallback.size();i++)
+					callback[i]=errorCallback[i];
+				for(int i=0;i<callbackSize;i++)
+				{
+					if(callback[i]!=nullptr)
+					{
+						callback[i]->processNetworkError(it.s,it.errCode,it.errMessage);
+
+						//DELETE
+						deleteErrorCallbackMutex.lock();
+						AVOIDING_DEADLOCK_KAK = deleteErrorCallbackList;
+						deleteErrorCallbackList.clear();
+						deleteErrorCallbackMutex.unlock();
+						for(unsigned int j=0;j<AVOIDING_DEADLOCK_KAK.size();j++)
+						{
+							for(unsigned int k=0;k<errorCallback.size();k++)
+							{
+								if(errorCallback[k] == AVOIDING_DEADLOCK_KAK[j])//Aus errorCallback LÖSChEN
+								{
+									for(int l=0;l<callbackSize;l++)//Callback eintrag auf nullptr setzen
+									{
+										if(errorCallback[k] == callback[l])
+										{
+											callback[l] = nullptr;
+											break;
+										}
+									}//*****************************END CALLBACK EINTRAG
+									errorCallback.erase(errorCallback.begin()+k);
+									break;
+								}//***************************************************END AUS errorCallback LÖSCHEN
+							}
+						}
+						//**********END DELETE
+					}
+				}
+			}//**************** END PROCESS
+			errorQueue.clear();
+			errorQueueMutex.unlock();
+
+			//DELETE
 			deleteErrorCallbackMutex.lock();
-			std::vector<NetworkParticipant*> AVOIDING_DEADLOCK_KAK(deleteErrorCallbackList);
+			AVOIDING_DEADLOCK_KAK = deleteErrorCallbackList;
 			deleteErrorCallbackList.clear();
 			deleteErrorCallbackMutex.unlock();
 			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
@@ -179,8 +254,7 @@ Server::Server()
 					}
 				errorCallbackMutex.unlock();
 			}
-
-			Sleep(1);
+			//********** END DELETE
 		}
 	});
 
@@ -219,16 +293,12 @@ Server::~Server()
 
 	writeThread->join();
 	delete writeThread;
-
-	addNewMessageCallbackThread->join();
-	delete addNewMessageCallbackThread;
-	deleteNewMessageCallbackThread->join();
-	delete deleteNewMessageCallbackThread;
-
-	addErrorCallbackThread->join();
-	delete addErrorCallbackThread;
-	deleteErrorCallbackThread->join();
-	delete deleteErrorCallbackThread;
+	
+	addDeleteProcessNewMessageCallback->join();
+	delete addDeleteProcessNewMessageCallback;
+		
+	addDeleteProcessErrorCallback->join();
+	delete addDeleteProcessErrorCallback;
 }
 
 void Server::startListening()
@@ -564,10 +634,9 @@ BOOL Server::PostAccept(PERIODATA* pIoData)
 
 void Server::sendError(SOCKET s,int errCode,string errMessage)
 {
-	errorCallbackMutex.lock();
-	for(unsigned int i=0;i<errorCallback.size();i++)
-		errorCallback[i]->processNetworkError(s,errCode,errMessage);
-	errorCallbackMutex.unlock();
+	errorQueueMutex.lock();
+	errorQueue.push_back(error(s,errCode,errMessage));
+	errorQueueMutex.unlock();
 }
 
 void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
@@ -584,12 +653,11 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 	}
 
 	if(!socketIsConnected && id != 0x0100)
-		return;
-
-	newMessageCallbackMutex.lock();
-	for(unsigned int i=0;i<newMessageCallback.size();i++)
-		newMessageCallback[i]->processNewMessage(s,id,data);
-	newMessageCallbackMutex.unlock();
+		return;//Nicht connected und keine Loginanfrage -> verwerfen
+	
+	newMessageQueueMutex.lock();
+	newMessageQueue.push_back(newMessage(s,id,data));
+	newMessageQueueMutex.unlock();
 }
 
 void Server::write(SOCKET s,short id,vector<char> data)

@@ -90,7 +90,11 @@ Map* GameLobbyLogic::getMap()
 void GameLobbyLogic::addPlayer(PlayerData* player)
 {
 	if(this->players.size() < static_cast<unsigned int>(this->playerlimit))
+	{
 		this->players.push_back(player);
+		for(auto it : players)
+			this->sendPlayerNames(it->s);
+	}
 }
 
 bool GameLobbyLogic::isAlreadyConnected(SOCKET s)
@@ -181,7 +185,10 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 					std::vector<char> erfg;
 
-					this->server->write(s, 0x0304, erfg);
+					
+					for(auto it : players)
+						this->server->write(it->s, 0x0304, erfg);
+					
 				}
 			}break;
 		case 0x0310:

@@ -72,7 +72,7 @@ StandardButton::~StandardButton()
 void StandardButton::updateVisuals()
 {
 
-	m_Rect.setFillColor(getFillColor());
+	m_Rect.setFillColor(this->getFillColor());
 }
 
 void StandardButton::updatePosition()
