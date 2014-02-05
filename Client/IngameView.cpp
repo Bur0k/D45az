@@ -164,11 +164,12 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 
 bool IngameView::PressedRight()
 {
+
 	drawPath();
 
 	if(m_is_turn_valid)
 		addPathToArmy();
-
+	
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
 			return true;
@@ -180,6 +181,8 @@ bool IngameView::PressedLeft()
 	chat.PressedLeft();
 	currentTurn.clear();
 	mouseOverTurn.clear();
+	UnitGroup* tmpUG = NULL;
+	City* tmpCity = NULL;
 
 	//displayed armys
 	for(Army* a : m_owned_armys)
@@ -191,10 +194,25 @@ bool IngameView::PressedLeft()
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
 			return true;
+		
+	for(City* city : m_GameData.ownedCities)
+	{
+		if(m_pointAt == city->position)
+		{
+			displayCityInfo(city);
+			tmpCity = city;
+		}
+	}
+	for(UnitGroup* ug : m_GameData.ownedUnits)
+	{
+		if(m_pointAt == Vector2i(ug->pos.x, ug->pos.x))
+		{
+			displayArmyInfo(ug);
+			tmpUG = ug;
+		}
+	}
 
-	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
-		if(m_pointAt == m_GameData.ownedCities[i]->position)
-			displayCityInfo(*m_GameData.ownedCities[i]);
+	mainGui.updateMgui(tmpCity, tmpUG);
 	return retvalue;
 }
 
@@ -254,6 +272,7 @@ void IngameView::onTextInput(std::string s)
 
 void IngameView::draw(sf::RenderWindow* rw)
 {
+	this;
 	m_map.render(*rw,m_mapView);
 
 	fogOfWardraw(rw);
@@ -539,13 +558,13 @@ void IngameView::moveMap()
 		a->onMapMove(m_mapView);
 }
 
-void IngameView::displayCityInfo(City &c)
+void IngameView::displayCityInfo(City *c)
 {
-	std::cout << " stadt Income : " << c.generatedIncome << std::endl;
-	std::cout << " stadt level  : " << c.level << std::endl;
+	std::cout << " stadt Income : " << c->generatedIncome << std::endl;
+	std::cout << " stadt level  : " << c->level << std::endl;
 }
 
-void IngameView::displayArmyInfo(Unit &)
+void IngameView::displayArmyInfo(UnitGroup * ug)
 {
 	std::cout << " clicked on army! " << std::endl;
 }

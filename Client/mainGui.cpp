@@ -54,8 +54,16 @@ void mainGui::positionGraphics()
 
 }
 
-void mainGui::updateMgui()
+void mainGui::updateMgui(City* city, UnitGroup* army)
 {
+	if(city != NULL)
+	{
+		has_city = true;
+	}
+	if(army != NULL)
+	{
+		has_army = true;
+	}
 
 	
 	select_city->setIsEnabled(has_city);
@@ -66,9 +74,9 @@ void mainGui::updateMgui()
 		select_army->unLock();
 
 	if(!has_city && !has_army)
-	{
 		hidden = true;
-	}
+	else 
+		hidden = false;
 }
 
 bool mainGui::MouseMoved(sf::Vector2i & mouse)
