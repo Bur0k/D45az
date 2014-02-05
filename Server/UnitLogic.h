@@ -29,7 +29,7 @@ public:
 
 	short living;
 	int range;
-	int attackpower;
+	double attackpower;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
