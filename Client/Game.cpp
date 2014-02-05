@@ -438,7 +438,7 @@ void Game::LoadView(Views v)
 		break;
 
 	case Views::INGAME:
-		m_pMS->next_song();
+		m_pMS->next_song(); // spielt nächstmöglichen titel
 		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::YOURTURN);
 		clear = true;
 		break;
@@ -455,6 +455,10 @@ void Game::LoadView(Views v)
 			delete m_ViewVect[m_ViewVect.size() -1 ];
 			m_ViewVect.pop_back();
 			m_ViewMode = m_ViewVect[m_ViewVect.size() -1]->getType();
+			if(m_ViewMode == Views::INGAME)
+				m_pMS->next_song();
+			else 
+				m_pMS->play_music(login);
 			return;
 		}
 		else 
@@ -614,7 +618,7 @@ void Game::timer()
 
 	if(m_audioCheck.getElapsedTime().asSeconds() > 5)
 	{
-		m_pMS->next_song();
+		m_pMS->play_song_again();
 	}
 
 

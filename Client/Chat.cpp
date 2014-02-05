@@ -49,7 +49,8 @@ void Chat::onButtonClick(int id)
 	{
 		b.setPosition(400,500);
 		b.setText("<");
-		b.setFillColor(MyColors.White);
+		b.m_color = MyColors.White;
+		b.animationTick();
 	}
 	else
 	{
@@ -212,7 +213,10 @@ void Chat::processNewMessage(short id,vector<char> data)
 			updateDisplayedChatLines();
 			updateDisplayedChatLinesMutex.unlock();
 			if(!active)
-				b.setFillColor(MyColors.Chartreuse);
+			{
+				b.m_color = MyColors.Chartreuse;
+				b.animationTick();
+			}
 		}break;
 	}
 }

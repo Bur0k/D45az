@@ -15,7 +15,7 @@ public:
 	vector<string> players;
 	short playerLimit;
 	string gameMaster;
-	std::atomic<short> updated;//Bit 0 = players, 1=playerLimit,2=gameMaster
+	std::atomic<short> updated;//Bit 0 = players, 1=playerLimit,2=gameMaster,3=inGame
 	//Map current Map;
 
 private:

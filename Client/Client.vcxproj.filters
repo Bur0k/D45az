@@ -175,6 +175,9 @@
     <ClCompile Include="Chat.cpp">
       <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
+    <ClCompile Include="mainGui.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SplittedSprite.h">
@@ -306,6 +309,9 @@
     <ClInclude Include="Chat.h">
       <Filter>Codes\GameLogic</Filter>
     </ClInclude>
+    <ClInclude Include="mainGui.h">
+      <Filter>Codes\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libsndfile-1.dll">
@@ -409,6 +415,9 @@
       <Filter>Data\songs</Filter>
     </None>
     <None Include="Data\Songs\3_Pearl.ogg">
+      <Filter>Data\songs</Filter>
+    </None>
+    <None Include="Data\Songs\menu2.ogg">
       <Filter>Data\songs</Filter>
     </None>
   </ItemGroup>
