@@ -176,6 +176,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(this->startCities[i]->level);
 				}
 
+				erfg.push_back(5);
+
 				server->write(s, 0x0403, erfg);
 			}break;
 		case 0x0404:
