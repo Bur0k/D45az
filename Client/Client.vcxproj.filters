@@ -423,6 +423,9 @@
     <None Include="Data\Images\mainGui.psd">
       <Filter>Data\img</Filter>
     </None>
+    <None Include="..\Server\Data\Maps\Map2.tmx">
+      <Filter>Data\map</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">
@@ -500,6 +503,15 @@
       <Filter>Data\sound</Filter>
     </Media>
     <Media Include="Data\Sounds\sound2.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\chat_close.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\chat_open.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\commit.wav">
       <Filter>Data\sound</Filter>
     </Media>
   </ItemGroup>

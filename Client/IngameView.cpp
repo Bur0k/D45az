@@ -20,7 +20,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_turnOnPathDraw = false;
 	
 	
-	
+	m_pMS = MusikSampler::getInstance(); // singleton!
 	
 	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
@@ -106,7 +106,10 @@ void IngameView::onButtonClick(int id)
 	{
 	case IngameViewButtonId::COMMIT:
 		if(m_phase == InagameViewPhases::YOURTURN)
+		{
+			m_pMS->play_sound(COMMIT_SOUND);
 			nextPhase();
+		}
 		break;
 	default:
 		break;
@@ -729,12 +732,17 @@ void IngameView::updateFogOfWar()
 			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
-			}
+		default:
+			maxRange=2>maxRange?2:maxRange;
+		}
 		for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)
 			for(unsigned int j=0;j<m_map.layers[0]->layer[0].size();j++)
-				if((j-it->pos.x)*(j-it->pos.x) + 
-					(i-it->pos.y)*(i-it->pos.y) <= maxRange*maxRange)
+			{
+				float xdiff=std::abs(it->pos.x*2.0f-j);
+				float ydiff=std::abs(it->pos.y*2.0f-i);
+				if(xdiff*xdiff + ydiff*ydiff <= maxRange*maxRange)
 					toDraw[i][j]=false;
+			}
 		}
 	for(auto it2:m_map.layers)
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
@@ -818,9 +826,9 @@ void IngameView::commitMessage()
 
 	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
 
-	for(int i = 0; i < this->army_moves.size(); i++)
+	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
-		for(int j = 0; j < this->army_moves[i].size(); j++)
+		for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
 		{
 			erfg.push_back(this->army_moves[i][j].x);
 			erfg.push_back(this->army_moves[i][j].y);

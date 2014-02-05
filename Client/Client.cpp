@@ -132,7 +132,7 @@ Client::Client()
 			{
 				std::unique_ptr<NetworkParticipant*[]> callback (new NetworkParticipant*[newMessageCallback.size()]);
 				int callbackSize = newMessageCallback.size();
-				for(int i=0;i<newMessageCallback.size();i++)
+				for(unsigned int i=0;i<newMessageCallback.size();i++)
 					callback[i]=newMessageCallback[i];
 				for(int i=0;i<callbackSize;i++)
 				{
@@ -218,7 +218,7 @@ Client::Client()
 			{
 				std::unique_ptr<NetworkParticipant*[]> callback (new NetworkParticipant*[errorCallback.size()]);
 				int callbackSize = errorCallback.size();
-				for(int i=0;i<errorCallback.size();i++)
+				for(unsigned int i=0;i<errorCallback.size();i++)
 					callback[i]=errorCallback[i];
 				for(int i=0;i<callbackSize;i++)
 				{

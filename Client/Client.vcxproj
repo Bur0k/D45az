@@ -172,6 +172,7 @@
     <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Server\Data\Maps\Map2.tmx" />
     <None Include="Data\Images\button_small.psd" />
     <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Images\mainGui.psd" />
@@ -239,6 +240,9 @@
     <Image Include="Data\Maps\TileSheets\test.png" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="Data\Sounds\chat_close.wav" />
+    <Media Include="Data\Sounds\chat_open.wav" />
+    <Media Include="Data\Sounds\commit.wav" />
     <Media Include="Data\Sounds\sound1.wav" />
     <Media Include="Data\Sounds\sound2.wav" />
   </ItemGroup>
