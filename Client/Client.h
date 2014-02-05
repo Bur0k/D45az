@@ -11,6 +11,7 @@
 #include "NetworkParticipant.h"
 #include <algorithm>
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
