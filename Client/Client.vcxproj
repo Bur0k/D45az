@@ -192,6 +192,7 @@
     <None Include="Data\Songs\4_Requium.ogg" />
     <None Include="Data\Songs\login.ogg" />
     <None Include="Data\Songs\menu.ogg" />
+    <None Include="Data\Songs\menu2.ogg" />
     <None Include="libsndfile-1.dll" />
     <None Include="openal32.dll" />
     <None Include="Projektplanung.doc" />

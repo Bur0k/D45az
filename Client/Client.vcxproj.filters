@@ -411,6 +411,9 @@
     <None Include="Data\Songs\3_Pearl.ogg">
       <Filter>Data\songs</Filter>
     </None>
+    <None Include="Data\Songs\menu2.ogg">
+      <Filter>Data\songs</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">
