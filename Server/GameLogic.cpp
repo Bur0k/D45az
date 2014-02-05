@@ -407,8 +407,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -438,8 +438,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
 								army1.units.erase(army1.units.begin()+k);
@@ -486,8 +486,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
@@ -519,8 +519,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk1 += army1.units[k]->attackpower;
 							atk2 += army2.units[k]->attackpower;
 
-							atk1 += ceil(rand()*10); // kein plan obs FUNZT
-							atk2 += ceil(rand()*10);
+							atk1 += (rand()%100)/100.0; 
+							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
 								army1.units.erase(army1.units.begin()+k);
