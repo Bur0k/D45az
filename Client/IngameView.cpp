@@ -771,10 +771,11 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
-	}
+}
 
 bool IngameView::isInCity(UnitGroup* u)
 {
+	return false;
 	for(City* c : m_GameData.allCities)
 		if(Vector2i(u->pos.x, u->pos.y) == c->position)
 			return true;
