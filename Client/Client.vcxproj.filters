@@ -423,6 +423,9 @@
     <None Include="Data\Images\mainGui.psd">
       <Filter>Data\img</Filter>
     </None>
+    <None Include="..\Server\Data\Maps\Map2.tmx">
+      <Filter>Data\map</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">

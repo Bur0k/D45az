@@ -172,6 +172,7 @@
     <ClInclude Include="UnitGroup.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Server\Data\Maps\Map2.tmx" />
     <None Include="Data\Images\button_small.psd" />
     <None Include="Data\Images\commit Button.psd" />
     <None Include="Data\Images\mainGui.psd" />
