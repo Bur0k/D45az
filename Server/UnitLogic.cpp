@@ -1,6 +1,5 @@
 #include "UnitLogic.h"
 
-#define maxlivingsoldiers 25
 
 UnitLogic::UnitLogic(UnitTypes type)
 {

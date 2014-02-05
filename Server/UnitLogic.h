@@ -26,7 +26,7 @@ public:
 	~UnitLogic();
 
 	UnitTypes type;
-		
+
 	short living;
 	int range;
 	int attackpower;
