@@ -177,7 +177,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(static_cast<char>((this->startCities[i]->position->x)>>1));
 					erfg.push_back(static_cast<char>((this->startCities[i]->position->y)>>1));
 					erfg.push_back(this->startCities[i]->level);
-					erfg.push_back(this->startCities[i]->player_ID);
+					erfg.push_back((char)this->startCities[i]->player_ID);
 				}
 
 				
