@@ -22,12 +22,14 @@ GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
 			if( v->layer[i][j] == STARTCITY)
 			{
 				CityLogic* c = new CityLogic(id, j, i);
+				c->player_ID = 5;
 				this->startCities.push_back(c);
 				id++;
 			}
 			else if( v->layer[i][j] == NEUTRALCITY)
 			{
 				CityLogic* c = new CityLogic(id, j, i);
+				c->player_ID = 5;
 				this->neutralCities.push_back(c);
 				id++;
 			}
@@ -168,15 +170,17 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(static_cast<char>(this->neutralCities[i]->position->x));
 					erfg.push_back(static_cast<char>(this->neutralCities[i]->position->y));
 					erfg.push_back(this->neutralCities[i]->level);
+					erfg.push_back(5);
 				}
 				for(unsigned int i = 0; i < this->startCities.size(); i++)
 				{
 					erfg.push_back(static_cast<char>(this->startCities[i]->position->x));
 					erfg.push_back(static_cast<char>(this->startCities[i]->position->y));
 					erfg.push_back(this->startCities[i]->level);
+					erfg.push_back(this->startCities[i]->player_ID);
 				}
 
-				erfg.push_back(5);
+				
 
 				server->write(s, 0x0403, erfg);
 			}break;
