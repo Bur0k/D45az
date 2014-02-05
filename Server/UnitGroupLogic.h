@@ -9,7 +9,7 @@
 
 #define def 1.2
 #define off 1
-#define run 0
+#define run -1
 
 using namespace std;
 
