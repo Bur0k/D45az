@@ -571,15 +571,20 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 {
 	currentTurn.clear();
 	mouseOverTurn.clear();
+	
+	m_maxLen=10;
 	for(auto it : army_moves)
 	{
 		if(it[0] == sf::Vector2i(u->pos.x, u->pos.y))
-{
-			for(int i=0;i<it.size();i++)
+		{
+			for(unsigned int i=0;i<it.size();i++)
 				currentTurn.push_back(turn(it[i]));
 			break;
 		}
 	}
+	if(currentTurn.size()==0)
+		currentTurn.push_back(turn(sf::Vector2i(u->pos.x,u->pos.y)));
+
 	m_turnOnPathDraw = true;
 	std::cout << " clicked on army! " << std::endl;
 }
@@ -588,8 +593,6 @@ void IngameView::drawPath()
 {
 	if(m_turnOnPathDraw)
 	{
-		mouseOverTurn.clear();
-
 		if(currentTurn.size() == 0)
 		{
 			m_maxLen=10;
@@ -692,6 +695,9 @@ void IngameView::addPathToArmy()
 			turns.clear();
 			for(auto turn : currentTurn)
 				turns.push_back(turn.pos);
+			currentTurn.clear();
+			mouseOverTurn.clear();
+			m_turnOnPathDraw = false;
 			return;
 		}
 	}
@@ -701,6 +707,9 @@ void IngameView::addPathToArmy()
 	for(auto turn : currentTurn)
 		newturn.push_back(turn.pos);
 	army_moves.push_back(newturn);
+	currentTurn.clear();
+	mouseOverTurn.clear();
+	m_turnOnPathDraw = false;
 }
 
 void IngameView::loadPath(Vector2i pos)
