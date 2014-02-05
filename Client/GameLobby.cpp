@@ -76,6 +76,7 @@ void GameLobby::processNewMessage(short id,vector<char> data)
 	case 0x0304:
 		{
 			this->Ingame = true;
+			updated |= 8;
 		}break;
 	case 0x0305:
 		{

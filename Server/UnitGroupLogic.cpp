@@ -2,6 +2,8 @@
 
 UnitGroupLogic::UnitGroupLogic(short units, UnitTypes type, POINT pos,  vector<UnitGroupLogic*>* unitGroups)
 {
+	this->pos = new POINT();
+
 	this->pos->x = pos.x;
 	this->pos->y = pos.y;
 
@@ -12,7 +14,6 @@ UnitGroupLogic::UnitGroupLogic(short units, UnitTypes type, POINT pos,  vector<U
 	for(int i = 0; i < units; i++)
 	{
 		UnitLogic* unit = new UnitLogic(type);
-
 		this->units.push_back(unit);
 	}
 

@@ -15,6 +15,7 @@
 #include "Army.h"
 #include "LogicData.h"
 #include "Chat.h"
+#include "mainGui.h"
 
 #define INGAMEVIEW_MAX_MAPSPEED  20
 #define INGAMEVIEW_MOUSEOVER_RECT_BORDER 2
@@ -88,6 +89,9 @@ private:
 
 	//CHAT
 	Chat chat;
+	
+	//Main Gui
+	mainGui mainGui;
 
 	//debug
 
