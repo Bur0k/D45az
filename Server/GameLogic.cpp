@@ -382,16 +382,18 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
 {
 
-	while(army1.unitGroups->size() != 0 && army2.unitGroups->size() != 0) // Armeen haben noch Kompanien?
+	while(army1.units.size() != 0 && army2.units.size() != 0) // Armeen haben noch Kompanien?
 	{
-		if(army1.unitGroups->size() > army2.unitGroups->size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
+		if(army1.units.size() > army2.units.size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
 		{
-			for(unsigned int a = 0; a < army2.unitGroups->size(); a ++)
+			for(unsigned int a = 0; a < army2.units.size(); a ++)
 			{
-				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				while(army1.units[a]->living != 0 && army2.units[a]->living != 0) // Kompanie hat noch Einheiten?
 				{
-					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
-						for(unsigned int k = 0; k < army2.units.size(); k++)
+					if(army1.units[a]->living > army2.units[a]->living)
+					{// Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+						short buffer = army2.units[a]->living;
+						for(int k = 0; k < buffer; k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -417,10 +419,11 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
+					}
 					else 
 					for(unsigned int k = 0; k < army1.units.size(); k++)
 						{
@@ -448,29 +451,30 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
 				}
 				
 			// kein Plan ob richtige Stelle
-				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
-					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				if(army1.units[a]->living == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.units.erase(army1.units.begin()+a);
 				else
-					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+					army2.units.erase(army1.units.begin()+a);
 
 			}
 		}
 		else
 		{
-			for(unsigned int a = 0; a < army1.unitGroups->size(); a ++)
+			for(unsigned int a = 0; a < army1.units.size(); a ++)
 			{
-				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				while(army1.units[a]->living != 0 && army2.units[a]->living != 0) // Kompanie hat noch Einheiten?
 				{
-					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+					if(army1.units[a]->living > army2.units[a]->living) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
 					{
-						for(unsigned int k = 0; k < army2.units.size(); k++)
+						short buffer2 = army2.units[a]->living;
+						for(int k = 0; k < buffer2; k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -496,9 +500,9 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
 					}
 					else 
@@ -529,22 +533,22 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
 					}
 				}
 							
 				// kein Plan ob richtige Stelle
-				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
-					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				if(army1.units[a]->living == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.units.erase(army1.units.begin()+a);
 				else
-					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+					army2.units.erase(army1.units.begin()+a);
 			}		
 		}
 	}
-	if(army1.unitGroups->size() == 0)
+	if(army1.units.size() == 0)
 		return army2;
 	else
 		return army1;

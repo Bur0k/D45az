@@ -848,7 +848,7 @@ void IngameView::commitMessage()
 {
 	vector<char> erfg;
 
-	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
+	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
