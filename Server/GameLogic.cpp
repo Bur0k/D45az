@@ -393,7 +393,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 					if(army1.units[a]->living > army2.units[a]->living)
 					{// Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
 						short buffer = army2.units[a]->living;
-						for(unsigned int k = 0; k < buffer; k++)
+						for(int k = 0; k < buffer; k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -474,7 +474,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 					if(army1.units[a]->living > army2.units[a]->living) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
 					{
 						short buffer2 = army2.units[a]->living;
-						for(unsigned int k = 0; k < buffer2; k++)
+						for(int k = 0; k < buffer2; k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
