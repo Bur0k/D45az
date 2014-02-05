@@ -50,7 +50,7 @@ void Chat::onButtonClick(int id)
 		b.setPosition(400,500);
 		b.setText("<");
 		b.m_color = MyColors.White;
-		b.animationTick();
+		b.updateVisuals();
 	}
 	else
 	{

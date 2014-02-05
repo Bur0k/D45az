@@ -136,20 +136,38 @@ class Server
 	thread* writeThread;
 	list<writeData> toWrite;
 	mutex toWriteMutex;
-
-	thread* addNewMessageCallbackThread;
-	vector<NetworkParticipant*> addNewMessageCallbackList;
-	mutex addNewMessageCallbackMutex;
-	thread* deleteNewMessageCallbackThread;
-	vector<NetworkParticipant*> deleteNewMessageCallbackList;
-	mutex deleteNewMessageCallbackMutex;
-
-	thread* addErrorCallbackThread;
+	
+	struct error
+	{
+		SOCKET s;
+		short errCode;
+		string errMessage;
+		error(SOCKET S,short ErrCode,string ErrMessage):s(S),errCode(ErrCode),errMessage(ErrMessage){}
+	};
+	vector<error> errorQueue;
+	mutex errorQueueMutex;
 	vector<NetworkParticipant*> addErrorCallbackList;
 	mutex addErrorCallbackMutex;
-	thread* deleteErrorCallbackThread;
 	vector<NetworkParticipant*> deleteErrorCallbackList;
 	mutex deleteErrorCallbackMutex;
+	thread* addDeleteProcessErrorCallback;
+
+
+	struct newMessage
+	{
+		SOCKET s;
+		short id;
+		std::vector<char> data;
+		newMessage(SOCKET S,short ID,std::vector<char> Data):s(S),id(ID),data(Data){}
+	};
+	vector<newMessage> newMessageQueue;
+	mutex newMessageQueueMutex;
+	vector<NetworkParticipant*> addNewMessageCallbackList;
+	mutex addNewMessageCallbackMutex;
+	vector<NetworkParticipant*> deleteNewMessageCallbackList;
+	mutex deleteNewMessageCallbackMutex;
+	thread* addDeleteProcessNewMessageCallback;
+	
 
 	bool running;
 	static Server* self;

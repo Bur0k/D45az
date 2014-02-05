@@ -29,8 +29,6 @@ private:
 		5 6 7
 	*/
 
-	//gets called by parent class
-	void updateVisuals();
 
 	//if position of parent rectangle changes adjust current graphics
 	void updatePosition();
@@ -42,6 +40,8 @@ public:
 	~StandardButton();
 
 	void draw(RenderWindow* rw);
+	//gets called by parent class
+	void updateVisuals();
 };
 
 
