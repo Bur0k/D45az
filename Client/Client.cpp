@@ -104,6 +104,27 @@ Client::Client()
 				newMessageCallback.push_back(AVOIDING_DEADLOCK_KAK[i]);
 			//********* END ADD
 
+
+			
+			//DELETE
+			deleteNewMessageCallbackMutex.lock();
+			AVOIDING_DEADLOCK_KAK = deleteNewMessageCallbackList;
+			deleteNewMessageCallbackList.clear();
+			deleteNewMessageCallbackMutex.unlock();
+			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
+			{
+				newMessageCallbackMutex.lock();
+				for(unsigned int j=0;j<newMessageCallback.size();j++)
+					if(newMessageCallback[j] == AVOIDING_DEADLOCK_KAK[i])
+					{
+						newMessageCallback.erase(newMessageCallback.begin()+j);
+						break;
+					}
+				newMessageCallbackMutex.unlock();
+			}
+			//********** END DELETE
+
+
 			//PROCESS
 
 			newMessageQueueMutex.lock();
@@ -150,23 +171,7 @@ Client::Client()
 			newMessageQueue.clear();
 			newMessageQueueMutex.unlock();
 
-			//DELETE
-			deleteNewMessageCallbackMutex.lock();
-			AVOIDING_DEADLOCK_KAK = deleteNewMessageCallbackList;
-			deleteNewMessageCallbackList.clear();
-			deleteNewMessageCallbackMutex.unlock();
-			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
-			{
-				newMessageCallbackMutex.lock();
-				for(unsigned int j=0;j<newMessageCallback.size();j++)
-					if(newMessageCallback[j] == AVOIDING_DEADLOCK_KAK[i])
-					{
-						newMessageCallback.erase(newMessageCallback.begin()+j);
-						break;
-					}
-				newMessageCallbackMutex.unlock();
-			}
-			//********** END DELETE
+			Sleep(1);
 		}
 	});
 
@@ -182,6 +187,29 @@ Client::Client()
 			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
 				errorCallback.push_back(AVOIDING_DEADLOCK_KAK[i]);
 			//********* END ADD
+
+
+			
+
+			//DELETE
+			deleteErrorCallbackMutex.lock();
+			AVOIDING_DEADLOCK_KAK = deleteErrorCallbackList;
+			deleteErrorCallbackList.clear();
+			deleteErrorCallbackMutex.unlock();
+			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
+			{
+				errorCallbackMutex.lock();
+				for(unsigned int j=0;j<errorCallback.size();j++)
+					if(errorCallback[j] == AVOIDING_DEADLOCK_KAK[i])
+					{
+						errorCallback.erase(errorCallback.begin()+j);
+						break;
+					}
+				errorCallbackMutex.unlock();
+			}
+			//********** END DELETE
+
+
 
 			//PROCESS
 
@@ -229,23 +257,7 @@ Client::Client()
 			errorQueue.clear();
 			errorQueueMutex.unlock();
 
-			//DELETE
-			deleteErrorCallbackMutex.lock();
-			AVOIDING_DEADLOCK_KAK = deleteErrorCallbackList;
-			deleteErrorCallbackList.clear();
-			deleteErrorCallbackMutex.unlock();
-			for(unsigned int i=0;i<AVOIDING_DEADLOCK_KAK.size();i++)
-			{
-				errorCallbackMutex.lock();
-				for(unsigned int j=0;j<errorCallback.size();j++)
-					if(errorCallback[j] == AVOIDING_DEADLOCK_KAK[i])
-					{
-						errorCallback.erase(errorCallback.begin()+j);
-						break;
-					}
-				errorCallbackMutex.unlock();
-			}
-			//********** END DELETE
+			Sleep(1);
 		}
 	});
 }
@@ -323,7 +335,6 @@ void Client::connectToServer(string ip, int port)
 
 	sendNewMessage(0x0001,std::vector<char>());
 }
-
 
 void Client::sendError(int errCode,string errMessage)
 {

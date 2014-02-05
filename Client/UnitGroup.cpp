@@ -43,8 +43,8 @@ float UnitGroup::getUnitgroupStrength()
 
 	for (int i = 0; i < 16; i++)
 	{
-		strength += (float)((0.9/16.0) * (this->units->count / maxlivingsoldiers));
-		switch (this->units->type)
+		strength += (float)((0.9/16.0) * (this->units[i].count / maxlivingsoldiers));
+		switch (this->units[i].type)
 		{
 		case UnitTypes::LIGHT:
 			countlight++;

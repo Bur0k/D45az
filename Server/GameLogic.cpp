@@ -167,15 +167,15 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				for(unsigned int i = 0; i < this->neutralCities.size(); i++)
 				{
-					erfg.push_back(static_cast<char>(this->neutralCities[i]->position->x));
-					erfg.push_back(static_cast<char>(this->neutralCities[i]->position->y));
+					erfg.push_back(static_cast<char>((this->neutralCities[i]->position->x)>>1));
+					erfg.push_back(static_cast<char>((this->neutralCities[i]->position->y)>>1));
 					erfg.push_back(this->neutralCities[i]->level);
 					erfg.push_back(5);
 				}
 				for(unsigned int i = 0; i < this->startCities.size(); i++)
 				{
-					erfg.push_back(static_cast<char>(this->startCities[i]->position->x));
-					erfg.push_back(static_cast<char>(this->startCities[i]->position->y));
+					erfg.push_back(static_cast<char>((this->startCities[i]->position->x)>>1));
+					erfg.push_back(static_cast<char>((this->startCities[i]->position->y)>>1));
 					erfg.push_back(this->startCities[i]->level);
 					erfg.push_back(this->startCities[i]->player_ID);
 				}
@@ -200,8 +200,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				for(unsigned int i = 0; i < this->playersIngame[index]->cities.size(); i++)
 				{
-					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x));
-					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y));
+					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x)>>1);
+					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y)>>1);
 					erfg.push_back(this->playersIngame[index]->cities[i]->level);
 				}
 
