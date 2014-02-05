@@ -194,23 +194,23 @@ bool IngameView::PressedLeft()
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedLeft())
-			return true;
+			retvalue |= true;
 
-	for(City* city : m_GameData.ownedCities)
+	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
 	{
-		if(m_pointAt == city->position)
+		if(m_pointAt == m_GameData.ownedCities[i]->position)
 		{
-			displayCityInfo(city);
-			tmpCity = city;
+			displayCityInfo(m_GameData.ownedCities[i]);
+			tmpCity = m_GameData.ownedCities[i];
 			break;
 		}
 	}
-	for(UnitGroup* ug : m_GameData.ownedUnits)
+	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
 	{
-		if(m_pointAt == Vector2i(ug->pos.x, ug->pos.x))
+		if(m_pointAt == Vector2i(m_GameData.ownedUnits[i]->pos.x, m_GameData.ownedUnits[i]->pos.y))
 		{
-			displayArmyInfo(ug);
-			tmpUG = ug;
+			displayArmyInfo(m_GameData.ownedUnits[i]);
+			tmpUG = m_GameData.ownedUnits[i];
 			break;
 		}
 	}
@@ -574,7 +574,7 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 	for(auto it : army_moves)
 	{
 		if(it[0] == sf::Vector2i(u->pos.x, u->pos.y))
-{
+		{
 			for(unsigned int i=0;i<it.size();i++)
 				currentTurn.push_back(turn(it[i]));
 			break;
