@@ -95,7 +95,6 @@ void GameLobbyView::onButtonClick(int id)
 	case START:
 		{
 			this->game->startGame();
-			this->m_nextView = Views::INGAME;
 			break;
 		}
 	case KICKP1:
@@ -272,6 +271,11 @@ void GameLobbyView::update(double elapsedMs)
 				this->kickPlayer[2]->setIsEnabled(true);
 				this->startgame->setIsEnabled(true);
 			}
+		}
+		if(game->updated & 8)	// ingame
+		{
+			game->updated &= ~8;
+			this->m_nextView = Views::INGAME;
 		}
 	}
 }
