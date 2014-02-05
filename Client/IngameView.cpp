@@ -550,6 +550,7 @@ void IngameView::displayCityInfo(City &c)
 
 void IngameView::displayArmyInfo(Unit &)
 {
+
 	std::cout << " clicked on army! " << std::endl;
 }
 
