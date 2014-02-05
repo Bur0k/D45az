@@ -99,8 +99,6 @@ private:
 
 	//debug off
 
-	//is filled with the army that is currently selected
-	std::vector<Unit*> UnitVector;
 
 	CommitButton* m_commitB;
 
@@ -144,7 +142,7 @@ private:
 	RectangleShape m_mapMouseOver;
 
 	//rectangles behind cities in playercolor
-	vector<sf::RectangleShape> m_RectangleShapes;
+	vector<sf::RectangleShape> m_RectangleCityShapes;
 
 public:
 	IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase);
@@ -208,6 +206,8 @@ private:
 	void fogOfWardraw(RenderWindow* rw);
 	//renders the path on screen
 	void pathDraw(RenderWindow* rw);
+
+	bool isInCity(UnitGroup*);
 };
 
 

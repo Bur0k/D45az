@@ -77,7 +77,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
 
-	mainGui.y_offset = static_cast<float>(screensize.y);
+
+	mainGui.onResize(screensize);
 	m_DrawV.push_back(&mainGui);
 	m_ClickV.push_back(&mainGui);
 	m_AnimateV.push_back(&mainGui);
@@ -152,6 +153,12 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	drawMouseOverPath();
 	chat.MouseMoved(mouse);
 	
+	//displayed armys
+	for(Army* a : m_owned_armys)
+		a->MouseMoved(mouse);
+	for(Army* a : m_enemy_armys)
+		a->MouseMoved(mouse);
+
 	return retValue;
 }
 
@@ -173,6 +180,12 @@ bool IngameView::PressedLeft()
 	chat.PressedLeft();
 	currentTurn.clear();
 	mouseOverTurn.clear();
+
+	//displayed armys
+	for(Army* a : m_owned_armys)
+		a->PressedLeft();
+	for(Army* a : m_enemy_armys)
+		a->PressedLeft();
 
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
@@ -205,6 +218,13 @@ bool IngameView::ReleasedLeft()
 void IngameView::animationTick()
 {
 	chat.animationTick();
+
+	//animate displayed armys
+	for(Army* a : m_owned_armys)
+		a->animationTick();
+	for(Army* a : m_enemy_armys)
+		a->animationTick();
+
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 
@@ -240,6 +260,12 @@ void IngameView::draw(sf::RenderWindow* rw)
 	
 	pathDraw(rw);
 	
+	//draw displayed armys
+	for(Army* a : m_owned_armys)
+		a->draw(rw);
+	for(Army* a : m_enemy_armys)
+		a->draw(rw);
+
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 
@@ -250,8 +276,8 @@ void IngameView::draw(sf::RenderWindow* rw)
 	m_mapView.width= rw->getSize().x;
 	m_mapView.height = rw->getSize().y;
 
-	for (unsigned int i = 0; i < m_RectangleShapes.size(); i++)
-		rw->draw(m_RectangleShapes[i]);
+	for (unsigned int i = 0; i < m_RectangleCityShapes.size(); i++)
+		rw->draw(m_RectangleCityShapes[i]);
 }
 
 void IngameView::fogOfWardraw(RenderWindow* rw)
@@ -360,6 +386,7 @@ void IngameView::update(double elapsedMs)
 void IngameView::onResize(Vector2u & size)
 {
 	m_screensize = size;
+	mainGui.onResize(size);
 	m_SBar->Resize((Vector2f) size);
 	m_commitB->onResize(size);
 	m_mapView.width = size.x;
@@ -498,11 +525,18 @@ void IngameView::moveMap()
 	if (tmpView != m_mapView)
 	{
 		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
-		{
+	{
 			m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * (m_tileSize.x / 2) - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 							(float)(m_GameData.allCities[i]->position.y * (m_tileSize.y / 2)- m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		}
 	}
+
+
+	//update displayed armys
+	for(Army* a : m_owned_armys)
+		a->onMapMove(m_mapView);
+	for(Army* a : m_enemy_armys)
+		a->onMapMove(m_mapView);
 }
 
 void IngameView::displayCityInfo(City &c)
@@ -697,11 +731,16 @@ void IngameView::updateFogOfWar()
 
 void IngameView::loadGamestate()
 {
+	//clear army vectors
 	for(Army* army : m_owned_armys)
 		delete army;
+	for(Army* army : m_enemy_armys)
+		delete army;
+	m_owned_armys.clear();
+	m_enemy_armys.clear();
 	
 	short my_ID;
-
+	//my player id is read from the city at position 0
 	if(m_GameData.ownedCities.size() > 0)
 		my_ID = m_GameData.ownedCities[0]->player_ID;
 
@@ -709,14 +748,14 @@ void IngameView::loadGamestate()
 	
 	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true,isInCity(m_GameData.ownedUnits[i])));
 
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
-	{
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x))));
-	}
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)),isInCity(m_GameData.ownedUnits[i])));
+
+	
 
 	//fill RectangleVector
 	for (auto city: m_GameData.allCities)
@@ -730,9 +769,18 @@ void IngameView::loadGamestate()
 		r.setPosition((float)(city->position.x * (m_tileSize.x / 2) - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 						(float)(city->position.y * (m_tileSize.y / 2) - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
-		m_RectangleShapes.push_back(r);
+		m_RectangleCityShapes.push_back(r);
 	}
+	}
+
+bool IngameView::isInCity(UnitGroup* u)
+{
+	for(City* c : m_GameData.allCities)
+		if(Vector2i(u->pos.x, u->pos.y) == c->position)
+			return true;
+	return false;
 }
+
 
 bool IngameView::isVisible(Vector2i pos)
 {
