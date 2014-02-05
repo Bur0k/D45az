@@ -118,7 +118,7 @@ Server::Server()
 			newMessageQueueMutex.lock();
 			for(auto it : newMessageQueue)
 			{
-				std::unique_ptr<NetworkParticipant*> callback (new NetworkParticipant*[newMessageCallback.size()]);
+				std::unique_ptr<NetworkParticipant*[]> callback (new NetworkParticipant*[newMessageCallback.size()]);
 				int callbackSize = newMessageCallback.size();
 				for(int i=0;i<newMessageCallback.size();i++)
 					callback[i]=newMessageCallback[i];
@@ -197,7 +197,7 @@ Server::Server()
 			errorQueueMutex.lock();
 			for(auto it : errorQueue)
 			{
-				std::unique_ptr<NetworkParticipant*> callback (new NetworkParticipant*[errorCallback.size()]);
+				std::unique_ptr<NetworkParticipant*[]> callback (new NetworkParticipant*[errorCallback.size()]);
 				int callbackSize = errorCallback.size();
 				for(int i=0;i<errorCallback.size();i++)
 					callback[i]=errorCallback[i];
