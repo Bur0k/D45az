@@ -710,7 +710,7 @@ void IngameView::updateFogOfWar()
 			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
-			}
+		}
 		for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)
 			for(unsigned int j=0;j<m_map.layers[0]->layer[0].size();j++)
 				if((j-it->pos.x)*(j-it->pos.x) + 
@@ -771,7 +771,9 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
-	}
+
+	updateFogOfWar();
+}
 
 bool IngameView::isInCity(UnitGroup* u)
 {
