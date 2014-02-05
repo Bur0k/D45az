@@ -58,8 +58,7 @@ protected:
 	//fits text to button
 	virtual void fitText(int border);
 
-	//is called by animatioTick() to update the button color
-	virtual void animation_upadate();
+
 
 	//for derived classes to update their visuals
 	virtual void updateVisuals();
@@ -85,7 +84,8 @@ public:
 	//@param dir true if mouse is over the button
 	void animationTick();
 	
-	
+	//is called by animatioTick() to update the button color
+	virtual void animation_upadate();
 
 	//implementing IDrawable
 	virtual void draw(RenderWindow* rw);

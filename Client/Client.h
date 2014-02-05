@@ -11,6 +11,7 @@
 #include "NetworkParticipant.h"
 #include <algorithm>
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -42,25 +43,38 @@ class Client
 	thread* writeThread;
 	list<vector<char>> toWrite;
 	mutex toWriteMutex;
-
-	thread* addNewMessageCallbackThread;
-	vector<NetworkParticipant*> addNewMessageCallbackList;
-	mutex addNewMessageCallbackMutex;
-	thread* deleteNewMessageCallbackThread;
-	vector<NetworkParticipant*> deleteNewMessageCallbackList;
-	mutex deleteNewMessageCallbackMutex;
-
-	thread* addErrorCallbackThread;
+	
+	mutex writeThreadsMutex;
+	mutex writeMutex;
+	
+	struct error
+	{
+		short errCode;
+		string errMessage;
+		error(short ErrCode,string ErrMessage):errCode(ErrCode),errMessage(ErrMessage){}
+	};
+	vector<error> errorQueue;
+	mutex errorQueueMutex;
 	vector<NetworkParticipant*> addErrorCallbackList;
 	mutex addErrorCallbackMutex;
-	thread* deleteErrorCallbackThread;
 	vector<NetworkParticipant*> deleteErrorCallbackList;
 	mutex deleteErrorCallbackMutex;
+	thread* addDeleteProcessErrorCallback;
 
 
-	mutex writeThreadsMutex;
-
-	mutex writeMutex;
+	struct newMessage
+	{
+		short id;
+		std::vector<char> data;
+		newMessage(short ID,std::vector<char> Data):id(ID),data(Data){}
+	};
+	vector<newMessage> newMessageQueue;
+	mutex newMessageQueueMutex;
+	vector<NetworkParticipant*> addNewMessageCallbackList;
+	mutex addNewMessageCallbackMutex;
+	vector<NetworkParticipant*> deleteNewMessageCallbackList;
+	mutex deleteNewMessageCallbackMutex;
+	thread* addDeleteProcessNewMessageCallback;
 	
 	static Client* self;
 	Client();

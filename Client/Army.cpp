@@ -5,7 +5,7 @@ Army::Army()
 	
 }
 
-Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible)
+Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 {
 	m_animation = -1;
 	m_mouseOver = false;
@@ -81,6 +81,8 @@ void Army::draw(sf::RenderWindow* rw)
 	}
 	rw->draw(m_powerBar);
 	rw->draw(m_pBarBg);
+
+	
 }
 
 //IClickable
@@ -192,6 +194,7 @@ Army* Army::split(int selection, std::vector<UnitGroup> & newUnits)
 void Army::onMapMove(Rect<int> mapv)
 {
 	m_mapViewOffset = Vector2i(mapv.left, mapv.top);
+	PositionGraphics();
 }
 
 int Army::getPlayerID()

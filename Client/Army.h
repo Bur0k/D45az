@@ -84,7 +84,7 @@ public:
 	Vector2i m_Tilesize;
 	
 
-	Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible);
+	Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible, bool isIncCity);
 	~Army();
 
 	

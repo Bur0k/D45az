@@ -13,8 +13,9 @@ mainGui::mainGui()
 	background.s.setSize((Vector2f)img.getSize());
 
 	select_army = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("Army"), SELECTARMY,true);
+	select_army->setIsEnabled(false);
 	select_city = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("City"), SELECTCITY,true);
-
+	select_city->setIsEnabled(false);
 	army_mode[0] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("defensive"), DEFENSIVE,false,false);
 	army_mode[1] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("agressive"), AGRESSIVE,false,false);
 	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("fast"), HURRY,false,false);
@@ -22,6 +23,8 @@ mainGui::mainGui()
 	hidden = true;
 	has_army = false;
 	has_city = false;
+
+
 
 	army_display = true;
 
@@ -44,10 +47,10 @@ mainGui::~mainGui()
 
 void mainGui::positionGraphics()
 {
-	float y_origin = y_offset - (hidden)? MAINGUI_HEIGHT_HIDDEN : MAINGUI_HEIGHT;
+	float y_origin = y_offset - ((hidden)? MAINGUI_HEIGHT_HIDDEN : MAINGUI_HEIGHT);
 	background.s.setPosition(0, y_origin);
 	select_army->setPosition(50, y_origin + 25);
-	select_city->setPosition(50, y_origin + 25);
+	select_city->setPosition(200, y_origin + 25);
 
 }
 
@@ -179,6 +182,7 @@ void mainGui::draw(sf::RenderWindow* rw)
 void mainGui::onResize(sf::Vector2u size)
 {
 	y_offset = static_cast<float>(size.y);
+	positionGraphics();
 }
 
 void mainGui::animationTick()

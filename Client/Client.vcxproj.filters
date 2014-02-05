@@ -169,13 +169,13 @@
     <ClCompile Include="Army.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>Codes\Graphic</Filter>
-    </ClCompile>
     <ClCompile Include="Chat.cpp">
       <Filter>Codes\GameLogic\Source</Filter>
     </ClCompile>
     <ClCompile Include="mainGui.cpp">
+      <Filter>Codes\Graphic\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
       <Filter>Codes\Graphic\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -420,6 +420,9 @@
     <None Include="Data\Songs\menu2.ogg">
       <Filter>Data\songs</Filter>
     </None>
+    <None Include="Data\Images\mainGui.psd">
+      <Filter>Data\img</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Images\background.png">
@@ -486,6 +489,9 @@
       <Filter>Data\img</Filter>
     </Image>
     <Image Include="Data\Images\germanset.png">
+      <Filter>Data\img</Filter>
+    </Image>
+    <Image Include="Data\Images\mainGui.png">
       <Filter>Data\img</Filter>
     </Image>
   </ItemGroup>
