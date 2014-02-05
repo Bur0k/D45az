@@ -64,6 +64,10 @@ class Client
 	
 	static Client* self;
 	Client();
+	Client& Client::operator = (const Client& src)
+	{
+		return *this;      // Referenz zurückgeben
+	}
 
 public:
 	static Client* get()

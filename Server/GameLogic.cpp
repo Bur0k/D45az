@@ -62,6 +62,82 @@ GameLogic::~GameLogic()
 	server->deleteFromErrorCallback(this);
 }
 
+void GameLogic::computeTurns()
+{
+	vector<UnitGroupLogic*> armies;
+	
+	for(int i = 0; i < this->movingArmies.size(); i++)
+	{
+		for(int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
+		{
+			if(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos == this->movingArmies[i]->move[0])
+			{
+				armies.push_back(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]);
+			}
+		}
+
+		this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
+	}
+
+	while(this->movingArmies.size() > 0)
+	{
+		for(int i = 0; i < this->movingArmies.size(); i++)
+		{
+			armies[i]->pos = this->movingArmies[i]->move[0];
+			this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
+			
+			this->isCollision(armies[i]->pos, armies);
+		}
+
+		for(int i = 0; i < this->movingArmies.size(); i++)
+		{
+			if(this->movingArmies[i]->move.size() == 0)
+			{
+				this->movingArmies.erase(this->movingArmies.begin() + i);
+				armies.erase(armies.begin() + i);
+			}
+		}
+	}
+}
+
+void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
+{
+	UnitGroupLogic* currentArmy = armies[0];
+
+	for(int i = 0; i < armies.size(); i++)
+	{
+		if(armies[i]->pos == pos)
+		{
+			currentArmy = armies[i];
+			armies.erase(armies.begin() + i);
+		}
+	}
+
+	for(auto it=armies.begin();it!=armies.end();it++)
+	{
+		POINT p1 = (*(*it)->pos);
+		for(auto it2=it+1;it2!=armies.end();it2++)
+		{
+			POINT p2 = (*(*it)->pos);
+			POINT p3;
+			p3.x=std::abs(p1.x-p2.x);
+			p3.y=std::abs(p1.y-p2.y);
+			const int RANGE = 2;
+			if(p3.x <= RANGE && p3.y <= RANGE)
+			{
+				if(currentArmy->player_ID == (*it)->player_ID)
+				{
+					// Abfrage Einheitenmerge
+				}
+				else
+				{
+					// Kampf
+				}
+			}
+		}
+	}
+}
+
 void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 {
 	std::vector<char> erfg;
@@ -99,6 +175,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(static_cast<char>(this->startCities[i]->position->y));
 					erfg.push_back(this->startCities[i]->level);
 				}
+
+				erfg.push_back(5);
 
 				server->write(s, 0x0403, erfg);
 			}break;
@@ -138,11 +216,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 							//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -192,11 +270,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						{
 								//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos.y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -237,11 +315,40 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			}break;
 			case 0x0412:
 				{
-					cout << "___________________________________________________________________________________";
-					cout << "Socket:" << s;
-					for( int  i = 0; i < erfg.size(); i++)
-						cout << erfg[i];
-					cout << "___________________________________________________________________________________";
+					vector<POINT*> vp;
+					POINT* p = new POINT();
+
+					int player_ID = data[0];
+
+					for(int i = 1; i < data.size(); i++)
+					{
+						if(data[i] == '/')
+						{
+							pArmy* movingArmy = new pArmy(player_ID, vp);
+							this->movingArmies.push_back(movingArmy);
+						}
+						else
+						{
+							if( i % 2 != 0)
+							{
+								p->x = data[i];
+							}
+							else
+							{
+								p->y = data[i];
+								vp.push_back(p);							
+							}
+						}
+						
+					}
+
+					this->playerCommits++;
+
+					if(this->playerCommits == this->playersIngame.size())
+					{
+						this->computeTurns();
+						this->playerCommits = 0;
+					}
 				}break;
 
 			case 0x1000://Chat empfangen
@@ -266,4 +373,175 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 {
 
+}
+
+UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
+{
+
+	while(army1.unitGroups->size() != 0 && army2.unitGroups->size() != 0) // Armeen haben noch Kompanien?
+	{
+		if(army1.unitGroups->size() > army2.unitGroups->size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
+		{
+			for(int a = 0; a < army2.unitGroups->size(); a ++)
+			{
+				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				{
+					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+						for(int k = 0; k < army2.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
+							}
+							
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
+
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
+
+							if(atk1 > atk2)
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+					else 
+					for(int k = 0; k < army1.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
+							}
+							
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
+
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
+
+							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+				}
+				
+			// kein Plan ob richtige Stelle
+				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				else
+					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+
+			}
+		}
+		else
+		{
+			for(int a = 0; a < army1.unitGroups->size(); a ++)
+			{
+				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				{
+					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+					{
+						for(int k = 0; k < army2.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
+							}
+
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
+
+							atk1 += (rand()%100)/100.0;
+							atk2 += (rand()%100)/100.0;
+
+							if(atk1 > atk2)
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+					}
+					else 
+					{
+					for(int k = 0; k < army1.units.size(); k++)
+						{
+							// Kampf Einheit gegen Einheit
+							double atk1 = 0.0;
+							double atk2 = 0.0;
+
+							switch (army1.strategy) // Armeeaufstellung 1 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							case UnitStrategy::RUNNING:   atk1 += run; break;
+							}
+							switch (army2.strategy) // Armeeaufstellung 2 anrechnen
+							{
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							case UnitStrategy::RUNNING:   atk2 += run; break;
+							}
+							
+							atk1 += army1.units[k]->attackpower;
+							atk2 += army2.units[k]->attackpower;
+
+							atk1 += (rand()%100)/100.0; 
+							atk2 += (rand()%100)/100.0;
+
+							if(atk1 > atk2)
+								army1.units.erase(army1.units.begin()+k);
+							else
+								army2.units.erase(army2.units.begin()+k);
+						}
+					}
+				}
+							
+				// kein Plan ob richtige Stelle
+				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				else
+					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+			}		
+		}
+	}
+	if(army1.unitGroups->size() == 0)
+		return army2;
+	else
+		return army1;
 }

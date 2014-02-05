@@ -1,6 +1,11 @@
 #ifndef UNITLOGIC_H
 #define UNITLOGIC_H
 
+#define light 2.0
+#define heavy 2.4
+#define longrange 2.8
+#define artillery 3.0
+
 #define maxlivingsoldiers 25
 
 #include "NetworkParticipant.h"
@@ -20,15 +25,14 @@ public:
 	UnitLogic(UnitTypes type);
 	~UnitLogic();
 
-	int attackpower;
-	int range;
 	UnitTypes type;
-	short living;
 
+	short living;
+	int range;
+	double attackpower;
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-
 };
 
 #endif

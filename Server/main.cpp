@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <ctime>
 #include "Server.h"
 #include "NetworkParticipant.h"
 #include "LogInLogic.h"
@@ -30,6 +32,8 @@ class testServer : public NetworkParticipant
 
 int main()
 {
+	srand(time(NULL)); // #Karre
+
 	Map map;
 	map.load("Data/Maps/TestMap.tmx");
 	

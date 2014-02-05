@@ -2,8 +2,10 @@
 
 UnitGroupLogic::UnitGroupLogic(short units, UnitTypes type, POINT pos,  vector<UnitGroupLogic*>* unitGroups)
 {
-	this->pos.x = pos.x;
-	this->pos.y = pos.y;
+	this->pos = new POINT();
+
+	this->pos->x = pos.x;
+	this->pos->y = pos.y;
 
 	this->unitGroups = unitGroups;
 
@@ -12,7 +14,6 @@ UnitGroupLogic::UnitGroupLogic(short units, UnitTypes type, POINT pos,  vector<U
 	for(int i = 0; i < units; i++)
 	{
 		UnitLogic* unit = new UnitLogic(type);
-
 		this->units.push_back(unit);
 	}
 
@@ -27,8 +28,8 @@ UnitGroupLogic::~UnitGroupLogic()
 
 void UnitGroupLogic::moveOneStep(POINT to)
 {
-	this->pos.x = to.x;
-	this->pos.y = to.y;
+	this->pos->x = to.x;
+	this->pos->y = to.y;
 }
 
 
@@ -65,7 +66,11 @@ void UnitGroupLogic::move(POINT moves[], int arrlen)
 
 void UnitGroupLogic::splitandMove(short units[], UnitTypes types[], POINT moves[], int arrlen)
 {
-	UnitGroupLogic* splittedGroup = new UnitGroupLogic(units[0], types[0], this->pos, this->unitGroups);
+	POINT tmp;
+	tmp.x = this->pos->x;
+	tmp.y = this->pos->y;
+
+	UnitGroupLogic* splittedGroup = new UnitGroupLogic(units[0], types[0], tmp, this->unitGroups);
 
 
 	for (int i = 1; i < 4; i++)

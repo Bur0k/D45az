@@ -1,8 +1,7 @@
 #include "pArmy.h"
 
-pArmy::pArmy(int playerID, POINT* position, UnitGroupLogic* army)
+pArmy::pArmy(int playerID, vector<POINT*> move)
 {
-	this->army = army;
 	this->playerID = playerID;
-	this->position = position;
+	this->move = move;
 }

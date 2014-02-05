@@ -3,6 +3,8 @@
 //TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
+	c = Client::get();
+
 	m_nextView = Views::NOCHANGE;
 
 	m_screensize = screensize;
@@ -83,6 +85,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
 
+	this->loadGamestate();
 
 	updateFogOfWar();
 }
@@ -492,11 +495,14 @@ void IngameView::moveMap()
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
 	//update rectanglescity
-	/*for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
+	if (tmpView != m_mapView)
+	{
+		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
 	{
 		m_RectangleShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 						(float)(m_GameData.allCities[i]->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
-	}*/
+		}
+	}
 }
 
 void IngameView::displayCityInfo(City &c)
@@ -742,6 +748,17 @@ void IngameView::commitMessage()
 	vector<char> erfg;
 
 	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
+
+	for(int i = 0; i < this->army_moves.size(); i++)
+	{
+		for(int j = 0; j < this->army_moves[i].size(); j++)
+		{
+			erfg.push_back(this->army_moves[i][j].x);
+			erfg.push_back(this->army_moves[i][j].y);
+		}
+
+		erfg.push_back('/');
+	}
 
 	c->write(0x0412, erfg);
 }

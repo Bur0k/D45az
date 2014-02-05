@@ -6,12 +6,11 @@
 
 struct pArmy
 {
-	POINT* position;
-	
+	vector<POINT*> move;
 	int playerID;
 	UnitGroupLogic* army;
 
-	pArmy(int playerID, POINT* position, UnitGroupLogic* army);
+	pArmy(int playerID, vector<POINT*> move);
 };
 
 #endif
