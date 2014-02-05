@@ -8,6 +8,11 @@
 #define songs  1 
 #define generel_noise 2 
 
+#define CHAT_OPEN 0
+#define CHAT_CLOSE 1
+#define COMMIT_SOUND 2
+
+
 #define login 0
 #define menu 1
 #define test 2
@@ -19,6 +24,11 @@ using namespace std;
 class MusikSampler
 {
 private:
+	//SINGLETON PATTERN
+	static bool instanceFlag;
+    static MusikSampler *single;
+
+	// Member
 	sf::Music m_Music;	// OGG - immer nur 1 Song geladen
 	int m_Songnumber;
 
@@ -35,6 +45,9 @@ private:
 	float m_SoVolume; // so = sounds, also geräusche
 
 public:
+	//SINGLETONM PATTERN
+	static MusikSampler* getInstance();
+
 	//ctor & dtor
 	MusikSampler(void); 
 	~MusikSampler(void);

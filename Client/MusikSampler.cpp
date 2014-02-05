@@ -1,12 +1,28 @@
 #include "MusikSampler.h"
 
+bool MusikSampler::instanceFlag = false;
+
+MusikSampler* MusikSampler::single = NULL;
+MusikSampler* MusikSampler::getInstance()
+{
+    if(! instanceFlag)
+    {
+        single = new MusikSampler();
+        instanceFlag = true;
+        return single;
+    }
+    else
+    {
+        return single;
+    }
+}
 
 MusikSampler::MusikSampler(void)
 {
 	m_SongPath = "Data/Songs/";
 	m_vSongFiles.push_back("login.ogg");
-	m_vSongFiles.push_back("menu.ogg");
 	m_vSongFiles.push_back("menu2.ogg");
+	m_vSongFiles.push_back("menu.ogg");
 	m_vSongFiles.push_back("1_Steps.ogg"); //songnamen manuell einfügen
 	m_vSongFiles.push_back("2_Fallen.ogg");
 	m_vSongFiles.push_back("3_Pearl.ogg");
@@ -15,8 +31,9 @@ MusikSampler::MusikSampler(void)
 	m_Songnumber = 3; // vorinitialisieren, dann 1. track gespielt
 
 	m_Soundpath = "Data/Sounds/";
-	m_vSoundFiles.push_back("sound1.wav");
-	m_vSoundFiles.push_back("sound2.wav");
+	m_vSoundFiles.push_back("chat_open.wav");
+	m_vSoundFiles.push_back("chat_close.wav");
+	m_vSoundFiles.push_back("commit.wav");
 	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
 	for(unsigned int i = 0; i < m_vSoundFiles.size(); i++)
 		m_vBuffer.push_back(preload_soundbuffer(i));
@@ -50,6 +67,8 @@ MusikSampler::~MusikSampler(void)
 			cout << "FehlerKarre " << e << '\n';
 		}
 	}
+
+	instanceFlag = false;
 }
 
 bool MusikSampler::load_music(int index)
