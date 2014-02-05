@@ -193,9 +193,14 @@ bool IngameView::PressedLeft()
 
 	bool retvalue = false;
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
+	{
 		if(m_ClickV[i]->PressedLeft())
+		{
 			retvalue |= true;
-		
+			break;
+		}
+	}
+
 	for(unsigned int i = 0; i < m_GameData.ownedCities.size(); i++)
 	{
 		if(m_pointAt == m_GameData.ownedCities[i]->position)
@@ -205,6 +210,7 @@ bool IngameView::PressedLeft()
 			break;
 		}
 	}
+
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
 	{
 		if(m_pointAt == Vector2i(m_GameData.ownedUnits[i]->pos.x, m_GameData.ownedUnits[i]->pos.y))
@@ -215,7 +221,8 @@ bool IngameView::PressedLeft()
 		}
 	}
 
-	mainGui.updateMgui(tmpCity, tmpUG);
+	if(tmpCity != NULL || tmpUG != NULL)
+		mainGui.updateMgui(tmpCity, tmpUG);
 	return retvalue;
 }
 
