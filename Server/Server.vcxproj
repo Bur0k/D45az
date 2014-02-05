@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Maps\Map1.tmx" />
+    <None Include="Data\Maps\Map2.tmx" />
     <None Include="Data\Maps\test.tmx" />
     <None Include="Data\Maps\TestMap.tmx" />
   </ItemGroup>
