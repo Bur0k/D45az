@@ -45,6 +45,7 @@ public:
     bool play_music(int index);
 	bool play_sound(int index);
 	void next_song();
+	void play_song_again();
 
 	//einstellungen
 	void set_volume(int type, float volume);

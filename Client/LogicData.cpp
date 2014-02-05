@@ -91,7 +91,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 
 				this->allCities.push_back(c);
 
-				data.erase(data.begin() + 1, data.begin() + 3);
+				data.erase(data.begin() + 1, data.begin() + 4);	//achtung
 			}
 		}break;
 	case 0x0405:
