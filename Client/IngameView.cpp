@@ -65,7 +65,6 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
 
-	m_turnOnPathDraw=true;
 	rsTurn.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	rsTurn.setFillColor(MyColors.Transparent);
 	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
@@ -167,11 +166,8 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 
 bool IngameView::PressedRight()
 {
-
 	drawPath();
 
-	if(m_is_turn_valid)
-		addPathToArmy();
 	
 	for(unsigned int i = 0; i < m_ClickV.size(); i++)
 		if(m_ClickV[i]->PressedRight())
@@ -182,8 +178,10 @@ bool IngameView::PressedRight()
 bool IngameView::PressedLeft()
 {
 	chat.PressedLeft();
-	currentTurn.clear();
-	mouseOverTurn.clear();
+	
+	if(m_turnOnPathDraw)
+		addPathToArmy();
+
 	UnitGroup* tmpUG = NULL;
 	City* tmpCity = NULL;
 
@@ -204,6 +202,7 @@ bool IngameView::PressedLeft()
 		{
 			displayCityInfo(m_GameData.ownedCities[i]);
 			tmpCity = m_GameData.ownedCities[i];
+			break;
 		}
 	}
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
@@ -212,6 +211,7 @@ bool IngameView::PressedLeft()
 		{
 			displayArmyInfo(m_GameData.ownedUnits[i]);
 			tmpUG = m_GameData.ownedUnits[i];
+			break;
 		}
 	}
 
@@ -567,8 +567,20 @@ void IngameView::displayCityInfo(City *c)
 	std::cout << " stadt level  : " << c->level << std::endl;
 }
 
-void IngameView::displayArmyInfo(UnitGroup * ug)
+void IngameView::displayArmyInfo(UnitGroup * u)
 {
+	currentTurn.clear();
+	mouseOverTurn.clear();
+	for(auto it : army_moves)
+	{
+		if(it[0] == sf::Vector2i(u->pos.x, u->pos.y))
+{
+			for(int i=0;i<it.size();i++)
+				currentTurn.push_back(turn(it[i]));
+			break;
+		}
+	}
+	m_turnOnPathDraw = true;
 	std::cout << " clicked on army! " << std::endl;
 }
 
@@ -576,7 +588,6 @@ void IngameView::drawPath()
 {
 	if(m_turnOnPathDraw)
 	{
-		m_is_turn_valid = true;
 		mouseOverTurn.clear();
 
 		if(currentTurn.size() == 0)
@@ -587,7 +598,6 @@ void IngameView::drawPath()
 				collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2+1] != 0)
 			{
 				currentTurn.back().valid = false;
-				m_is_turn_valid = false;
 			}
 		}
 		else
@@ -607,7 +617,6 @@ void IngameView::drawPath()
 							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
 						{
 							currentTurn.back().valid = false;
-							m_is_turn_valid = false;
 						}
 					}
 					if( m_maxLen <= static_cast<short>(currentTurn.size()))
@@ -634,9 +643,7 @@ void IngameView::drawMouseOverPath()
 	{
 		if(m_turnOnPathDraw)
 		{
-
 			m_is_turn_valid = true;
-
 			mouseOverTurn.clear();
 			sf::Vector2i lastTurn = currentTurn.back().pos;
 			if(m_pointAt != lastTurn)
@@ -666,6 +673,7 @@ void IngameView::drawMouseOverPath()
 							collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2] != 0 || collisionLayer->layer[lastTurn.y*2+1][lastTurn.x*2+1] != 0)
 						{
 							mouseOverTurn.back().valid=false;
+							m_is_turn_valid = false;
 						}
 					}
 				}
