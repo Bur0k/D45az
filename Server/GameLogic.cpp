@@ -68,9 +68,9 @@ void GameLogic::computeTurns()
 {
 	vector<UnitGroupLogic*> armies;
 	
-	for(int i = 0; i < this->movingArmies.size(); i++)
+	for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 	{
-		for(int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
+		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
 		{
 			if(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos == this->movingArmies[i]->move[0])
 			{
@@ -83,7 +83,7 @@ void GameLogic::computeTurns()
 
 	while(this->movingArmies.size() > 0)
 	{
-		for(int i = 0; i < this->movingArmies.size(); i++)
+		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 		{
 			armies[i]->pos = this->movingArmies[i]->move[0];
 			this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
@@ -91,7 +91,7 @@ void GameLogic::computeTurns()
 			this->isCollision(armies[i]->pos, armies);
 		}
 
-		for(int i = 0; i < this->movingArmies.size(); i++)
+		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 		{
 			if(this->movingArmies[i]->move.size() == 0)
 			{
@@ -106,7 +106,7 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 {
 	UnitGroupLogic* currentArmy = armies[0];
 
-	for(int i = 0; i < armies.size(); i++)
+	for(unsigned int i = 0; i < armies.size(); i++)
 	{
 		if(armies[i]->pos == pos)
 		{
@@ -324,7 +324,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					int player_ID = data[0];
 
-					for(int i = 1; i < data.size(); i++)
+					for(unsigned int i = 1; i < data.size(); i++)
 					{
 						if(data[i] == '/')
 						{
@@ -386,12 +386,12 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 	{
 		if(army1.unitGroups->size() > army2.unitGroups->size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
 		{
-			for(int a = 0; a < army2.unitGroups->size(); a ++)
+			for(unsigned int a = 0; a < army2.unitGroups->size(); a ++)
 			{
 				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
 				{
 					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
-						for(int k = 0; k < army2.units.size(); k++)
+						for(unsigned int k = 0; k < army2.units.size(); k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -422,7 +422,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 								army2.units.erase(army2.units.begin()+k);
 						}
 					else 
-					for(int k = 0; k < army1.units.size(); k++)
+					for(unsigned int k = 0; k < army1.units.size(); k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -464,13 +464,13 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 		}
 		else
 		{
-			for(int a = 0; a < army1.unitGroups->size(); a ++)
+			for(unsigned int a = 0; a < army1.unitGroups->size(); a ++)
 			{
 				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
 				{
 					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
 					{
-						for(int k = 0; k < army2.units.size(); k++)
+						for(unsigned int k = 0; k < army2.units.size(); k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -503,7 +503,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 					}
 					else 
 					{
-					for(int k = 0; k < army1.units.size(); k++)
+					for(unsigned int k = 0; k < army1.units.size(); k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;

@@ -11,12 +11,16 @@
 #include "Client.h"
 #include <mutex>
 
+#include "MusikSampler.h"
+
 class Chat : public ISliderFunction, public ITextBoxFunction, public NetworkParticipant, public IButtonfunction
 {
 	TextBox toSend;
 	Slider* s;
 	RectangleShape rs;
 	StandardButton b;	//Aussagekräftiger braucht man das nicht
+
+	MusikSampler* m_pMS;
 
 	Textblock displayedChatLines;
 	std::deque<std::string> chatLines;

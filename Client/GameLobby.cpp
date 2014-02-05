@@ -49,6 +49,17 @@ void GameLobby::maxPlayerChange(short value)
 	this->c->write(0x0311, erfg);
 }
 
+void GameLobby::kickPlayer(string name)
+{
+	vector<char> erfg = code((short) name.length());
+
+	vector<char> tmp = code(name);
+	for (unsigned int i = 0; i < name.length(); i++)
+		erfg.push_back(tmp[i]);
+
+	this->c->write(0x0312, erfg);
+}
+
 void GameLobby::processNewMessage(short id,vector<char> data)
 {
 	switch(id)

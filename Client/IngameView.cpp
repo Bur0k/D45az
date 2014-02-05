@@ -20,7 +20,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_turnOnPathDraw = false;
 	
 	
-	
+	m_pMS = MusikSampler::getInstance(); // singleton!
 	
 	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
 	m_ClickV.push_back(u);
@@ -106,7 +106,10 @@ void IngameView::onButtonClick(int id)
 	{
 	case IngameViewButtonId::COMMIT:
 		if(m_phase == InagameViewPhases::YOURTURN)
+		{
+			m_pMS->play_sound(COMMIT_SOUND);
 			nextPhase();
+		}
 		break;
 	default:
 		break;
@@ -547,6 +550,7 @@ void IngameView::displayCityInfo(City &c)
 
 void IngameView::displayArmyInfo(Unit &)
 {
+
 	std::cout << " clicked on army! " << std::endl;
 }
 
@@ -799,9 +803,9 @@ void IngameView::commitMessage()
 
 	erfg.push_back(this->m_GameData.ownedCities[0]->player_ID);
 
-	for(int i = 0; i < this->army_moves.size(); i++)
+	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
-		for(int j = 0; j < this->army_moves[i].size(); j++)
+		for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
 		{
 			erfg.push_back(this->army_moves[i][j].x);
 			erfg.push_back(this->army_moves[i][j].y);

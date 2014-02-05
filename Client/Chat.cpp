@@ -11,6 +11,8 @@ Chat::Chat():
 	s = new Slider(false,sf::Vector2f(20,200),1.0,sf::Vector2f(405,300),0);
 	s->Attach(this);
 
+	m_pMS = MusikSampler::getInstance(); // singleton!
+
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
@@ -47,6 +49,7 @@ void Chat::onButtonClick(int id)
 	active=!active;
 	if(active)
 	{
+		m_pMS->play_sound(CHAT_OPEN); // krasser Sound
 		b.setPosition(400,500);
 		b.setText("<");
 		b.m_color = MyColors.White;
@@ -54,6 +57,7 @@ void Chat::onButtonClick(int id)
 	}
 	else
 	{
+		m_pMS->play_sound(CHAT_CLOSE); // krasser Sound
 		b.setPosition(0,500);
 		b.setText(">");
 	}

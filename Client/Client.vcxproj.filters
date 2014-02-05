@@ -505,6 +505,15 @@
     <Media Include="Data\Sounds\sound2.wav">
       <Filter>Data\sound</Filter>
     </Media>
+    <Media Include="Data\Sounds\chat_close.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\chat_open.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\commit.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf">
