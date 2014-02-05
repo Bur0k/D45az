@@ -122,6 +122,8 @@ void Button::setIsEnabled(bool enable)
 	m_isEnabled = enable;
 	if(!enable)
 		setFillColor(m_color_disabled);
+	else
+		setFillColor(m_color);
 }
 
 bool Button::getIsEnabled()
@@ -237,6 +239,8 @@ void Button::animationTick()
 			animation_upadate();
 		}
 	}
+	else if(!m_isEnabled)
+		updateVisuals();
 }
 
 //example implementation

@@ -17,7 +17,7 @@
 #define AGRESSIVE 3
 #define HURRY 4
 #define MAINGUI_HEIGHT 250
-#define MAINGUI_HEIGHT_HIDDEN 50 
+#define MAINGUI_HEIGHT_HIDDEN 70 
 
 class mainGui
 	: public IClickable, public IButtonfunction, public IDrawable, public IAnimatable
