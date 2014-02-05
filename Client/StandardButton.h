@@ -35,8 +35,7 @@ private:
 	void updatePosition();
 
 public:
-	//gets called by parent class
-	void updateVisuals();
+
 
 	StandardButton();
 	///@param Size x or y should be bigger than 10 px
