@@ -65,7 +65,6 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_mapMouseOver.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
 	
 
-	m_turnOnPathDraw=true;
 	rsTurn.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
 	rsTurn.setFillColor(MyColors.Transparent);
 	rsTurn.setSize(Vector2f(static_cast<float>(m_tileSize.x - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2), static_cast<float>(m_tileSize.y - INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2)));
@@ -167,7 +166,6 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 
 bool IngameView::PressedRight()
 {
-
 	drawPath();
 
 
@@ -181,10 +179,9 @@ bool IngameView::PressedLeft()
 {
 	chat.PressedLeft();
 	
-	if(m_is_turn_valid)
+	if(m_turnOnPathDraw)
 		addPathToArmy();
-	currentTurn.clear();
-	mouseOverTurn.clear();
+
 	UnitGroup* tmpUG = NULL;
 	City* tmpCity = NULL;
 
@@ -205,6 +202,7 @@ bool IngameView::PressedLeft()
 		{
 			displayCityInfo(city);
 			tmpCity = city;
+			break;
 		}
 	}
 	for(UnitGroup* ug : m_GameData.ownedUnits)
@@ -213,6 +211,7 @@ bool IngameView::PressedLeft()
 		{
 			displayArmyInfo(ug);
 			tmpUG = ug;
+			break;
 		}
 	}
 
