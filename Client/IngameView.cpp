@@ -812,7 +812,11 @@ void IngameView::loadGamestate()
 	for (auto city: m_GameData.allCities)
 	{
 		RectangleShape r;
-		Color c = MyColors.player[city->player_ID];
+		Color c;
+		if (city->player_ID >= 0 && city->player_ID <= 5 && city->player_ID != 4)
+			c = MyColors.player[city->player_ID];
+		else
+			c = MyColors.Black;
 		c.a = 100;
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);

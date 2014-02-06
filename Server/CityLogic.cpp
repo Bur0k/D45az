@@ -27,7 +27,7 @@ bool CityLogic::upgradeCity()
 	if(this->level <= 5)
 	{
 		this->level++;
-		this->generatedIncome << 1;
+		this->generatedIncome = this->generatedIncome << 1;
 		return true;
 	}
 	else
