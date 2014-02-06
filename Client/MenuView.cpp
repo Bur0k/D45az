@@ -40,6 +40,7 @@ MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
 	m_DrawV.push_back(m_musictext);
 
 	m_musicslider = new Slider(true, Vector2f(MENU_WIDTH, 30), 1, Vector2f(0,0), 1);
+	m_musicslider->setValue(0.8);
 	m_musicslider->Attach(this);
 	m_DrawV.push_back(m_musicslider);
 	m_ClickV.push_back(m_musicslider);
@@ -144,9 +145,10 @@ void MenuView::onSliderValueChange(int ID, double position)
 	switch(ID)
 	{
 	case 0:
-		m_pMS->set_volume(generel_noise, static_cast<float>(position*100));
+		m_pMS->set_volume(sound_noise, static_cast<float>(position*100));
 		break;
 	case 1:
+		m_pMS->set_volume(song_noise, static_cast<float>(position*100));
 		break;
 	}
 }

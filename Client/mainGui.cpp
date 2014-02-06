@@ -63,7 +63,7 @@ void mainGui::positionGraphics()
 	select_city->setPosition(200, y_origin + 25);
 
 	for(unsigned int i = 0; i < units.size(); i++)
-		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 185 : y_offset - 95));
+		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 }
 
