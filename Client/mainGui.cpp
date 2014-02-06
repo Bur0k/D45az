@@ -14,11 +14,16 @@ mainGui::mainGui()
 
 	select_army = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("Army"), MAINGUI_SELECTARMY,true);
 	select_army->setIsEnabled(false);
+	select_army->Attach(this);
 	select_city = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("City"), MAINGUI_SELECTCITY,true);
 	select_city->setIsEnabled(false);
+	select_city->Attach(this);
 	army_mode[0] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("defensive"), MAINGUI_DEFENSIVE,false,false);
+	army_mode[0]->Attach(this);
 	army_mode[1] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("agressive"), MAINGUI_AGRESSIVE,false,false);
+	army_mode[1]->Attach(this);
 	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("fast"), MAINGUI_HURRY,false,false);
+	army_mode[2]->Attach(this);
 
 	hidden = true;
 	has_army = false;
@@ -55,16 +60,21 @@ void mainGui::positionGraphics()
 	select_army->setPosition(50, y_origin + 25);
 	select_city->setPosition(200, y_origin + 25);
 
+	for(unsigned int i = 0; i < units.size(); i++)
+		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 185 : y_offset - 95));
+
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
 {
 	if(city != NULL)
 	{
+		this->city = city;
 		has_city = true;
 	}
 	if(army != NULL)
 	{
+		this->group = army;
 		has_army = true;
 	}
 
@@ -220,12 +230,9 @@ void mainGui::displayArmy()
 	units.clear();
 
 	for(int i = 0; i < 16; i++)
-	{
 		if(group->units[i].count > 0)
-		{
 			units.push_back(new Unit(Vector2f(0,0),group->units[i].type,group->units[i].count));
-		}
-	}
 
+	positionGraphics();
 }
 

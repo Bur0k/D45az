@@ -55,6 +55,7 @@ public:
 	bool Detach(ISliderFunction*);
 	
 	double getValue();
+	void setValue(double);
 
 	void setPosition(Vector2f);
 	Vector2f getPosition();

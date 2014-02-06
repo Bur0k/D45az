@@ -1,7 +1,18 @@
 #ifndef UNITGROUP_H
 #define UNITGROUP_H
 
-#define maxlivingsoldiers 20
+#define maxlivingsoldiers 25
+
+#define light 2.0
+#define heavy 2.4
+#define longrange 2.8
+#define artillery 3.0
+
+#define def 1.2
+#define off 1
+#define run -1
+
+#define maxstrength (16 * maxlivingsoldiers * artillery * def)
 
 #include "NetworkParticipant.h"
 #include "Client.h"
