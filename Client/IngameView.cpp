@@ -149,9 +149,9 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	
 	//displayed armys
 	for(Army* a : m_owned_armys)
-		a->MouseMoved(mouse);
+		a->MouseMoved(m_pointAt);
 	for(Army* a : m_enemy_armys)
-		a->MouseMoved(mouse);
+		a->MouseMoved(m_pointAt);
 
 	return retValue;
 }
@@ -212,6 +212,9 @@ bool IngameView::PressedLeft()
 			break;
 		}
 	}
+
+	for(Army* a : m_owned_armys)
+		a->ReleasedLeft();
 
 	if(tmpCity != NULL || tmpUG != NULL)
 	mainGui.updateMgui(tmpCity, tmpUG);

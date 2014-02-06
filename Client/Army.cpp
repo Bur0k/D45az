@@ -12,6 +12,7 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 	m_animating = false;
 
 	m_isVisible = isVisible;
+	m_marked = false;
 
 	m_playerColor = MyColors.player[ug->player_ID];
 
@@ -26,8 +27,8 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 	m_armySprite = new SplittedSprite(m_texture, ARMY_SPRITE_WIDTH, ARMY_SPRITE_HEIGHT);
 	m_armySprite->setFrame(1);
 
-	m_markedIndicator.setRadius((float)ARMY_TILESIZE / 2);
-	m_markedIndicator.setPointCount(30);
+	m_markedIndicator.setRadius((float)ARMY_TILESIZE / 2 - 5);
+	m_markedIndicator.setPointCount(40);
 	
 	m_powerBar.setSize(Vector2f(ARMY_POWERBAR_THICKNESS, static_cast<float>(64 * units->getUnitgroupStrength())));
 	m_powerBar.setFillColor(MyColors.player[units->player_ID]);
@@ -60,7 +61,7 @@ void Army::PositionGraphics()
 	pos = pos * (float)ARMY_TILESIZE - (Vector2f)m_mapViewOffset;
 	m_armySprite->setPosition(pos.x - 2, pos.y);
 
-	m_markedIndicator.setPosition(pos);
+	m_markedIndicator.setPosition(pos.x + 5 , pos.y + 5);
 	m_pBarBg.setPosition(pos);
 	m_powerBar.setPosition(pos.x, pos.y + 64 - m_powerBar.getSize().y);
 	
@@ -75,7 +76,7 @@ void Army::draw(sf::RenderWindow* rw)
 		return;
 	if(m_inCity)
 	{
-		if(m_marked)
+		if(m_marked || m_mouseOver) 
 			rw->draw(m_markedIndicator);
 		rw->draw(*m_armySprite);
 	}
@@ -91,17 +92,18 @@ bool Army::MouseMoved(sf::Vector2i & mouse)
 	if(!m_isVisible)
 		return false;
 
-	if( mouse.x > m_dimensions.left && mouse.x < m_dimensions.left + m_dimensions.width &&
-		mouse.x > m_dimensions.left && mouse.x < m_dimensions.left + m_dimensions.width)
+	if( mouse.x == units->pos.x && mouse.y == units->pos.y)
 	{
-		Color tmp = m_playerColor;
-		tmp.a = 100;
-		m_markedIndicator.setFillColor(tmp);
 		m_mouseOver = true;
+		if(!m_marked)
+		{
+			Color tmp = m_playerColor;
+			tmp.a = 100;
+			m_markedIndicator.setFillColor(tmp);
+		}
 	}
 	else	
 	{
-		m_markedIndicator.setFillColor(MyColors.Transparent);
 		m_mouseOver = false;
 	}
 	return m_mouseOver;
@@ -113,12 +115,16 @@ bool Army::PressedLeft()
 		return false;
 	if(m_mouseOver)
 	{
-		m_marked = !m_marked;
+		m_marked = true;
 		m_markedIndicator.setFillColor(m_playerColor);
 		return true;
 	}
-	else 
+	else
+	{
+		m_marked = false;
 		return false;
+	}
+		
 }
 
 bool Army::PressedRight(){ return false; }

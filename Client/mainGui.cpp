@@ -89,7 +89,7 @@ void mainGui::positionGraphics()
 		units[i]->setPosition(Vector2f(20 + 70 * (float)(i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
-		army_mode[i]->setPosition(Vector2f(600,y_origin + i * 40));
+		army_mode[i]->setPosition(Vector2f(600,y_origin + 120 + i * 40));
 	
 	
 	cityLevel.setPos(sf::Vector2f(30,y_origin+75));
@@ -111,11 +111,13 @@ void mainGui::updateMgui(City* city, UnitGroup* army)
 	{
 		this->city = city;
 		has_city = true;
+		
 	}
 	if(army != NULL)
 	{
 		this->group = army;
 		has_army = true;
+		
 	}
 
 	
@@ -123,6 +125,7 @@ void mainGui::updateMgui(City* city, UnitGroup* army)
 	if(!has_city)
 		select_city->unLock();
 	select_army->setIsEnabled(has_army);
+	
 	if(!has_army)
 		select_army->unLock();
 
@@ -134,6 +137,10 @@ void mainGui::updateMgui(City* city, UnitGroup* army)
 
 	if(hidden != oldhidden)
 		positionGraphics();
+	
+
+	select_city->animation_upadate();
+	select_army->animation_upadate();
 }
 
 bool mainGui::MouseMoved(sf::Vector2i & mouse)
@@ -327,14 +334,12 @@ void mainGui::draw(sf::RenderWindow* rw)
 	select_city->draw(rw);
 	
 	
-	if(army_display && has_army)
+	if(army_display && has_army && !hidden)
 	{
-		
+		for(int i = 0; i < 3; i++)
+			army_mode[i]->draw(rw);
 		for(Unit* u : units)
 			u->draw(rw);
-		if(!hidden)
-			for(int i = 0; i < 3; i++)
-				army_mode[i]->draw(rw);
 	}
 	else if(city_display)
 	{
