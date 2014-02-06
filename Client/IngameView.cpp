@@ -866,8 +866,8 @@ void IngameView::commitArmyStrategy()
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
-		erfg.push_back(this->m_GameData.allUnits[i]->pos.x);
-		erfg.push_back(this->m_GameData.allUnits[i]->pos.y);
+		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
+		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
 		switch(s)
 		{
