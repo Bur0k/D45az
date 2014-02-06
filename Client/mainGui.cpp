@@ -1,7 +1,9 @@
 #include "mainGui.h"
 
 
-mainGui::mainGui()
+mainGui::mainGui():
+	cityLevel(sf::Vector2f(0,0),sf::Vector2f(0,0),"",18),
+	cityIncome(sf::Vector2f(0,0),sf::Vector2f(0,0),"",18)
 {
 	Image img;
 	if(!img.loadFromFile("Data/Images/mainGui.png"))
@@ -167,6 +169,9 @@ void mainGui::onButtonClick(int id)
 		{
 			hidden = false;
 			positionGraphics();
+
+			displayCity();
+
 			select_army->unLock();
 		}
 		break;
@@ -236,3 +241,8 @@ void mainGui::displayArmy()
 	positionGraphics();
 }
 
+void mainGui::displayCity()
+{
+	cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
+	cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
+}
