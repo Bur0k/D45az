@@ -7,6 +7,7 @@ GameLogic::GameLogic(vector<PlayerData> players, Map* map)
 	server->addToNewMessageCallback(this);
 	server->addToErrorCallback(this);
 
+	this->playerCommits = 0;
 	this->map = map;
 
 	MapLayer* v = this->map->layers[0];
@@ -72,7 +73,12 @@ void GameLogic::computeTurns()
 	{
 		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
 		{
-			if(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos == this->movingArmies[i]->move[0])
+			int x1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->x;
+			int y1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->y;
+			int x2 = this->movingArmies[i]->move[0]->x;
+			int y2 = this->movingArmies[i]->move[0]->y;
+
+			if(x1 == x2 && y1 == y2)
 			{
 				armies.push_back(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]);
 			}
@@ -334,12 +340,13 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						{
 							if( i % 2 != 0)
 							{
-								p->x = data[i];
+								p->x = data[i] * 2;
 							}
 							else
 							{
-								p->y = data[i];
-								vp.push_back(p);							
+								p->y = data[i] * 2;
+								vp.push_back(p);
+								p = new POINT();
 							}
 						}
 						
@@ -426,6 +433,13 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						data.erase(data.begin() + 6);
 					}
 				}break;
+				case 0x0416:
+					{
+						for(int i = 0; i < data.size(); i++)
+						{
+
+							}
+					}break;
 			case 0x1000://Chat empfangen
 				{
 					for(auto it : playersIngame)
