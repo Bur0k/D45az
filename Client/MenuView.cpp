@@ -34,6 +34,16 @@ MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
 	m_DrawV.push_back(m_volumeslider);
 	m_ClickV.push_back(m_volumeslider);
 
+	m_musictext = new Textblock(Vector2f(0,0), Vector2f(MENU_WIDTH, 50), "MusicVolume", 20);
+	m_musictext->setFillColor(MyColors.Transparent);
+	m_musictext->setFontColor(MyColors.White);
+	m_DrawV.push_back(m_musictext);
+
+	m_musicslider = new Slider(true, Vector2f(MENU_WIDTH, 30), 1, Vector2f(0,0), 1);
+	m_musicslider->Attach(this);
+	m_DrawV.push_back(m_musicslider);
+	m_ClickV.push_back(m_musicslider);
+
 	m_pGraphics = new SpriteTex[3];
 
 	Image img;
@@ -54,7 +64,7 @@ MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
 		m_pGraphics[i].s.setTexture(&m_pGraphics[i].t, true);
 	}
 	m_pGraphics[0].s.setSize(Vector2f(240,150));
-	/*TEMP*/ m_pGraphics[1].s.setSize(Vector2f(240,150));
+	/*TEMP*/ m_pGraphics[1].s.setSize(Vector2f(240,230));			//TO CHANGE
 	m_pGraphics[2].s.setSize(Vector2f(240,150));
 
 	positionElements(screensize);
@@ -86,6 +96,14 @@ void MenuView::positionElements(Vector2u & size)
 
 	refPoint.y += 60;
 
+	m_musictext->setPos(Vector2f(refPoint.x + MENU_WIDTH / 2 - m_musictext->getSize().x / 2, refPoint.y));
+
+	refPoint.y += 20;
+
+	m_musicslider->setPosition(refPoint);
+
+	refPoint.y += 60;
+
 	m_exitbutton->setPosition(refPoint);
 
 	m_pGraphics[2].s.setPosition(refPoint.x - MENU_BORDERSPACING,m_pGraphics[1].s.getPosition().y + m_pGraphics[1].s.getSize().y);
@@ -98,6 +116,8 @@ MenuView::~MenuView(void)
 	delete m_continuebutton;
 	delete m_volumeslider;
 	delete m_volumetext;
+	delete m_musictext;
+	delete m_musicslider;
 
 	delete[] m_pGraphics;
 }
@@ -121,12 +141,20 @@ void MenuView::onButtonClick(int id)
 
 void MenuView::onSliderValueChange(int ID, double position)
 {
-	m_pMS->set_volume(generel_noise, static_cast<float>(position*100));
+	switch(ID)
+	{
+	case 0:
+		m_pMS->set_volume(generel_noise, static_cast<float>(position*100));
+		break;
+	case 1:
+		break;
+	}
 }
 
 void MenuView::onSliderReleased(int ID, double position)
 {
-	std::cout << "Lautstärke jetzt: " << position*100 << std::endl;
+	if (ID == 0)
+		std::cout << "Lautstärke jetzt: " << position*100 << std::endl;
 }
 
 
