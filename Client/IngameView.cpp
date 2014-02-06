@@ -69,10 +69,10 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGui.onResize(screensize);
-	m_DrawV.push_back(&mainGui);
-	m_ClickV.push_back(&mainGui);
-	m_AnimateV.push_back(&mainGui);
+	mainGuiOBJECT.onResize(screensize);
+	m_DrawV.push_back(&mainGuiOBJECT);
+	m_ClickV.push_back(&mainGuiOBJECT);
+	m_AnimateV.push_back(&mainGuiOBJECT);
 
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
@@ -214,7 +214,7 @@ bool IngameView::PressedLeft()
 	}
 
 	if(tmpCity != NULL || tmpUG != NULL)
-	mainGui.updateMgui(tmpCity, tmpUG);
+		mainGuiOBJECT.updateMgui(tmpCity, tmpUG);
 	return retvalue;
 }
 
@@ -411,7 +411,7 @@ void IngameView::update(double elapsedMs)
 void IngameView::onResize(Vector2u & size)
 {
 	m_screensize = size;
-	mainGui.onResize(size);
+	mainGuiOBJECT.onResize(size);
 	m_SBar->Resize((Vector2f) size);
 	m_commitB->onResize(size);
 	m_mapView.width = size.x;
@@ -594,7 +594,7 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 
 void IngameView::drawPath()
 {
-	if(m_turnOnPathDraw)
+	if(m_turnOnPathDraw && m_phase == InagameViewPhases::YOURTURN)
 	{
 		if(currentTurn.size() == 0)
 		{
@@ -645,7 +645,7 @@ void IngameView::drawPath()
 
 void IngameView::drawMouseOverPath()
 {
-	if(currentTurn.size() != 0)
+	if(currentTurn.size() != 0 && m_phase == InagameViewPhases::YOURTURN)
 	{
 		if(m_turnOnPathDraw)
 		{
@@ -899,9 +899,5 @@ void IngameView::commitMoves()
 
 void IngameView::commitCityActions()
 {
-	// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
-
-
-
-	vector<char> erfg;
+	c->write(0x0414,mainGuiOBJECT.getCityActionData());
 }

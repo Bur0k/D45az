@@ -101,7 +101,7 @@ private:
 	Chat chat;
 	
 	//Main Gui
-	mainGui mainGui;
+	mainGui mainGuiOBJECT;
 
 	//debug
 

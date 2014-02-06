@@ -49,9 +49,11 @@ mainGui::mainGui():
 	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Heavy"), maingui_heavy,false,false));
 	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Longrange"), maingui_longrange,false,false));
 	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Artillery"), maingui_artillery,false,false));
+	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Cityupgrade"), maingui_city,false,false));
 
 	for(auto it : cityUnityBuy)
 		it->Attach(this);
+	currentCityActionsIndex=0;
 }
 
 
@@ -91,7 +93,11 @@ void mainGui::positionGraphics()
 	for(int i = 0; i < 3; i++)
 		army_mode[i]->setPosition(Vector2f(600,y_origin + i * 40));
 	
-	
+
+	if(currentCityActionsIndex < updateInfo.size())
+		cityIncome.setText("Income: "+to_string(updateInfo[currentCityActionsIndex].remainingGold),sf::Vector2f(1000,1000));
+	if(currentCityActionsIndex < updateInfo.size())
+		cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
 	cityLevel.setPos(sf::Vector2f(30,y_origin+75));
 	cityIncome.setPos(sf::Vector2f(30,y_origin+100));
 
@@ -103,6 +109,7 @@ void mainGui::positionGraphics()
 		cityUnityBuy[i]->setPosition(sf::Vector2f(startX,y_origin+175));
 		startX+=75;
 	}
+	cityUnityBuy[cityUnits.size()]->setPosition(sf::Vector2f(startX,y_origin+175));
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
@@ -243,50 +250,68 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_light:
-		if(city->generatedIncome >= lightPrice)
+		if(updateInfo[currentCityActionsIndex].remainingGold >= lightPrice)
 		{
-			city->generatedIncome -= lightPrice;
+			updateInfo[currentCityActionsIndex].remainingGold -= lightPrice;
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
-			cityUnits[0]->setNumberOfSoldiers(cityUnits[0]->getNumberOfSoldiers()+1);
-			displayCity();
+			updateInfo[currentCityActionsIndex].numOfProducingUnit = cityUnits[0]->getNumberOfSoldiers()+1;
+			cityUnits[0]->setNumberOfSoldiers(updateInfo[currentCityActionsIndex].numOfProducingUnit);
+			updateInfo[currentCityActionsIndex].ProducedUnit = UnitTypes::LIGHT;
+			positionGraphics();
 		}
 		break;
 
 	case maingui_heavy:
-		if(city->generatedIncome >= heavyPrice)
+		if(updateInfo[currentCityActionsIndex].remainingGold >= heavyPrice)
 		{
-			city->generatedIncome -= heavyPrice;
+			updateInfo[currentCityActionsIndex].remainingGold -= heavyPrice;
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
-			cityUnits[1]->setNumberOfSoldiers(cityUnits[1]->getNumberOfSoldiers()+1);
-			displayCity();
+			updateInfo[currentCityActionsIndex].numOfProducingUnit = cityUnits[1]->getNumberOfSoldiers()+1;
+			cityUnits[1]->setNumberOfSoldiers(updateInfo[currentCityActionsIndex].numOfProducingUnit);
+			updateInfo[currentCityActionsIndex].ProducedUnit = UnitTypes::HEAVY;
+			positionGraphics();
 		}
 		break;
 
 	case maingui_longrange:
-		if(city->generatedIncome >= longrangePrice)
+		if(updateInfo[currentCityActionsIndex].remainingGold >= longrangePrice)
 		{
-			city->generatedIncome -= longrangePrice;
+			updateInfo[currentCityActionsIndex].remainingGold -= longrangePrice;
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
-			cityUnits[2]->setNumberOfSoldiers(cityUnits[2]->getNumberOfSoldiers()+1);
-			displayCity();
+			updateInfo[currentCityActionsIndex].numOfProducingUnit = cityUnits[2]->getNumberOfSoldiers()+1;
+			cityUnits[2]->setNumberOfSoldiers(updateInfo[currentCityActionsIndex].numOfProducingUnit);
+			updateInfo[currentCityActionsIndex].ProducedUnit = UnitTypes::LONGRANGE;
+			positionGraphics();
 		}
 		break;
 
 	case maingui_artillery:
-		if(city->generatedIncome >= artilleryPrice)
+		if(updateInfo[currentCityActionsIndex].remainingGold >= artilleryPrice)
 		{
-			city->generatedIncome -= artilleryPrice;
+			updateInfo[currentCityActionsIndex].remainingGold -= artilleryPrice;
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
-			cityUnits[3]->setNumberOfSoldiers(cityUnits[3]->getNumberOfSoldiers()+1);
-			displayCity();
+			updateInfo[currentCityActionsIndex].numOfProducingUnit = cityUnits[3]->getNumberOfSoldiers()+1;
+			cityUnits[3]->setNumberOfSoldiers(updateInfo[currentCityActionsIndex].numOfProducingUnit);
+			updateInfo[currentCityActionsIndex].ProducedUnit = UnitTypes::ARTILLERY;
+			positionGraphics();
+		}
+		break;
+
+	case maingui_city:
+		if(updateInfo[currentCityActionsIndex].remainingGold >= cityUpgrade)
+		{
+			updateInfo[currentCityActionsIndex].remainingGold -= cityUpgrade;
+			updateInfo[currentCityActionsIndex].updating = true;
+			cityUnityBuy[4]->setIsEnabled(false);
+			positionGraphics();
 		}
 		break;
 
@@ -397,8 +422,84 @@ void mainGui::resetModeButtons()
 
 void mainGui::displayCity()
 {
-	cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
-	cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
+	bool isAlreadyDefined = false;
+	for(unsigned int i=0;i<updateInfo.size();i++)
+	{
+		if(updateInfo[i].pos == city->position)
+		{
+
+			isAlreadyDefined = true;
+			currentCityActionsIndex = static_cast<int>(currentCityActionsIndex);
+			if(updateInfo[i].updating)
+				cityUnityBuy[4]->setIsEnabled(false);
+			else
+				cityUnityBuy[4]->setIsEnabled(true);
+
+			if(updateInfo[i].numOfProducingUnit != 0)
+			{
+				cityUnityBuy[0]->setIsEnabled(false);
+				cityUnityBuy[1]->setIsEnabled(false);
+				cityUnityBuy[2]->setIsEnabled(false);
+				cityUnityBuy[3]->setIsEnabled(false);
+				switch(updateInfo[i].ProducedUnit)
+				{
+				case UnitTypes::LIGHT:cityUnityBuy[0]->setIsEnabled(true);break;
+				case UnitTypes::HEAVY:cityUnityBuy[1]->setIsEnabled(true);break;
+				case UnitTypes::LONGRANGE:cityUnityBuy[2]->setIsEnabled(true);break;
+				case UnitTypes::ARTILLERY:cityUnityBuy[3]->setIsEnabled(true);break;
+				}
+			}
+			else
+			{
+				cityUnityBuy[0]->setIsEnabled(true);
+				cityUnityBuy[1]->setIsEnabled(true);
+				cityUnityBuy[2]->setIsEnabled(true);
+				cityUnityBuy[3]->setIsEnabled(true);
+			}
+
+			break;
+		}
+	}
+	if(!isAlreadyDefined)
+	{
+		cityUnityBuy[0]->setIsEnabled(true);
+		cityUnityBuy[1]->setIsEnabled(true);
+		cityUnityBuy[2]->setIsEnabled(true);
+		cityUnityBuy[3]->setIsEnabled(true);
+		cityUnityBuy[4]->setIsEnabled(true);
+
+		currentCityActionsIndex = updateInfo.size();
+
+		CityActions ca;
+		ca.numOfProducingUnit=0;
+		ca.pos=city->position;
+		ca.ProducedUnit=UnitTypes::ARTILLERY;
+		ca.updating=false;
+		ca.remainingGold=city->generatedIncome+100;
+
+		updateInfo.push_back(ca);
+	}
 
 	positionGraphics();
+}
+
+std::vector<char> mainGui::getCityActionData()
+{
+	// Message: (Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
+
+	std::vector<char> toSend;
+
+
+	for(auto it : updateInfo)
+	{
+		toSend.push_back(static_cast<char>(it.pos.x));
+		toSend.push_back(static_cast<char>(it.pos.y));
+		toSend.push_back(static_cast<char>(it.numOfProducingUnit));
+		toSend.push_back(static_cast<char>(it.ProducedUnit));
+		toSend.push_back(static_cast<char>(it.updating));
+	}
+
+
+	updateInfo.clear();
+	return toSend;
 }
