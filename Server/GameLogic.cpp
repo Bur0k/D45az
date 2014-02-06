@@ -367,7 +367,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						}
 
 
-						for(int i = 0; i < this->playersIngame.size(); i++)
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 							server->write(this->playersIngame[i]->owner.s, 0x0415, erfg);
 			
 						this->playerCommits = 0;
@@ -459,7 +459,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 							}
 					}break;
 				case 0x0418:
-					{ 
+					{
 						erfg = this->divideForMessage(this->playersIngame[data[0]]->gold);
 
 						server->write(s, 0x0413, erfg);
@@ -482,7 +482,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 	}
 
 }
-
+	
 vector<char> GameLogic::divideForMessage(int number)
 {
 	vector<char> erfg;
