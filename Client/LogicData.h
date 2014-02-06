@@ -8,6 +8,7 @@
 #include "UnitGroup.h"
 #include <string>
 #include <SFML\Graphics.hpp>
+#include <sstream>
 
 class LogicData : public NetworkParticipant
 {

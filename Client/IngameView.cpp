@@ -50,6 +50,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
 	
+	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -404,8 +405,8 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	if(m_phase == InagameViewPhases::WAITFORPLAYERS )
-		this;
+	if(m_phase == InagameViewPhases::WAITFORPLAYERS && m_GameData.serverReady)
+		nextPhase();
 }
 
 void IngameView::onResize(Vector2u & size)
@@ -824,6 +825,8 @@ void IngameView::loadGamestate()
 	}
 
 	updateFogOfWar();
+
+
 }
 
 bool IngameView::isInCity(UnitGroup* u)

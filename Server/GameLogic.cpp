@@ -459,11 +459,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 							}
 					}break;
 				case 0x0418:
-					{
-						int gold = this->playersIngame[data[0]]->gold;
+					{ 
+						erfg = this->divideForMessage(this->playersIngame[data[0]]->gold);
 
 						server->write(s, 0x0413, erfg);
-					}
+					}break;
 			case 0x1000://Chat empfangen
 				{
 					for(auto it : playersIngame)
@@ -481,6 +481,19 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}break;
 	}
 
+}
+
+vector<char> GameLogic::divideForMessage(int number)
+{
+	vector<char> erfg;
+
+	std::stringstream sstr;
+	sstr << number;
+
+	for(int i = 0; i < sstr.str().size(); i++)
+		erfg.push_back(sstr.str()[i]);
+
+	return erfg;
 }
 	
 void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
