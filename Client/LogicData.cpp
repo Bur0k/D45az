@@ -56,7 +56,7 @@ void LogicData::requestOwnedUnits()
 void LogicData::requestGold()
 {
 	vector<char> erfg;
-	erfg.push_back(this->ownedCities[0]->player_ID);
+	erfg.push_back((char)this->ownedCities[0]->player_ID);
 	c->write(0x0418, erfg);
 }
 
