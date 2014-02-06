@@ -435,7 +435,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}break;
 				case 0x0416:
 					{
-						for(int i = 0; i < data.size(); i++)
+						for(unsigned int i = 0; i < data.size(); i++)
 						{
 
 							}

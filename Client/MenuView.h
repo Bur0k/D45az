@@ -45,7 +45,7 @@ private:
 	KeyInputVect m_KeyV;
 
 public:
-	MenuView(Vector2u & screensize, bool extended, MusikSampler* MS);
+	MenuView(Vector2u & screensize, bool extended);
 	~MenuView(void);
 
 	virtual Views nextState();

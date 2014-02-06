@@ -858,7 +858,7 @@ void IngameView::commitArmyStrategy()
 	vector<char> erfg;
 	UnitStrategy s = UnitStrategy::OFFENSIVE;
 
-	for(int i = 0; i < this->m_GameData.allUnits.size(); i++)
+	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
 		erfg.push_back(this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back(this->m_GameData.allUnits[i]->pos.y);
