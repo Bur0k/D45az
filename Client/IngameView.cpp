@@ -824,7 +824,7 @@ void IngameView::loadGamestate()
 	}
 
 	updateFogOfWar();
-	}
+}
 
 bool IngameView::isInCity(UnitGroup* u)
 {
@@ -850,6 +850,7 @@ void IngameView::commitMessage()
 	this->commitMoves();
 	this->commitCityActions();
 	this->m_GameData.requestAllUnits();
+	this->m_GameData.requestOwnedUnits();
 }
 
 void IngameView::commitArmyStrategy()
