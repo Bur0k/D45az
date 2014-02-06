@@ -404,8 +404,11 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	//GIVE ME INFO DAMMIT!
-
+	if(m_phase == InagameViewPhases::WAITFORPLAYERS && m_GameData.serverReady)
+	{
+		m_GameData.serverReady = false;
+		nextPhase();
+	}
 }
 
 void IngameView::onResize(Vector2u & size)
@@ -440,7 +443,11 @@ void IngameView::nextPhase()
 	case InagameViewPhases::WAITFORPLAYERS:
 		//do things..
 		//wait till server sends move data
-		m_phase = InagameViewPhases::WATCHRESULTS;
+		
+		//m_phase = InagameViewPhases::WATCHRESULTS;
+		loadGamestate();
+		m_commitB->setIsEnabled(true);
+		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
 	case InagameViewPhases::WATCHRESULTS:
@@ -849,8 +856,8 @@ void IngameView::commitMessage()
 	this->commitArmyStrategy();
 	this->commitMoves();
 	this->commitCityActions();
-	this->m_GameData.requestAllUnits();
-	this->m_GameData.requestOwnedUnits();
+	this->m_GameData.updateGameData();
+	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 }
 
 void IngameView::commitArmyStrategy()
@@ -860,8 +867,8 @@ void IngameView::commitArmyStrategy()
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
-		erfg.push_back(this->m_GameData.allUnits[i]->pos.x);
-		erfg.push_back(this->m_GameData.allUnits[i]->pos.y);
+		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
+		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
 		switch(s)
 		{

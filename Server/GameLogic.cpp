@@ -366,6 +366,10 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 							}
 						}
 
+
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+							server->write(this->playersIngame[i]->owner.s, 0x0415, erfg);
+			
 						this->playerCommits = 0;
 					}
 				}break;
@@ -435,9 +439,9 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}break;
 				case 0x0416:
 					{
-						for(int i = 0; i < this->playersIngame.size(); i++)
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
-							for(int k = 0; k < this->playersIngame[i]->unitGroups.size(); k++)
+							for(unsigned int k = 0; k < this->playersIngame[i]->unitGroups.size(); k++)
 							{
 								if(this->playersIngame[i]->unitGroups[k]->pos->x == data[0])
 									if(this->playersIngame[i]->unitGroups[k]->pos->y == data[1])
@@ -454,6 +458,12 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 							}
 							}
 					}break;
+				/*case 0x0418:
+					{
+						int gold = this->playersIngame[data[0]]->gold;
+
+						server->write(s, 0x0413, erfg);
+					}*/
 			case 0x1000://Chat empfangen
 				{
 					for(auto it : playersIngame)
