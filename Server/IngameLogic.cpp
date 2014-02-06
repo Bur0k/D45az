@@ -1,6 +1,6 @@
 #include "IngameLogic.h"
 
-IngameLogic::IngameLogic(int id, PlayerData* owner, CityLogic* startCity)
+IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 {
 	this->server = Server::get();
 

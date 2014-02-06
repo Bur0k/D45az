@@ -1,6 +1,6 @@
 #include "GameLogic.h"
 
-GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
+GameLogic::GameLogic(vector<PlayerData> players, Map* map)
 {
 	this->server = Server::get();
 
@@ -150,7 +150,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			{
 				for(int i = 0; i < (signed) this->playersIngame.size(); i++)
 				{
-					string name = this->playersIngame[i]->owner->Name;
+					string name = this->playersIngame[i]->owner.Name;
 					vector<char> tmp = code(name);
 
 					erfg.insert(erfg.end(), tmp.begin(), tmp.end());
@@ -190,7 +190,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
-					if(this->playersIngame[i]->owner->s == s)
+					if(this->playersIngame[i]->owner.s == s)
 						index = i;
 				}
 
@@ -268,7 +268,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 			{
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
-					if (this->playersIngame[i]->owner->s == s)
+					if (this->playersIngame[i]->owner.s == s)
 					{
 						for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 						{
@@ -359,13 +359,13 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				{
 					for(auto it : playersIngame)
 					{
-						if(s == it->owner->s)//Ist der Spieler in DIESER Lobby?
+						if(s == it->owner.s)//Ist der Spieler in DIESER Lobby?
 						{
-							string chatToSend = it->owner->Name + ": "+decodeString(data,0,data.size());
+							string chatToSend = it->owner.Name + ": "+decodeString(data,0,data.size());
 							std::vector<char> toSend = code(chatToSend);
 
 							for(auto it2 : playersIngame)
-								server->write(it2->owner->s,0x1001,toSend);
+								server->write(it2->owner.s,0x1001,toSend);
 							break;
 						}
 					}

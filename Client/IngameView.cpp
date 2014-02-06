@@ -610,7 +610,7 @@ void IngameView::drawPath()
 				currentTurn.back().valid = false;
 			}
 		}
-		else
+		else if(m_is_turn_valid)
 		{
 			sf::Vector2i lastTurn = currentTurn.back().pos;
 			if(m_pointAt != lastTurn)
