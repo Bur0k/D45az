@@ -9,8 +9,6 @@
 #include <string>
 #include "NetworkParticipant.h"
 
-// MUSS MAL IRGENDWO ANGELEGT WERDEN
-
 
 class LobbyLogic : public NetworkParticipant
 {

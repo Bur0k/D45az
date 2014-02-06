@@ -37,6 +37,21 @@ mainGui::mainGui():
 	group = NULL;
 
 	army_display = true;
+	city_display = false;
+
+	cityLevel.setBackgroundColor(MyColors.Transparent);
+	cityIncome.setBackgroundColor(MyColors.Transparent);
+	cityUnits.push_back(new Unit(sf::Vector2f(0,0),UnitTypes::LIGHT,0));
+	cityUnits.push_back(new Unit(sf::Vector2f(0,0),UnitTypes::HEAVY,0));
+	cityUnits.push_back(new Unit(sf::Vector2f(0,0),UnitTypes::LONGRANGE,0));
+	cityUnits.push_back(new Unit(sf::Vector2f(0,0),UnitTypes::ARTILLERY,0));
+	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Light"), maingui_light,false,false));
+	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Heavy"), maingui_heavy,false,false));
+	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Longrange"), maingui_longrange,false,false));
+	cityUnityBuy.push_back(new StandardButton(Vector2f(0,0),Vector2f(60,30),std::string("Artillery"), maingui_artillery,false,false));
+
+	for(auto it : cityUnityBuy)
+		it->Attach(this);
 }
 
 
@@ -56,6 +71,11 @@ mainGui::~mainGui()
 		delete u;
 
 	units.clear();
+
+	for(auto it : cityUnits)
+		delete it;
+	for(auto it : cityUnityBuy)
+		delete it;
 }
 
 void mainGui::positionGraphics()
@@ -69,7 +89,20 @@ void mainGui::positionGraphics()
 		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
-		army_mode[i]->setPosition(Vector2f(650, y_origin + 100 + i * 35));
+		army_mode[i]->setPosition(Vector2f(600,y_origin + i * 40));
+	
+	
+	cityLevel.setPos(sf::Vector2f(30,y_origin+75));
+	cityIncome.setPos(sf::Vector2f(30,y_origin+100));
+
+	int startX = 150;
+	
+	for(unsigned int i=0;i<cityUnits.size();i++)
+	{
+		cityUnits[i]->setPosition(sf::Vector2f(startX,y_origin+75));
+		cityUnityBuy[i]->setPosition(sf::Vector2f(startX,y_origin+175));
+		startX+=75;
+	}
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
@@ -117,6 +150,9 @@ bool mainGui::MouseMoved(sf::Vector2i & mouse)
 		for(Unit* u : units)
 			retvalue |= u->MouseMoved(mouse);
 	}
+	if(city_display)
+		for(auto it : cityUnityBuy)
+			it->MouseMoved(mouse);
 	return retvalue;
 }
 
@@ -135,6 +171,9 @@ bool mainGui::PressedLeft()
 		for(Unit* u : units)
 			retvalue |= u->PressedLeft();
 	}
+	if(city_display)
+		for(auto it : cityUnityBuy)
+			it->PressedLeft();
 	return retvalue;
 }
 
@@ -151,6 +190,9 @@ bool mainGui::ReleasedLeft()
 		for(Unit* u : units)
 			retvalue |= u->ReleasedLeft();
 	}
+	if(city_display)
+		for(auto it : cityUnityBuy)
+			it->ReleasedLeft();
 	return retvalue;
 }
 
@@ -162,7 +204,7 @@ void mainGui::onButtonClick(int id)
 		if(has_army && select_army->getIsPressed())
 		{
 			army_display = true;
-			hidden = false;
+			hidden = city_display = false;
 			positionGraphics();
 			
 			displayArmy();
@@ -179,8 +221,8 @@ void mainGui::onButtonClick(int id)
 	case MAINGUI_SELECTCITY:
 		if(has_city && select_city->getIsPressed())
 		{
-			army_display = false;
-			hidden = false;
+			army_display = hidden = false;
+			city_display = true;
 			positionGraphics();
 
 			displayCity();
@@ -210,6 +252,54 @@ void mainGui::onButtonClick(int id)
 		resetModeButtons();
 		army_mode[2]->m_color = MyColors.Chartreuse;
 		group->strategy = UnitStrategy::RUNNING;
+		break;
+
+	case maingui_light:
+		if(city->generatedIncome >= lightPrice)
+		{
+			city->generatedIncome -= lightPrice;
+			cityUnityBuy[1]->setIsEnabled(false);
+			cityUnityBuy[2]->setIsEnabled(false);
+			cityUnityBuy[3]->setIsEnabled(false);
+			cityUnits[0]->setNumberOfSoldiers(cityUnits[0]->getNumberOfSoldiers()+1);
+			displayCity();
+		}
+		break;
+
+	case maingui_heavy:
+		if(city->generatedIncome >= heavyPrice)
+		{
+			city->generatedIncome -= heavyPrice;
+			cityUnityBuy[0]->setIsEnabled(false);
+			cityUnityBuy[2]->setIsEnabled(false);
+			cityUnityBuy[3]->setIsEnabled(false);
+			cityUnits[1]->setNumberOfSoldiers(cityUnits[1]->getNumberOfSoldiers()+1);
+			displayCity();
+		}
+		break;
+
+	case maingui_longrange:
+		if(city->generatedIncome >= longrangePrice)
+		{
+			city->generatedIncome -= longrangePrice;
+			cityUnityBuy[0]->setIsEnabled(false);
+			cityUnityBuy[1]->setIsEnabled(false);
+			cityUnityBuy[3]->setIsEnabled(false);
+			cityUnits[2]->setNumberOfSoldiers(cityUnits[2]->getNumberOfSoldiers()+1);
+			displayCity();
+		}
+		break;
+
+	case maingui_artillery:
+		if(city->generatedIncome >= artilleryPrice)
+		{
+			city->generatedIncome -= artilleryPrice;
+			cityUnityBuy[0]->setIsEnabled(false);
+			cityUnityBuy[1]->setIsEnabled(false);
+			cityUnityBuy[2]->setIsEnabled(false);
+			cityUnits[3]->setNumberOfSoldiers(cityUnits[3]->getNumberOfSoldiers()+1);
+			displayCity();
+		}
 		break;
 
 	default:
@@ -246,6 +336,15 @@ void mainGui::draw(sf::RenderWindow* rw)
 			for(int i = 0; i < 3; i++)
 				army_mode[i]->draw(rw);
 	}
+	else if(city_display)
+	{
+		cityIncome.draw(rw);
+		cityLevel.draw(rw);
+		for(auto it : cityUnits)
+			it->draw(rw);
+		for(auto it : cityUnityBuy)
+			it->draw(rw);
+	}
 }
 
 void mainGui::onResize(sf::Vector2u size)
@@ -260,6 +359,9 @@ void mainGui::animationTick()
 	select_city->animationTick();
 	for(int i = 0; i < 3; i++)
 		army_mode[i]->animationTick();
+	if(city_display)
+		for(auto it : cityUnityBuy)
+			it->animationTick();
 }
 
 void mainGui::displayArmy()
@@ -310,4 +412,6 @@ void mainGui::displayCity()
 {
 	cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
 	cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
+
+	positionGraphics();
 }

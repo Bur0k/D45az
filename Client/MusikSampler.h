@@ -4,19 +4,33 @@
 #include <vector>
 #include <SFML/Audio.hpp>
 
-#define sound_noise 0  
-#define song_noise  1 
-#define generel_noise 2 
+//#define sound_noise 0  
+//#define song_noise  1 
+//#define generel_noise 2 
+//
+//#define CHAT_OPEN 0
+//#define CHAT_CLOSE 1
+//#define COMMIT_SOUND 2
+//
+//
+//#define login 0
+//#define menu 1
+//#define test 2
+//#define menumusiken 3
 
-#define CHAT_OPEN 0
-#define CHAT_CLOSE 1
-#define COMMIT_SOUND 2
+static const int sound_noise = 0;  
+static const int song_noise = 1; 
+static const int generel_noise = 2; 
+
+static const int CHAT_OPEN = 0;
+static const int CHAT_CLOSE = 1;
+static const int COMMIT_SOUND = 2;
 
 
-#define login 0
-#define menu 1
-#define test 2
-#define menumusiken 3
+static const int login = 0;
+static const int menu = 1;
+static const int test = 2;
+static const int menumusiken = 3;
 
 
 using namespace std;

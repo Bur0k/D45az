@@ -22,6 +22,8 @@ public:
 	vector<City*> ownedCities;
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
+	int gold;
+	bool serverReady;
 
 	LogicData();
 	~LogicData();
@@ -34,6 +36,7 @@ public:
 	void requestOwnedCities();
 	void requestAllUnits();
 	void requestOwnedUnits();
+	void requestGold();
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);
