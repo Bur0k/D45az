@@ -464,7 +464,7 @@ void Game::LoadView(Views v)
 		{
 			m_pMS->play_music(menu);
 			m_ViewMode = v;
-			NewView = new MenuView(m_pWindow->getSize(),false, m_pMS);
+			NewView = new MenuView(m_pWindow->getSize(),false);
 		}
 		break;
 

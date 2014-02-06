@@ -41,7 +41,7 @@ private:
 	vector<string> m_vSoundFiles;
 
 	// Lautstärkeeinstellungen
-	float m_BgVolume; //backgound, also songs
+	float m_BgVolume; //background, also songs
 	float m_SoVolume; // so = sounds, also geräusche
 
 public:
@@ -51,6 +51,10 @@ public:
 	//ctor & dtor
 	MusikSampler(void); 
 	~MusikSampler(void);
+
+	//getter & setter
+	float get_BGV();
+	float get_SOV();
 
 	// lade und abspielfunktionen
     bool load_music(int index);		// im hintergrund ausgeführt
@@ -62,11 +66,4 @@ public:
 
 	//einstellungen
 	void set_volume(int type, float volume);
-
-	// noch nicht verwendet
-    void pause();
-    void stop();
-    int get_duration();
-    void set_loop(bool loop);
-    void set_pitch(float pitch);
 };
