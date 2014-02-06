@@ -381,7 +381,6 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 
 UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
 {
-
 	while(army1.unitGroups->size() != 0 && army2.unitGroups->size() != 0) // Armeen haben noch Kompanien?
 	{
 		if(army1.unitGroups->size() > army2.unitGroups->size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
