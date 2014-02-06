@@ -11,11 +11,11 @@
 #include "City.h"
 #include "IDrawable.h"
 
-#define SELECTARMY 0
-#define SELECTCITY 1
-#define DEFENSIVE 2
-#define AGRESSIVE 3
-#define HURRY 4
+#define MAINGUI_SELECTARMY 0
+#define MAINGUI_SELECTCITY 1
+#define MAINGUI_DEFENSIVE 2
+#define MAINGUI_AGRESSIVE 3
+#define MAINGUI_HURRY 4
 #define MAINGUI_HEIGHT 250
 #define MAINGUI_HEIGHT_HIDDEN 70 
 
@@ -34,6 +34,8 @@ private:
 	bool mouseOver;
 	
 	bool hidden;
+
+	void displayArmy();
 	
 public:
 	float y_offset;
