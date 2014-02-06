@@ -19,8 +19,7 @@ void LogicData::updateGameData()
 	this->requestOwnedCities();
 	this->requestOwnedUnits();
 	this->requestAllCities();
-	this->requestAllUnits();
-	
+	this->requestAllUnits();	
 }
 
 void LogicData::requestPlayers()
@@ -54,6 +53,13 @@ void LogicData::requestOwnedUnits()
 	c->write(0x0410, erfg);
 }
 
+void LogicData::requestGold()
+{
+	vector<char> erfg;
+	erfg.push_back(this->ownedCities[0]->player_ID);
+	c->write(0x0418, erfg);
+}
+
 void LogicData::processNewMessage(short id,vector<char> data)
 {
 	vector<char> erfg;
@@ -63,6 +69,8 @@ void LogicData::processNewMessage(short id,vector<char> data)
 	case 0x0401:
 		{
 			string name;
+
+			this->playersIngame.clear();
 
 			for(unsigned int i = 0; i < data.size(); i++)
 			{
@@ -80,6 +88,8 @@ void LogicData::processNewMessage(short id,vector<char> data)
 			int length = data[0];
 			sf::Vector2i pos;
 			int level;
+
+			this->allCities.clear();
 
 			for(int i = 0; i < length; i++)
 			{
@@ -101,6 +111,8 @@ void LogicData::processNewMessage(short id,vector<char> data)
 			sf::Vector2i pos;
 			int level;
 
+			this->ownedCities.clear();
+
 			for(int i = 0; i < length; i++)
 			{
 				pos.x = data[1];
@@ -113,6 +125,8 @@ void LogicData::processNewMessage(short id,vector<char> data)
 
 				data.erase(data.begin() + 1, data.begin() + 3);
 			}
+
+			this->requestGold();
 		}break;
 	case 0x0409:
 		{
@@ -168,6 +182,14 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
 				ownedUnits.push_back(ugroup);
 			}
+		}break;
+	case 0x0413:
+		{
+			this->gold = data[0];
+		}break;
+	case 0x0415:
+		{
+			this->serverReady = true;
 		}break;
 }
 }

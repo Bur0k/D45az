@@ -849,8 +849,8 @@ void IngameView::commitMessage()
 	this->commitArmyStrategy();
 	this->commitMoves();
 	this->commitCityActions();
-	this->m_GameData.requestAllUnits();
-	this->m_GameData.requestOwnedUnits();
+	this->m_GameData.updateGameData();
+	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 }
 
 void IngameView::commitArmyStrategy()
