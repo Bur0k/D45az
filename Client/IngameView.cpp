@@ -842,7 +842,33 @@ bool IngameView::isVisible(Vector2i pos)
 
 void IngameView::commitMessage()
 {
+	this->commitArmyStrategy();
 	this->commitMoves();
+	this->commitCityActions();
+}
+
+void IngameView::commitArmyStrategy()
+{
+	vector<char> erfg;
+	UnitStrategy s = UnitStrategy::OFFENSIVE;
+
+	for(int i = 0; i < this->m_GameData.allUnits.size(); i++)
+	{
+		erfg.push_back(this->m_GameData.allUnits[i]->pos.x);
+		erfg.push_back(this->m_GameData.allUnits[i]->pos.y);
+
+		switch(s)
+		{
+			case UnitStrategy::DEFENSIVE:
+				erfg.push_back(0);
+			case UnitStrategy::OFFENSIVE:
+				erfg.push_back(1);
+			case UnitStrategy::RUNNING:
+				erfg.push_back(2);
+		}
+	}
+
+	c->write(0x0416, erfg);
 }
 
 void IngameView::commitMoves()

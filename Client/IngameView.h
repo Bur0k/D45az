@@ -186,6 +186,7 @@ public:
 	// Turn committed!! //
 
 	void commitMessage();
+	void commitArmyStrategy();
 	void commitMoves();
 	void commitCityActions();
 

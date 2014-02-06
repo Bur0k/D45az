@@ -27,7 +27,7 @@ public:
 
 	UnitTypes type;
 
-	short living;
+	short living; // 25 Einheiten
 	int range;
 	double attackpower;
 
