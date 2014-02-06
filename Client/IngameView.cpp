@@ -256,6 +256,10 @@ void IngameView::onKeyDown(sf::Event e)
 	chat.onKeyDown(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyDown(e);
+
+	if(Keyboard::isKeyPressed(Keyboard::F))
+		loadGamestate();
+
 }
 
 void IngameView::onKeyUp(sf::Event e)
@@ -798,8 +802,8 @@ void IngameView::loadGamestate()
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
 			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)),isInCity(m_GameData.ownedUnits[i])));
 
-	
-
+	//clear RectangleVector
+	m_RectangleCityShapes.clear();
 	//fill RectangleVector
 	for (auto city: m_GameData.allCities)
 	{
@@ -820,7 +824,7 @@ void IngameView::loadGamestate()
 	}
 
 	updateFogOfWar();
-	}
+}
 
 bool IngameView::isInCity(UnitGroup* u)
 {
@@ -846,6 +850,7 @@ void IngameView::commitMessage()
 	this->commitMoves();
 	this->commitCityActions();
 	this->m_GameData.requestAllUnits();
+	this->m_GameData.requestOwnedUnits();
 }
 
 void IngameView::commitArmyStrategy()
@@ -853,7 +858,7 @@ void IngameView::commitArmyStrategy()
 	vector<char> erfg;
 	UnitStrategy s = UnitStrategy::OFFENSIVE;
 
-	for(int i = 0; i < this->m_GameData.allUnits.size(); i++)
+	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
 		erfg.push_back(this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back(this->m_GameData.allUnits[i]->pos.y);

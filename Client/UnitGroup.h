@@ -8,11 +8,11 @@
 #define longrange 2.8
 #define artillery 3.0
 
-#define def 1.2
-#define off 1
-#define run -1
+#define def____ 1.2
+#define off____ 1
+#define run____ -1
 
-#define maxstrength (16 * maxlivingsoldiers * artillery * def)
+#define maxstrength (16 * maxlivingsoldiers * artillery * def____)
 
 #include "NetworkParticipant.h"
 #include "Client.h"

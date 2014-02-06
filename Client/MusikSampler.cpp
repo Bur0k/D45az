@@ -152,11 +152,6 @@ bool MusikSampler::play_sound(int index)
    return 1;
 }
 
-void MusikSampler::pause()
-{
-    m_Music.pause();
-}
-
 void MusikSampler::next_song()
 {
 	if(static_cast<unsigned int>(m_Songnumber) >= m_vSongFiles.size() - 1 || static_cast<unsigned int>(m_Songnumber) < menumusiken) // wenn letzter song gespielt wurde zurück
@@ -187,4 +182,14 @@ void MusikSampler::set_volume(int type, float volume)
 		case generel_noise: set_volume(sound_noise,volume); 
 							set_volume(song_noise,volume); break;
 	}
+}
+
+float MusikSampler::get_BGV()
+{
+	return m_BgVolume;
+}
+	
+float MusikSampler::get_SOV()
+{
+	return m_SoVolume;
 }

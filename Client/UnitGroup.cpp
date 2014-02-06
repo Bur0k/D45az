@@ -38,11 +38,11 @@ float UnitGroup::getUnitgroupStrength()
 
 	float strategyfactor;
 	if (this->strategy == UnitStrategy::DEFENSIVE)
-		strategyfactor = def;
+		strategyfactor = (float)def____;
 	if (this->strategy == UnitStrategy::OFFENSIVE)
-		strategyfactor = off;
+		strategyfactor = (float)off____;
 	if (this->strategy == UnitStrategy::RUNNING)
-		strategyfactor = run;
+		strategyfactor = (float)run____;
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -50,23 +50,23 @@ float UnitGroup::getUnitgroupStrength()
 		switch (this->units[i].type)
 		{
 		case UnitTypes::LIGHT:
-			strength += this->units[i].count * light;
+			strength += (float)(this->units[i].count * light);
 			break;
 		case UnitTypes::HEAVY:
-			strength += this->units[i].count * heavy;
+			strength += (float)(this->units[i].count * heavy);
 			break;
 		case UnitTypes::LONGRANGE:
-			strength += this->units[i].count * longrange;
+			strength += (float)(this->units[i].count * longrange);
 			break;
 		case UnitTypes::ARTILLERY:
-			strength += this->units[i].count * artillery;
+			strength += (float)(this->units[i].count * artillery);
 			break;
 		default:
 			break;
 		}
 	}
 
-	strength = strength / maxstrength;
+	strength = strength / (float)maxstrength;
 
 	return strength;
 }
