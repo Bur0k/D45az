@@ -1,8 +1,11 @@
 #include "MenuView.h"
 
 
-MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
+MenuView::MenuView(Vector2u & screensize, bool extended)
 {
+	//Musik
+	m_pMS = MusikSampler::getInstance(); // singleton
+
 	m_animating = true;
 	m_extended = extended;
 	backgroundanimation = 0;
@@ -24,23 +27,25 @@ MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
 	m_AnimateV.push_back(m_continuebutton);
 	m_ClickV.push_back(m_continuebutton);
 
-	m_volumetext = new Textblock(Vector2f(0,0), Vector2f(MENU_WIDTH,50), "Volume", 20);
+	m_volumetext = new Textblock(Vector2f(0,0), Vector2f(MENU_WIDTH,50), "Hintergrundlautstärke", 20);
 	m_volumetext->setFillColor(MyColors.Transparent);
 	m_volumetext->setFontColor(MyColors.White);
 	m_DrawV.push_back(m_volumetext);
-																//TODO get the actual volume for the slider
+																
 	m_volumeslider = new Slider(true, Vector2f(MENU_WIDTH, 30), 1, Vector2f(0,0), 0);
+	m_volumeslider->setValue(m_pMS->get_BGV() / 100);
 	m_volumeslider->Attach(this);
 	m_DrawV.push_back(m_volumeslider);
 	m_ClickV.push_back(m_volumeslider);
 
-	m_musictext = new Textblock(Vector2f(0,0), Vector2f(MENU_WIDTH, 50), "MusicVolume", 20);
+	m_musictext = new Textblock(Vector2f(0,0), Vector2f(MENU_WIDTH, 50), "Effektlautstärke", 20);
 	m_musictext->setFillColor(MyColors.Transparent);
 	m_musictext->setFontColor(MyColors.White);
 	m_DrawV.push_back(m_musictext);
 
 	m_musicslider = new Slider(true, Vector2f(MENU_WIDTH, 30), 1, Vector2f(0,0), 1);
-	m_musicslider->setValue(0.8);
+	m_volumeslider->setValue(m_pMS->get_SOV() / 100);
+	m_musicslider->setValue(1);
 	m_musicslider->Attach(this);
 	m_DrawV.push_back(m_musicslider);
 	m_ClickV.push_back(m_musicslider);
@@ -69,8 +74,6 @@ MenuView::MenuView(Vector2u & screensize, bool extended, MusikSampler* MS)
 	m_pGraphics[2].s.setSize(Vector2f(240,150));
 
 	positionElements(screensize);
-
-	m_pMS = MS;
 }
 
 void MenuView::positionElements(Vector2u & size)
@@ -145,10 +148,10 @@ void MenuView::onSliderValueChange(int ID, double position)
 	switch(ID)
 	{
 	case 0:
-		m_pMS->set_volume(sound_noise, static_cast<float>(position*100));
+		m_pMS->set_volume(song_noise, static_cast<float>(position*100));
 		break;
 	case 1:
-		m_pMS->set_volume(song_noise, static_cast<float>(position*100));
+		m_pMS->set_volume(sound_noise, static_cast<float>(position*100));
 		break;
 	}
 }
