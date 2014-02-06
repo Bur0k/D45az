@@ -183,7 +183,12 @@ public:
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
 
+	// Turn committed!! //
+
 	void commitMessage();
+	void commitArmyStrategy();
+	void commitMoves();
+	void commitCityActions();
 
 	/////IMPLEMENTING IView end/////
 
@@ -191,8 +196,8 @@ private:
 	//gets called if next phase is required
 	void nextPhase();
 	void moveMap();
-	void displayCityInfo(City &);
-	void displayArmyInfo(Unit &);
+	void displayCityInfo(City*);
+	void displayArmyInfo(UnitGroup*);
 	void drawPath();
 	//saves path to army at path[0]
 	void addPathToArmy();

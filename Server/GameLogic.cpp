@@ -1,6 +1,6 @@
 #include "GameLogic.h"
 
-GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
+GameLogic::GameLogic(vector<PlayerData> players, Map* map)
 {
 	this->server = Server::get();
 
@@ -146,11 +146,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 	switch(id)
 	{
-		case 0x0400:
+		case 0x0400: // Client fordert die Spielernamen aller Teilnehmer an
 			{
 				for(int i = 0; i < (signed) this->playersIngame.size(); i++)
 				{
-					string name = this->playersIngame[i]->owner->Name;
+					string name = this->playersIngame[i]->owner.Name;
 					vector<char> tmp = code(name);
 
 					erfg.insert(erfg.end(), tmp.begin(), tmp.end());
@@ -159,7 +159,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				server->write(s, 0x0401, erfg);
 			}break;
-		case 0x0402:
+		case 0x0402: // Client fordert Daten aller Städte auf der Karte an
 			{
 				int length = this->neutralCities.size() + this->startCities.size();
 
@@ -177,20 +177,20 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(static_cast<char>((this->startCities[i]->position->x)>>1));
 					erfg.push_back(static_cast<char>((this->startCities[i]->position->y)>>1));
 					erfg.push_back(this->startCities[i]->level);
-					erfg.push_back(this->startCities[i]->player_ID);
+					erfg.push_back((char)this->startCities[i]->player_ID);
 				}
 
 				
 
 				server->write(s, 0x0403, erfg);
 			}break;
-		case 0x0404:
+		case 0x0404: // Client fordert Daten der eigenen Städte an
 			{
 				int index;
 
 				for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
-					if(this->playersIngame[i]->owner->s == s)
+					if(this->playersIngame[i]->owner.s == s)
 						index = i;
 				}
 
@@ -213,18 +213,17 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		case 0x0408:
 			{	
 				// sende alle einheitengruppen
-				//umschreiben TODO
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
 					for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 					{
 							//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -264,21 +263,21 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					
 				server->write(s, 0x0409, erfg);
 			}break;
-			case 0x0410:	//sende eigene Einheiten // umschreiben TODO
+			case 0x0410:	//sende eigene Einheiten 
 			{
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
-					if (this->playersIngame[i]->owner->s == s)
+					if (this->playersIngame[i]->owner.s == s)
 					{
 						for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 						{
 								//send pos
 								std::vector<char> tmp;
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 						
-								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y);
+								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->y>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
 
@@ -317,7 +316,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}
 				server->write(s, 0x0411, erfg);
 			}break;
-			case 0x0412:
+			case 0x0412: // Auswerten der übertragenen Einheitenbewegungen nach dem Commit
 				{
 					vector<POINT*> vp;
 					POINT* p = new POINT();
@@ -351,21 +350,93 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					if(this->playerCommits == this->playersIngame.size())
 					{
 						this->computeTurns();
+
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+						{
+							for(unsigned  j = 0; j < this->playersIngame[i]->cities.size(); j++)
+							{
+								this->playersIngame[i]->gold += this->playersIngame[i]->cities[j]->generatedIncome;
+							}
+						}
+
 						this->playerCommits = 0;
 					}
 				}break;
+				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)
+				{
+						// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
 
+					POINT p;
+
+					for(unsigned int i = 0; i < (data.size()>>1); i++)
+					{
+						short playerID = data[0];
+						p.x = data[1];
+						p.y = data[2];
+						int armyCount = data[3];
+						short type = data[4];
+						UnitTypes atype;
+
+						switch(type)
+						{
+						case 0:
+							{
+								atype = UnitTypes::LIGHT;
+							}
+						case 1:
+							{
+								atype = UnitTypes::HEAVY;
+							}
+						case 2:
+							{
+								atype = UnitTypes::LONGRANGE;
+							}
+						case 3:
+							{
+								atype = UnitTypes::ARTILLERY;
+							}
+						}
+
+						bool isCityUpgraded = false;
+						if(data[5] == 1)
+							isCityUpgraded = true;
+
+						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
+						{
+							if(this->playersIngame[playerID]->cities[i]->position == &p)
+							{
+								if(this->playersIngame[playerID]->cities[i]->upgradeCity())
+									this->playersIngame[playerID]->gold -= 500;
+							}
+						}
+
+						p.y += 2;
+
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+						{
+							for(int j = 0; this->playersIngame[i]->unitGroups.size(); j++)
+							{
+								if(this->playersIngame[i]->unitGroups[j]->pos == &p)
+									p.y += 2;
+							}
+						}
+
+						UnitGroupLogic newGroup = UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
+
+						data.erase(data.begin() + 6);
+					}
+				}break;
 			case 0x1000://Chat empfangen
 				{
 					for(auto it : playersIngame)
 					{
-						if(s == it->owner->s)//Ist der Spieler in DIESER Lobby?
+						if(s == it->owner.s)//Ist der Spieler in DIESER Lobby?
 						{
-							string chatToSend = it->owner->Name + ": "+decodeString(data,0,data.size());
+							string chatToSend = it->owner.Name + ": "+decodeString(data,0,data.size());
 							std::vector<char> toSend = code(chatToSend);
 
 							for(auto it2 : playersIngame)
-								server->write(it2->owner->s,0x1001,toSend);
+								server->write(it2->owner.s,0x1001,toSend);
 							break;
 						}
 					}
@@ -381,16 +452,19 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 
 UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
 {
-	while(army1.unitGroups->size() != 0 && army2.unitGroups->size() != 0) // Armeen haben noch Kompanien?
+
+	while(army1.units.size() != 0 && army2.units.size() != 0) // Armeen haben noch Kompanien?
 	{
-		if(army1.unitGroups->size() > army2.unitGroups->size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
+		if(army1.units.size() > army2.units.size()) // ist Armee 1 größer, dann alle Kompanien von 2 durchgehen
 		{
-			for(unsigned int a = 0; a < army2.unitGroups->size(); a ++)
+			for(unsigned int a = 0; a < army2.units.size(); a ++)
 			{
-				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				while(army1.units[a]->living != 0 && army2.units[a]->living != 0) // Kompanie hat noch Einheiten?
 				{
-					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
-						for(unsigned int k = 0; k < army2.units.size(); k++)
+					if(army1.units[a]->living > army2.units[a]->living)
+					{// Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+						short buffer = army2.units[a]->living;
+						for(int k = 0; k < buffer; k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -416,10 +490,11 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
+					}
 					else 
 					for(unsigned int k = 0; k < army1.units.size(); k++)
 						{
@@ -447,29 +522,30 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2) // Einheit 1 oder Einheit 2 ist besiegt
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
 				}
 				
 			// kein Plan ob richtige Stelle
-				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
-					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				if(army1.units[a]->living == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.units.erase(army1.units.begin()+a);
 				else
-					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+					army2.units.erase(army1.units.begin()+a);
 
 			}
 		}
 		else
 		{
-			for(unsigned int a = 0; a < army1.unitGroups->size(); a ++)
+			for(unsigned int a = 0; a < army1.units.size(); a ++)
 			{
-				while(army1.units.size() != 0 && army2.units.size() != 0) // Kompanie hat noch Einheiten?
+				while(army1.units[a]->living != 0 && army2.units[a]->living != 0) // Kompanie hat noch Einheiten?
 				{
-					if(army1.units.size() > army2.units.size()) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
+					if(army1.units[a]->living > army2.units[a]->living) // Kompanie 1 größer, alle Einheiten der Kompanie 2 kämpfen lassen
 					{
-						for(unsigned int k = 0; k < army2.units.size(); k++)
+						short buffer2 = army2.units[a]->living;
+						for(int k = 0; k < buffer2; k++)
 						{
 							// Kampf Einheit gegen Einheit
 							double atk1 = 0.0;
@@ -495,9 +571,9 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
 					}
 					else 
@@ -528,22 +604,22 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += (rand()%100)/100.0;
 
 							if(atk1 > atk2)
-								army1.units.erase(army1.units.begin()+k);
+								army1.units[a]->living--;
 							else
-								army2.units.erase(army2.units.begin()+k);
+								army2.units[a]->living--;
 						}
 					}
 				}
 							
 				// kein Plan ob richtige Stelle
-				if(army1.unitGroups[a].size() == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
-					army1.unitGroups->erase(army1.unitGroups->begin()+a);
+				if(army1.units[a]->living == 0) // entweder Kompanie 1 oder Kompanie 2 ist besiegt
+					army1.units.erase(army1.units.begin()+a);
 				else
-					army2.unitGroups->erase(army2.unitGroups->begin()+a);
+					army2.units.erase(army1.units.begin()+a);
 			}		
 		}
 	}
-	if(army1.unitGroups->size() == 0)
+	if(army1.units.size() == 0)
 		return army2;
 	else
 		return army1;

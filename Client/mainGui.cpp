@@ -12,18 +12,21 @@ mainGui::mainGui()
 	background.s.setTexture(& background.t);
 	background.s.setSize((Vector2f)img.getSize());
 
-	select_army = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("Army"), SELECTARMY,true);
+	select_army = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("Army"), MAINGUI_SELECTARMY,true);
 	select_army->setIsEnabled(false);
-	select_city = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("City"), SELECTCITY,true);
+	select_city = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("City"), MAINGUI_SELECTCITY,true);
 	select_city->setIsEnabled(false);
-	army_mode[0] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("defensive"), DEFENSIVE,false,false);
-	army_mode[1] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("agressive"), AGRESSIVE,false,false);
-	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("fast"), HURRY,false,false);
+	army_mode[0] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("defensive"), MAINGUI_DEFENSIVE,false,false);
+	army_mode[1] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("agressive"), MAINGUI_AGRESSIVE,false,false);
+	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("fast"), MAINGUI_HURRY,false,false);
 
 	hidden = true;
 	has_army = false;
 	has_city = false;
+	mouseOver = false;
 
+	city = NULL;
+	group = NULL;
 
 
 	army_display = true;
@@ -54,8 +57,16 @@ void mainGui::positionGraphics()
 
 }
 
-void mainGui::updateMgui()
+void mainGui::updateMgui(City* city, UnitGroup* army)
 {
+	if(city != NULL)
+	{
+		has_city = true;
+	}
+	if(army != NULL)
+	{
+		has_army = true;
+	}
 
 	
 	select_city->setIsEnabled(has_city);
@@ -65,10 +76,15 @@ void mainGui::updateMgui()
 	if(!has_army)
 		select_army->unLock();
 
+	bool oldhidden = hidden;
+
 	if(!has_city && !has_army)
-	{
 		hidden = true;
-	}
+	else 
+		hidden = false;
+
+	if(hidden != oldhidden)
+		positionGraphics();
 }
 
 bool mainGui::MouseMoved(sf::Vector2i & mouse)
@@ -90,6 +106,7 @@ bool mainGui::MouseMoved(sf::Vector2i & mouse)
 bool mainGui::PressedLeft()
 {
 	bool retvalue;
+	
 	retvalue |= select_army->PressedLeft();
 	retvalue |= select_city->PressedLeft();
 
@@ -123,16 +140,19 @@ void mainGui::onButtonClick(int id)
 {
 	switch (id)
 	{
-	case SELECTARMY:
+	case MAINGUI_SELECTARMY:
 		if(has_army && select_army->getIsPressed())
 		{
 			hidden = false;
 			positionGraphics();
+			
+			displayArmy();
+			
 			select_city->unLock();
 		}
 		break;
 
-	case SELECTCITY:
+	case MAINGUI_SELECTCITY:
 		if(has_city && select_city->getIsPressed())
 		{
 			hidden = false;
@@ -141,13 +161,13 @@ void mainGui::onButtonClick(int id)
 		}
 		break;
 
-	case DEFENSIVE:
+	case MAINGUI_DEFENSIVE:
 		break;
 
-	case AGRESSIVE:
+	case MAINGUI_AGRESSIVE:
 		break;
 
-	case HURRY:
+	case MAINGUI_HURRY:
 		break;
 
 	default:
@@ -192,3 +212,20 @@ void mainGui::animationTick()
 	for(int i = 0; i < 3; i++)
 		army_mode[i]->animationTick();
 }
+
+void mainGui::displayArmy()
+{
+	for(Unit* u : units)
+		delete u;
+	units.clear();
+
+	for(int i = 0; i < 16; i++)
+	{
+		if(group->units[i].count > 0)
+		{
+			units.push_back(new Unit(Vector2f(0,0),group->units[i].type,group->units[i].count));
+		}
+	}
+
+}
+

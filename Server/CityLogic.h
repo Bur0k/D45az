@@ -24,7 +24,7 @@ public:
 	
 	// Funktionen
 
-	void upgradeCity();
+	bool upgradeCity();
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

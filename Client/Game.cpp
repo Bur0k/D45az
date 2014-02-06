@@ -327,7 +327,6 @@ void Game::onMouseDownRight()
 		m_ViewVect[m_ViewVect.size() - 1]->PressedRight();
 }
 
-
 void Game::onMouseUpLeft()
 {
 	if(m_ViewMode == Views::TESTSCREEN)
