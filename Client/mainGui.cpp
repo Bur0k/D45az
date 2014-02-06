@@ -63,6 +63,12 @@ void mainGui::positionGraphics()
 	for(unsigned int i = 0; i < units.size(); i++)
 		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
+	for(int i = 0; i < 3; i++)
+	{
+
+	}
+
+
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
@@ -153,6 +159,7 @@ void mainGui::onButtonClick(int id)
 	case MAINGUI_SELECTARMY:
 		if(has_army && select_army->getIsPressed())
 		{
+			army_display = true;
 			hidden = false;
 			positionGraphics();
 			
@@ -165,6 +172,7 @@ void mainGui::onButtonClick(int id)
 	case MAINGUI_SELECTCITY:
 		if(has_city && select_city->getIsPressed())
 		{
+			army_display = false;
 			hidden = false;
 			positionGraphics();
 			select_army->unLock();
@@ -183,9 +191,6 @@ void mainGui::onButtonClick(int id)
 	default:
 		break;
 	}
-
-
-
 }
 
 bool mainGui::PressedRight(){  return false; }
@@ -206,6 +211,7 @@ void mainGui::draw(sf::RenderWindow* rw)
 	
 		for(int i = 0; i < 3; i++)
 			rw->draw(*army_mode[i]);
+
 	}
 }
 
