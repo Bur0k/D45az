@@ -69,8 +69,6 @@ void mainGui::positionGraphics()
 	{
 
 	}
-
-
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
