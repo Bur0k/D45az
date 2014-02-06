@@ -7,11 +7,17 @@
 #include <math.h>
 #include <vector>
 
-#define def 1.2
-#define off 1
-#define run -1
+
+
+//#define def 1.2
+//#define off 1
+//#define run -1
 
 using namespace std;
+
+static float run = -1.0f;
+static float off = 1.0f;
+static float def = (float)1.2;
 
 enum class UnitStrategy{DEFENSIVE, OFFENSIVE, RUNNING};
 

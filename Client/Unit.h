@@ -7,9 +7,11 @@
 #include "graphic_globals.h"
 
 
-#define UNIT_WIDTH 60
-#define UNIT_HEIGHT 90
+//#define UNIT_WIDTH 60
+//#define UNIT_HEIGHT 90
 
+static const float UNIT_WIDTH = 60.0f;
+static const float UNIT_HEIGHT = 90.0f;
 
 using namespace sf;
 
