@@ -853,6 +853,7 @@ void IngameView::commitMessage()
 	this->commitArmyStrategy();
 	this->commitMoves();
 	this->commitCityActions();
+	this->m_GameData.requestAllUnits();
 }
 
 void IngameView::commitArmyStrategy()
