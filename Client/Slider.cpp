@@ -252,8 +252,8 @@ void Slider::draw(RenderWindow* rw)
 void Slider::setValue(double val)
 {
 	if(m_horizontal)
-		m_pBar[3].s.setPosition((m_dimensions.width - SLIDERENDBLOCKWIDTH - m_dimensions.height) * val + m_dimensions.left, m_pBar[3].s.getPosition().y);
+		m_pBar[3].s.setPosition((m_dimensions.width - SLIDERENDBLOCKWIDTH - m_dimensions.height) * (float)val + m_dimensions.left, m_pBar[3].s.getPosition().y);
 	else
-		m_pBar[3].s.setPosition( m_pBar[3].s.getPosition().x, (m_dimensions.height - SLIDERENDBLOCKWIDTH - m_dimensions.width) * val + m_dimensions.top);
+		m_pBar[3].s.setPosition( m_pBar[3].s.getPosition().x, (m_dimensions.height - SLIDERENDBLOCKWIDTH - m_dimensions.width) * (float)val + m_dimensions.top);
 	
 }

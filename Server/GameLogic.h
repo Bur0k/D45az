@@ -14,8 +14,11 @@
 using namespace std;
 
 
-#define STARTCITY 53
-#define NEUTRALCITY 45
+//#define STARTCITY 53
+//#define NEUTRALCITY 45
+
+static const int STARTCITY = 53;
+static const int NEUTRALCITY = 45;
 
 class GameLogic : public NetworkParticipant
 {
