@@ -352,9 +352,9 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 						this->computeTurns();
 
-						for(int i = 0; i < this->playersIngame.size(); i++)
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
-							for(int j = 0; j < this->playersIngame[i]->cities.size(); j++)
+							for(unsigned  j = 0; j < this->playersIngame[i]->cities.size(); j++)
 							{
 								this->playersIngame[i]->gold += this->playersIngame[i]->cities[j]->generatedIncome;
 							}
@@ -369,7 +369,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					POINT p;
 
-					for(int i = 0; i < (data.size()>>1); i++)
+					for(unsigned int i = 0; i < (data.size()>>1); i++)
 					{
 						short playerID = data[0];
 						p.x = data[1];
@@ -402,7 +402,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						if(data[5] == 1)
 							isCityUpgraded = true;
 
-						for(int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
+						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
 						{
 							if(this->playersIngame[playerID]->cities[i]->position == &p)
 							{
@@ -413,7 +413,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 						p.y += 2;
 
-						for(int i = 0; i < this->playersIngame.size(); i++)
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
 							for(int j = 0; this->playersIngame[i]->unitGroups.size(); j++)
 							{
