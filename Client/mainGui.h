@@ -46,7 +46,7 @@ public:
 	mainGui();
 	~mainGui();
 
-	void updateMgui();
+	void updateMgui(City * c, UnitGroup*);
 	void onResize(sf::Vector2u);
 	City* city;
 	UnitGroup* group;

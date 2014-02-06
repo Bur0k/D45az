@@ -32,7 +32,7 @@ class testServer : public NetworkParticipant
 
 int main()
 {
-	srand(time(NULL)); // #Karre
+	srand((unsigned int)time(NULL)); // #Karre
 
 	Map map;
 	map.load("Data/Maps/TestMap.tmx");

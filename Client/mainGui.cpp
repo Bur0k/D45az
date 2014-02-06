@@ -23,7 +23,10 @@ mainGui::mainGui()
 	hidden = true;
 	has_army = false;
 	has_city = false;
+	mouseOver = false;
 
+	city = NULL;
+	group = NULL;
 
 
 	army_display = true;
@@ -54,8 +57,16 @@ void mainGui::positionGraphics()
 
 }
 
-void mainGui::updateMgui()
+void mainGui::updateMgui(City* city, UnitGroup* army)
 {
+	if(city != NULL)
+	{
+		has_city = true;
+	}
+	if(army != NULL)
+	{
+		has_army = true;
+	}
 
 	
 	select_city->setIsEnabled(has_city);
@@ -65,10 +76,15 @@ void mainGui::updateMgui()
 	if(!has_army)
 		select_army->unLock();
 
+	bool oldhidden = hidden;
+
 	if(!has_city && !has_army)
-	{
 		hidden = true;
-	}
+	else 
+		hidden = false;
+
+	if(hidden != oldhidden)
+		positionGraphics();
 }
 
 bool mainGui::MouseMoved(sf::Vector2i & mouse)
@@ -90,6 +106,7 @@ bool mainGui::MouseMoved(sf::Vector2i & mouse)
 bool mainGui::PressedLeft()
 {
 	bool retvalue;
+	
 	retvalue |= select_army->PressedLeft();
 	retvalue |= select_city->PressedLeft();
 
