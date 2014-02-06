@@ -66,7 +66,7 @@ float UnitGroup::getUnitgroupStrength()
 		}
 	}
 
-	strength = strength / maxstrength;
+	strength = strength / (float)maxstrength;
 
 	return strength;
 }
