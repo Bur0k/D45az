@@ -813,7 +813,7 @@ void IngameView::loadGamestate()
 	{
 		RectangleShape r;
 		Color c;
-		if (city->player_ID >= 0 && city->player_ID <= 5 )
+		if (city->player_ID >= 0 && city->player_ID <= 5 && city->player_ID != 4)
 			c = MyColors.player[city->player_ID];
 		else
 			c = MyColors.Black;
