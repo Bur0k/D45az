@@ -5,7 +5,10 @@ LogicData::LogicData()
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
+	this->serverReady  = false;
 	this->updateGameData();
+
+
 }
 
 LogicData::~LogicData()
