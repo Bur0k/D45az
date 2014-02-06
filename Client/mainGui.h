@@ -12,13 +12,21 @@
 #include "IDrawable.h"
 #include "Textblock.h"
 
-#define MAINGUI_SELECTARMY 0
-#define MAINGUI_SELECTCITY 1
-#define MAINGUI_DEFENSIVE 2
-#define MAINGUI_AGRESSIVE 3
-#define MAINGUI_HURRY 4
-#define MAINGUI_HEIGHT 250
-#define MAINGUI_HEIGHT_HIDDEN 70 
+//#define MAINGUI_SELECTARMY 0
+//#define MAINGUI_SELECTCITY 1
+//#define MAINGUI_DEFENSIVE 2
+//#define MAINGUI_AGRESSIVE 3
+//#define MAINGUI_HURRY 4
+//#define MAINGUI_HEIGHT 250
+//#define MAINGUI_HEIGHT_HIDDEN 70 
+
+static const int MAINGUI_SELECTARMY = 0;
+static const int MAINGUI_SELECTCITY = 1;
+static const int MAINGUI_DEFENSIVE = 2;
+static const int MAINGUI_AGRESSIVE = 3;
+static const int MAINGUI_HURRY = 4;
+static const int MAINGUI_HEIGHT = 250;
+static const int MAINGUI_HEIGHT_HIDDEN = 70; 
 
 class mainGui
 	: public IClickable, public IButtonfunction, public IDrawable, public IAnimatable
