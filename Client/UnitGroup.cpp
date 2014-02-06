@@ -38,11 +38,11 @@ float UnitGroup::getUnitgroupStrength()
 
 	float strategyfactor;
 	if (this->strategy == UnitStrategy::DEFENSIVE)
-		strategyfactor = (float)def;
+		strategyfactor = (float)def____;
 	if (this->strategy == UnitStrategy::OFFENSIVE)
-		strategyfactor = (float)off;
+		strategyfactor = (float)off____;
 	if (this->strategy == UnitStrategy::RUNNING)
-		strategyfactor = (float)run;
+		strategyfactor = (float)run____;
 
 	for (int i = 0; i < 16; i++)
 	{
