@@ -34,6 +34,9 @@ MusikSampler::MusikSampler(void)
 	m_vSoundFiles.push_back("chat_open.wav");
 	m_vSoundFiles.push_back("chat_close.wav");
 	m_vSoundFiles.push_back("commit.wav");
+	m_vSoundFiles.push_back("turn.wav");
+	m_vSoundFiles.push_back("lose.wav");
+	m_vSoundFiles.push_back("win.wav");
 	// Sounds gleich in Buffer laden, um dann Buffer schnell an angeforderten sound zu hängen
 	for(unsigned int i = 0; i < m_vSoundFiles.size(); i++)
 		m_vBuffer.push_back(preload_soundbuffer(i));

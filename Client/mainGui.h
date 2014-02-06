@@ -31,11 +31,13 @@ const int maingui_light = 5;
 const int maingui_heavy = 6;
 const int maingui_longrange = 7;
 const int maingui_artillery= 8;
+const int maingui_city= 9;
 
 const int lightPrice = 10;
-const int heavyPrice = 10;
-const int longrangePrice = 10;
-const int artilleryPrice = 10;
+const int heavyPrice = 25;
+const int longrangePrice = 40;
+const int artilleryPrice = 55;
+const int cityUpgrade = 50;
 
 class mainGui
 	: public IClickable, public IButtonfunction, public IDrawable, public IAnimatable
@@ -59,9 +61,20 @@ private:
 	Textblock cityLevel;
 	std::vector<Unit*> cityUnits;
 	std::vector<StandardButton*> cityUnityBuy;
+	struct CityActions
+	{
+		Vector2i pos;
+		bool updating;
+		int numOfProducingUnit;
+		UnitTypes ProducedUnit;
+		int remainingGold;
+	};
+	int currentCityActionsIndex;
+	std::vector<CityActions> updateInfo;
 	
 	void resetModeButtons();
 public:
+	std::vector<char> getCityActionData();
 	float y_offset;
 
 	bool has_army;
