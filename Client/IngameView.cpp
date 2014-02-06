@@ -256,6 +256,10 @@ void IngameView::onKeyDown(sf::Event e)
 	chat.onKeyDown(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyDown(e);
+
+	if(Keyboard::isKeyPressed(Keyboard::F))
+		loadGamestate();
+
 }
 
 void IngameView::onKeyUp(sf::Event e)
@@ -845,6 +849,7 @@ void IngameView::commitMessage()
 	this->commitArmyStrategy();
 	this->commitMoves();
 	this->commitCityActions();
+	this->m_GameData.requestAllUnits();
 }
 
 void IngameView::commitArmyStrategy()

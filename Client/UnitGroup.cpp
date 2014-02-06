@@ -35,42 +35,38 @@ void UnitGroup::processNetworkError(int id, std::string msg)
 float UnitGroup::getUnitgroupStrength()
 {
 	float strength = 0;
-	// bis zu 0.9 für maximale Anzahl an Einheiten in der group, die restlichen 0.1 entstehen durch die mischung der einheiten 
-	short countlight = 0;
-	short countheavy = 0;
-	short countlongrange = 0;
-	short countartillery = 0;
+
+	float strategyfactor;
+	if (this->strategy == UnitStrategy::DEFENSIVE)
+		strategyfactor = (float)def____;
+	if (this->strategy == UnitStrategy::OFFENSIVE)
+		strategyfactor = (float)off____;
+	if (this->strategy == UnitStrategy::RUNNING)
+		strategyfactor = (float)run____;
 
 	for (int i = 0; i < 16; i++)
 	{
-		strength += (float)((0.9/16.0) * (this->units[i].count / maxlivingsoldiers));
+		strength += this->units[i].count * strategyfactor;
 		switch (this->units[i].type)
 		{
 		case UnitTypes::LIGHT:
-			countlight++;
+			strength += (float)(this->units[i].count * light);
 			break;
 		case UnitTypes::HEAVY:
-			countheavy++;
+			strength += (float)(this->units[i].count * heavy);
 			break;
 		case UnitTypes::LONGRANGE:
-			countlongrange++;
+			strength += (float)(this->units[i].count * longrange);
 			break;
 		case UnitTypes::ARTILLERY:
-			countartillery++;
+			strength += (float)(this->units[i].count * artillery);
 			break;
 		default:
 			break;
 		}
 	}
 
-	if (countlight != 0)
-		strength += (float)0.1/4.0;
-	if (countheavy != 0)
-		strength += (float)0.1/4.0;
-	if (countlongrange != 0)
-		strength += (float)0.1/4.0;
-	if (countartillery != 0)
-		strength += (float)0.1/4.0;
+	strength = strength / (float)maxstrength;
 
 	return strength;
 }

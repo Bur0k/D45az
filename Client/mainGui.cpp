@@ -1,7 +1,9 @@
 #include "mainGui.h"
 
 
-mainGui::mainGui()
+mainGui::mainGui():
+	cityLevel(sf::Vector2f(0,0),sf::Vector2f(0,0),"",18),
+	cityIncome(sf::Vector2f(0,0),sf::Vector2f(0,0),"",18)
 {
 	Image img;
 	if(!img.loadFromFile("Data/Images/mainGui.png"))
@@ -61,7 +63,13 @@ void mainGui::positionGraphics()
 	select_city->setPosition(200, y_origin + 25);
 
 	for(unsigned int i = 0; i < units.size(); i++)
-		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 185 : y_offset - 95));
+		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
+
+	for(int i = 0; i < 3; i++)
+	{
+
+	}
+
 
 }
 
@@ -153,6 +161,7 @@ void mainGui::onButtonClick(int id)
 	case MAINGUI_SELECTARMY:
 		if(has_army && select_army->getIsPressed())
 		{
+			army_display = true;
 			hidden = false;
 			positionGraphics();
 			
@@ -165,8 +174,12 @@ void mainGui::onButtonClick(int id)
 	case MAINGUI_SELECTCITY:
 		if(has_city && select_city->getIsPressed())
 		{
+			army_display = false;
 			hidden = false;
 			positionGraphics();
+
+			displayCity();
+
 			select_army->unLock();
 		}
 		break;
@@ -183,9 +196,6 @@ void mainGui::onButtonClick(int id)
 	default:
 		break;
 	}
-
-
-
 }
 
 bool mainGui::PressedRight(){  return false; }
@@ -206,6 +216,7 @@ void mainGui::draw(sf::RenderWindow* rw)
 	
 		for(int i = 0; i < 3; i++)
 			rw->draw(*army_mode[i]);
+
 	}
 }
 
@@ -236,3 +247,8 @@ void mainGui::displayArmy()
 	positionGraphics();
 }
 
+void mainGui::displayCity()
+{
+	cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
+	cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
+}

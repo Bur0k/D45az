@@ -10,6 +10,7 @@
 #include "UnitGroup.h"
 #include "City.h"
 #include "IDrawable.h"
+#include "Textblock.h"
 
 #define MAINGUI_SELECTARMY 0
 #define MAINGUI_SELECTCITY 1
@@ -36,6 +37,9 @@ private:
 	bool hidden;
 
 	void displayArmy();
+	void displayCity();
+	Textblock cityIncome;
+	Textblock cityLevel;
 	
 public:
 	float y_offset;
