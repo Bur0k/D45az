@@ -802,8 +802,8 @@ void IngameView::loadGamestate()
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
 			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)),isInCity(m_GameData.ownedUnits[i])));
 
-	
-
+	//clear RectangleVector
+	m_RectangleCityShapes.clear();
 	//fill RectangleVector
 	for (auto city: m_GameData.allCities)
 	{

@@ -435,9 +435,23 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}break;
 				case 0x0416:
 					{
-						for(unsigned int i = 0; i < data.size(); i++)
+						for(int i = 0; i < this->playersIngame.size(); i++)
 						{
+							for(int k = 0; k < this->playersIngame[i]->unitGroups.size(); k++)
+							{
+								if(this->playersIngame[i]->unitGroups[k]->pos->x == data[0])
+									if(this->playersIngame[i]->unitGroups[k]->pos->y == data[1])
+									{
+										switch(data[2])
+						{
+											case 0: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::DEFENSIVE;
+											case 1: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::OFFENSIVE;
+											case 2: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::RUNNING;
+										}
 
+											data.erase(data.begin(), data.begin() + 2);
+									}
+							}
 							}
 					}break;
 			case 0x1000://Chat empfangen
@@ -523,7 +537,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							else
                                         army2.units[k]->living --;
 						}
-					}
+						}
 					else 
 						{
                                 int Einheiten = army2.units[k]->living;
