@@ -224,6 +224,9 @@ private:
 	void pathDraw(RenderWindow* rw);
 
 	bool isInCity(UnitGroup*);
+
+	int getRemainingMovementPoints(UnitGroup*);
+
 };
 
 

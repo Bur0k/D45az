@@ -514,6 +514,15 @@
     <Media Include="Data\Sounds\commit.wav">
       <Filter>Data\sound</Filter>
     </Media>
+    <Media Include="Data\Sounds\lose.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\turn.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
+    <Media Include="Data\Sounds\win.wav">
+      <Filter>Data\sound</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Data\Fonts\arial.ttf">

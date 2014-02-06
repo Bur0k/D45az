@@ -22,9 +22,12 @@ static const int sound_noise = 0;
 static const int song_noise = 1; 
 static const int generel_noise = 2; 
 
-static const int CHAT_OPEN = 0;
-static const int CHAT_CLOSE = 1;
-static const int COMMIT_SOUND = 2;
+#define CHAT_OPEN 0
+#define CHAT_CLOSE 1
+#define COMMIT_SOUND 2
+#define TURN 3
+#define LOSE 4
+#define WIN 5
 
 
 static const int login = 0;

@@ -11,7 +11,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 	server->addToErrorCallback(this);
 
 	this->owner = owner;
-	this->gold = 500;
+	this->gold = 5;
 
 	POINT p;
 	p.x = startCity->position->x;
@@ -19,9 +19,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 
 	UnitTypes type = UnitTypes::LIGHT;
 
-	UnitGroupLogic* uGroup = new UnitGroupLogic(10, type, p, &this->unitGroups);
-
-
+	UnitGroupLogic* uGroup = new UnitGroupLogic(8, type, p, &this->unitGroups);
 }
 
 IngameLogic::~IngameLogic()
