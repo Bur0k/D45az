@@ -40,7 +40,7 @@ MusikSampler::MusikSampler(void)
 
 
 	// Lautstärke am Anfang 100%
-	m_BgVolume = 100.0;
+	m_BgVolume = 80.0;
 	m_SoVolume = 100.0;
 }
 
@@ -177,57 +177,14 @@ void MusikSampler::set_volume(int type, float volume)
 {
 	switch(type)
 	{
-		case sounds: m_SoVolume = volume; // für neue ändern
+		case sound_noise: m_SoVolume = volume; // für neue ändern
 			for (unsigned int i = 0; i < m_vSound.size() ; i++) // alle aktiven ändern
 			{
 				m_vSound[i]->setVolume(volume);
 			}	break;
-		case songs:  m_BgVolume = volume; 
+		case song_noise:  m_BgVolume = volume; 
 			m_Music.setVolume(volume); break;
-		case generel_noise: set_volume(sounds,volume); 
-							set_volume(songs,volume); break;
+		case generel_noise: set_volume(sound_noise,volume); 
+							set_volume(song_noise,volume); break;
 	}
 }
-
-/*
-void MusikSampler::stop()
-{
-    if (!loaded)
-    {
-        return;
-    }
-
-    samples.Stop();
-}
-
-int MusikSampler::get_duration()
-{
-    if (!loaded)
-    {
-        return -1;
-    }
-
-    return samples.GetDuration();
-}
-
-void MusikSampler::set_loop(bool loop)
-{
-    if (!loaded)
-    {
-        return;
-    }
-
-    samples.SetLoop(loop);
-}
-
-
-void MusikSampler::set_pitch(float pitch)
-{
-    if (!loaded)
-    {
-        return;
-    }
-
-    samples.SetPitch(pitch);
-}
-*/

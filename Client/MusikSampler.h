@@ -4,8 +4,8 @@
 #include <vector>
 #include <SFML/Audio.hpp>
 
-#define sounds 0  
-#define songs  1 
+#define sound_noise 0  
+#define song_noise  1 
 #define generel_noise 2 
 
 #define CHAT_OPEN 0
