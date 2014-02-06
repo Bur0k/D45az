@@ -41,6 +41,7 @@ private:
 	Textblock cityIncome;
 	Textblock cityLevel;
 	
+	void resetModeButtons();
 public:
 	float y_offset;
 

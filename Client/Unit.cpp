@@ -124,10 +124,10 @@ bool Unit::PressedLeft()
 	if(m_mouseOver)
 	{
 		m_clicked = !m_clicked;
-		if(m_clicked)	
+		/*if(m_clicked)	
 			m_textbg.setFillColor(MyColors.BlueTransparent);
 		else 
-			m_textbg.setFillColor(MyColors.WhiteTransparent);
+			m_textbg.setFillColor(MyColors.WhiteTransparent);*/
 		return true;
 	}
 	return false;
