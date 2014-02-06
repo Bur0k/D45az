@@ -13,12 +13,19 @@
 
 using namespace sf;
 
-#define ARMY_ANIMATIONSTEPS 10
-#define ARMY_SPRITE_WIDTH 62
-#define ARMY_SPRITE_HEIGHT 64
-#define ARMY_POWERBAR_THICKNESS 5
+//#define ARMY_ANIMATIONSTEPS 10
+//#define ARMY_SPRITE_WIDTH 62
+//#define ARMY_SPRITE_HEIGHT 64
+//#define ARMY_POWERBAR_THICKNESS 5
+//
+//#define ARMY_TILESIZE 64
 
-#define ARMY_TILESIZE 64
+static const int ARMY_ANIMATIONSTEPS = 10;
+static const int ARMY_SPRITE_WIDTH = 62;
+static const int ARMY_SPRITE_HEIGHT = 64;
+static const float ARMY_POWERBAR_THICKNESS = 5.0f;
+
+static float ARMY_TILESIZE = 64.0f;
 
 class Army
 	: public IDrawable, public IClickable, public IAnimatable, public IIngameObjects

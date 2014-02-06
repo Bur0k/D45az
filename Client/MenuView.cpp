@@ -44,8 +44,7 @@ MenuView::MenuView(Vector2u & screensize, bool extended)
 	m_DrawV.push_back(m_musictext);
 
 	m_musicslider = new Slider(true, Vector2f(MENU_WIDTH, 30), 1, Vector2f(0,0), 1);
-	m_volumeslider->setValue(m_pMS->get_SOV() / 100);
-	m_musicslider->setValue(1);
+	m_musicslider->setValue(m_pMS->get_SOV() / 100);
 	m_musicslider->Attach(this);
 	m_DrawV.push_back(m_musicslider);
 	m_ClickV.push_back(m_musicslider);
@@ -158,8 +157,16 @@ void MenuView::onSliderValueChange(int ID, double position)
 
 void MenuView::onSliderReleased(int ID, double position)
 {
-	if (ID == 0)
-		std::cout << "Lautstärke jetzt: " << position*100 << std::endl;
+switch(ID)
+	{
+	case 0:
+	 	cout << m_volumeslider->getValue() <<endl;
+		break;
+	case 1:
+		cout << m_musicslider->getValue() <<endl;
+		break;
+	}
+
 }
 
 

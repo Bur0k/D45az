@@ -27,6 +27,7 @@ public:
 	Color Silver;
 	Color Bronze;
 	Color player[4];
+	Color ButtonColor;
 	
 
 	MyColors() {
@@ -41,6 +42,7 @@ public:
 		Gold = Color(201,137,16);
 		Silver = Color(168,168,168);
 		Bronze = Color(150,90,56);
+		ButtonColor = Color(0xE0,0xE0,0xE0,0xFF);
 
 		Black = Color::Black;
 		White = Color::White;

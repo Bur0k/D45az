@@ -12,10 +12,14 @@
 #include "MusikSampler.h"
 
 using namespace sf;
+//
+//#define MENU_ANIMATIONTIME 30
+//#define MENU_WIDTH 200
+//#define MENU_BORDERSPACING 20
 
-#define MENU_ANIMATIONTIME 30
-#define MENU_WIDTH 200
-#define MENU_BORDERSPACING 20
+static const int MENU_ANIMATIONTIME = 30;
+static const float MENU_WIDTH = 200;
+static const int MENU_BORDERSPACING = 20;
 
 class MenuView : public IView, public IButtonfunction, public ISliderFunction
 {

@@ -13,11 +13,17 @@
 #include "StandardButton.h"
 #include "Textblock.h"
 
-#define Statusbarheight 50.0
-#define IconOffset 150.0
-#define LabelOffset 200.0
-#define IconX 170.0
-#define IconY 5.0
+//#define Statusbarheight 50.0
+//#define IconOffset 150.0
+//#define LabelOffset 200.0
+//#define IconX 170.0
+//#define IconY 5.0
+
+static const float Statusbarheight = 50.0;
+static const float IconOffset = 150.0;
+static const float LabelOffset = 200.0;
+static const float IconX = 170.0;
+static const float IconY = 5.0;
 
 
 using namespace std;
