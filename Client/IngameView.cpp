@@ -873,7 +873,7 @@ void IngameView::commitCityActions()
 {
 	// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
 
+
+
 	vector<char> erfg;
-
-
 }
