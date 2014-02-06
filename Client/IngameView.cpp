@@ -404,8 +404,11 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	if(m_phase == InagameViewPhases::WAITFORPLAYERS )
-		this;
+	if(m_phase == InagameViewPhases::WAITFORPLAYERS && m_GameData.serverReady)
+	{
+		m_GameData.serverReady = false;
+		nextPhase();
+	}
 }
 
 void IngameView::onResize(Vector2u & size)
@@ -440,7 +443,10 @@ void IngameView::nextPhase()
 	case InagameViewPhases::WAITFORPLAYERS:
 		//do things..
 		//wait till server sends move data
-		m_phase = InagameViewPhases::WATCHRESULTS;
+		
+		//m_phase = InagameViewPhases::WATCHRESULTS;
+		loadGamestate();
+		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
 	case InagameViewPhases::WATCHRESULTS:
