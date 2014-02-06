@@ -494,7 +494,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							else
 								army2.units[a]->living--;
 						}
-					}
+						}
 					else 
 					for(unsigned int k = 0; k < army1.units.size(); k++)
 						{
