@@ -243,8 +243,11 @@
     <Media Include="Data\Sounds\chat_close.wav" />
     <Media Include="Data\Sounds\chat_open.wav" />
     <Media Include="Data\Sounds\commit.wav" />
+    <Media Include="Data\Sounds\lose.wav" />
     <Media Include="Data\Sounds\sound1.wav" />
     <Media Include="Data\Sounds\sound2.wav" />
+    <Media Include="Data\Sounds\turn.wav" />
+    <Media Include="Data\Sounds\win.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
