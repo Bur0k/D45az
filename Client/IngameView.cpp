@@ -846,6 +846,11 @@ bool IngameView::isVisible(Vector2i pos)
 
 void IngameView::commitMessage()
 {
+	this->commitMoves();
+}
+
+void IngameView::commitMoves()
+{
 	vector<char> erfg;
 
 	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
@@ -864,3 +869,11 @@ void IngameView::commitMessage()
 	c->write(0x0412, erfg);
 }
 
+void IngameView::commitCityActions()
+{
+	// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
+
+	vector<char> erfg;
+
+
+}
