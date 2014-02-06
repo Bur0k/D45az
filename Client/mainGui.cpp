@@ -35,10 +35,7 @@ mainGui::mainGui():
 	city = NULL;
 	group = NULL;
 
-
 	army_display = true;
-
-	
 }
 
 
@@ -66,9 +63,7 @@ void mainGui::positionGraphics()
 		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
-	{
-
-	}
+		army_mode[i]->setPosition(Vector2f(600,y_origin + i * 40));
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
