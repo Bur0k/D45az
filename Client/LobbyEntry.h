@@ -5,7 +5,9 @@
 #include "Textblock.h"
 #include "graphic_globals.h"
 
-#define LOBBYENTRYBORDER 10
+//#define LOBBYENTRYBORDER 10
+
+static const float LOBBYENTRYBORDER = 10;
 
 class LobbyEntry : public Button
 {

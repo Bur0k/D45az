@@ -40,7 +40,7 @@ Button::Button(Vector2f pos, Vector2f size, sf::String S, int ID, bool lock, uns
 	
 	//std::cout << "textsize x " << textsize.width << " y " << textsize.height << std::endl;
 	
-	m_color = Color(0xE0,0xE0,0xE0,0xFF);
+	m_color = MyColors.ButtonColor;
 	setFillColor(m_color);
 	m_color_clicked = MyColors.Orange;
 	m_color_mouseOver = MyColors.Red;

@@ -12,8 +12,9 @@
 
 using namespace sf;
 
-#define SLIDERENDBLOCKWIDTH 10
+//#define SLIDERENDBLOCKWIDTH 10
 
+static const float SLIDERENDBLOCKWIDTH = 10;
 
 class ISliderFunction
 {

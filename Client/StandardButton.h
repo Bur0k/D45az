@@ -13,7 +13,9 @@ using namespace sf;
 
 
 //adjust it to your sprite file
-#define BUTTONTILESIZE 10
+//#define BUTTONTILESIZE 10
+
+static const int BUTTONTILESIZE = 10;
 
 //go-to-button if you don't need any special features
 class StandardButton : public Button
