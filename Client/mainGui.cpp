@@ -111,8 +111,9 @@ bool mainGui::MouseMoved(sf::Vector2i & mouse)
 
 	if(army_display && has_army)
 	{
-		for(int i = 0; i < 3; i++)
-			retvalue |= army_mode[i]->MouseMoved(mouse);
+		if(!hidden)
+			for(int i = 0; i < 3; i++)
+				retvalue |= army_mode[i]->MouseMoved(mouse);
 		for(Unit* u : units)
 			retvalue |= u->MouseMoved(mouse);
 	}
@@ -128,8 +129,9 @@ bool mainGui::PressedLeft()
 
 	if(army_display && has_army)
 	{
-		for(int i = 0; i < 3; i++)
-			retvalue |= army_mode[i]->PressedLeft();
+		if(!hidden)
+			for(int i = 0; i < 3; i++)
+				retvalue |= army_mode[i]->PressedLeft();
 		for(Unit* u : units)
 			retvalue |= u->PressedLeft();
 	}
@@ -167,6 +169,11 @@ void mainGui::onButtonClick(int id)
 			
 			select_city->unLock();
 		}
+		else if(!select_army->getIsPressed())
+		{
+			hidden = true;
+			positionGraphics();
+		}
 		break;
 
 	case MAINGUI_SELECTCITY:
@@ -179,6 +186,11 @@ void mainGui::onButtonClick(int id)
 			displayCity();
 
 			select_army->unLock();
+		}
+		else if(!select_city->getIsPressed())
+		{
+			hidden = true;
+			positionGraphics();
 		}
 		break;
 
@@ -227,11 +239,12 @@ void mainGui::draw(sf::RenderWindow* rw)
 	
 	if(army_display && has_army)
 	{
+		
 		for(Unit* u : units)
 			u->draw(rw);
-	
-		for(int i = 0; i < 3; i++)
-			army_mode[i]->draw(rw);
+		if(!hidden)
+			for(int i = 0; i < 3; i++)
+				army_mode[i]->draw(rw);
 	}
 }
 

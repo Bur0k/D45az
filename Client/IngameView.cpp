@@ -404,8 +404,8 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	//GIVE ME INFO DAMMIT!
-
+	if(m_phase == InagameViewPhases::WAITFORPLAYERS )
+		this;
 }
 
 void IngameView::onResize(Vector2u & size)
