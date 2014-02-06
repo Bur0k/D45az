@@ -146,7 +146,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 	switch(id)
 	{
-		case 0x0400:
+		case 0x0400: // Client fordert die Spielernamen aller Teilnehmer an
 			{
 				for(int i = 0; i < (signed) this->playersIngame.size(); i++)
 				{
@@ -159,7 +159,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				server->write(s, 0x0401, erfg);
 			}break;
-		case 0x0402:
+		case 0x0402: // Client fordert Daten aller Städte auf der Karte an
 			{
 				int length = this->neutralCities.size() + this->startCities.size();
 
@@ -184,7 +184,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				server->write(s, 0x0403, erfg);
 			}break;
-		case 0x0404:
+		case 0x0404: // Client fordert Daten der eigenen Städte an
 			{
 				int index;
 
@@ -317,7 +317,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}
 				server->write(s, 0x0411, erfg);
 			}break;
-			case 0x0412:
+			case 0x0412: // Auswerten der übertragenen Einheitenbewegungen nach dem Commit
 				{
 					vector<POINT*> vp;
 					POINT* p = new POINT();
@@ -351,10 +351,82 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					if(this->playerCommits == this->playersIngame.size())
 					{
 						this->computeTurns();
+
+						for(int i = 0; i < this->playersIngame.size(); i++)
+						{
+							for(int j = 0; j < this->playersIngame[i]->cities.size(); j++)
+							{
+								this->playersIngame[i]->gold += this->playersIngame[i]->cities[j]->generatedIncome;
+							}
+						}
+
 						this->playerCommits = 0;
 					}
 				}break;
+				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)
+				{
+						// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
 
+					POINT p;
+
+					for(int i = 0; i < (data.size()>>1); i++)
+					{
+						short playerID = data[0];
+						p.x = data[1];
+						p.y = data[2];
+						int armyCount = data[3];
+						short type = data[4];
+						UnitTypes atype;
+
+						switch(type)
+						{
+						case 0:
+							{
+								atype = UnitTypes::LIGHT;
+							}
+						case 1:
+							{
+								atype = UnitTypes::HEAVY;
+							}
+						case 2:
+							{
+								atype = UnitTypes::LONGRANGE;
+							}
+						case 3:
+							{
+								atype = UnitTypes::ARTILLERY;
+							}
+						}
+
+						bool isCityUpgraded = false;
+						if(data[5] == 1)
+							isCityUpgraded = true;
+
+						for(int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
+						{
+							if(this->playersIngame[playerID]->cities[i]->position == &p)
+							{
+								if(this->playersIngame[playerID]->cities[i]->upgradeCity())
+									this->playersIngame[playerID]->gold -= 500;
+							}
+						}
+
+						p.y += 2;
+
+						for(int i = 0; i < this->playersIngame.size(); i++)
+						{
+							for(int j = 0; this->playersIngame[i]->unitGroups.size(); j++)
+							{
+								if(this->playersIngame[i]->unitGroups[j]->pos == &p)
+									p.y += 2;
+							}
+						}
+
+						UnitGroupLogic newGroup = UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
+
+						data.erase(data.begin() + 6);
+					}
+				}break;
 			case 0x1000://Chat empfangen
 				{
 					for(auto it : playersIngame)
