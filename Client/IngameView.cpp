@@ -15,21 +15,13 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_scrollspeed = Vector2f(0,0);
 
 	m_phase = startphase;
-	//debug
+
 
 	m_turnOnPathDraw = false;
 	
 	
 	m_pMS = MusikSampler::getInstance(); // singleton!
-	
-	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
-	m_ClickV.push_back(u);
-	m_DrawV.push_back(u);
 
-	u1 = new Unit(Vector2f(570,500),UnitTypes::LIGHT, 17);
-	m_ClickV.push_back(u1);
-	m_DrawV.push_back(u1);
-	//debug end
 	
 	m_map.load("Data/Maps/Map1.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
