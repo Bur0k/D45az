@@ -446,6 +446,7 @@ void IngameView::nextPhase()
 		
 		//m_phase = InagameViewPhases::WATCHRESULTS;
 		loadGamestate();
+		m_commitB->setIsEnabled(true);
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
