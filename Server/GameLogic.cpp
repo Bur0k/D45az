@@ -367,7 +367,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						}
 
 
-						for(int i = 0; i < this->playersIngame.size(); i++)
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 							server->write(this->playersIngame[i]->owner.s, 0x0415, erfg);
 			
 						this->playerCommits = 0;
