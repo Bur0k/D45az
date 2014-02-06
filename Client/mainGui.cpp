@@ -20,11 +20,12 @@ mainGui::mainGui():
 	select_city = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("City"), MAINGUI_SELECTCITY,true);
 	select_city->setIsEnabled(false);
 	select_city->Attach(this);
-	army_mode[0] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("defensive"), MAINGUI_DEFENSIVE,false,false);
+
+	army_mode[0] = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("defensive"), MAINGUI_DEFENSIVE,false,false);
 	army_mode[0]->Attach(this);
-	army_mode[1] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("agressive"), MAINGUI_AGRESSIVE,false,false);
+	army_mode[1] = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("agressive"), MAINGUI_AGRESSIVE,false,false);
 	army_mode[1]->Attach(this);
-	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(120,30),std::string("fast"), MAINGUI_HURRY,false,false);
+	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("fast"), MAINGUI_HURRY,false,false);
 	army_mode[2]->Attach(this);
 
 	hidden = true;
@@ -50,6 +51,11 @@ mainGui::~mainGui()
 
 	for(int i = 0; i < 3; i++)
 		delete army_mode[i];
+
+	for(Unit* u : units)
+		delete u;
+
+	units.clear();
 }
 
 void mainGui::positionGraphics()
@@ -63,7 +69,7 @@ void mainGui::positionGraphics()
 		units[i]->setPosition(Vector2f(20 + 70 * (i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
-		army_mode[i]->setPosition(Vector2f(600,y_origin + i * 40));
+		army_mode[i]->setPosition(Vector2f(650, y_origin + 100 + i * 35));
 }
 
 void mainGui::updateMgui(City* city, UnitGroup* army)
@@ -91,8 +97,7 @@ void mainGui::updateMgui(City* city, UnitGroup* army)
 
 	if(!has_city && !has_army)
 		hidden = true;
-	else 
-		hidden = false;
+
 
 	if(hidden != oldhidden)
 		positionGraphics();
@@ -178,17 +183,35 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case MAINGUI_DEFENSIVE:
+		resetModeButtons();
+		army_mode[0]->m_color = MyColors.Chartreuse;
+		group->strategy = UnitStrategy::DEFENSIVE;
 		break;
 
 	case MAINGUI_AGRESSIVE:
+		resetModeButtons();
+		army_mode[1]->m_color = MyColors.Chartreuse;
+		group->strategy = UnitStrategy::OFFENSIVE;
 		break;
 
 	case MAINGUI_HURRY:
+		resetModeButtons();
+		army_mode[2]->m_color = MyColors.Chartreuse;
+		group->strategy = UnitStrategy::RUNNING;
 		break;
 
 	default:
 		break;
 	}
+
+	for(int i = 0; i < 3; i++)
+		army_mode[i]->animation_upadate();
+
+	if(!select_army->getIsPressed() && !select_city->getIsPressed())
+		hidden = true;
+	else 
+		hidden = false;
+
 }
 
 bool mainGui::PressedRight(){  return false; }
@@ -208,8 +231,7 @@ void mainGui::draw(sf::RenderWindow* rw)
 			u->draw(rw);
 	
 		for(int i = 0; i < 3; i++)
-			rw->draw(*army_mode[i]);
-
+			army_mode[i]->draw(rw);
 	}
 }
 
@@ -233,12 +255,43 @@ void mainGui::displayArmy()
 		delete u;
 	units.clear();
 
+
 	for(int i = 0; i < 16; i++)
 		if(group->units[i].count > 0)
 			units.push_back(new Unit(Vector2f(0,0),group->units[i].type,group->units[i].count));
 
+	void resetModeButtons();
+	switch (group->strategy)
+	{
+	case UnitStrategy::DEFENSIVE:
+		army_mode[0]->m_color = MyColors.Chartreuse;
+		break;
+
+	case UnitStrategy::OFFENSIVE:
+		army_mode[1]->m_color = MyColors.Chartreuse;
+		break;
+
+	case UnitStrategy::RUNNING:
+		army_mode[2]->m_color = MyColors.Chartreuse;
+		break;	
+	
+	default:
+		break;
+	}
+	
 	positionGraphics();
 }
+
+void mainGui::resetModeButtons()
+{
+	for(int i = 0; i < 3; i++)
+	{
+		army_mode[i]->m_color = MyColors.ButtonColor;
+		army_mode[i]->animation_upadate();
+	}
+
+}
+
 
 void mainGui::displayCity()
 {
