@@ -11,6 +11,9 @@
 #define CHAT_OPEN 0
 #define CHAT_CLOSE 1
 #define COMMIT_SOUND 2
+#define TURN 3
+#define LOSE 4
+#define WIN 5
 
 
 #define login 0
