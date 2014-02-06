@@ -34,6 +34,9 @@ private:
 	Textblock* m_volumetext;
 	Slider* m_volumeslider;
 
+	Textblock* m_musictext;
+	Slider* m_musicslider;
+
 	MusikSampler* m_pMS;
 
 	DrawVect m_DrawV;

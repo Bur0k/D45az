@@ -30,7 +30,7 @@ private:
 	Map* map;
 
 public:
-	GameLogic::GameLogic(vector<PlayerData*> players, Map* map);
+	GameLogic::GameLogic(vector<PlayerData> players, Map* map);
 	GameLogic::~GameLogic();
 
 	void computeTurns();

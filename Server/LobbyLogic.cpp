@@ -84,7 +84,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				
 					for (unsigned int i = 0; i < it->second->getPlayers().size(); i++)
 					{
-						string name = it->second->getPlayers().at(i)->Name;
+						string name = it->second->getPlayers().at(i).Name;
 						len = name.length();
 						tmp = code(len);
 						erfg.push_back(tmp[0]);
@@ -114,7 +114,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				for (unsigned int i = 0; i < server->connectedPlayers.size(); i++)
 					if (server->connectedPlayers[i].s == s && gamesCreated[mapid]->isAlreadyConnected(s) == false)
 					{
-							gamesCreated[mapid]->addPlayer(&server->connectedPlayers[i]);
+							gamesCreated[mapid]->addPlayer(server->connectedPlayers[i]);
 							break;
 					}			
 

@@ -248,3 +248,11 @@ void Slider::draw(RenderWindow* rw)
 	for(int i = 0; i < 4; i++)
 		rw->draw(m_pBar[i].s);
 }
+
+void Slider::setValue(double val)
+{
+	m_pBar[3].s.setPosition(
+		(m_horizontal)? m_pBar[0].s.getPosition().x + SLIDERENDBLOCKWIDTH + static_cast<float>(m_pBar[3].s.getSize().x * val) : m_pBar[3].s.getPosition().x,
+		(m_horizontal)? m_pBar[3].s.getPosition().y : m_pBar[0].s.getPosition().y + SLIDERENDBLOCKWIDTH + static_cast<float>(m_pBar[3].s.getSize().y * val)
+		);
+}

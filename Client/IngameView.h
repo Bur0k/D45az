@@ -183,7 +183,12 @@ public:
 	void onSliderReleased(int ID, double position);
 	void onTextBoxSend(int ID, std::string s);
 
+	// Turn committed!! //
+
 	void commitMessage();
+	void commitArmyStrategy();
+	void commitMoves();
+	void commitCityActions();
 
 	/////IMPLEMENTING IView end/////
 

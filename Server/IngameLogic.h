@@ -17,13 +17,13 @@ public:
 	Server* server;
 
 	short player_ID;
-	PlayerData* owner;
+	PlayerData owner;
 	vector<CityLogic*> cities;
 	vector<UnitGroupLogic*> unitGroups;
 	int gold;
 
 public:
-	IngameLogic::IngameLogic(int id, PlayerData* owner, CityLogic* startCity);
+	IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity);
 	IngameLogic::~IngameLogic();
 
 	//Funktionen

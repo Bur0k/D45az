@@ -1,6 +1,6 @@
 #include "GameLogic.h"
 
-GameLogic::GameLogic(vector<PlayerData*> players, Map* map)
+GameLogic::GameLogic(vector<PlayerData> players, Map* map)
 {
 	this->server = Server::get();
 
@@ -146,11 +146,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 	switch(id)
 	{
-		case 0x0400:
+		case 0x0400: // Client fordert die Spielernamen aller Teilnehmer an
 			{
 				for(int i = 0; i < (signed) this->playersIngame.size(); i++)
 				{
-					string name = this->playersIngame[i]->owner->Name;
+					string name = this->playersIngame[i]->owner.Name;
 					vector<char> tmp = code(name);
 
 					erfg.insert(erfg.end(), tmp.begin(), tmp.end());
@@ -159,7 +159,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				server->write(s, 0x0401, erfg);
 			}break;
-		case 0x0402:
+		case 0x0402: // Client fordert Daten aller Städte auf der Karte an
 			{
 				int length = this->neutralCities.size() + this->startCities.size();
 
@@ -184,13 +184,13 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 				server->write(s, 0x0403, erfg);
 			}break;
-		case 0x0404:
+		case 0x0404: // Client fordert Daten der eigenen Städte an
 			{
 				int index;
 
 				for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
-					if(this->playersIngame[i]->owner->s == s)
+					if(this->playersIngame[i]->owner.s == s)
 						index = i;
 				}
 
@@ -213,7 +213,6 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		case 0x0408:
 			{	
 				// sende alle einheitengruppen
-				//umschreiben TODO
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
 					for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
@@ -264,11 +263,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					
 				server->write(s, 0x0409, erfg);
 			}break;
-			case 0x0410:	//sende eigene Einheiten // umschreiben TODO
+			case 0x0410:	//sende eigene Einheiten 
 			{
 				for (unsigned int i = 0; i < this->playersIngame.size(); i++)
 				{
-					if (this->playersIngame[i]->owner->s == s)
+					if (this->playersIngame[i]->owner.s == s)
 					{
 						for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 						{
@@ -317,7 +316,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}
 				server->write(s, 0x0411, erfg);
 			}break;
-			case 0x0412:
+			case 0x0412: // Auswerten der übertragenen Einheitenbewegungen nach dem Commit
 				{
 					vector<POINT*> vp;
 					POINT* p = new POINT();
@@ -351,21 +350,93 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					if(this->playerCommits == this->playersIngame.size())
 					{
 						this->computeTurns();
+
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+						{
+							for(unsigned  j = 0; j < this->playersIngame[i]->cities.size(); j++)
+							{
+								this->playersIngame[i]->gold += this->playersIngame[i]->cities[j]->generatedIncome;
+							}
+						}
+
 						this->playerCommits = 0;
 					}
 				}break;
+				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)
+				{
+						// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
 
+					POINT p;
+
+					for(unsigned int i = 0; i < (data.size()>>1); i++)
+					{
+						short playerID = data[0];
+						p.x = data[1];
+						p.y = data[2];
+						int armyCount = data[3];
+						short type = data[4];
+						UnitTypes atype;
+
+						switch(type)
+						{
+						case 0:
+							{
+								atype = UnitTypes::LIGHT;
+							}
+						case 1:
+							{
+								atype = UnitTypes::HEAVY;
+							}
+						case 2:
+							{
+								atype = UnitTypes::LONGRANGE;
+							}
+						case 3:
+							{
+								atype = UnitTypes::ARTILLERY;
+							}
+						}
+
+						bool isCityUpgraded = false;
+						if(data[5] == 1)
+							isCityUpgraded = true;
+
+						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
+						{
+							if(this->playersIngame[playerID]->cities[i]->position == &p)
+							{
+								if(this->playersIngame[playerID]->cities[i]->upgradeCity())
+									this->playersIngame[playerID]->gold -= 500;
+							}
+						}
+
+						p.y += 2;
+
+						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+						{
+							for(int j = 0; this->playersIngame[i]->unitGroups.size(); j++)
+							{
+								if(this->playersIngame[i]->unitGroups[j]->pos == &p)
+									p.y += 2;
+							}
+						}
+
+						UnitGroupLogic newGroup = UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
+
+						data.erase(data.begin() + 6);
+					}
+				}break;
 			case 0x1000://Chat empfangen
 				{
 					for(auto it : playersIngame)
 					{
-						if(s == it->owner->s)//Ist der Spieler in DIESER Lobby?
+						if(s == it->owner.s)//Ist der Spieler in DIESER Lobby?
 						{
-							string chatToSend = it->owner->Name + ": "+decodeString(data,0,data.size());
+							string chatToSend = it->owner.Name + ": "+decodeString(data,0,data.size());
 							std::vector<char> toSend = code(chatToSend);
 
 							for(auto it2 : playersIngame)
-								server->write(it2->owner->s,0x1001,toSend);
+								server->write(it2->owner.s,0x1001,toSend);
 							break;
 						}
 					}
@@ -382,35 +453,35 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
 {
 	while(army1.units.size() != 0 && army2.units.size() != 0) // bis eine Armee keine Kompanien mehr hat
-			{
+	{
                 if(army1.units.size() < army2.units.size())
-                {
+		{
                     int Kompanies = army1.units.size();
                     for (int k = 0; k < Kompanies; k++) // alle Kompanien kämpfen 
-                    { 
+			{
                         while(army1.units[k]->living != 0 && army2.units[k]->living != 0) // bis eine Kompanie keine Einheiten mehr hat
-                        {
+				{
                             if(army1.units[k]->living < army2.units[k]->living)
-                            {
+						{
                                 int Einheiten = army1.units[k]->living;
                                 for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
                                 {
-							        double atk1 = 0.0;
-							        double atk2 = 0.0;
+							double atk1 = 0.0;
+							double atk2 = 0.0;
 
                                     switch(army1.strategy) // ArmeeStrategie
-                                    {
-									case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							{
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
 									case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING:	atk1 += run; break;
-                                    }
+							}
                                     switch(army2.strategy)
-                                    {
-                                        case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							{
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
                                         case UnitStrategy::DEFENSIVE: atk2 += def; break;
                                         case UnitStrategy::RUNNING: atk2 += run; break;
-                                    }
-                                    
+							}
+							
 									switch(army1.units[k]->type) // KompanieTyp
                                     {
 									case UnitTypes::LIGHT: atk1 += light; break;
@@ -425,7 +496,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
                                     case UnitTypes::LONGRANGE: atk2 += longrange; break;
                                     case UnitTypes::ARTILLERY: atk2 += artillery; break;
                                     }
-                                    
+
 
                                     double bonus = 0.0;
                                     bonus = (rand() % 100) / 100.0;  // 1. Bonus zwischen 0,00 und 1,00
@@ -435,31 +506,31 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                                     if(atk1 < atk2)
                                         army1.units[k]->living --;
-                                    else 
+							else
                                         army2.units[k]->living --;
-                                }
-                            }
-                            else
-                            {
+						}
+					}
+					else 
+						{
                                 int Einheiten = army2.units[k]->living;
                                 for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
                                 {
-							        double atk1 = 0.0;
-							        double atk2 = 0.0;
+							double atk1 = 0.0;
+							double atk2 = 0.0;
 
                                     switch(army1.strategy) // ArmeeStrategie
-                                    {
-									case UnitStrategy::OFFENSIVE: atk1 += off; break;
+							{
+							case UnitStrategy::OFFENSIVE: atk1 += off; break;
 									case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING: atk1 += run; break;
-                                    }
+							}
                                     switch(army2.strategy)
-                                    {
-                                    case UnitStrategy::OFFENSIVE: atk2 += off; break;
+							{
+							case UnitStrategy::OFFENSIVE: atk2 += off; break;
                                     case UnitStrategy::DEFENSIVE: atk2 += def; break;
                                     case UnitStrategy::RUNNING: atk2 += run; break;
-                                    }
-                                    
+							}
+							
                                     switch(army1.units[k]->type) // KompanieTyp
                                     {
 									case UnitTypes::LIGHT: atk1 += light; break;
@@ -474,7 +545,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 									case UnitTypes::LONGRANGE: atk2 += longrange; break;
 									case UnitTypes::ARTILLERY: atk2 += artillery; break;
                                     }
-                                    
+
                                     double bonus = 0.0;
                                     bonus = (rand() % 100) / 100.0;  // 1. Bonus zwischen 0,00 und 1,00
                                     atk1 += bonus;
@@ -483,12 +554,12 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                                     if(atk1 < atk2)
                                         army1.units[k]->living --;
-                                    else 
+							else
                                         army2.units[k]->living --;
-                                }
-                            }
+						}
+				}
                         }
-                     
+				
                     if(army1.units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
 						army1.units.erase(army1.units.begin()+k);
                     else if (army2.units[k]->living == 0)
@@ -496,38 +567,38 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                     if (army1.units.size() < army2.units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
                         Kompanies = army1.units.size();
-                    else
+				else
                         Kompanies = army2.units.size();
-                    }
-                }
-                else
-                {
+			}
+		}
+		else
+		{
                     int Kompanies = army2.units.size();
                     for(int k = 0; k < Kompanies; k++) // alle Kompanien kämpfen 
-                    { 
+			{
                         while(army1.units[k]->living != 0 && army2.units[k]->living != 0) // bis eine Kompanie keine Einheiten mehr hat
-                        {
+				{
                             if(army1.units[k]->living < army2.units[k]->living)
-                            {
+					{
                                 int Einheiten = army1.units[k]->living;
                                 for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
-                                {
-							        double atk1 = 0.0;
-							        double atk2 = 0.0;
+						{
+							double atk1 = 0.0;
+							double atk2 = 0.0;
 
                                     switch(army1.strategy) // ArmeeStrategie
-                                    {
+							{
 									case UnitStrategy::OFFENSIVE: atk1 += off; break;
-									case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING: atk1 += run; break;
-                                    }
+							}
                                     switch(army2.strategy)
-                                    {
+							{
 									case UnitStrategy::OFFENSIVE: atk2 += off; break;
-									case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
 									case UnitStrategy::RUNNING: atk2 += run; break;
-                                    }
-                                    
+							}
+
                                     switch(army1.units[k]->type) // KompanieTyp
                                     {
 									case UnitTypes::LIGHT: atk1 += light; break;
@@ -542,7 +613,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 									case UnitTypes::LONGRANGE: atk2 += longrange; break;
 									case UnitTypes::ARTILLERY: atk2 += artillery; break;
                                     }
-                                    
+
                                     double bonus = 0.0;
                                     bonus = (rand() % 100) / 100.0;  // 1. Bonus zwischen 0,00 und 1,00
                                     atk1 += bonus;
@@ -551,31 +622,31 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                                     if(atk1 < atk2)
                                         army1.units[k]->living --;
-                                    else 
+							else
                                         army2.units[k]->living --;
-                                }
-                            }
-                            else
-                            {
+						}
+					}
+					else 
+					{
                                 int Einheiten = army2.units[k]->living;
                                 for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
-                                {
-							        double atk1 = 0.0;
-							        double atk2 = 0.0;
+						{
+							double atk1 = 0.0;
+							double atk2 = 0.0;
 
                                     switch(army1.strategy) // ArmeeStrategie
-                                    {
+							{
 									case UnitStrategy::OFFENSIVE: atk1 += off; break;
-									case UnitStrategy::DEFENSIVE: atk1 += def; break;
+							case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING: atk1 += run; break;
-                                    }
+							}
                                     switch(army2.strategy)
-                                    {
+							{
 									case UnitStrategy::OFFENSIVE: atk2 += off; break;
-									case UnitStrategy::DEFENSIVE: atk2 += def; break;
+							case UnitStrategy::DEFENSIVE: atk2 += def; break;
 									case UnitStrategy::RUNNING: atk2 += run; break;
-                                    }
-                                    
+							}
+							
                                     switch(army1.units[k]->type) // KompanieTyp
                                     {
 									case UnitTypes::LIGHT: atk1 += light; break;
@@ -590,7 +661,7 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 									case UnitTypes::LONGRANGE: atk2 += longrange; break;
 									case UnitTypes::ARTILLERY: atk2 += artillery; break;
                                     }
-                                    
+
                                     double bonus = 0.0;
                                     bonus = (rand() % 100) / 100.0;  // 1. Bonus zwischen 0,00 und 1,00
                                     atk1 += bonus;
@@ -599,12 +670,12 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                                     if(atk1 < atk2)
                                         army1.units[k]->living --; // STerben der Einheiten
-                                    else 
+							else
                                         army2.units[k]->living --;
-                                }
-                            }
-                        }
-
+						}
+					}
+				}
+							
                         if (army2.units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
                             army2.units.erase(army2.units.begin()+k);
                         else if (army1.units[k]->living == 0)
@@ -612,11 +683,11 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                         if (army1.units.size() < army2.units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
                             Kompanies = army1.units.size();
-                        else
+				else
                             Kompanies = army2.units.size();
-                    }
-                }
-            }
+			}		
+		}
+	}
 	
 	if(army1.units.size() == 0)
 		return army2;

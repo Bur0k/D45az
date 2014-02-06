@@ -13,7 +13,7 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	this->players[2] = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
 	this->players[3] = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
 	
-	this->mapName = new Text("mapname", MyFonts::getFont(GameFonts::ARIAL), 35);
+	this->mapName = new Text("", MyFonts::getFont(GameFonts::ARIAL), 35);
 	//m_DrawV.push_back(mapName);
 	for (int i = 0; i < 4; i++)
 		this->players[i]->setColor(MyColors.White);
@@ -27,8 +27,8 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 	this->kickPlayer[2] = new StandardButton(sf::Vector2f(70, 250), sf::Vector2f(50, 25), "kick", KICKP3, false, false); 
 
 	this->kickPlayer[0]->setIsEnabled(false);
-	this->kickPlayer[0]->setIsEnabled(false);
-	this->kickPlayer[0]->setIsEnabled(false);
+	this->kickPlayer[1]->setIsEnabled(false);
+	this->kickPlayer[2]->setIsEnabled(false);
 
 
 	this->leave = new StandardButton(sf::Vector2f(10, 280), sf::Vector2f(100, 50), "leave", LEAVE, false);
@@ -36,12 +36,12 @@ GameLobbyView::GameLobbyView(Vector2u & screensize)
 
 	this->startgame->setIsEnabled(false);
 
-	for (int i = 0; i < 3; i++)
+	/*for (int i = 0; i < 3; i++)
 	{
 		m_DrawV.push_back(kickPlayer[i]);
 		m_AnimateV.push_back(kickPlayer[i]);
 		m_ClickV.push_back(kickPlayer[i]);
-	}
+	}*/
 
 
 	this->kickPlayer[0]->Attach(this);

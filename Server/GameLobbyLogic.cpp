@@ -7,7 +7,7 @@ GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName
 	//this->id = id;
 	this->gameMaster = master;
 	this->playerlimit = 4;
-	this->players.push_back(&this->gameMaster);
+	this->players.push_back(this->gameMaster);
 	this->gameLobbyName = GameLobbyName;
 
 	Map* map = new Map();
@@ -68,7 +68,7 @@ PlayerData GameLobbyLogic::getGamemaster()
 	return this->gameMaster;
 }
 
-vector<PlayerData*>& GameLobbyLogic::getPlayers()
+vector<PlayerData>& GameLobbyLogic::getPlayers()
 {
 	return this->players;
 }
@@ -87,13 +87,13 @@ Map* GameLobbyLogic::getMap()
 
 /* Funktionen */
 
-void GameLobbyLogic::addPlayer(PlayerData* player)
+void GameLobbyLogic::addPlayer(PlayerData player)
 {
 	if(this->players.size() < static_cast<unsigned int>(this->playerlimit))
 	{
 		this->players.push_back(player);
 		for(auto it : players)
-			this->sendPlayerNames(it->s);
+			this->sendPlayerNames(it.s);
 	}
 }
 
@@ -101,7 +101,7 @@ bool GameLobbyLogic::isAlreadyConnected(SOCKET s)
 {
 	for(unsigned int i = 0; i < this->players.size(); i++)
 	{
-		if(this->players[i]->s == s)
+		if(this->players[i].s == s)
 			return true;
 	}
 
@@ -114,7 +114,7 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 
 	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
-		string name = this->players[i]->Name;
+		string name = this->players[i].Name;
 		vector<char> tmp = code(name);
 
 		erfg.insert(erfg.end(), tmp.begin(), tmp.end());
@@ -157,7 +157,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
-		if(s == this->players[i]->s)
+		if(s == this->players[i].s)
 			socketAvailable = true;
 	}
 
@@ -168,7 +168,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 		case 0x0300:
 			{
 				for(unsigned int i = 0; i < this->players.size(); i++)
-					if(this->players[i]->s == s)
+					if(this->players[i].s == s)
 						this->players.erase(this->players.begin() + i);
 				
 				std::vector<char> erfg;
@@ -187,7 +187,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 					
 					for(auto it : players)
-						this->server->write(it->s, 0x0304, erfg);
+						this->server->write(it.s, 0x0304, erfg);
 					
 				}
 			}break;
@@ -227,7 +227,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 				for (unsigned int i = 0; i < this->players.size(); i++)
 				{
-					if (this->players[i]->Name == name)
+					if (this->players[i].Name == name)
 						this->players.erase(players.begin() + i);
 				}
 
@@ -266,12 +266,12 @@ void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMes
 			{
 				for(int i = 0; i < (signed) this->players.size(); i++)
 				{
-					if(s == this->players[i]->s)
+					if(s == this->players[i].s)
 					{
-						if(this->players[i]->s == this->gameMaster.s)
+						if(this->players[i].s == this->gameMaster.s)
 							if(this->players.size() != 1)
 							{
-								this->setGamemaster(*this->players[i + 1]);
+								this->setGamemaster(this->players[i + 1]);
 							}
 				
 						this->players.erase(this->players.begin() + i);	
@@ -282,12 +282,12 @@ void GameLobbyLogic::processNetworkError(SOCKET s,int errCode,std::string errMes
 			{
 				for(int i = 0; i < (signed) this->players.size(); i++)
 				{
-					if(s == this->players[i]->s)
+					if(s == this->players[i].s)
 					{
-						if(this->players[i]->s == this->gameMaster.s)
+						if(this->players[i].s == this->gameMaster.s)
 							if(this->players.size() != 1)
 							{
-								this->setGamemaster(*this->players[i + 1]);
+								this->setGamemaster(this->players[i + 1]);
 							}
 				
 						this->players.erase(this->players.begin() + i);	

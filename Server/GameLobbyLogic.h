@@ -15,7 +15,7 @@ class GameLobbyLogic : public NetworkParticipant
 private:
 	Server* server;
 	//short id;
-	vector<PlayerData*> players;
+	vector<PlayerData> players;
 	short playerlimit;
 	PlayerData gameMaster;
 	string gameLobbyName;
@@ -35,13 +35,13 @@ public:
 	short getPlayerlimit();
 	void setGamemaster(PlayerData player);
 	PlayerData getGamemaster();
-	vector<PlayerData*>& getPlayers(); 
+	vector<PlayerData>& getPlayers(); 
 	void setMap(Map* map);
 	Map* getMap();
 
 	/*Funktionen*/
 
-	void addPlayer(PlayerData* player);
+	void addPlayer(PlayerData player);
 	bool isAlreadyConnected(SOCKET s);
 	void sendPlayerNames(SOCKET s);
 	void sendMaxPlayers(SOCKET s);

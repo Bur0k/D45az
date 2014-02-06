@@ -15,21 +15,13 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_scrollspeed = Vector2f(0,0);
 
 	m_phase = startphase;
-	//debug
+
 
 	m_turnOnPathDraw = false;
 	
 	
 	m_pMS = MusikSampler::getInstance(); // singleton!
-	
-	u = new Unit(Vector2f(500,500),UnitTypes::HEAVY, 120);
-	m_ClickV.push_back(u);
-	m_DrawV.push_back(u);
 
-	u1 = new Unit(Vector2f(570,500),UnitTypes::LIGHT, 17);
-	m_ClickV.push_back(u1);
-	m_DrawV.push_back(u1);
-	//debug end
 	
 	m_map.load("Data/Maps/Map1.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
@@ -610,7 +602,7 @@ void IngameView::drawPath()
 				currentTurn.back().valid = false;
 			}
 		}
-		else
+		else if(m_is_turn_valid)
 		{
 			sf::Vector2i lastTurn = currentTurn.back().pos;
 			if(m_pointAt != lastTurn)
@@ -812,7 +804,11 @@ void IngameView::loadGamestate()
 	for (auto city: m_GameData.allCities)
 	{
 		RectangleShape r;
-		Color c = MyColors.player[city->player_ID];
+		Color c;
+		if (city->player_ID >= 0 && city->player_ID <= 5 && city->player_ID != 4)
+			c = MyColors.player[city->player_ID];
+		else
+			c = MyColors.Black;
 		c.a = 100;
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);
@@ -846,6 +842,37 @@ bool IngameView::isVisible(Vector2i pos)
 
 void IngameView::commitMessage()
 {
+	this->commitArmyStrategy();
+	this->commitMoves();
+	this->commitCityActions();
+}
+
+void IngameView::commitArmyStrategy()
+{
+	vector<char> erfg;
+	UnitStrategy s = UnitStrategy::OFFENSIVE;
+
+	for(int i = 0; i < this->m_GameData.allUnits.size(); i++)
+	{
+		erfg.push_back(this->m_GameData.allUnits[i]->pos.x);
+		erfg.push_back(this->m_GameData.allUnits[i]->pos.y);
+
+		switch(s)
+		{
+			case UnitStrategy::DEFENSIVE:
+				erfg.push_back(0);
+			case UnitStrategy::OFFENSIVE:
+				erfg.push_back(1);
+			case UnitStrategy::RUNNING:
+				erfg.push_back(2);
+		}
+	}
+
+	c->write(0x0416, erfg);
+}
+
+void IngameView::commitMoves()
+{
 	vector<char> erfg;
 
 	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
@@ -864,3 +891,11 @@ void IngameView::commitMessage()
 	c->write(0x0412, erfg);
 }
 
+void IngameView::commitCityActions()
+{
+	// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
+
+
+
+	vector<char> erfg;
+}
