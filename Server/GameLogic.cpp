@@ -215,6 +215,15 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		
 
 				server->write(s, 0x0405, erfg);
+
+				// Gold übertragen
+
+				erfg.clear();
+
+				erfg = this->divideForMessage(this->playersIngame[index]->gold);
+
+				server->write(s, 0x0413, erfg);
+				server->write(s, 0x0600, erfg);
 			}break;
 		case 0x0408:
 			{	
@@ -460,9 +469,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					}break;
 				case 0x0418:
 					{
-						erfg = this->divideForMessage(this->playersIngame[data[0]]->gold);
 
-						server->write(s, 0x0413, erfg);
 					}break;
 			case 0x1000://Chat empfangen
 				{

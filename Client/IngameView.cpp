@@ -4,6 +4,7 @@
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
 	c = Client::get();
+	c->addToNewMessageCallback(this);
 
 	m_nextView = Views::NOCHANGE;
 
@@ -863,7 +864,6 @@ void IngameView::commitMessage()
 	this->commitMoves();
 	this->commitCityActions();
 	this->m_GameData.updateGameData();
-	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 }
 
 void IngameView::commitArmyStrategy()
@@ -907,10 +907,29 @@ void IngameView::commitMoves()
 		erfg.push_back('/');
 	}
 
+	this->army_moves.clear();
+
 	c->write(0x0412, erfg);
 }
 
 void IngameView::commitCityActions()
 {
 	c->write(0x0414,mainGuiOBJECT.getCityActionData());
+}
+
+void IngameView::processNewMessage(short id,vector<char> data)
+{
+	switch(id)
+	{
+	case 0x0600:
+		{
+			
+		//	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+		}break;
+	}
+}
+
+void IngameView::processNetworkError(int id, std::string msg)
+{
+
 }
