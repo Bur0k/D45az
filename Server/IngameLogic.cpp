@@ -8,7 +8,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 	this->player_ID = id;
 
 	server->addToNewMessageCallback(this);
-	server->addToErrorCallback(this);
+	server->addToErrorCallback(this); // as
 
 	this->owner = owner;
 	this->gold = 500;
