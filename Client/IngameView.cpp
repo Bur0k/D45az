@@ -799,7 +799,7 @@ void IngameView::updateFogOfWar()
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
 			for(auto it3:m_GameData.ownedCities)
 			{
-				int id = it2->layer[it3->position.y][it3->position.x];
+				int id = it2->layer[it3->position.y<<1][it3->position.x<<1];
 				for(unsigned int i=0;i<it2->layer.size();i++)
 					for(unsigned int j=0;j<it2->layer[0].size();j++)
 						if(id == it2->layer[i][j])
