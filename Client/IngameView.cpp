@@ -817,6 +817,11 @@ void IngameView::loadGamestate()
 		delete army;
 	for(Army* army : m_enemy_armys)
 		delete army;
+
+	for(std::vector<Vector2i> v : army_moves)
+		v.clear();
+	army_moves.clear();
+
 	m_owned_armys.clear();
 	m_enemy_armys.clear();
 	
