@@ -435,6 +435,7 @@ void IngameView::nextPhase()
 	switch (m_phase)
 	{
 	case InagameViewPhases::YOURTURN:
+		// Button disablen
 		m_commitB->setIsEnabled(false);
 
 		commitMessage();
@@ -868,28 +869,29 @@ void IngameView::commitMessage()
 	this->commitArmyStrategy();
 	this->commitMoves();
 	this->commitCityActions();
-	this->m_GameData.updateGameData();
-	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+	this->m_GameData.updateGameData(); // Warum!?  Hier ist doch noch gar nichts brechnet, 
+							//sondern erst, wenn der Server alle (Spieler-)Infos hat
+	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold); // hat noch keine Info, weil nix brechnet (Zeitlich)
 }
 
 void IngameView::commitArmyStrategy()
 {
 	vector<char> erfg;
-	UnitStrategy s = UnitStrategy::OFFENSIVE;
+	UnitStrategy s = UnitStrategy::OFFENSIVE; // noch nicht dirrerenziert
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
-		switch(s)
+		switch(s) // STefan... Switches brauchen immer einen break -.-
 		{
 			case UnitStrategy::DEFENSIVE:
-				erfg.push_back(0);
+				erfg.push_back(0); break;
 			case UnitStrategy::OFFENSIVE:
-				erfg.push_back(1);
+				erfg.push_back(1); break;
 			case UnitStrategy::RUNNING:
-				erfg.push_back(2);
+				erfg.push_back(2); break;
 		}
 	}
 
