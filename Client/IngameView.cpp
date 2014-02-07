@@ -863,8 +863,9 @@ void IngameView::loadGamestate()
 
 bool IngameView::isInCity(UnitGroup* u)
 {
+	Vector2i pos = Vector2i(u->pos.x, u->pos.y);
 	for(City* c : m_GameData.allCities)
-		if(Vector2i(u->pos.x, u->pos.y) == c->position)
+		if(pos == c->position)
 			return true;
 	return false;
 }
@@ -959,13 +960,11 @@ void IngameView::processNetworkError(int id, std::string msg)
 
 void IngameView::deleteMoves(UnitGroup* ug)
 {
-	Vector2i pos = Vector2i(ug->pos.x, ug->pos.x);
+	Vector2i pos = Vector2i(ug->pos.x, ug->pos.y);
 	for(unsigned int i = 0; i < army_moves.size(); i++)
-		if(pos == army_moves[i][0])
+		if(pos == army_moves[i][0]) 
 		{
 			army_moves.erase(army_moves.begin() + i);
 			break;
 		}
-
-	
 }

@@ -95,9 +95,9 @@ void mainGui::positionGraphics()
 		units[i]->setPosition(Vector2f(20 + 70 * (float)(i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
-		army_mode[i]->setPosition(Vector2f(600,y_origin + 120 + i * 40));
+		army_mode[i]->setPosition(Vector2f(600,y_origin + 90 + i * 40));
 	
-	deleteMove->setPosition(Vector2f(600, y_offset - 30));
+	deleteMove->setPosition(Vector2f(600, y_origin + 90 + 120));
 
 	if(currentCityActionsIndex < updateInfo.size())
 		cityIncome.setText("Income: "+to_string(updateInfo[currentCityActionsIndex].remainingGold),sf::Vector2f(1000,1000));
@@ -235,7 +235,7 @@ void mainGui::onButtonClick(int id)
 			
 			select_city->unLock();
 		}
-		else if(!select_army->getIsPressed())
+		else if(!select_city->getIsPressed() && !select_army->getIsPressed())
 		{
 			hidden = true;
 			positionGraphics();
@@ -253,7 +253,7 @@ void mainGui::onButtonClick(int id)
 
 			select_army->unLock();
 		}
-		else if(!select_city->getIsPressed())
+		else if(!select_city->getIsPressed() && !select_army->getIsPressed())
 		{
 			hidden = true;
 			positionGraphics();
