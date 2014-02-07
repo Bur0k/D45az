@@ -52,6 +52,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_AnimateV.push_back(m_SBar);
 	
 	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+	this->turnCount = 0;
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -943,6 +944,8 @@ void IngameView::processNewMessage(short id,vector<char> data)
 	case 0x0602:	// Alle Daten Up to Date -> Freigabe Statusbar update
 		{
 			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+			this->turnCount++;
+			this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
 		}break;
 	}
 }

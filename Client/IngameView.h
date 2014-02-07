@@ -198,6 +198,7 @@ public:
 	void commitArmyStrategy();
 	void commitMoves();
 	void commitCityActions();
+	short turnCount;
 
 	void processNewMessage(short id,vector<char> data);
 	void processNetworkError(int id, std::string msg);
