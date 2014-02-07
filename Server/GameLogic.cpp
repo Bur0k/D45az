@@ -334,6 +334,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				{
 					vector<POINT*> vp;
 					POINT* p = new POINT();
+					vector<char> erfg;
 
 					int player_ID = data[0];
 
@@ -341,8 +342,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 						if(data[i] == '/')
 						{
-							pArmy* movingArmy = new pArmy(player_ID, vp);
-							this->movingArmies.push_back(movingArmy);
+							if(vp.size() > 1)
+							{
+								pArmy* movingArmy = new pArmy(player_ID, vp);
+								this->movingArmies.push_back(movingArmy);
+							}
 						}
 						else
 						{
@@ -364,10 +368,27 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					if(this->playerCommits == this->playersIngame.size())
 					{
+						// Erstellen eines Vektors mit allen Bewegungen zur Client Visualisierung
+
+						for(int i = 0; i < this->movingArmies.size(); i++)
+						{
+							erfg.push_back(this->movingArmies[i]->playerID);
+
+							for(int j = 0; j < this->movingArmies[i]->move.size(); j++)
+							{
+								erfg.push_back(this->movingArmies[i]->move[j]->x);
+								erfg.push_back(this->movingArmies[i]->move[j]->y);
+							}
+
+							erfg.push_back('/');
+						}
+
 						this->computeTurns();
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
+							server->write(this->playersIngame[i]->owner.s, 0x0417, erfg);
+
 							for(unsigned  j = 0; j < this->playersIngame[i]->cities.size(); j++)
 							{
 								this->playersIngame[i]->gold += this->playersIngame[i]->cities[j]->generatedIncome;

@@ -210,6 +210,14 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		{		
 			this->serverReady = true;
 		}break;
+	case 0x0417:
+		{
+			// data enthält alle Moves die durchgeführt werden
+
+			// z.B data[0] -> playerID
+			// data[1] -> x Koordinate
+			// data[2] -> y Koordinate
+		}break;
 }
 }
 

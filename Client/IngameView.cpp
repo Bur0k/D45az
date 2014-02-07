@@ -919,13 +919,14 @@ void IngameView::commitMoves()
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
-		for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
-		{
-			erfg.push_back(this->army_moves[i][j].x);
-			erfg.push_back(this->army_moves[i][j].y);
-		}
+			for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
+			{
+				erfg.push_back(this->army_moves[i][j].x);
+				erfg.push_back(this->army_moves[i][j].y);
+			}
 
 		erfg.push_back('/');
+
 	}
 
 	this->army_moves.clear();
@@ -952,6 +953,7 @@ void IngameView::processNewMessage(short id,vector<char> data)
 			this->turnCount++;
 			this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
 		}break;
+
 	}
 }
 
