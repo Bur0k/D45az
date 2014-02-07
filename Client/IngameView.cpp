@@ -895,7 +895,7 @@ void IngameView::commitArmyStrategy()
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
-		switch(s) // STefan... Switches brauchen immer einen break -.-
+		switch(s) 
 		{
 			case UnitStrategy::DEFENSIVE:
 				erfg.push_back(0); break;
