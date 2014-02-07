@@ -263,7 +263,10 @@ void IngameView::onKeyDown(sf::Event e)
 		m_KeyV[i]->onKeyDown(e);
 
 	if(Keyboard::isKeyPressed(Keyboard::F))
+	{
 		loadGamestate();
+		updateFogOfWar();
+	}
 
 }
 
@@ -444,9 +447,9 @@ void IngameView::nextPhase()
 		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
 		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
 		// durchgeführt hat
-		// --> Server muss selbst sehen, wann er fertig ist und der Clien
+		// --> Server muss selbst sehen, wann er fertig ist und der Client
 		// bräuchte gar keine Nachfragenachricht! Sondern müsste
-		// eigentlich auch Server warten !!!
+		// eigentlich auf den Server warten !!!
 		commitMessage();
 
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
@@ -853,8 +856,6 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
-
-	updateFogOfWar();
 }
 
 bool IngameView::isInCity(UnitGroup* u)
