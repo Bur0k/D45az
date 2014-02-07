@@ -15,9 +15,9 @@
 
 using namespace std;
 
-static const float run = -1.0f;
-static const float off = 1.0f;
-static const float def = (float)1.2;
+static const float run = -0.3f;
+static const float off = 0.8f;
+static const float def = (float)1.1;
 
 enum class UnitStrategy{DEFENSIVE, OFFENSIVE, RUNNING};
 

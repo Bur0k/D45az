@@ -71,7 +71,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGuiOBJECT.onResize(screensize);
+	mainGuiOBJECT.onResize(screensize); // wieso wird das als Fehler angezeit?
 	m_DrawV.push_back(&mainGuiOBJECT);
 	m_ClickV.push_back(&mainGuiOBJECT);
 	m_AnimateV.push_back(&mainGuiOBJECT);
@@ -436,22 +436,31 @@ void IngameView::nextPhase()
 	switch (m_phase)
 	{
 	case InagameViewPhases::YOURTURN:
+		// Button disablen
 		m_commitB->setIsEnabled(false);
-		//do things..
 
+		// Befehle vom Spieler werden dem Server übermittelt
+		// aber momentan wird sofort noch nach Berechnungen gefragt.
+		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
+		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
+		// durchgeführt hat
+		// --> Server muss selbst sehen, wann er fertig ist und der Clien
+		// bräuchte gar keine Nachfragenachricht! Sondern müsste
+		// eigentlich auch Server warten !!!
 		commitMessage();
 
-		//send moves to server
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
 
 	case InagameViewPhases::WAITFORPLAYERS:
-		//do things..
-		//wait till server sends move data
-		
-		//m_phase = InagameViewPhases::WATCHRESULTS;
+		// wird zyklisch aufgerufen, aber hier darf doch noch gar nicht
+		// geladen werden, wenn Server noch gar nicht alles brechnet hat!?
+		// heißt doch die Phase deswegen "WAIT..." !!!
 		loadGamestate();
 		m_commitB->setIsEnabled(true);
+
+		// hier müsste zu Watchresults gegangen werden, wenn man aktuellen 
+		// State vom Server erhalten hat !!!
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
@@ -460,6 +469,8 @@ void IngameView::nextPhase()
 		m_commitB->setIsEnabled(true);
 		loadGamestate();
 		//do things..
+				
+		m_pMS->play_sound(TURN);
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
@@ -467,10 +478,14 @@ void IngameView::nextPhase()
 		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
+		//if winner
+			m_pMS->play_sound(WIN);
+			//else = LOSER
+			m_pMS->play_sound(LOSE);
 		break;
 
 	default:
-		std::cout << "IngameView Error: unknow phase!" << std::endl;
+		std::cout << "IngameView Error: unknown phase!" << std::endl;
 		break;
 	}
 }
@@ -758,12 +773,16 @@ void IngameView::updateFogOfWar()
 		{
 		case UnitTypes::ARTILLERY:
 			maxRange=INGAMEVIEW_ARTILLERY_SIGHT>maxRange?INGAMEVIEW_ARTILLERY_SIGHT:maxRange;
+			break;
 		case UnitTypes::HEAVY:
 			maxRange=INGAMEVIEW_HEAVY_SIGHT>maxRange?INGAMEVIEW_HEAVY_SIGHT:maxRange;
+			break;
 		case UnitTypes::LIGHT:
 			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
+			break;
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
+			break;
 		default:
 			maxRange=2>maxRange?2:maxRange;
 		}
@@ -836,8 +855,6 @@ void IngameView::loadGamestate()
 	}
 
 	updateFogOfWar();
-
-
 }
 
 bool IngameView::isInCity(UnitGroup* u)
@@ -863,27 +880,29 @@ void IngameView::commitMessage()
 	this->commitArmyStrategy();
 	this->commitMoves();
 	this->commitCityActions();
-	this->m_GameData.updateGameData();
+	this->m_GameData.updateGameData(); // Warum!?  Hier ist doch noch gar nichts brechnet, 
+							//sondern erst, wenn der Server alle (Spieler-)Infos hat
+	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold); // hat noch keine Info, weil nix brechnet (Zeitlich)
 }
 
 void IngameView::commitArmyStrategy()
 {
 	vector<char> erfg;
-	UnitStrategy s = UnitStrategy::OFFENSIVE;
+	UnitStrategy s = UnitStrategy::OFFENSIVE; // noch nicht dirrerenziert
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
-		switch(s)
+		switch(s) // STefan... Switches brauchen immer einen break -.-
 		{
 			case UnitStrategy::DEFENSIVE:
-				erfg.push_back(0);
+				erfg.push_back(0); break;
 			case UnitStrategy::OFFENSIVE:
-				erfg.push_back(1);
+				erfg.push_back(1); break;
 			case UnitStrategy::RUNNING:
-				erfg.push_back(2);
+				erfg.push_back(2); break;
 		}
 	}
 
