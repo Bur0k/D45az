@@ -67,7 +67,6 @@ private:
 		bool updating;
 		int numOfProducingUnit;
 		UnitTypes ProducedUnit;
-		int remainingGold;
 	};
 	int currentCityActionsIndex;
 	std::vector<CityActions> updateInfo;

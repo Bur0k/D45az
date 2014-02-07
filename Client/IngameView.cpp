@@ -265,7 +265,6 @@ void IngameView::onKeyDown(sf::Event e)
 	if(Keyboard::isKeyPressed(Keyboard::F))
 	{
 		loadGamestate();
-		updateFogOfWar();
 	}
 
 }

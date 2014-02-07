@@ -95,7 +95,7 @@ void mainGui::positionGraphics()
 	
 
 	if(currentCityActionsIndex < updateInfo.size())
-		cityIncome.setText("Income: "+to_string(updateInfo[currentCityActionsIndex].remainingGold),sf::Vector2f(1000,1000));
+		cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
 	if(currentCityActionsIndex < updateInfo.size())
 		cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
 	cityLevel.setPos(sf::Vector2f(30,y_origin+75));
