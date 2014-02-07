@@ -877,12 +877,9 @@ bool IngameView::isVisible(Vector2i pos)
 
 void IngameView::commitMessage()
 {
-	this->commitArmyStrategy();
-	this->commitMoves();
+	this->commitArmyStrategy();	
 	this->commitCityActions();
-	this->m_GameData.updateGameData(); // Warum!?  Hier ist doch noch gar nichts brechnet, 
-							//sondern erst, wenn der Server alle (Spieler-)Infos hat
-	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold); // hat noch keine Info, weil nix brechnet (Zeitlich)
+	this->commitMoves();
 }
 
 void IngameView::commitArmyStrategy()
@@ -941,9 +938,12 @@ void IngameView::processNewMessage(short id,vector<char> data)
 	switch(id)
 	{
 	case 0x0600:
+		{		
+			this->m_GameData.updateGameData();
+		}break;
+	case 0x0602:
 		{
-			
-		//	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 		}break;
 	}
 }

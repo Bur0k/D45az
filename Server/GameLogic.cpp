@@ -223,7 +223,6 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				erfg = this->divideForMessage(this->playersIngame[index]->gold);
 
 				server->write(s, 0x0413, erfg);
-				server->write(s, 0x0600, erfg);
 			}break;
 		case 0x0408:
 			{	
@@ -377,7 +376,10 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+						{
 							server->write(this->playersIngame[i]->owner.s, 0x0415, erfg);
+							server->write(this->playersIngame[i]->owner.s, 0x0600, erfg);
+						}
 			
 						this->playerCommits = 0;
 					}
@@ -468,11 +470,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 											data.erase(data.begin(), data.begin() + 2);
 									}
 							}
-							}
+						}
 					}break;
-				case 0x0418:
+				case 0x0601:
 					{
-
+						server->write(s, 0x0602, erfg);
 					}break;
 			case 0x1000://Chat empfangen
 				{
