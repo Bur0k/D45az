@@ -75,6 +75,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		g->Draw();
 		
 		window.display();
+
+		sleep(sf::milliseconds(1));
 	}
 	
 	delete g;
