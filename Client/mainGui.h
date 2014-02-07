@@ -11,6 +11,7 @@
 #include "City.h"
 #include "IDrawable.h"
 #include "Textblock.h"
+#include "Statusbar.h"
 
 //#define MAINGUI_SELECTARMY 0
 //#define MAINGUI_SELECTCITY 1
@@ -27,6 +28,7 @@ static const int MAINGUI_AGRESSIVE = 3;
 static const int MAINGUI_HURRY = 4;
 static const int MAINGUI_HEIGHT = 250;
 static const int MAINGUI_HEIGHT_HIDDEN = 70;
+static const int MAINGUI_UNDO_MOVE = 22; 
 const int maingui_light = 5;
 const int maingui_heavy = 6;
 const int maingui_longrange = 7;
@@ -39,15 +41,29 @@ const int longrangePrice = 40;
 const int artilleryPrice = 55;
 const int cityUpgrade = 50;
 
+class ImainGuiFunc
+{
+public:
+	virtual void deleteMoves(UnitGroup*)=0;
+};
+
+
+
 class mainGui
 	: public IClickable, public IButtonfunction, public IDrawable, public IAnimatable
 {
 private:
+	
+
 	SpriteTex background;
 	std::vector<Unit*> units;
 	StandardButton* select_army;
 	StandardButton* select_city;
 	StandardButton* army_mode[3];
+	StandardButton* deleteMove;
+
+	
+	
 
 	void positionGraphics();
 
@@ -73,6 +89,8 @@ private:
 	
 	void resetModeButtons();
 public:
+	ImainGuiFunc* deleteMoveFunction;
+	Statusbar* statusbar;
 	std::vector<char> getCityActionData();
 	float y_offset;
 

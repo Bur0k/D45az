@@ -28,6 +28,10 @@ mainGui::mainGui():
 	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("fast"), MAINGUI_HURRY,false,false);
 	army_mode[2]->Attach(this);
 
+	deleteMove = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("undo Move"), MAINGUI_UNDO_MOVE,false,false);
+	deleteMove->Attach(this);
+
+
 	hidden = true;
 	has_army = false;
 	has_city = false;
@@ -93,6 +97,7 @@ void mainGui::positionGraphics()
 	for(int i = 0; i < 3; i++)
 		army_mode[i]->setPosition(Vector2f(600,y_origin + 120 + i * 40));
 	
+	deleteMove->setPosition(Vector2f(600, y_offset - 30));
 
 	if(currentCityActionsIndex < updateInfo.size())
 		cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
@@ -163,6 +168,7 @@ bool mainGui::MouseMoved(sf::Vector2i & mouse)
 				retvalue |= army_mode[i]->MouseMoved(mouse);
 		for(Unit* u : units)
 			retvalue |= u->MouseMoved(mouse);
+		retvalue |= deleteMove->MouseMoved(mouse);
 	}
 	if(city_display)
 		for(auto it : cityUnityBuy)
@@ -184,6 +190,8 @@ bool mainGui::PressedLeft()
 				retvalue |= army_mode[i]->PressedLeft();
 		for(Unit* u : units)
 			retvalue |= u->PressedLeft();
+
+		retvalue |= deleteMove->PressedLeft();
 	}
 	if(city_display)
 		for(auto it : cityUnityBuy)
@@ -203,6 +211,8 @@ bool mainGui::ReleasedLeft()
 			retvalue |= army_mode[i]->ReleasedLeft();
 		for(Unit* u : units)
 			retvalue |= u->ReleasedLeft();
+
+		retvalue |= deleteMove->ReleasedLeft();
 	}
 	if(city_display)
 		for(auto it : cityUnityBuy)
@@ -266,6 +276,11 @@ void mainGui::onButtonClick(int id)
 		resetModeButtons();
 		army_mode[2]->m_color = MyColors.Chartreuse;
 		group->strategy = UnitStrategy::RUNNING;
+		break;
+
+	case MAINGUI_UNDO_MOVE:
+		if(deleteMoveFunction != NULL)
+			deleteMoveFunction->deleteMoves(group);
 		break;
 
 	case maingui_light:
@@ -365,6 +380,8 @@ void mainGui::draw(sf::RenderWindow* rw)
 			army_mode[i]->draw(rw);
 		for(Unit* u : units)
 			u->draw(rw);
+
+		deleteMove->draw(rw);
 	}
 	else if(city_display)
 	{
@@ -374,6 +391,8 @@ void mainGui::draw(sf::RenderWindow* rw)
 			it->draw(rw);
 		for(auto it : cityUnityBuy)
 			it->draw(rw);
+
+		
 	}
 }
 
@@ -392,6 +411,7 @@ void mainGui::animationTick()
 	if(city_display)
 		for(auto it : cityUnityBuy)
 			it->animationTick();
+	deleteMove->animationTick();
 }
 
 void mainGui::displayArmy()

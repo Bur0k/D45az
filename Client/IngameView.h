@@ -67,12 +67,12 @@ struct buildOrders
 
 
 class IngameView : 
-	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction, public NetworkParticipant
+	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction, public NetworkParticipant, public ImainGuiFunc
 {
 private:
 
 	Client* c;
-
+	
 	//path drawing
 	bool m_turnOnPathDraw;
 	short m_maxLen;
@@ -203,6 +203,9 @@ public:
 	void processNetworkError(int id, std::string msg);
 
 	/////IMPLEMENTING IView end/////
+	
+	//ImainGuiFunc
+	void deleteMoves(UnitGroup*);
 
 private:
 	//gets called if next phase is required
