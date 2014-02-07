@@ -139,7 +139,7 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				}
 				else
 				{
-					// Kampf
+					// FIGHT
 				}
 			}
 		}
@@ -376,12 +376,17 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
-						{
-							server->write(this->playersIngame[i]->owner.s, 0x0415, erfg);
+						{							
 							server->write(this->playersIngame[i]->owner.s, 0x0600, erfg);
 						}
 			
 						this->playerCommits = 0;
+					}
+					else
+					{
+						while(this->playerCommits < this->playersIngame.size()){}
+
+						this->computeTurns();
 					}
 				}break;
 				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)
@@ -478,6 +483,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				case 0x0601:
 					{
 						server->write(s, 0x0602, erfg); // Freigabe an Client für Statusbarupdate
+						server->write(s, 0x0415, erfg); // Server ist fertig mit allen Berechnungen
 					}break;
 			case 0x1000://Chat empfangen
 				{

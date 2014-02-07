@@ -447,14 +447,6 @@ void IngameView::nextPhase()
 		// Button disablen
 		m_commitB->setIsEnabled(false);
 
-		// Befehle vom Spieler werden dem Server übermittelt
-		// aber momentan wird sofort noch nach Berechnungen gefragt.
-		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
-		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
-		// durchgeführt hat
-		// --> Server muss selbst sehen, wann er fertig ist und der Client
-		// bräuchte gar keine Nachfragenachricht! Sondern müsste
-		// eigentlich auf den Server warten !!!
 		commitMessage();
 
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
@@ -866,6 +858,7 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
+	updateFogOfWar();
 }
 
 bool IngameView::isInCity(UnitGroup* u)
@@ -913,8 +906,8 @@ void IngameView::commitArmyStrategy()
 				erfg.push_back(2); break;
 		}
 	}
-
-	c->write(0x0416, erfg);
+	if(erfg.size() > 0)
+		c->write(0x0416, erfg);
 }
 
 void IngameView::commitMoves()
