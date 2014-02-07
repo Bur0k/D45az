@@ -574,14 +574,14 @@ void IngameView::moveMap()
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
 	//update rectanglescity
-	if (tmpView != m_mapView)
+	/*if (tmpView != m_mapView)
 	{
 		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
 	{
 			m_RectangleCityShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 							(float)(m_GameData.allCities[i]->position.y * m_tileSize.y- m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		}
-	}
+	}*/
 
 
 	//update displayed armys
