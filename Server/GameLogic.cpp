@@ -397,14 +397,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					for(unsigned int i = 0; i < (data.size()>>1); i++)
 					{
-						short playerID;
-						for(auto it : server->connectedPlayers)
-							if(it.s==s)
-								playerID = it.s;
-						p.x = data[0];
-						p.y = data[1];
-						int armyCount = data[2];
-						short type = data[3];
+						short playerID = data[0];
+						p.x = data[1];
+						p.y = data[2];
+						int armyCount = data[3];
+						short type = data[4];
 						UnitTypes atype;
 
 						switch(type)
@@ -428,7 +425,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						}
 
 						bool isCityUpgraded = false;
-						if(data[4] == 1)
+						if(data[5] == 1)
 							isCityUpgraded = true;
 
 						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)

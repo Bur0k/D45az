@@ -284,9 +284,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_light:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= lightPrice)
+		if(statusbar->m_vValue[0] >= lightPrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= lightPrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - lightPrice);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
@@ -298,9 +298,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_heavy:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= heavyPrice)
+		if(statusbar->m_vValue[0] >= heavyPrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= heavyPrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - heavyPrice);
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
@@ -312,9 +312,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_longrange:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= longrangePrice)
+		if(statusbar->m_vValue[0] >= longrangePrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= longrangePrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - longrangePrice);
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
@@ -326,9 +326,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_artillery:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= artilleryPrice)
+		if(statusbar->m_vValue[0] >= artilleryPrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= artilleryPrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - artilleryPrice);
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
@@ -340,9 +340,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_city:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= cityUpgrade)
+		if(statusbar->m_vValue[0] >= cityUpgrade)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= cityUpgrade;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - cityUpgrade);
 			updateInfo[currentCityActionsIndex].updating = true;
 			cityUnityBuy[4]->setIsEnabled(false);
 			positionGraphics();
@@ -513,7 +513,6 @@ void mainGui::displayCity()
 		ca.pos=city->position;
 		ca.ProducedUnit=UnitTypes::ARTILLERY;
 		ca.updating=false;
-		ca.remainingGold=city->generatedIncome;
 
 		updateInfo.push_back(ca);
 	}
@@ -530,6 +529,7 @@ std::vector<char> mainGui::getCityActionData()
 
 	for(auto it : updateInfo)
 	{
+		toSend.push_back(static_cast<char>(city->player_ID));
 		toSend.push_back(static_cast<char>(it.pos.x));
 		toSend.push_back(static_cast<char>(it.pos.y));
 		toSend.push_back(static_cast<char>(it.numOfProducingUnit));
