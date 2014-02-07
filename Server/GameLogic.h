@@ -9,6 +9,7 @@
 #include <vector>
 #include <math.h>
 #include "pArmy.h"
+#include <sstream>
 
 
 using namespace std;
@@ -38,6 +39,7 @@ public:
 
 	void computeTurns();
 	void isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
+	vector<char> divideForMessage(int number);
 
 	void processNewMessage(SOCKET s,short id,std::vector<char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);

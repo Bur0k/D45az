@@ -11,7 +11,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 	server->addToErrorCallback(this);
 
 	this->owner = owner;
-	this->gold = 5;
+	this->gold = 500;
 
 	POINT p;
 	p.x = startCity->position->x;

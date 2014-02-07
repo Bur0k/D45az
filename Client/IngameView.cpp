@@ -50,6 +50,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
 	
+	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -69,10 +70,10 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGui.onResize(screensize);
-	m_DrawV.push_back(&mainGui);
-	m_ClickV.push_back(&mainGui);
-	m_AnimateV.push_back(&mainGui);
+	mainGuiOBJECT.onResize(screensize);
+	m_DrawV.push_back(&mainGuiOBJECT);
+	m_ClickV.push_back(&mainGuiOBJECT);
+	m_AnimateV.push_back(&mainGuiOBJECT);
 
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
@@ -149,9 +150,9 @@ bool IngameView::MouseMoved(sf::Vector2i & mouse)
 	
 	//displayed armys
 	for(Army* a : m_owned_armys)
-		a->MouseMoved(mouse);
+		a->MouseMoved(m_pointAt);
 	for(Army* a : m_enemy_armys)
-		a->MouseMoved(mouse);
+		a->MouseMoved(m_pointAt);
 
 	return retValue;
 }
@@ -213,8 +214,11 @@ bool IngameView::PressedLeft()
 		}
 	}
 
+	for(Army* a : m_owned_armys)
+		a->ReleasedLeft();
+
 	if(tmpCity != NULL || tmpUG != NULL)
-	mainGui.updateMgui(tmpCity, tmpUG);
+		mainGuiOBJECT.updateMgui(tmpCity, tmpUG);
 	return retvalue;
 }
 
@@ -414,7 +418,7 @@ void IngameView::update(double elapsedMs)
 void IngameView::onResize(Vector2u & size)
 {
 	m_screensize = size;
-	mainGui.onResize(size);
+	mainGuiOBJECT.onResize(size);
 	m_SBar->Resize((Vector2f) size);
 	m_commitB->onResize(size);
 	m_mapView.width = size.x;
@@ -607,7 +611,7 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 
 void IngameView::drawPath()
 {
-	if(m_turnOnPathDraw)
+	if(m_turnOnPathDraw && m_phase == InagameViewPhases::YOURTURN)
 	{
 		if(currentTurn.size() == 0)
 		{
@@ -658,7 +662,7 @@ void IngameView::drawPath()
 
 void IngameView::drawMouseOverPath()
 {
-	if(currentTurn.size() != 0)
+	if(currentTurn.size() != 0 && m_phase == InagameViewPhases::YOURTURN)
 	{
 		if(m_turnOnPathDraw)
 		{
@@ -837,6 +841,8 @@ void IngameView::loadGamestate()
 	}
 
 	updateFogOfWar();
+
+
 }
 
 bool IngameView::isInCity(UnitGroup* u)
@@ -912,9 +918,5 @@ void IngameView::commitMoves()
 
 void IngameView::commitCityActions()
 {
-	// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
-
-
-
-	vector<char> erfg;
+	c->write(0x0414,mainGuiOBJECT.getCityActionData());
 }

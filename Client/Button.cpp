@@ -134,7 +134,7 @@ bool Button::getIsEnabled()
 bool Button::getIsPressed()
 {
 
-	return m_isClicked;
+	return (!m_staysClicked)? m_isClicked: m_lockedIn;
 }
 
 void Button::unLock()
@@ -188,7 +188,7 @@ bool Button::PressedLeft()
 			 * to prevent 
 			 * not calling notify when clicked  when mouse over but releasing when not
 			 */
-			if(m_lockedIn)
+			if(m_staysClicked)
 				Notify();	
 		}
 		return true;

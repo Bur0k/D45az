@@ -188,10 +188,20 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0413:
 		{
-			this->gold = data[0];
+			stringstream str;
+			string st;
+			int g;
+			for(int i = 0; i < data.size(); i++)
+			{
+				st += data[i];
+			}
+			str << st;
+			str >> g;
+
+			this->gold = g;
 		}break;
 	case 0x0415:
-		{
+		{		
 			this->serverReady = true;
 		}break;
 }

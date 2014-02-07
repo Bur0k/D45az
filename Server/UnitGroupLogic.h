@@ -41,8 +41,11 @@ public:
 	UnitGroupLogic(short units, UnitTypes type, POINT p, vector<UnitGroupLogic*>* unitGroups);
 	~UnitGroupLogic();
 
+	bool mergeUnitGroup(UnitGroupLogic* unitgroup);
+	void addUnit(short living, UnitTypes type);
+	
+	//out of date
 	void moveOneStep(POINT to);
-	void addUnit(short units, UnitTypes type);
 	void removeUnit(short units, UnitTypes type); 
 	void move(POINT moves[], int arrlen);
 	void splitandMove(short units[], UnitTypes types[], POINT moves[], int arrlen);

@@ -26,6 +26,26 @@ UnitGroupLogic::~UnitGroupLogic()
 		delete this->units[i];
 }
 
+bool UnitGroupLogic::mergeUnitGroup(UnitGroupLogic* unitgroup)
+{
+	if (this->units.size() + unitgroup->units.size() > 16)
+		return false;
+	else
+	{
+		for (unsigned int i = 0; i < unitgroup->units.size(); i++)
+		{
+			this->addUnit(unitgroup->units[i]->living, unitgroup->units[i]->type);
+		}
+		for (unsigned int i = 0; i < this->unitGroups->size(); i++)
+		{
+			this->unitGroups->erase(remove(this->unitGroups->begin(),this->unitGroups->end(),unitgroup));
+		}
+		delete unitgroup;
+		return true;
+	}
+}
+
+
 void UnitGroupLogic::moveOneStep(POINT to)
 {
 	this->pos->x = to.x;
@@ -33,10 +53,14 @@ void UnitGroupLogic::moveOneStep(POINT to)
 }
 
 
-void UnitGroupLogic::addUnit(short units, UnitTypes type)
+void UnitGroupLogic::addUnit(short living, UnitTypes type)
 {
-	for (int i = 0; i < units; i++)
+	if (this->units.size() < 17)
+	{
 		UnitLogic* unit = new UnitLogic(type);
+		unit->living = living;
+		this->units.push_back(unit);
+	}
 }
 
 
