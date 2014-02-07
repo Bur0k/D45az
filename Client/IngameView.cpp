@@ -443,9 +443,9 @@ void IngameView::nextPhase()
 		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
 		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
 		// durchgeführt hat
-		// --> Server muss selbst sehen, wann er fertig ist und der Clien
+		// --> Server muss selbst sehen, wann er fertig ist und der Client
 		// bräuchte gar keine Nachfragenachricht! Sondern müsste
-		// eigentlich auch Server warten !!!
+		// eigentlich auf den Server warten !!!
 		commitMessage();
 
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
