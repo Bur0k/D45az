@@ -139,7 +139,7 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				}
 				else
 				{
-					// Kampf
+					// FIGHT
 				}
 			}
 		}
@@ -382,6 +382,12 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						}
 			
 						this->playerCommits = 0;
+					}
+					else
+					{
+						while(this->playerCommits < this->playersIngame.size()){}
+
+						this->computeTurns();
 					}
 				}break;
 				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)

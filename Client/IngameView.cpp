@@ -903,8 +903,8 @@ void IngameView::commitArmyStrategy()
 				erfg.push_back(2); break;
 		}
 	}
-
-	c->write(0x0416, erfg);
+	if(erfg.size() > 0)
+		c->write(0x0416, erfg);
 }
 
 void IngameView::commitMoves()

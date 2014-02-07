@@ -7,8 +7,6 @@ LogicData::LogicData()
 
 	this->serverReady  = false;
 	this->updateGameData();
-
-
 }
 
 LogicData::~LogicData()
