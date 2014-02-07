@@ -432,7 +432,6 @@ void IngameView::nextPhase()
 	{
 	case InagameViewPhases::YOURTURN:
 		m_commitB->setIsEnabled(false);
-		//do things..
 
 		commitMessage();
 
@@ -447,6 +446,7 @@ void IngameView::nextPhase()
 		//m_phase = InagameViewPhases::WATCHRESULTS;
 		loadGamestate();
 		m_commitB->setIsEnabled(true);
+
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
@@ -455,6 +455,8 @@ void IngameView::nextPhase()
 		m_commitB->setIsEnabled(true);
 		loadGamestate();
 		//do things..
+				
+		m_pMS->play_sound(TURN);
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
@@ -462,10 +464,14 @@ void IngameView::nextPhase()
 		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
+		//if winner
+			m_pMS->play_sound(WIN);
+			//else = LOSER
+			m_pMS->play_sound(LOSE);
 		break;
 
 	default:
-		std::cout << "IngameView Error: unknow phase!" << std::endl;
+		std::cout << "IngameView Error: unknown phase!" << std::endl;
 		break;
 	}
 }
