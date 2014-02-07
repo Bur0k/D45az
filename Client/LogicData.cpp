@@ -128,8 +128,6 @@ void LogicData::processNewMessage(short id,vector<char> data)
 
 				data.erase(data.begin() + 1, data.begin() + 3);
 			}
-
-			this->requestGold();
 		}break;
 	case 0x0409:
 		{

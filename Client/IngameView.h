@@ -67,7 +67,7 @@ struct buildOrders
 
 
 class IngameView : 
-	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction
+	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction, public NetworkParticipant
 {
 private:
 
@@ -198,6 +198,9 @@ public:
 	void commitArmyStrategy();
 	void commitMoves();
 	void commitCityActions();
+
+	void processNewMessage(short id,vector<char> data);
+	void processNetworkError(int id, std::string msg);
 
 	/////IMPLEMENTING IView end/////
 

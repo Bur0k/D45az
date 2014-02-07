@@ -215,6 +215,15 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 		
 
 				server->write(s, 0x0405, erfg);
+
+				// Gold übertragen
+
+				erfg.clear();
+
+				erfg = this->divideForMessage(this->playersIngame[index]->gold);
+
+				server->write(s, 0x0413, erfg);
+				server->write(s, 0x0600, erfg);
 			}break;
 		case 0x0408:
 			{	
@@ -375,17 +384,20 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				}break;
 				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)
 				{
-						// Message: (playerID, Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
+						// Message: (Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, ...)
 
 					POINT p;
 
 					for(unsigned int i = 0; i < (data.size()>>1); i++)
 					{
-						short playerID = data[0];
-						p.x = data[1];
-						p.y = data[2];
-						int armyCount = data[3];
-						short type = data[4];
+						short playerID;
+						for(auto it : server->connectedPlayers)
+							if(it.s==s)
+								playerID = it.s;
+						p.x = data[0];
+						p.y = data[1];
+						int armyCount = data[2];
+						short type = data[3];
 						UnitTypes atype;
 
 						switch(type)
@@ -409,7 +421,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						}
 
 						bool isCityUpgraded = false;
-						if(data[5] == 1)
+						if(data[4] == 1)
 							isCityUpgraded = true;
 
 						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
@@ -460,9 +472,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					}break;
 				case 0x0418:
 					{
-						erfg = this->divideForMessage(this->playersIngame[data[0]]->gold);
 
-						server->write(s, 0x0413, erfg);
 					}break;
 			case 0x1000://Chat empfangen
 				{
