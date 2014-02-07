@@ -73,7 +73,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGuiOBJECT.onResize(screensize); // wieso wird das als Fehler angezeit?
+	mainGuiOBJECT.onResize(screensize);
 	m_DrawV.push_back(&mainGuiOBJECT);
 	m_ClickV.push_back(&mainGuiOBJECT);
 	m_AnimateV.push_back(&mainGuiOBJECT);
