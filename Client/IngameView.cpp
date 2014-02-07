@@ -853,6 +853,7 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
+	updateFogOfWar();
 }
 
 bool IngameView::isInCity(UnitGroup* u)
