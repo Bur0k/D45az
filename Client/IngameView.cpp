@@ -3,6 +3,8 @@
 //TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
+	
+
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
@@ -72,13 +74,16 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGuiOBJECT.onResize(screensize); // wieso wird das als Fehler angezeit?
+	mainGuiOBJECT.onResize(screensize);
 	m_DrawV.push_back(&mainGuiOBJECT);
 	m_ClickV.push_back(&mainGuiOBJECT);
 	m_AnimateV.push_back(&mainGuiOBJECT);
 
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
+
+	mainGuiOBJECT.deleteMoveFunction = this;
+	mainGuiOBJECT.statusbar = m_SBar;
 
 	this->loadGamestate();
 
@@ -266,7 +271,6 @@ void IngameView::onKeyDown(sf::Event e)
 	if(Keyboard::isKeyPressed(Keyboard::F))
 	{
 		loadGamestate();
-		updateFogOfWar();
 	}
 
 }
@@ -837,14 +841,14 @@ void IngameView::loadGamestate()
 	//clear RectangleVector
 	m_RectangleCityShapes.clear();
 	//fill RectangleVector
-	for (auto city: m_GameData.allCities)
+	for (City* city: m_GameData.allCities)
 	{
 		RectangleShape r;
 		Color c;
 		if (city->player_ID >= 0 && city->player_ID <= 5 && city->player_ID != 4)
 			c = MyColors.player[city->player_ID];
 		else
-			c = MyColors.Black;
+			c = MyColors.Orange;
 		c.a = 100;
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);
@@ -859,8 +863,9 @@ void IngameView::loadGamestate()
 
 bool IngameView::isInCity(UnitGroup* u)
 {
+	Vector2i pos = Vector2i(u->pos.x, u->pos.y);
 	for(City* c : m_GameData.allCities)
-		if(Vector2i(u->pos.x, u->pos.y) == c->position)
+		if(pos == c->position)
 			return true;
 	return false;
 }
@@ -953,4 +958,15 @@ void IngameView::processNewMessage(short id,vector<char> data)
 void IngameView::processNetworkError(int id, std::string msg)
 {
 
+}
+
+void IngameView::deleteMoves(UnitGroup* ug)
+{
+	Vector2i pos = Vector2i(ug->pos.x, ug->pos.y);
+	for(unsigned int i = 0; i < army_moves.size(); i++)
+		if(pos == army_moves[i][0]) 
+		{
+			army_moves.erase(army_moves.begin() + i);
+			break;
+		}
 }

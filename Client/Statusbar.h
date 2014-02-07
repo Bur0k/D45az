@@ -57,12 +57,12 @@ private: // soll eigentlich NICHT abgeleitet werden
 	vector<Texture> m_vTextures;
 	vector<Sprite> m_vSPictures;
 	vector<Textblock*> m_vTLabels;
-	vector<int> m_vValue;
 
 	//Zeiger auf andere Klassen
 	StatusBarFunctions* m_pOpenMenu;
 
 public:
+	vector<int> m_vValue;
 	//ctor & dtor
 	Statusbar(Vector2f pos, Vector2f size, StatusBarFunctions* OpenMenu);
 	~Statusbar(void);
