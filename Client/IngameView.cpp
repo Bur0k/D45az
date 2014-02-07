@@ -53,8 +53,12 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
 	
+	this->turnCount = 1;
 	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
-	this->turnCount = 0;
+	this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+	this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+	this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+	
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -949,9 +953,11 @@ void IngameView::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0602:	// Alle Daten Up to Date -> Freigabe Statusbar update
 		{
-			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 			this->turnCount++;
+			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);			
 			this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+			this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+			this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
 		}break;
 
 	}
