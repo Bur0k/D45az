@@ -462,9 +462,12 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 									{
 										switch(data[2])
 						{
-											case 0: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::DEFENSIVE;
-											case 1: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::OFFENSIVE;
-											case 2: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::RUNNING;
+											case 0: 
+												{this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::DEFENSIVE;}break;
+											case 1: 
+												{this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::OFFENSIVE;}break;
+											case 2: 
+												{this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::RUNNING;}break;
 										}
 
 											data.erase(data.begin(), data.begin() + 2);
@@ -474,7 +477,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					}break;
 				case 0x0601:
 					{
-						server->write(s, 0x0602, erfg);
+						server->write(s, 0x0602, erfg); // Freigabe an Client für Statusbarupdate
 					}break;
 			case 0x1000://Chat empfangen
 				{

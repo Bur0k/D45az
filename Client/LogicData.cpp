@@ -158,7 +158,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0411:
 		{
-			bool enable = false;
+			bool enable = false;	// Sperre für setValue der Statusbar, da sie bei der ersten Datenübertragung noch nicht vorhanden ist
 			if(this->ownedUnits.size() != 0)
 				enable = true;
 
@@ -189,8 +189,8 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				
 				if(enable)
 				{
-					erfg.clear();
-					c->write(0x0601, erfg);
+					erfg.clear();	
+					c->write(0x0601, erfg);	// Message an den Server -> Alle neuen Daten eingelesen
 				}
 			}
 		}break;

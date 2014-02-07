@@ -938,11 +938,11 @@ void IngameView::processNewMessage(short id,vector<char> data)
 {
 	switch(id)
 	{
-	case 0x0600:
+	case 0x0600: // Alle Spieler haben Committed -> Server schickt update Freigabe
 		{		
 			this->m_GameData.updateGameData();
 		}break;
-	case 0x0602:
+	case 0x0602:	// Alle Daten Up to Date -> Freigabe Statusbar update
 		{
 			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
 		}break;
