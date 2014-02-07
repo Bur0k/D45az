@@ -493,7 +493,7 @@ void mainGui::displayCity()
 		ca.pos=city->position;
 		ca.ProducedUnit=UnitTypes::ARTILLERY;
 		ca.updating=false;
-		ca.remainingGold=city->generatedIncome+100;
+		ca.remainingGold=city->generatedIncome;
 
 		updateInfo.push_back(ca);
 	}
