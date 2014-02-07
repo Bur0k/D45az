@@ -442,14 +442,6 @@ void IngameView::nextPhase()
 		// Button disablen
 		m_commitB->setIsEnabled(false);
 
-		// Befehle vom Spieler werden dem Server übermittelt
-		// aber momentan wird sofort noch nach Berechnungen gefragt.
-		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
-		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
-		// durchgeführt hat
-		// --> Server muss selbst sehen, wann er fertig ist und der Client
-		// bräuchte gar keine Nachfragenachricht! Sondern müsste
-		// eigentlich auf den Server warten !!!
 		commitMessage();
 
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
