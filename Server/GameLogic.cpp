@@ -409,19 +409,19 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						case 0:
 							{
 								atype = UnitTypes::LIGHT;
-							}
+							}break;
 						case 1:
 							{
 								atype = UnitTypes::HEAVY;
-							}
+							}break;
 						case 2:
 							{
 								atype = UnitTypes::LONGRANGE;
-							}
+							}break;
 						case 3:
 							{
 								atype = UnitTypes::ARTILLERY;
-							}
+							}break;
 						}
 
 						bool isCityUpgraded = false;
