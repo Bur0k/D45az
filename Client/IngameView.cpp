@@ -70,7 +70,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGuiOBJECT.onResize(screensize);
+	mainGuiOBJECT.onResize(screensize); // wieso wird das als Fehler angezeit?
 	m_DrawV.push_back(&mainGuiOBJECT);
 	m_ClickV.push_back(&mainGuiOBJECT);
 	m_AnimateV.push_back(&mainGuiOBJECT);
@@ -438,20 +438,28 @@ void IngameView::nextPhase()
 		// Button disablen
 		m_commitB->setIsEnabled(false);
 
+		// Befehle vom Spieler werden dem Server übermittelt
+		// aber momentan wird sofort noch nach Berechnungen gefragt.
+		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
+		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
+		// durchgeführt hat
+		// --> Server muss selbst sehen, wann er fertig ist und der Clien
+		// bräuchte gar keine Nachfragenachricht! Sondern müsste
+		// eigentlich auch Server warten !!!
 		commitMessage();
 
-		//send moves to server
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
 
 	case InagameViewPhases::WAITFORPLAYERS:
-		//do things..
-		//wait till server sends move data
-		
-		//m_phase = InagameViewPhases::WATCHRESULTS;
+		// wird zyklisch aufgerufen, aber hier darf doch noch gar nicht
+		// geladen werden, wenn Server noch gar nicht alles brechnet hat!?
+		// heißt doch die Phase deswegen "WAIT..." !!!
 		loadGamestate();
 		m_commitB->setIsEnabled(true);
 
+		// hier müsste zu Watchresults gegangen werden, wenn man aktuellen 
+		// State vom Server erhalten hat !!!
 		m_phase = InagameViewPhases::YOURTURN;
 		break;
 
@@ -763,13 +771,17 @@ void IngameView::updateFogOfWar()
 		switch(it->units->type)
 		{
 		case UnitTypes::ARTILLERY:
-			maxRange=INGAMEVIEW_ARTILLERY_SIGHT>maxRange?INGAMEVIEW_ARTILLERY_SIGHT:maxRange;
+			maxRange=INGAMEVIEW_ARTILLERY_SIGHT>maxRange?INGAMEVIEW_ARTILLERY_SIGHT:maxRange; 
+			break;
 		case UnitTypes::HEAVY:
 			maxRange=INGAMEVIEW_HEAVY_SIGHT>maxRange?INGAMEVIEW_HEAVY_SIGHT:maxRange;
+			break;
 		case UnitTypes::LIGHT:
 			maxRange=INGAMEVIEW_LIGHT_SIGHT>maxRange?INGAMEVIEW_LIGHT_SIGHT:maxRange;
+			break;
 		case UnitTypes::LONGRANGE:
 			maxRange=INGAMEVIEW_RANGED_SIGHT>maxRange?INGAMEVIEW_RANGED_SIGHT:maxRange;
+			break;
 		default:
 			maxRange=2>maxRange?2:maxRange;
 		}
@@ -842,8 +854,6 @@ void IngameView::loadGamestate()
 	}
 
 	updateFogOfWar();
-
-
 }
 
 bool IngameView::isInCity(UnitGroup* u)
