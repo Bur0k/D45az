@@ -143,8 +143,6 @@ void IngameView::onTextBoxSend(int ID, std::string s)
 
 }
 
-
-
 bool IngameView::MouseMoved(sf::Vector2i & mouse)
 {
 	chat.MouseMoved(mouse);
