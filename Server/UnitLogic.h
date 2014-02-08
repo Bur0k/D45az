@@ -37,7 +37,7 @@ public:
 	int range;
 	double attackpower;
 
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNewMessage(SOCKET s,short id,std::vector<unsigned char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 

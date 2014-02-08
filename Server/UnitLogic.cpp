@@ -48,7 +48,7 @@ UnitLogic::~UnitLogic()
 	server->deleteFromErrorCallback(this);
 }
 
-void UnitLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void UnitLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
 {
 }
 

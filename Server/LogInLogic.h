@@ -19,9 +19,9 @@ public:
 	LogInLogic(); // anmelden
 	~LogInLogic();
 
-	static void LogicMessageCallback(SOCKET s,short id,vector<char> data);
+	static void LogicMessageCallback(SOCKET s,short id,vector<unsigned char> data);
 
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNewMessage(SOCKET s,short id,std::vector<unsigned char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 

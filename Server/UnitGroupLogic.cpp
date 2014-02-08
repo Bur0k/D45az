@@ -114,7 +114,7 @@ void UnitGroupLogic::changeStrategy(UnitStrategy strategy)
 }
 
 
-void UnitGroupLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void UnitGroupLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
 {
 }
 

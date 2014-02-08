@@ -204,7 +204,7 @@ void Chat::updateDisplayedChatLines()
 }
 
 
-void Chat::processNewMessage(short id,vector<char> data)
+void Chat::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch(id)
 	{
