@@ -89,6 +89,8 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	mainGuiOBJECT.deleteMoveFunction = this;
 	mainGuiOBJECT.statusbar = m_SBar;
 
+	m_commitB->setIsEnabled(false);
+
 	this->loadGamestate();
 
 	updateFogOfWar();
@@ -421,7 +423,7 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	if(m_phase == InagameViewPhases::WAITFORPLAYERS && m_GameData.serverReady)
+	if((m_phase == InagameViewPhases::WAITFORPLAYERS || m_phase == InagameViewPhases::STARTPHASE) && m_GameData.serverReady)
 	{
 		m_GameData.serverReady = false;
 		nextPhase();
@@ -479,15 +481,19 @@ void IngameView::nextPhase()
 		break;
 
 	case InagameViewPhases::GAMEOVER:
-		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
-		//if winner
+		if(m_GameData.ownedCities.size() > 0)
 			m_pMS->play_sound(WIN);
-			//else = LOSER
+		else
 			m_pMS->play_sound(LOSE);
 		break;
-
+	case InagameViewPhases::STARTPHASE:
+		
+		loadGamestate();
+		m_commitB->setIsEnabled(true);
+		m_phase = InagameViewPhases::YOURTURN;
+		break;
 	default:
 		std::cout << "IngameView Error: unknown phase!" << std::endl;
 		break;

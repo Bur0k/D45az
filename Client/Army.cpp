@@ -39,7 +39,6 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 	c.a = 100;
 	m_pBarBg.setFillColor(c);
 
-
 	m_markedIndicator.setFillColor(MyColors.Transparent);
 
 	PositionGraphics();
