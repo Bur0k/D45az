@@ -11,6 +11,7 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 	m_mouseOver = false;
 	m_animating = false;
 
+	m_inCity = isInCity;
 	m_isVisible = isVisible;
 	m_marked = false;
 
@@ -74,7 +75,7 @@ void Army::draw(sf::RenderWindow* rw)
 {
 	if(!m_isVisible)
 		return;
-	if(m_inCity)
+	if(!m_inCity)
 	{
 		if(m_marked || m_mouseOver) 
 			rw->draw(m_markedIndicator);

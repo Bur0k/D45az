@@ -91,10 +91,13 @@ void GameLogic::computeTurns()
 	{
 		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 		{
-			armies[i]->pos = this->movingArmies[i]->move[0];
-			this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
+			if(this->movingArmies[i]->move.size() > 0)
+			{
+				armies[i]->pos = this->movingArmies[i]->move[0];
+				this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
 			
-			this->isCollision(armies[i]->pos, armies);
+				this->isCollision(armies[i]->pos, armies);
+			}
 		}
 
 		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
@@ -139,7 +142,7 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				}
 				else
 				{
-					// Kampf
+					// FIGHT
 				}
 			}
 		}
@@ -223,7 +226,6 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				erfg = this->divideForMessage(this->playersIngame[index]->gold);
 
 				server->write(s, 0x0413, erfg);
-				server->write(s, 0x0600, erfg);
 			}break;
 		case 0x0408:
 			{	
@@ -335,6 +337,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				{
 					vector<POINT*> vp;
 					POINT* p = new POINT();
+					vector<char> erfg;
 
 					int player_ID = data[0];
 
@@ -342,8 +345,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 						if(data[i] == '/')
 						{
-							pArmy* movingArmy = new pArmy(player_ID, vp);
-							this->movingArmies.push_back(movingArmy);
+							if(vp.size() > 1)
+							{
+								pArmy* movingArmy = new pArmy(player_ID, vp);
+								this->movingArmies.push_back(movingArmy);
+							}
 						}
 						else
 						{
@@ -365,10 +371,27 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					if(this->playerCommits == this->playersIngame.size())
 					{
+						// Erstellen eines Vektors mit allen Bewegungen zur Client Visualisierung
+
+						for(int i = 0; i < this->movingArmies.size(); i++)
+						{
+							erfg.push_back(this->movingArmies[i]->playerID);
+
+							for(int j = 0; j < this->movingArmies[i]->move.size(); j++)
+							{
+								erfg.push_back(this->movingArmies[i]->move[j]->x);
+								erfg.push_back(this->movingArmies[i]->move[j]->y);
+							}
+
+							erfg.push_back('/');
+						}
+
 						this->computeTurns();
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
+							server->write(this->playersIngame[i]->owner.s, 0x0417, erfg);
+
 							for(unsigned  j = 0; j < this->playersIngame[i]->cities.size(); j++)
 							{
 								this->playersIngame[i]->gold += this->playersIngame[i]->cities[j]->generatedIncome;
@@ -377,7 +400,9 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
-							server->write(this->playersIngame[i]->owner.s, 0x0415, erfg);
+						{							
+							server->write(this->playersIngame[i]->owner.s, 0x0600, erfg);
+						}
 			
 						this->playerCommits = 0;
 					}
@@ -390,14 +415,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 					for(unsigned int i = 0; i < (data.size()>>1); i++)
 					{
-						short playerID;
-						for(auto it : server->connectedPlayers)
-							if(it.s==s)
-								playerID = it.s;
-						p.x = data[0];
-						p.y = data[1];
-						int armyCount = data[2];
-						short type = data[3];
+						short playerID = data[0];
+						p.x = data[1];
+						p.y = data[2];
+						int armyCount = data[3];
+						short type = data[4];
 						UnitTypes atype;
 
 						switch(type)
@@ -405,23 +427,23 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						case 0:
 							{
 								atype = UnitTypes::LIGHT;
-							}
+							}break;
 						case 1:
 							{
 								atype = UnitTypes::HEAVY;
-							}
+							}break;
 						case 2:
 							{
 								atype = UnitTypes::LONGRANGE;
-							}
+							}break;
 						case 3:
 							{
 								atype = UnitTypes::ARTILLERY;
-							}
+							}break;
 						}
 
 						bool isCityUpgraded = false;
-						if(data[4] == 1)
+						if(data[5] == 1)
 							isCityUpgraded = true;
 
 						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
@@ -460,19 +482,23 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 									{
 										switch(data[2])
 						{
-											case 0: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::DEFENSIVE;
-											case 1: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::OFFENSIVE;
-											case 2: this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::RUNNING;
+											case 0: 
+												{this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::DEFENSIVE;}break;
+											case 1: 
+												{this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::OFFENSIVE;}break;
+											case 2: 
+												{this->playersIngame[i]->unitGroups[k]->strategy = UnitStrategy::RUNNING;}break;
 										}
 
 											data.erase(data.begin(), data.begin() + 2);
 									}
 							}
-							}
+						}
 					}break;
-				case 0x0418:
+				case 0x0601:
 					{
-
+						server->write(s, 0x0602, erfg); // Freigabe an Client für Statusbarupdate
+						server->write(s, 0x0415, erfg); // Server ist fertig mit allen Berechnungen
 					}break;
 			case 0x1000://Chat empfangen
 				{

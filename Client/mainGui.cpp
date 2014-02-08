@@ -28,6 +28,10 @@ mainGui::mainGui():
 	army_mode[2] = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("fast"), MAINGUI_HURRY,false,false);
 	army_mode[2]->Attach(this);
 
+	deleteMove = new StandardButton(Vector2f(0,0),Vector2f(100,30),std::string("undo Move"), MAINGUI_UNDO_MOVE,false,false);
+	deleteMove->Attach(this);
+
+
 	hidden = true;
 	has_army = false;
 	has_city = false;
@@ -91,11 +95,12 @@ void mainGui::positionGraphics()
 		units[i]->setPosition(Vector2f(20 + 70 * (float)(i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
-		army_mode[i]->setPosition(Vector2f(600,y_origin + 120 + i * 40));
+		army_mode[i]->setPosition(Vector2f(600,y_origin + 90 + i * 40));
 	
+	deleteMove->setPosition(Vector2f(600, y_origin + 90 + 120));
 
 	if(currentCityActionsIndex < updateInfo.size())
-		cityIncome.setText("Income: "+to_string(updateInfo[currentCityActionsIndex].remainingGold),sf::Vector2f(1000,1000));
+		cityIncome.setText("Income: "+to_string(city->generatedIncome),sf::Vector2f(1000,1000));
 	if(currentCityActionsIndex < updateInfo.size())
 		cityLevel.setText("Level: "+to_string(city->level),sf::Vector2f(1000,1000));
 	cityLevel.setPos(sf::Vector2f(30,y_origin+75));
@@ -163,6 +168,7 @@ bool mainGui::MouseMoved(sf::Vector2i & mouse)
 				retvalue |= army_mode[i]->MouseMoved(mouse);
 		for(Unit* u : units)
 			retvalue |= u->MouseMoved(mouse);
+		retvalue |= deleteMove->MouseMoved(mouse);
 	}
 	if(city_display)
 		for(auto it : cityUnityBuy)
@@ -184,6 +190,8 @@ bool mainGui::PressedLeft()
 				retvalue |= army_mode[i]->PressedLeft();
 		for(Unit* u : units)
 			retvalue |= u->PressedLeft();
+
+		retvalue |= deleteMove->PressedLeft();
 	}
 	if(city_display)
 		for(auto it : cityUnityBuy)
@@ -203,6 +211,8 @@ bool mainGui::ReleasedLeft()
 			retvalue |= army_mode[i]->ReleasedLeft();
 		for(Unit* u : units)
 			retvalue |= u->ReleasedLeft();
+
+		retvalue |= deleteMove->ReleasedLeft();
 	}
 	if(city_display)
 		for(auto it : cityUnityBuy)
@@ -225,7 +235,7 @@ void mainGui::onButtonClick(int id)
 			
 			select_city->unLock();
 		}
-		else if(!select_army->getIsPressed())
+		else if(!select_city->getIsPressed() && !select_army->getIsPressed())
 		{
 			hidden = true;
 			positionGraphics();
@@ -243,7 +253,7 @@ void mainGui::onButtonClick(int id)
 
 			select_army->unLock();
 		}
-		else if(!select_city->getIsPressed())
+		else if(!select_city->getIsPressed() && !select_army->getIsPressed())
 		{
 			hidden = true;
 			positionGraphics();
@@ -268,10 +278,15 @@ void mainGui::onButtonClick(int id)
 		group->strategy = UnitStrategy::RUNNING;
 		break;
 
+	case MAINGUI_UNDO_MOVE:
+		if(deleteMoveFunction != NULL)
+			deleteMoveFunction->deleteMoves(group);
+		break;
+
 	case maingui_light:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= lightPrice)
+		if(statusbar->m_vValue[0] >= lightPrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= lightPrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - lightPrice);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
@@ -283,9 +298,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_heavy:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= heavyPrice)
+		if(statusbar->m_vValue[0] >= heavyPrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= heavyPrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - heavyPrice);
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
@@ -297,9 +312,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_longrange:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= longrangePrice)
+		if(statusbar->m_vValue[0] >= longrangePrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= longrangePrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - longrangePrice);
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[3]->setIsEnabled(false);
@@ -311,9 +326,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_artillery:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= artilleryPrice)
+		if(statusbar->m_vValue[0] >= artilleryPrice)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= artilleryPrice;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - artilleryPrice);
 			cityUnityBuy[0]->setIsEnabled(false);
 			cityUnityBuy[1]->setIsEnabled(false);
 			cityUnityBuy[2]->setIsEnabled(false);
@@ -325,9 +340,9 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case maingui_city:
-		if(updateInfo[currentCityActionsIndex].remainingGold >= cityUpgrade)
+		if(statusbar->m_vValue[0] >= cityUpgrade)
 		{
-			updateInfo[currentCityActionsIndex].remainingGold -= cityUpgrade;
+			statusbar->setValue(Icons::MONEY, statusbar->m_vValue[0] - cityUpgrade);
 			updateInfo[currentCityActionsIndex].updating = true;
 			cityUnityBuy[4]->setIsEnabled(false);
 			positionGraphics();
@@ -365,6 +380,8 @@ void mainGui::draw(sf::RenderWindow* rw)
 			army_mode[i]->draw(rw);
 		for(Unit* u : units)
 			u->draw(rw);
+
+		deleteMove->draw(rw);
 	}
 	else if(city_display)
 	{
@@ -374,6 +391,8 @@ void mainGui::draw(sf::RenderWindow* rw)
 			it->draw(rw);
 		for(auto it : cityUnityBuy)
 			it->draw(rw);
+
+		
 	}
 }
 
@@ -392,6 +411,7 @@ void mainGui::animationTick()
 	if(city_display)
 		for(auto it : cityUnityBuy)
 			it->animationTick();
+	deleteMove->animationTick();
 }
 
 void mainGui::displayArmy()
@@ -493,7 +513,6 @@ void mainGui::displayCity()
 		ca.pos=city->position;
 		ca.ProducedUnit=UnitTypes::ARTILLERY;
 		ca.updating=false;
-		ca.remainingGold=city->generatedIncome;
 
 		updateInfo.push_back(ca);
 	}
@@ -510,6 +529,7 @@ std::vector<char> mainGui::getCityActionData()
 
 	for(auto it : updateInfo)
 	{
+		toSend.push_back(static_cast<char>(city->player_ID));
 		toSend.push_back(static_cast<char>(it.pos.x));
 		toSend.push_back(static_cast<char>(it.pos.y));
 		toSend.push_back(static_cast<char>(it.numOfProducingUnit));

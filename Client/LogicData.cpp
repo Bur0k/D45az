@@ -7,8 +7,6 @@ LogicData::LogicData()
 
 	this->serverReady  = false;
 	this->updateGameData();
-
-
 }
 
 LogicData::~LogicData()
@@ -158,6 +156,10 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0411:
 		{
+			bool enable = false;	// Sperre für setValue der Statusbar, da sie bei der ersten Datenübertragung noch nicht vorhanden ist
+			if(this->ownedUnits.size() != 0)
+				enable = true;
+
 			for (unsigned int i = 0; i < data.size(); i+=74)
 			{
 				ownedUnits.clear();
@@ -182,6 +184,12 @@ void LogicData::processNewMessage(short id,vector<char> data)
 
 				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
 				ownedUnits.push_back(ugroup);
+				
+				if(enable)
+				{
+					erfg.clear();	
+					c->write(0x0601, erfg);	// Message an den Server -> Alle neuen Daten eingelesen
+				}
 			}
 		}break;
 	case 0x0413:
@@ -201,6 +209,14 @@ void LogicData::processNewMessage(short id,vector<char> data)
 	case 0x0415:
 		{		
 			this->serverReady = true;
+		}break;
+	case 0x0417:
+		{
+			// data enthält alle Moves die durchgeführt werden
+
+			// z.B data[0] -> playerID
+			// data[1] -> x Koordinate
+			// data[2] -> y Koordinate
 		}break;
 }
 }

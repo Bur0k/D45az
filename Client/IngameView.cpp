@@ -3,6 +3,8 @@
 //TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
+	
+
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
@@ -51,7 +53,12 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
 	
+	this->turnCount = 1;
 	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+	this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+	this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+	this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+	
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -71,13 +78,16 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	turnOnFogOfWar = true;
 
 
-	mainGuiOBJECT.onResize(screensize); // wieso wird das als Fehler angezeit?
+	mainGuiOBJECT.onResize(screensize);
 	m_DrawV.push_back(&mainGuiOBJECT);
 	m_ClickV.push_back(&mainGuiOBJECT);
 	m_AnimateV.push_back(&mainGuiOBJECT);
 
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
+
+	mainGuiOBJECT.deleteMoveFunction = this;
+	mainGuiOBJECT.statusbar = m_SBar;
 
 	this->loadGamestate();
 
@@ -265,7 +275,6 @@ void IngameView::onKeyDown(sf::Event e)
 	if(Keyboard::isKeyPressed(Keyboard::F))
 	{
 		loadGamestate();
-		updateFogOfWar();
 	}
 
 }
@@ -442,14 +451,6 @@ void IngameView::nextPhase()
 		// Button disablen
 		m_commitB->setIsEnabled(false);
 
-		// Befehle vom Spieler werden dem Server übermittelt
-		// aber momentan wird sofort noch nach Berechnungen gefragt.
-		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
-		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
-		// durchgeführt hat
-		// --> Server muss selbst sehen, wann er fertig ist und der Client
-		// bräuchte gar keine Nachfragenachricht! Sondern müsste
-		// eigentlich auf den Server warten !!!
 		commitMessage();
 
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
@@ -577,14 +578,14 @@ void IngameView::moveMap()
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
 	//update rectanglescity
-	if (tmpView != m_mapView)
+	/*if (tmpView != m_mapView)
 	{
 		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
 	{
 			m_RectangleCityShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 							(float)(m_GameData.allCities[i]->position.y * m_tileSize.y- m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		}
-	}
+	}*/
 
 
 	//update displayed armys
@@ -802,7 +803,7 @@ void IngameView::updateFogOfWar()
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
 			for(auto it3:m_GameData.ownedCities)
 			{
-				int id = it2->layer[it3->position.y][it3->position.x];
+				int id = it2->layer[it3->position.y<<1][it3->position.x<<1];
 				for(unsigned int i=0;i<it2->layer.size();i++)
 					for(unsigned int j=0;j<it2->layer[0].size();j++)
 						if(id == it2->layer[i][j])
@@ -817,6 +818,11 @@ void IngameView::loadGamestate()
 		delete army;
 	for(Army* army : m_enemy_armys)
 		delete army;
+
+	for(std::vector<Vector2i> v : army_moves)
+		v.clear();
+	army_moves.clear();
+
 	m_owned_armys.clear();
 	m_enemy_armys.clear();
 	
@@ -839,14 +845,14 @@ void IngameView::loadGamestate()
 	//clear RectangleVector
 	m_RectangleCityShapes.clear();
 	//fill RectangleVector
-	for (auto city: m_GameData.allCities)
+	for (City* city: m_GameData.allCities)
 	{
 		RectangleShape r;
 		Color c;
 		if (city->player_ID >= 0 && city->player_ID <= 5 && city->player_ID != 4)
 			c = MyColors.player[city->player_ID];
 		else
-			c = MyColors.Black;
+			c = MyColors.Orange;
 		c.a = 100;
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);
@@ -856,12 +862,14 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
+	updateFogOfWar();
 }
 
 bool IngameView::isInCity(UnitGroup* u)
 {
+	Vector2i pos = Vector2i(u->pos.x, u->pos.y);
 	for(City* c : m_GameData.allCities)
-		if(Vector2i(u->pos.x, u->pos.y) == c->position)
+		if(pos == c->position)
 			return true;
 	return false;
 }
@@ -878,12 +886,9 @@ bool IngameView::isVisible(Vector2i pos)
 
 void IngameView::commitMessage()
 {
-	this->commitArmyStrategy();
-	this->commitMoves();
+	this->commitArmyStrategy();	
 	this->commitCityActions();
-	this->m_GameData.updateGameData(); // Warum!?  Hier ist doch noch gar nichts brechnet, 
-							//sondern erst, wenn der Server alle (Spieler-)Infos hat
-	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold); // hat noch keine Info, weil nix brechnet (Zeitlich)
+	this->commitMoves();
 }
 
 void IngameView::commitArmyStrategy()
@@ -906,8 +911,8 @@ void IngameView::commitArmyStrategy()
 				erfg.push_back(2); break;
 		}
 	}
-
-	c->write(0x0416, erfg);
+	if(erfg.size() > 0)
+		c->write(0x0416, erfg);
 }
 
 void IngameView::commitMoves()
@@ -918,13 +923,14 @@ void IngameView::commitMoves()
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
-		for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
-		{
-			erfg.push_back(this->army_moves[i][j].x);
-			erfg.push_back(this->army_moves[i][j].y);
-		}
+			for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
+			{
+				erfg.push_back(this->army_moves[i][j].x);
+				erfg.push_back(this->army_moves[i][j].y);
+			}
 
 		erfg.push_back('/');
+
 	}
 
 	this->army_moves.clear();
@@ -941,15 +947,34 @@ void IngameView::processNewMessage(short id,vector<char> data)
 {
 	switch(id)
 	{
-	case 0x0600:
-		{
-			
-		//	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+	case 0x0600: // Alle Spieler haben Committed -> Server schickt update Freigabe
+		{		
+			this->m_GameData.updateGameData();
 		}break;
+	case 0x0602:	// Alle Daten Up to Date -> Freigabe Statusbar update
+		{
+			this->turnCount++;
+			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);			
+			this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+			this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+			this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+		}break;
+
 	}
 }
 
 void IngameView::processNetworkError(int id, std::string msg)
 {
 
+}
+
+void IngameView::deleteMoves(UnitGroup* ug)
+{
+	Vector2i pos = Vector2i(ug->pos.x, ug->pos.y);
+	for(unsigned int i = 0; i < army_moves.size(); i++)
+		if(pos == army_moves[i][0]) 
+		{
+			army_moves.erase(army_moves.begin() + i);
+			break;
+		}
 }
