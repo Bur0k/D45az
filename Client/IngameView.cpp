@@ -967,10 +967,13 @@ void IngameView::processNewMessage(short id,vector<unsigned char> data)
 	case 0x0602:	// Alle Daten Up to Date -> Freigabe Statusbar update
 		{
 			this->turnCount++;
-			this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);			
-			this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
-			this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
-			this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+			if(turnCount > 1)
+			{
+				this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);			
+				this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+				this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+				this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+			}
 		}break;
 
 	}

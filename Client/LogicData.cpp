@@ -185,11 +185,11 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
 				ownedUnits.push_back(ugroup);
 				
-				if(enable)
-				{
+				/*if(enable)
+				{*/
 					erfg.clear();	
 					c->write(0x0601, erfg);	// Message an den Server -> Alle neuen Daten eingelesen
-				}
+				//}
 			}
 		}break;
 	case 0x0413:
