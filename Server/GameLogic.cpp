@@ -73,11 +73,11 @@ void GameLogic::computeTurns()
 	
 	for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 	{
-		POINT* p = new POINT();
-		p->x = this->movingArmies[i]->move[0]->x;
-		p->x = this->movingArmies[i]->move[0]->y;
-		vp.push_back(p);
-		result_moves.push_back(vp);
+		//POINT* p = new POINT();
+		//p->x = this->movingArmies[i]->move[0]->x;
+		//p->x = this->movingArmies[i]->move[0]->y;
+		//vp.push_back(p);
+		//result_moves.push_back(vp);
 
 		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
 		{

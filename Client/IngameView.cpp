@@ -77,6 +77,11 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
 
+	//toDraw.clear();
+	//std::vector<bool> temp;
+	//temp.resize(m_map.layers[0]->layer[0].size(),true);//X Values
+	//for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)//Y Values
+	//	toDraw.push_back(temp);
 
 	mainGuiOBJECT.onResize(screensize);
 	m_DrawV.push_back(&mainGuiOBJECT);
@@ -95,7 +100,7 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	//TODO LOADING GRAPHIC
 	//this->loadGamestate();
 
-	//updateFogOfWar();
+	updateFogOfWar();
 }
 
 IngameView::~IngameView()
