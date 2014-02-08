@@ -91,10 +91,13 @@ void GameLogic::computeTurns()
 	{
 		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 		{
-			armies[i]->pos = this->movingArmies[i]->move[0];
-			this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
+			if(this->movingArmies[i]->move.size() > 0)
+			{
+				armies[i]->pos = this->movingArmies[i]->move[0];
+				this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
 			
-			this->isCollision(armies[i]->pos, armies);
+				this->isCollision(armies[i]->pos, armies);
+			}
 		}
 
 		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
@@ -402,12 +405,6 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						}
 			
 						this->playerCommits = 0;
-					}
-					else
-					{
-						while(this->playerCommits < this->playersIngame.size()){}
-
-						this->computeTurns();
 					}
 				}break;
 				case 0x0414: // Auswertung Stadtaktionen nach Commit (Einheiten ausbilden, Stadt aufwerten)
