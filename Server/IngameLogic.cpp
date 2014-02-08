@@ -29,9 +29,9 @@ IngameLogic::~IngameLogic()
 }
 
 
-void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	switch(id)
 	{

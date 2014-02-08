@@ -202,7 +202,7 @@ public:
 	void commitCityActions();
 	short turnCount;
 
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 
 	/////IMPLEMENTING IView end/////

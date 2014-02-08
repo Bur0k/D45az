@@ -10,7 +10,7 @@ GameLobby::GameLobby()
 
 	updated = 0;
 
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	this->c->write(0x0330, erfg);
 }
 
@@ -23,44 +23,44 @@ GameLobby::~GameLobby(void)
 
 void GameLobby::disconnect()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	this->c->write(0x0300, erfg);
 }
 
 void GameLobby::startGame()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	this->c->write(0x0303, erfg);
 }
 
 void GameLobby::mapChange(short mapID)
 {
-	vector<char> erfg = code(mapID);
+	vector<unsigned char> erfg = code(mapID);
 
 	this->c->write(0x0310, erfg);
 }
 
 void GameLobby::maxPlayerChange(short value)
 {
-	vector<char> erfg = code(value);
+	vector<unsigned char> erfg = code(value);
 
 	this->c->write(0x0311, erfg);
 }
 
 void GameLobby::kickPlayer(string name)
 {
-	vector<char> erfg = code((short) name.length());
+	vector<unsigned char> erfg = code((short) name.length());
 
-	vector<char> tmp = code(name);
+	vector<unsigned char> tmp = code(name);
 	for (unsigned int i = 0; i < name.length(); i++)
 		erfg.push_back(tmp[i]);
 
 	this->c->write(0x0312, erfg);
 }
 
-void GameLobby::processNewMessage(short id,vector<char> data)
+void GameLobby::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch(id)
 	{

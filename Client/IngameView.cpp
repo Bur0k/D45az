@@ -901,7 +901,7 @@ void IngameView::commitMessage()
 
 void IngameView::commitArmyStrategy()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	UnitStrategy s = UnitStrategy::OFFENSIVE; // noch nicht dirrerenziert
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
@@ -925,9 +925,9 @@ void IngameView::commitArmyStrategy()
 
 void IngameView::commitMoves()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
-	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
+	erfg.push_back((unsigned char)this->m_GameData.ownedCities[0]->player_ID);
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
@@ -951,7 +951,7 @@ void IngameView::commitCityActions()
 	c->write(0x0414,mainGuiOBJECT.getCityActionData());
 }
 
-void IngameView::processNewMessage(short id,vector<char> data)
+void IngameView::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch(id)
 	{

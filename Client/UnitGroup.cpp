@@ -22,7 +22,7 @@ UnitGroup::~UnitGroup()
 	delete[] units;
 }
 
-void UnitGroup::processNewMessage(short id,vector<char> data)
+void UnitGroup::processNewMessage(short id,vector<unsigned char> data)
 {
 
 }

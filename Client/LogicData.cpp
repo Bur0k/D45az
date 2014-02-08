@@ -25,45 +25,45 @@ void LogicData::updateGameData()
 
 void LogicData::requestPlayers()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	erfg.push_back(0);
 	c->write(0x0400, erfg);
 }
 
 void LogicData::requestAllCities()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0402, erfg);
 }
 
 void LogicData::requestOwnedCities()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0404, erfg);
 }
 
 void LogicData::requestAllUnits()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0408, erfg);
 }
 
 void LogicData::requestOwnedUnits()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0410, erfg);
 }
 
 void LogicData::requestGold()
 {
-	vector<char> erfg;
-	erfg.push_back((char)this->ownedCities[0]->player_ID);
+	vector<unsigned char> erfg;
+	erfg.push_back((unsigned char)this->ownedCities[0]->player_ID);
 	c->write(0x0418, erfg);
 }
 
-void LogicData::processNewMessage(short id,vector<char> data)
+void LogicData::processNewMessage(short id,vector<unsigned char> data)
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	switch(id)
 	{

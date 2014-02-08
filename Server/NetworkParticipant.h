@@ -8,7 +8,7 @@
 class NetworkParticipant
 {
 public:
-	virtual void processNewMessage(SOCKET s,short id,std::vector<char> data) = 0;
+	virtual void processNewMessage(SOCKET s,short id,std::vector<unsigned char> data) = 0;
 	virtual void processNetworkError(SOCKET s,int errCode,std::string errMessage) = 0;
 };
 

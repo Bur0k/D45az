@@ -8,7 +8,7 @@ Ingame::~Ingame()
 {
 }
 
-void Ingame::processNewMessage(short id,vector<char> data)
+void Ingame::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch(id)
 	{

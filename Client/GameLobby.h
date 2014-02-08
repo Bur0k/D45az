@@ -26,7 +26,7 @@ public:
 	GameLobby();
 	~GameLobby();
 
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 
 	// Funktionen
