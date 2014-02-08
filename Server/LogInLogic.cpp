@@ -13,7 +13,7 @@ LogInLogic::~LogInLogic()
 	server->deleteFromNewMessageCallback(this);
 }
 
-void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
+void LogInLogic::processNewMessage(SOCKET s,short id,vector<unsigned char> data)
 {
 	switch(id)
 	{
@@ -33,7 +33,7 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				{
 					if (server->connectedPlayers[i].Name == name)
 					{
-						std::vector<char> erfg;
+						std::vector<unsigned char> erfg;
 						erfg.push_back(0);
 						server->write(s,0x0101,erfg);
 
@@ -50,14 +50,14 @@ void LogInLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					server->connectedPlayers.push_back(newPlayer);
 
 					//send 0101 nachricht 1
-					std::vector<char> erfg;
+					std::vector<unsigned char> erfg;
 					erfg.push_back(1);
 					server->write(s,0x0101,erfg);
 				}
 			}
 			else
 			{
-				std::vector<char> erfg;
+				std::vector<unsigned char> erfg;
 				erfg.push_back((char)-1);
 				server->write(s,0x0101,erfg);
 			}

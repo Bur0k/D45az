@@ -1,6 +1,6 @@
 #include "Login.h"
 
-void Login::processNewMessage(short id,vector<char> data)
+void Login::processNewMessage(short id,vector<unsigned char> data)
 {
 	if(id==0x0101)
 	{
@@ -29,7 +29,7 @@ Login::Login(string Name)
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
-	vector<char> charName;
+	vector<unsigned char> charName;
 	for(unsigned int i=0;i<Name.size();i++)
 		charName.push_back(Name.at(i));
 

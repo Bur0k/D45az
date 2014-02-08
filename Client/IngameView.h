@@ -47,7 +47,8 @@ enum class InagameViewPhases{
 	YOURTURN,			//moving units and building is allowed
 	WAITFORPLAYERS,		//wait till all players have finished their 
 	WATCHRESULTS,		//watch results of the last turn
-	GAMEOVER			//game has ended no further information from the server is required and the fog of war will be turned off
+	GAMEOVER,			//game has ended no further information from the server is required and the fog of war will be turned off
+	STARTPHASE			//the client will wiat till the server has given all its information
 };
 
 class turn
@@ -67,12 +68,13 @@ struct buildOrders
 
 
 class IngameView : 
-	public IView, public IButtonfunction, public ISliderFunction, public ITextBoxFunction, public NetworkParticipant, public ImainGuiFunc
+	public IView, public IButtonfunction, public ISliderFunction,
+	public ITextBoxFunction, public NetworkParticipant, public ImainGuiFunc
 {
 private:
 
 	Client* c;
-	
+
 	//path drawing
 	bool m_turnOnPathDraw;
 	short m_maxLen;
@@ -200,7 +202,7 @@ public:
 	void commitCityActions();
 	short turnCount;
 
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 
 	/////IMPLEMENTING IView end/////

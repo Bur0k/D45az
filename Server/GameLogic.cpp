@@ -157,9 +157,9 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 	}
 }
 
-void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
 {
-	std::vector<char> erfg;
+	std::vector<unsigned char> erfg;
 
 	switch(id)
 	{
@@ -168,7 +168,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				for(int i = 0; i < (signed) this->playersIngame.size(); i++)
 				{
 					string name = this->playersIngame[i]->owner.Name;
-					vector<char> tmp = code(name);
+					vector<unsigned char> tmp = code(name);
 
 					erfg.insert(erfg.end(), tmp.begin(), tmp.end());
 					erfg.push_back('/');
@@ -194,7 +194,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					erfg.push_back(static_cast<char>((this->startCities[i]->position->x)>>1));
 					erfg.push_back(static_cast<char>((this->startCities[i]->position->y)>>1));
 					erfg.push_back(this->startCities[i]->level);
-					erfg.push_back((char)this->startCities[i]->player_ID);
+					erfg.push_back((unsigned char)this->startCities[i]->player_ID);
 				}
 
 				
@@ -243,7 +243,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 					{
 							//send pos
-								std::vector<char> tmp;
+								std::vector<unsigned char> tmp;
 								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
@@ -297,7 +297,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						for (unsigned int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 						{
 								//send pos
-								std::vector<char> tmp;
+								std::vector<unsigned char> tmp;
 								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
@@ -345,7 +345,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 				{
 					vector<POINT*> vp;
 					POINT* p = new POINT();
-					vector<char> erfg;
+					vector<unsigned char> erfg;
 
 					int player_ID = data[0];
 
@@ -516,7 +516,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 						if(s == it->owner.s)//Ist der Spieler in DIESER Lobby?
 						{
 							string chatToSend = it->owner.Name + ": "+decodeString(data,0,data.size());
-							std::vector<char> toSend = code(chatToSend);
+							std::vector<unsigned char> toSend = code(chatToSend);
 
 							for(auto it2 : playersIngame)
 								server->write(it2->owner.s,0x1001,toSend);
@@ -528,9 +528,9 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 
 }
 	
-vector<char> GameLogic::divideForMessage(int number)
+vector<unsigned char> GameLogic::divideForMessage(int number)
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	std::stringstream sstr;
 	sstr << number;

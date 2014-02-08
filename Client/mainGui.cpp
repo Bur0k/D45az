@@ -520,11 +520,11 @@ void mainGui::displayCity()
 	positionGraphics();
 }
 
-std::vector<char> mainGui::getCityActionData()
+std::vector<unsigned char> mainGui::getCityActionData()
 {
 	// Message: (Position x city, Position y city, Anzahl Truppen Group, Unittype, bool cityUpgrade, playerID,...)
 
-	std::vector<char> toSend;
+	std::vector<unsigned char> toSend;
 
 
 	for(auto it : updateInfo)

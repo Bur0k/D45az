@@ -89,9 +89,13 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	mainGuiOBJECT.deleteMoveFunction = this;
 	mainGuiOBJECT.statusbar = m_SBar;
 
-	this->loadGamestate();
+	m_commitB->setIsEnabled(false);
 
-	updateFogOfWar();
+	//the server ready bool has to be set for the game to load the actual game data
+	//TODO LOADING GRAPHIC
+	//this->loadGamestate();
+
+	//updateFogOfWar();
 }
 
 IngameView::~IngameView()
@@ -421,7 +425,7 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	if(m_phase == InagameViewPhases::WAITFORPLAYERS && m_GameData.serverReady)
+	if((m_phase == InagameViewPhases::WAITFORPLAYERS || m_phase == InagameViewPhases::STARTPHASE) && m_GameData.serverReady)
 	{
 		m_GameData.serverReady = false;
 		nextPhase();
@@ -479,15 +483,19 @@ void IngameView::nextPhase()
 		break;
 
 	case InagameViewPhases::GAMEOVER:
-		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
-		//if winner
+		if(m_GameData.ownedCities.size() > 0)
 			m_pMS->play_sound(WIN);
-			//else = LOSER
+		else
 			m_pMS->play_sound(LOSE);
 		break;
-
+	case InagameViewPhases::STARTPHASE:
+		
+		loadGamestate();
+		m_commitB->setIsEnabled(true);
+		m_phase = InagameViewPhases::YOURTURN;
+		break;
 	default:
 		std::cout << "IngameView Error: unknown phase!" << std::endl;
 		break;
@@ -893,7 +901,7 @@ void IngameView::commitMessage()
 
 void IngameView::commitArmyStrategy()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	UnitStrategy s = UnitStrategy::OFFENSIVE; // noch nicht dirrerenziert
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
@@ -917,9 +925,9 @@ void IngameView::commitArmyStrategy()
 
 void IngameView::commitMoves()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
-	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
+	erfg.push_back((unsigned char)this->m_GameData.ownedCities[0]->player_ID);
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
@@ -943,7 +951,7 @@ void IngameView::commitCityActions()
 	c->write(0x0414,mainGuiOBJECT.getCityActionData());
 }
 
-void IngameView::processNewMessage(short id,vector<char> data)
+void IngameView::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch(id)
 	{

@@ -91,7 +91,7 @@ private:
 public:
 	ImainGuiFunc* deleteMoveFunction;
 	Statusbar* statusbar;
-	std::vector<char> getCityActionData();
+	std::vector<unsigned char> getCityActionData();
 	float y_offset;
 
 	bool has_army;

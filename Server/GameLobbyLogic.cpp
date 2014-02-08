@@ -110,12 +110,12 @@ bool GameLobbyLogic::isAlreadyConnected(SOCKET s)
 
 void GameLobbyLogic::sendPlayerNames(SOCKET s)
 {
-	std::vector<char> erfg;
+	std::vector<unsigned char> erfg;
 
 	for(int i = 0; i < (signed) this->players.size(); i++)
 	{
 		string name = this->players[i].Name;
-		vector<char> tmp = code(name);
+		vector<unsigned char> tmp = code(name);
 
 		erfg.insert(erfg.end(), tmp.begin(), tmp.end());
 		erfg.push_back('/');
@@ -129,13 +129,13 @@ void GameLobbyLogic::sendPlayerNames(SOCKET s)
 
 void GameLobbyLogic::sendMaxPlayers(SOCKET s)
 {
-	vector<char> erfg = code(this->playerlimit);
+	vector<unsigned char> erfg = code(this->playerlimit);
 	this->server->write(s, 0x0305, erfg);
 }
 
 void GameLobbyLogic::sendGameMaster(SOCKET s)
 {
-	vector<char> erfg = code(this->gameMaster.Name);
+	vector<unsigned char> erfg = code(this->gameMaster.Name);
 	this->server->write(s, 0x0306, erfg);
 }
 
@@ -145,13 +145,13 @@ void GameLobbyLogic::sendGameLobbyData(SOCKET s)
 }
 //void GameLobbyLogic::sendCurrentMap(SOCKET s)
 //{
-//	vector<char> erfg = code(this->currentMap->id);
+//	vector<unsigned char> erfg = code(this->currentMap->id);
 //	this->server->write(s, 0x0306, erfg);
 //}
 
 /* Kommunikation */
 
-void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
+void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<unsigned char> data)
 {
 	bool socketAvailable = false;
 
@@ -171,7 +171,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 					if(this->players[i].s == s)
 						this->players.erase(this->players.begin() + i);
 				
-				std::vector<char> erfg;
+				std::vector<unsigned char> erfg;
 
 				this->server->write(s, 0x0301, erfg);	
 			}break;
@@ -183,7 +183,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 					GameLogic* game = new GameLogic(this->players, this->currentMap);
 
-					std::vector<char> erfg;
+					std::vector<unsigned char> erfg;
 
 					
 					for(auto it : players)
@@ -199,7 +199,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 					// Mapchange
 
-					std::vector<char> erfg;
+					std::vector<unsigned char> erfg;
 
 					this->server->write(s, 0x0320, erfg);
 				}
@@ -215,7 +215,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 
 					this->setPlayerlimit(anz);
 
-					std::vector<char> erfg;
+					std::vector<unsigned char> erfg;
 					char playerCount = static_cast<char>(anz);
 					erfg.push_back(playerCount);
 					this->server->write(s, 0x0321, erfg);

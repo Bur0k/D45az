@@ -17,7 +17,7 @@ public:
 
 	//returns 0 for no Response until now, returns 1 for name can be used returns -1 for name is already used
 	short getState();
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 };
 

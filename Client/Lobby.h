@@ -29,7 +29,7 @@ public:
 	void connectToGameLobby(short mapid);
 	void createNewGameLobby(std::string gamename);
 	void askforLobbyData();
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 };
 
