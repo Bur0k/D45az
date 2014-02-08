@@ -91,9 +91,11 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	m_commitB->setIsEnabled(false);
 
-	this->loadGamestate();
+	//the server ready bool has to be set for the game to load the actual game data
+	//TODO LOADING GRAPHIC
+	//this->loadGamestate();
 
-	updateFogOfWar();
+	//updateFogOfWar();
 }
 
 IngameView::~IngameView()
