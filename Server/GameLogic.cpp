@@ -68,9 +68,17 @@ GameLogic::~GameLogic()
 void GameLogic::computeTurns()
 {
 	vector<UnitGroupLogic*> armies;
+	std::vector<std::vector<POINT*>> result_moves;
+	vector<POINT*> vp;
 	
 	for(unsigned int i = 0; i < this->movingArmies.size(); i++)
 	{
+		POINT* p = new POINT();
+		p->x = this->movingArmies[i]->move[0]->x;
+		p->x = this->movingArmies[i]->move[0]->y;
+		vp.push_back(p);
+		result_moves.push_back(vp);
+
 		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
 		{
 			int x1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->x;
@@ -373,24 +381,24 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 					{
 						// Erstellen eines Vektors mit allen Bewegungen zur Client Visualisierung
 
-						for(int i = 0; i < this->movingArmies.size(); i++)
-						{
-							erfg.push_back(this->movingArmies[i]->playerID);
+						//for(int i = 0; i < this->movingArmies.size(); i++)
+						//{
+						//	erfg.push_back(this->movingArmies[i]->playerID);
 
-							for(int j = 0; j < this->movingArmies[i]->move.size(); j++)
-							{
-								erfg.push_back(this->movingArmies[i]->move[j]->x);
-								erfg.push_back(this->movingArmies[i]->move[j]->y);
-							}
+						//	for(int j = 0; j < this->movingArmies[i]->move.size(); j++)
+						//	{
+						//		erfg.push_back(this->movingArmies[i]->move[j]->x);
+						//		erfg.push_back(this->movingArmies[i]->move[j]->y);
+						//	}
 
-							erfg.push_back('/');
-						}
+						//	erfg.push_back('/');
+						//}
 
 						this->computeTurns();
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
-							server->write(this->playersIngame[i]->owner.s, 0x0417, erfg);
+							//server->write(this->playersIngame[i]->owner.s, 0x0417, erfg);
 
 							for(unsigned  j = 0; j < this->playersIngame[i]->cities.size(); j++)
 							{
@@ -398,6 +406,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
 							}
 						}
 
+						erfg.clear();
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{							

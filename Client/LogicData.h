@@ -23,6 +23,7 @@ public:
 	vector<City*> ownedCities;
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
+	std::vector<std::vector<sf::Vector2i>> result_moves;
 	int gold;
 	bool serverReady;
 
