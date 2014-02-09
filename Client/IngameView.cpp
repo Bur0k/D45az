@@ -916,9 +916,9 @@ bool IngameView::isVisible(Vector2i pos)
 {
 	pos *= 2;
 	if(toDraw[pos.y][pos.x] || toDraw[pos.y + 1][pos.x] || toDraw[pos.y][pos.x + 1] || toDraw[pos.y + 1][pos.x + 1])
-		return true;
-	else	
 		return false;
+	else	
+		return true;
 }
 
 void IngameView::commitMessage()
