@@ -863,6 +863,8 @@ void IngameView::loadGamestate()
 	m_owned_armys.clear();
 	m_enemy_armys.clear();
 	
+	updateFogOfWar();
+
 	short my_ID;
 	//my player id is read from the city at position 0
 	if(m_GameData.ownedCities.size() > 0)
@@ -899,7 +901,6 @@ void IngameView::loadGamestate()
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
-	updateFogOfWar();
 }
 
 bool IngameView::isInCity(Vector2i pos)
