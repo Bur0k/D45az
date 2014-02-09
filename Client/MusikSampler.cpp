@@ -124,7 +124,7 @@ bool MusikSampler::play_music(int index)
 
 	m_Songnumber = index;
 	m_Music.setVolume(m_BgVolume);
-	m_Music.play();
+	//m_Music.play();
 	return 1;
 }
 
@@ -138,7 +138,7 @@ bool MusikSampler::play_sound(int index)
 	tmp_sound->setBuffer(m_vBuffer[index]); // sound abholen
 
 	tmp_sound->setVolume(m_SoVolume);
-	tmp_sound->play();	
+	//tmp_sound->play();	
 
 	for (unsigned int i = 0; i < m_vSound.size() ; i++)
 		if(m_vSound[i]->getStatus() == 0) // enum 0 == stopped
