@@ -578,4 +578,10 @@ void  mainGui::Clear()
 	hidden = true;
 
 	positionGraphics();
+
+	updateInfo.clear();
+	for(auto it : cityUnits)
+		it->setNumberOfSoldiers(0);
+	for(auto it : cityUnityBuy)
+		it->setIsEnabled(true);
 }
