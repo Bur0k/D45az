@@ -141,14 +141,14 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 		if(pos->x + 2 >= p2->x && pos->x - 2 <= p2->x && pos->y + 2 >= p2->y && pos->y - 2 <= p2->y)
 		{
 			if(currentArmy->player_ID == armies[i]->player_ID)
-			{
+				{
 				cout << "MERGE";
 				
 				*currentArmy = fight(*currentArmy, *armies[i]); 
-				// Abfrage Einheitenmerge
-			}
-			else
-			{
+					// Abfrage Einheitenmerge
+				}
+				else
+				{
 				cout << "FIGHT";
 
 				*currentArmy = fight(*currentArmy, *armies[i]); 
@@ -223,10 +223,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x)>>1);
 						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y)>>1);
 						erfg.push_back(this->playersIngame[index]->cities[i]->level);
+						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
 					}
-
-					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
-		
 
 					server->write(s, 0x0405, erfg);
 
@@ -248,6 +246,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 					{
 							//send pos
 								std::vector<unsigned char> tmp;
+								
+								tmp = code((int)this->playersIngame[i]->player_ID);
+								for (unsigned int l = 0; l < tmp.size(); l++)
+									erfg.push_back(tmp[l]);
+
 								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);
@@ -739,8 +742,8 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 					}
 					else 
 					{
-                        int Einheiten = army2.units[k]->living;
-                        for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
+                                int Einheiten = army2.units[k]->living;
+                                for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
 						{
 							double atk1 = 0.0;
 							double atk2 = 0.0;
@@ -781,21 +784,21 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 
                                     if(atk1 < atk2)
                                         army1.units[k]->living --; // STerben der Einheiten
-									else
+							else
                                         army2.units[k]->living --;
 						}
 					}
 				}
 							
-			if (army2.units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
-				army2.units.erase(army2.units.begin()+k);
-			else if (army1.units[k]->living == 0)
-				army1.units.erase(army1.units.begin()+k);
+                        if (army2.units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
+                            army2.units.erase(army2.units.begin()+k);
+                        else if (army1.units[k]->living == 0)
+                            army1.units.erase(army1.units.begin()+k);
 
-			if (army1.units.size() < army2.units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
-				Kompanies = army1.units.size();
-			else
-				Kompanies = army2.units.size();
+                        if (army1.units.size() < army2.units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
+                            Kompanies = army1.units.size();
+				else
+                            Kompanies = army2.units.size();
 			}		
 		}
 	}
