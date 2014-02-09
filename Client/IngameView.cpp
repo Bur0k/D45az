@@ -306,6 +306,19 @@ void IngameView::onKeyDown(sf::Event e)
 		loadGamestate();
 	}
 
+	int x = 0;
+	int y = 0;
+
+	if(Keyboard::isKeyPressed(Keyboard::Left))
+		x = -1;
+	else if(Keyboard::isKeyPressed(Keyboard::Right))
+		x = +1;
+	if(Keyboard::isKeyPressed(Keyboard::Down))
+		y = +1;
+	else if(Keyboard::isKeyPressed(Keyboard::Up))
+		y = -1;
+	if(x != 0 || y != 0)
+		setScrollDirection(x,y);
 }
 
 void IngameView::onKeyUp(sf::Event e)
@@ -313,6 +326,20 @@ void IngameView::onKeyUp(sf::Event e)
 	chat.onKeyUp(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
+	
+	int x = 0;
+	int y = 0;
+
+	if(Keyboard::isKeyPressed(Keyboard::Left))
+		x = -1;
+	else if(Keyboard::isKeyPressed(Keyboard::Right))
+		x = +1;
+	if(Keyboard::isKeyPressed(Keyboard::Down))
+		y = +1;
+	else if(Keyboard::isKeyPressed(Keyboard::Up))
+		y = -1;
+	if(x == 0 || y == 0)
+		setScrollDirection(x,y);
 }
 
 void IngameView::onTextInput(std::string s)
@@ -628,6 +655,11 @@ void IngameView::moveMap()
 		a->onMapMove(m_mapView);
 	for(Army* a : m_enemy_armys)
 		a->onMapMove(m_mapView);
+
+	//update mouse over rectangle
+	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+
 }
 
 void IngameView::displayCityInfo(City *c)
@@ -895,7 +927,7 @@ void IngameView::loadGamestate()
 		c.a = 100;
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);
-		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2);
 		r.setPosition((float)(city->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 						(float)(city->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
