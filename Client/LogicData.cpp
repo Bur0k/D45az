@@ -87,6 +87,7 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 	case 0x0403:
 		{
 			int length = data[0];
+			short playerID;
 			sf::Vector2i pos;
 			int level;
 
@@ -97,8 +98,9 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 				pos.x = data[1];
 				pos.y = data[2];
 				level = data[3];
+				playerID = data[4];
 
-				City* c = new City(pos, level, 5);
+				City* c = new City(pos, level, playerID);
 
 				this->allCities.push_back(c);
 
@@ -107,7 +109,7 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 		}break;
 	case 0x0405:
 		{
-			short player_ID = data[4];
+			short player_ID;
 			int length = data[0];
 			sf::Vector2i pos;
 			int level;
@@ -119,12 +121,13 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 				pos.x = data[1];
 				pos.y = data[2];
 				level = data[3];
+				player_ID = data[4];
 
 				City* c = new City(pos, level, player_ID);
 
 				this->ownedCities.push_back(c);
 
-				data.erase(data.begin() + 1, data.begin() + 3);
+				data.erase(data.begin() + 1, data.begin() + 5);
 			}
 		}break;
 	case 0x0409:

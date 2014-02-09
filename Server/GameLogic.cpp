@@ -152,7 +152,7 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				}
 				else
 				{
-					// FIGHT
+					this->fight(*currentArmy, *(*it));
 				}
 			}
 		}
@@ -224,10 +224,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x)>>1);
 						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y)>>1);
 						erfg.push_back(this->playersIngame[index]->cities[i]->level);
+						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
 					}
-
-					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
-		
 
 					server->write(s, 0x0405, erfg);
 
