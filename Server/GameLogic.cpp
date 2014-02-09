@@ -47,6 +47,8 @@ GameLogic::GameLogic(vector<PlayerData> players, Map* map)
 		this->playersIngame.push_back(ingame);
 	}
 
+	for(int i = 0; i < players.size(); i++)
+		this->newUnitGroupsCreated.push_back(0);
 	
 }
 
@@ -79,7 +81,9 @@ void GameLogic::computeTurns()
 		//vp.push_back(p);
 		//result_moves.push_back(vp);
 
-		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
+
+
+		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size() - this->newUnitGroupsCreated[this->movingArmies[i]->playerID]; j++)
 		{
 			int x1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->x;
 			int y1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->y;
@@ -117,6 +121,9 @@ void GameLogic::computeTurns()
 			}
 		}
 	}
+
+	for(int i = 0; i < this->newUnitGroupsCreated.size(); i++)
+		this->newUnitGroupsCreated[i] = 0;
 }
 
 void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
@@ -203,37 +210,40 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 			}break;
 		case 0x0404: // Client fordert Daten der eigenen Städte an
 			{
-				int index;
-
-				for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+				if(this->playersIngame.size() > 0)
 				{
-					if(this->playersIngame[i]->owner.s == s)
-						index = i;
-				}
+					int index;
 
-				int length = this->playersIngame[index]->cities.size();
+					for(unsigned int i = 0; i < this->playersIngame.size(); i++)
+					{
+						if(this->playersIngame[i]->owner.s == s)
+							index = i;
+					}
 
-				erfg.push_back(length);
+					int length = this->playersIngame[index]->cities.size();
 
-				for(unsigned int i = 0; i < this->playersIngame[index]->cities.size(); i++)
-				{
-					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x)>>1);
-					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y)>>1);
-					erfg.push_back(this->playersIngame[index]->cities[i]->level);
-				}
+					erfg.push_back(length);
 
-				erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
+					for(unsigned int i = 0; i < this->playersIngame[index]->cities.size(); i++)
+					{
+						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->x)>>1);
+						erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[i]->position->y)>>1);
+						erfg.push_back(this->playersIngame[index]->cities[i]->level);
+					}
+
+					erfg.push_back(static_cast<char>(this->playersIngame[index]->cities[0]->player_ID));
 		
 
-				server->write(s, 0x0405, erfg);
+					server->write(s, 0x0405, erfg);
 
-				// Gold übertragen
+					// Gold übertragen
 
-				erfg.clear();
+					erfg.clear();
 
-				erfg = this->divideForMessage(this->playersIngame[index]->gold);
+					erfg = this->divideForMessage(this->playersIngame[index]->gold);
 
-				server->write(s, 0x0413, erfg);
+					server->write(s, 0x0413, erfg);
+				}
 			}break;
 		case 0x0408:
 			{	
@@ -455,12 +465,20 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 						if(data[5] == 1)
 							isCityUpgraded = true;
 
+						p.x *= 2;
+						p.y *= 2;
+
 						for(unsigned int i = 0; i < this->playersIngame[playerID]->cities.size(); i++)
 						{
-							if(this->playersIngame[playerID]->cities[i]->position == &p)
+							short x1 = p.x;
+							short x2 = this->playersIngame[playerID]->cities[i]->position->x;
+							short y1 = p.y;
+							short y2 = this->playersIngame[playerID]->cities[i]->position->y;
+
+							if(x1 == x2 && y1 == y2)
 							{
 								if(this->playersIngame[playerID]->cities[i]->upgradeCity())
-									this->playersIngame[playerID]->gold -= 500;
+									this->playersIngame[playerID]->gold -= 50;
 							}
 						}
 
@@ -468,7 +486,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 
 						for(unsigned int i = 0; i < this->playersIngame.size(); i++)
 						{
-							for(int j = 0; this->playersIngame[i]->unitGroups.size(); j++)
+							for(int j = 0; j < this->playersIngame[i]->unitGroups.size(); j++)
 							{
 								if(this->playersIngame[i]->unitGroups[j]->pos == &p)
 									p.y += 2;
@@ -477,7 +495,9 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 
 						UnitGroupLogic newGroup = UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
 
-						data.erase(data.begin() + 6);
+						this->newUnitGroupsCreated[playerID]++;
+
+						data.erase(data.begin(), data.begin() + 5);
 					}
 				}break;
 				case 0x0416:

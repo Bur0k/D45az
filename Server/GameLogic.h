@@ -32,11 +32,11 @@ private:
 	vector<CityLogic*> neutralCities;
 	short playerCommits;
 	Map* map;
+	vector<short> newUnitGroupsCreated;
 
 public:
 	GameLogic::GameLogic(vector<PlayerData> players, Map* map);
 	GameLogic::~GameLogic();
-
 	void computeTurns();
 	void isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
 	vector<unsigned char> divideForMessage(int number);
