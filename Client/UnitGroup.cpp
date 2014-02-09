@@ -1,7 +1,7 @@
 #include "UnitGroup.h"
 
 // umschreiben
-UnitGroup::UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, City* producer)
+UnitGroup::UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, int ownerID)
 {
 	this->strategy = strategy;
 	this->units = new soldiers[16];
@@ -14,7 +14,7 @@ UnitGroup::UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], U
 			this->units[i].type = types[i];
 	}
 
-	this->player_ID = producer->player_ID;
+	this->player_ID = ownerID;
 }
 
 UnitGroup::~UnitGroup()
