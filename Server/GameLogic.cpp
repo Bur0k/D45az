@@ -490,7 +490,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 							}
 						}
 
-						UnitGroupLogic newGroup = UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
+						UnitGroupLogic* newGroup = new UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
 
 
 						data.erase(data.begin(), data.begin() + 5);
