@@ -3,7 +3,7 @@
 //TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
-	
+
 
 	c = Client::get();
 	c->addToNewMessageCallback(this);
@@ -17,15 +17,17 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_scrolldir = Vector2i(0,0);
 	m_scrollspeed = Vector2f(0,0);
 
+	m_resultMoveStep = 0;
+
 	m_phase = startphase;
 
 
 	m_turnOnPathDraw = false;
-	
-	
+
+
 	m_pMS = MusikSampler::getInstance(); // singleton!
 
-	
+
 	m_map.load("Data/Maps/Map1.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
 	m_mapTileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight);
@@ -226,14 +228,29 @@ bool IngameView::PressedLeft()
 	{
 		if(m_pointAt == Vector2i(m_GameData.ownedUnits[i]->pos.x, m_GameData.ownedUnits[i]->pos.y))
 		{
-			displayArmyInfo(m_GameData.ownedUnits[i]);
 			tmpUG = m_GameData.ownedUnits[i];
+			switch (tmpUG->strategy)
+			{
+			case UnitStrategy::DEFENSIVE:
+				m_pathMaxLength = 7;
+				break;
+
+			case UnitStrategy::OFFENSIVE:
+				m_pathMaxLength = 10;
+				break;
+
+			case UnitStrategy::RUNNING:
+				m_pathMaxLength = 15;
+				break;
+
+			default:
+				break;
+			}
+			displayArmyInfo(m_GameData.ownedUnits[i]);
+
 			break;
 		}
 	}
-
-	for(Army* a : m_owned_armys)
-		a->ReleasedLeft();
 
 	if(tmpCity != NULL || tmpUG != NULL)
 		mainGuiOBJECT.updateMgui(tmpCity, tmpUG);
@@ -270,6 +287,9 @@ void IngameView::animationTick()
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 
+	if(m_phase == InagameViewPhases::WATCHRESULTS)
+		AnimateArmyMoves();
+		
 	moveMap();
 }
 	
@@ -308,6 +328,8 @@ void IngameView::draw(sf::RenderWindow* rw)
 	fogOfWardraw(rw);
 	
 	pathDraw(rw);
+
+	rw->draw(m_mapMouseOver);
 	
 	//draw displayed armys
 	for(Army* a : m_owned_armys)
@@ -318,7 +340,7 @@ void IngameView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 
-	rw->draw(m_mapMouseOver);
+	
 	
 	chat.draw(rw);
 	Rect<float> MapView;
@@ -464,15 +486,14 @@ void IngameView::nextPhase()
 		break;
 
 	case InagameViewPhases::WAITFORPLAYERS:
-		// wird zyklisch aufgerufen, aber hier darf doch noch gar nicht
-		// geladen werden, wenn Server noch gar nicht alles brechnet hat!?
-		// heißt doch die Phase deswegen "WAIT..." !!!
-		loadGamestate();
-		m_commitB->setIsEnabled(true);
+		//reset animation variables
+		m_resultMoveStep = 0;
+		m_resultMoveStepMax = 0;
+		for(std::vector<Vector2i> v : m_GameData.result_moves)
+			if(v.size() > m_resultMoveStepMax)
+				m_resultMoveStepMax = v.size();
 
-		// hier müsste zu Watchresults gegangen werden, wenn man aktuellen 
-		// State vom Server erhalten hat !!!
-		m_phase = InagameViewPhases::YOURTURN;
+		m_phase = InagameViewPhases::WATCHRESULTS;
 		break;
 
 	case InagameViewPhases::WATCHRESULTS:
@@ -588,15 +609,16 @@ void IngameView::moveMap()
 		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
+
 	//update rectanglescity
-	/*if (tmpView != m_mapView)
+	if (tmpView != m_mapView)
 	{
 		for (unsigned int i = 0; i < m_GameData.allCities.size(); i++)
 	{
 			m_RectangleCityShapes[i].setPosition((float)(m_GameData.allCities[i]->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 							(float)(m_GameData.allCities[i]->position.y * m_tileSize.y- m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		}
-	}*/
+	}
 
 
 	//update displayed armys
@@ -617,7 +639,7 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 	currentTurn.clear();
 	mouseOverTurn.clear();
 	
-	m_maxLen=10;
+	m_maxLen=m_pathMaxLength;
 	for(auto it : army_moves)
 	{
 		if(it[0] == sf::Vector2i(u->pos.x, u->pos.y))
@@ -640,7 +662,7 @@ void IngameView::drawPath()
 	{
 		if(currentTurn.size() == 0)
 		{
-			m_maxLen=10;
+			m_maxLen = m_pathMaxLength;
 			currentTurn.push_back(turn(m_pointAt));
 			if(	collisionLayer->layer[currentTurn.back().pos.y*2][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2][currentTurn.back().pos.x*2+1] != 0 ||
 				collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2+1] != 0)
@@ -830,6 +852,8 @@ void IngameView::loadGamestate()
 	for(Army* army : m_enemy_armys)
 		delete army;
 
+	mainGuiOBJECT.updateMgui(NULL,NULL);
+
 	for(std::vector<Vector2i> v : army_moves)
 		v.clear();
 	army_moves.clear();
@@ -846,12 +870,12 @@ void IngameView::loadGamestate()
 	
 	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true,isInCity(m_GameData.ownedUnits[i])));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true, isInCity(Vector2i(m_GameData.ownedUnits[i]->pos.x, m_GameData.ownedUnits[i]->pos.y))));
 
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)),isInCity(m_GameData.ownedUnits[i])));
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)),isInCity(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.y))));
 
 	//clear RectangleVector
 	m_RectangleCityShapes.clear();
@@ -876,9 +900,8 @@ void IngameView::loadGamestate()
 	updateFogOfWar();
 }
 
-bool IngameView::isInCity(UnitGroup* u)
+bool IngameView::isInCity(Vector2i pos)
 {
-	Vector2i pos = Vector2i(u->pos.x, u->pos.y);
 	for(City* c : m_GameData.allCities)
 		if(pos == c->position)
 			return true;
@@ -982,7 +1005,7 @@ void IngameView::processNetworkError(int id, std::string msg)
 
 }
 
-void IngameView::deleteMoves(UnitGroup* ug)
+void IngameView::deleteMoves(UnitGroup* ug, int length)
 {
 	Vector2i pos = Vector2i(ug->pos.x, ug->pos.y);
 	for(unsigned int i = 0; i < army_moves.size(); i++)
@@ -991,4 +1014,63 @@ void IngameView::deleteMoves(UnitGroup* ug)
 			army_moves.erase(army_moves.begin() + i);
 			break;
 		}
+
+	if(length != -1)
+		m_pathMaxLength = length;
+}
+
+void IngameView::AnimateArmyMoves()
+{
+	bool animation = false;
+	for(Army* a : m_owned_armys)
+		animation |= a->m_animating;
+	for(Army* a : m_enemy_armys)
+		animation |= a->m_animating;
+
+	if(!animation)
+	{
+		for(Army* a : m_owned_armys)
+		{
+			Vector2i nextPos = getNextAnimationPosition(a->m_original_position, m_resultMoveStep);
+
+			if(nextPos == ARMY_DIED)
+				a->m_isDead = true;
+			else if(nextPos != ARMY_STOPPED)
+			{
+				a->animatedMove(nextPos);
+				a->m_inCity = isInCity(nextPos);
+			}
+		}
+
+		for(Army* a : m_enemy_armys)
+		{
+			Vector2i nextPos = getNextAnimationPosition(a->m_original_position, m_resultMoveStep);
+
+			if(nextPos == ARMY_DIED)
+				a->m_isDead = true;
+			else if(nextPos != ARMY_STOPPED)
+			{
+				a->animatedMove(nextPos);
+				a->m_isVisible = isVisible(nextPos);
+			}
+		}
+		m_resultMoveStep++;
+		if((unsigned)m_resultMoveStep >= m_resultMoveStepMax)
+		{
+			nextPhase();
+		}
+	}
+}
+
+Vector2i IngameView::getNextAnimationPosition(Vector2i startpos, int index)
+{
+	for(std::vector<Vector2i> v : m_GameData.result_moves)
+		if(startpos == v[0] && v.size() > (unsigned)index)
+			return v[index];
+		else if(v.size() <= (unsigned)index)
+			return ARMY_STOPPED;
+
+	//error case: return stopped
+	return ARMY_STOPPED;
+			
 }

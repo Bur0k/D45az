@@ -38,6 +38,8 @@ static const int INGAMEVIEW_HEAVY_SIGHT = 8;
 static const int INGAMEVIEW_RANGED_SIGHT = 8;
 static const int INGAMEVIEW_ARTILLERY_SIGHT = 8;
 
+static const Vector2i ARMY_DIED = Vector2i(-1, -1);
+static const Vector2i ARMY_STOPPED = Vector2i(-2, -2);
 
 enum class IngameViewButtonId{
 	COMMIT = 0,
@@ -78,6 +80,7 @@ private:
 	//path drawing
 	bool m_turnOnPathDraw;
 	short m_maxLen;
+	short m_pathMaxLength;
 	bool m_is_turn_valid;
 	std::vector<turn> currentTurn;//Von hier rauslesen. Wenn ein neuer Zug gemacht werden soll, einfach currentTurn.clear().
 	std::vector<turn> mouseOverTurn;
@@ -106,6 +109,10 @@ private:
 	mainGui mainGuiOBJECT;
 
 	//debug
+
+	//when m_phase == SHOWRESULTS 
+	unsigned int m_resultMoveStepMax;
+	int m_resultMoveStep;
 
 	Unit* u, * u1;
 
@@ -183,6 +190,7 @@ public:
 	void onKeyUp(sf::Event);
 	void onTextInput(std::string s);
 
+	//IView
 	void onResize(sf::Vector2u &);
 	void update(double elapsedMs);
 
@@ -208,7 +216,7 @@ public:
 	/////IMPLEMENTING IView end/////
 	
 	//ImainGuiFunc
-	void deleteMoves(UnitGroup*);
+	void deleteMoves(UnitGroup*, int lengt);
 
 private:
 	//gets called if next phase is required
@@ -232,9 +240,12 @@ private:
 	//renders the path on screen
 	void pathDraw(RenderWindow* rw);
 
-	bool isInCity(UnitGroup*);
+	bool isInCity(Vector2i pos);
 
 	int getRemainingMovementPoints(UnitGroup*);
+
+	void AnimateArmyMoves();
+	Vector2i IngameView::getNextAnimationPosition(Vector2i startpos, int index);
 
 };
 

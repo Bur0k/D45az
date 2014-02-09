@@ -44,7 +44,7 @@ const int cityUpgrade = 50;
 class ImainGuiFunc
 {
 public:
-	virtual void deleteMoves(UnitGroup*)=0;
+	virtual void deleteMoves(UnitGroup*, int length)=0;
 };
 
 

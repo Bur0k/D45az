@@ -39,8 +39,7 @@ private:
 	Vector2f m_a_oldPos;
 	Vector2f m_a_targetPos;
 
-	//if army is in a city only its power flag will be drawn
-	bool m_inCity;
+	
 	
 	Vector2i m_position;
 	Rect<float> m_dimensions;
@@ -61,6 +60,13 @@ private:
 public:
 	std::vector<Vector2i> moves;
 	UnitGroup* units;
+	
+	Vector2i m_original_position;
+
+	//if army is in a city only its power flag will be drawn
+	bool m_inCity;
+	//ir army is dead nothing will be drawn
+	bool m_isDead;
 
 	int getPlayerID();
 

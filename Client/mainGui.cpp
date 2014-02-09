@@ -261,26 +261,41 @@ void mainGui::onButtonClick(int id)
 		break;
 
 	case MAINGUI_DEFENSIVE:
-		resetModeButtons();
-		army_mode[0]->m_color = MyColors.Chartreuse;
-		group->strategy = UnitStrategy::DEFENSIVE;
+		if(group->strategy != UnitStrategy::DEFENSIVE)
+		{
+			resetModeButtons();
+			army_mode[0]->m_color = MyColors.Chartreuse;
+			group->strategy = UnitStrategy::DEFENSIVE;
+			if(deleteMoveFunction != NULL)
+				deleteMoveFunction->deleteMoves(group, 7);
+		}
 		break;
 
 	case MAINGUI_AGRESSIVE:
-		resetModeButtons();
-		army_mode[1]->m_color = MyColors.Chartreuse;
-		group->strategy = UnitStrategy::OFFENSIVE;
+		if(group->strategy != UnitStrategy::OFFENSIVE)
+		{
+			resetModeButtons();
+			army_mode[1]->m_color = MyColors.Chartreuse;
+			group->strategy = UnitStrategy::OFFENSIVE;
+			if(deleteMoveFunction != NULL)
+				deleteMoveFunction->deleteMoves(group, 10);
+		}
 		break;
 
 	case MAINGUI_HURRY:
-		resetModeButtons();
-		army_mode[2]->m_color = MyColors.Chartreuse;
-		group->strategy = UnitStrategy::RUNNING;
+		if(group->strategy != UnitStrategy::RUNNING)
+		{
+			resetModeButtons();
+			army_mode[2]->m_color = MyColors.Chartreuse;
+			group->strategy = UnitStrategy::RUNNING;
+			if(deleteMoveFunction != NULL)
+				deleteMoveFunction->deleteMoves(group, 15);
+		}
 		break;
 
 	case MAINGUI_UNDO_MOVE:
 		if(deleteMoveFunction != NULL)
-			deleteMoveFunction->deleteMoves(group);
+			deleteMoveFunction->deleteMoves(group, -1);
 		break;
 
 	case maingui_light:
