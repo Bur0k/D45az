@@ -129,14 +129,19 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 		}break;
 	case 0x0409:
 		{
-			for (unsigned int i = 0; i < data.size(); i+=74)
+			for (unsigned int i = 0; i < data.size(); i+=78)
 			{
+				for(auto it : allUnits)
+					delete it;
 				allUnits.clear();
 				
 				UnitStrategy strategy;
 				UnitTypes types[16];
 				short livingsoldiers[16];
 				POINT pos;
+
+				i+=4;//kurz was umgehen
+
 				//pos auslesen
 				pos.x = decodeInt(data, i);
 				pos.y = decodeInt(data, i + 4);
@@ -149,9 +154,10 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 					types[j] = (UnitTypes)decodeShort(data, i + 10 + 4 * j + 2);
 					livingsoldiers[j] =  decodeShort(data, i + 10 + 4*j);				
 				}
+				i-=4;//kurz was umgehen
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, this->ownedCities[0]);
-				 allUnits.push_back(ugroup);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, decodeInt(data,i));
+				allUnits.push_back(ugroup);
 			}	
 		}break;
 	case 0x0411:
@@ -182,7 +188,7 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 
 				}
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]->player_ID);
 				ownedUnits.push_back(ugroup);
 				
 				/*if(enable)

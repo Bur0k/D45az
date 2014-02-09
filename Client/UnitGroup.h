@@ -47,7 +47,7 @@ public:
 
 	UnitStrategy strategy;
 
-	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, City* producer);
+	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, int ownerID);
 	~UnitGroup();
 
 	void processNewMessage(short id,vector<unsigned char> data);
