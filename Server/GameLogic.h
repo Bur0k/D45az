@@ -32,7 +32,6 @@ private:
 	vector<CityLogic*> neutralCities;
 	short playerCommits;
 	Map* map;
-	vector<short> newUnitGroupsCreated;
 
 public:
 	GameLogic::GameLogic(vector<PlayerData> players, Map* map);

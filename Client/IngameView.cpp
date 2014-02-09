@@ -111,6 +111,8 @@ IngameView::~IngameView()
 	delete u1;
 	delete m_SBar;
 	delete m_commitB;
+
+	c->deleteFromNewMessageCallback(this);
 }
 
 

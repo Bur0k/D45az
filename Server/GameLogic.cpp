@@ -47,8 +47,6 @@ GameLogic::GameLogic(vector<PlayerData> players, Map* map)
 		this->playersIngame.push_back(ingame);
 	}
 
-	for(int i = 0; i < players.size(); i++)
-		this->newUnitGroupsCreated.push_back(0);
 	
 }
 
@@ -83,7 +81,7 @@ void GameLogic::computeTurns()
 
 
 
-		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size() - this->newUnitGroupsCreated[this->movingArmies[i]->playerID]; j++)
+		for(unsigned int j = 0; j < this->playersIngame[this->movingArmies[i]->playerID]->unitGroups.size(); j++)
 		{
 			int x1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->x;
 			int y1 = this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]->pos->y;
@@ -121,9 +119,6 @@ void GameLogic::computeTurns()
 			}
 		}
 	}
-
-	for(int i = 0; i < this->newUnitGroupsCreated.size(); i++)
-		this->newUnitGroupsCreated[i] = 0;
 }
 
 void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
@@ -292,6 +287,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 
 									k++;
 								}
+						
 
 					}
 				}
@@ -346,6 +342,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 
 									k++;
 								}
+							
 						}
 					}
 				}
@@ -495,7 +492,6 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 
 						UnitGroupLogic newGroup = UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
 
-						this->newUnitGroupsCreated[playerID]++;
 
 						data.erase(data.begin(), data.begin() + 5);
 					}

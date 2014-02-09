@@ -16,6 +16,7 @@ private:
 	Server* server;
 	//short id;
 	vector<PlayerData> players;
+	GameLogic* game;
 	short playerlimit;
 	PlayerData gameMaster;
 	string gameLobbyName;

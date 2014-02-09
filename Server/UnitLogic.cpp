@@ -3,13 +3,7 @@
 
 UnitLogic::UnitLogic(UnitTypes type)
 {
-	this->server = Server::get();
-
-	server->addToNewMessageCallback(this);
-	server->addToErrorCallback(this);
-
 	this->living = maxlivingsoldiers;
-
 
 	this->type = type;
 
@@ -44,14 +38,6 @@ UnitLogic::UnitLogic(UnitTypes type)
 
 UnitLogic::~UnitLogic()
 {
-	server->deleteFromNewMessageCallback(this);
-	server->deleteFromErrorCallback(this);
 }
 
-void UnitLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
-{
-}
 
-void UnitLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
-{
-}

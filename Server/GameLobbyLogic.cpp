@@ -21,6 +21,7 @@ GameLobbyLogic::GameLobbyLogic(short id, PlayerData master, string GameLobbyName
 GameLobbyLogic::~GameLobbyLogic()
 {
 	delete this->currentMap;
+	delete this->game;
 
 	server->deleteFromNewMessageCallback(this);
 	server->deleteFromErrorCallback(this);
@@ -181,7 +182,7 @@ void GameLobbyLogic::processNewMessage(SOCKET s,short id,vector<unsigned char> d
 				{
 					// Spielstart
 
-					GameLogic* game = new GameLogic(this->players, this->currentMap);
+				    game = new GameLogic(this->players, this->currentMap);
 
 					std::vector<unsigned char> erfg;
 
