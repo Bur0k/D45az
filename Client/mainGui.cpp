@@ -556,3 +556,26 @@ std::vector<unsigned char> mainGui::getCityActionData()
 	updateInfo.clear();
 	return toSend;
 }
+
+
+void  mainGui::Clear()
+{
+	resetModeButtons();
+	group = NULL;
+	city = NULL;
+
+	for(Unit* u : units)
+		delete u;
+
+	units.clear();
+
+	select_city->unLock();
+	select_army->unLock();
+
+	select_city->setIsEnabled(false);
+	select_army->setIsEnabled(false);
+
+	hidden = true;
+
+	positionGraphics();
+}

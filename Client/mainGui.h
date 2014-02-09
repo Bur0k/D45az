@@ -88,6 +88,7 @@ private:
 	std::vector<CityActions> updateInfo;
 	
 	void resetModeButtons();
+
 public:
 	ImainGuiFunc* deleteMoveFunction;
 	Statusbar* statusbar;
@@ -121,6 +122,8 @@ public:
 	void draw(sf::RenderWindow* rw);
 	//ianimatable
 	void animationTick();
+
+	void  Clear();
 
 };
 

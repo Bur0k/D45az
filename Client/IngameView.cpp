@@ -854,7 +854,7 @@ void IngameView::loadGamestate()
 	for(Army* army : m_enemy_armys)
 		delete army;
 
-	mainGuiOBJECT.updateMgui(NULL,NULL);
+	mainGuiOBJECT.Clear();
 
 	for(std::vector<Vector2i> v : army_moves)
 		v.clear();
