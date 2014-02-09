@@ -91,6 +91,7 @@ void GameLogic::computeTurns()
 			if(x1 == x2 && y1 == y2)
 			{
 				armies.push_back(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]);
+				
 			}
 		}
 
@@ -123,39 +124,38 @@ void GameLogic::computeTurns()
 
 void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 {
-	UnitGroupLogic* currentArmy = armies[0];
+	UnitGroupLogic* currentArmy = armies[0]; // Fehlerumgehung
 
-	for(unsigned int i = 0; i < armies.size(); i++)
+	for(unsigned int i = 0; i < armies.size(); i++) // Armee, die momentan bewegt wird zwischenspeichern
 	{
 		if(armies[i]->pos == pos)
 		{
-			currentArmy = armies[i];
+			currentArmy = armies[i]; // aktuelle gefunden
 			armies.erase(armies.begin() + i);
 		}
 	}
 
-	for(auto it=armies.begin();it!=armies.end();it++)
+	for(unsigned int i = 0; i < armies.size(); i++) // alle anderen Armeen durchgehen, ob Kollision gibt
 	{
-		POINT p1 = (*(*it)->pos);
-		for(auto it2=it+1;it2!=armies.end();it2++)
+		POINT* p2 = armies[i]->pos;
+
+		if(pos->x + 2 >= p2->x && pos->x - 2 <= p2->x && pos->y + 2 >= p2->y && pos->y - 2 <= p2->y)
 		{
-			POINT p2 = (*(*it)->pos);
-			POINT p3;
-			p3.x=std::abs(p1.x-p2.x);
-			p3.y=std::abs(p1.y-p2.y);
-			const int RANGE = 2;
-			if(p3.x <= RANGE && p3.y <= RANGE)
-			{
-				if(currentArmy->player_ID == (*it)->player_ID)
+			if(currentArmy->player_ID == armies[i]->player_ID)
 				{
+				cout << "MERGE";
+				
+				*currentArmy = fight(*currentArmy, *armies[i]); 
 					// Abfrage Einheitenmerge
 				}
 				else
 				{
-					this->fight(*currentArmy, *(*it));
-				}
+				cout << "FIGHT";
+
+				*currentArmy = fight(*currentArmy, *armies[i]); 
 			}
 		}
+		
 	}
 }
 
@@ -494,6 +494,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 						}
 
 						UnitGroupLogic* newGroup = new UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
+						
 
 
 						data.erase(data.begin(), data.begin() + 5);

@@ -20,6 +20,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 	UnitTypes type = UnitTypes::LIGHT;
 
 	UnitGroupLogic* uGroup = new UnitGroupLogic(8, type, p, &this->unitGroups);
+	uGroup->player_ID = startCity->player_ID;
 }
 
 IngameLogic::~IngameLogic()
