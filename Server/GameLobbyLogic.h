@@ -16,6 +16,7 @@ private:
 	Server* server;
 	//short id;
 	vector<PlayerData> players;
+	GameLogic* game;
 	short playerlimit;
 	PlayerData gameMaster;
 	string gameLobbyName;
@@ -51,7 +52,7 @@ public:
 
 	/*Kommunikation*/
 
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNewMessage(SOCKET s,short id,std::vector<unsigned char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 

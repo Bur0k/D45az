@@ -438,7 +438,7 @@ void Game::LoadView(Views v)
 
 	case Views::INGAME:
 		m_pMS->next_song(); // spielt nächstmöglichen titel
-		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::YOURTURN);
+		NewView = new IngameView(m_pWindow->getSize(), this, InagameViewPhases::STARTPHASE);
 		clear = true;
 		break;
 

@@ -44,7 +44,7 @@ const int cityUpgrade = 50;
 class ImainGuiFunc
 {
 public:
-	virtual void deleteMoves(UnitGroup*)=0;
+	virtual void deleteMoves(UnitGroup*, int length)=0;
 };
 
 
@@ -88,10 +88,11 @@ private:
 	std::vector<CityActions> updateInfo;
 	
 	void resetModeButtons();
+
 public:
 	ImainGuiFunc* deleteMoveFunction;
 	Statusbar* statusbar;
-	std::vector<char> getCityActionData();
+	std::vector<unsigned char> getCityActionData();
 	float y_offset;
 
 	bool has_army;
@@ -121,6 +122,8 @@ public:
 	void draw(sf::RenderWindow* rw);
 	//ianimatable
 	void animationTick();
+
+	void  Clear();
 
 };
 

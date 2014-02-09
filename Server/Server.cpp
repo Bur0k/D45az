@@ -4,38 +4,38 @@
 
 
 //Lowbyte zuerst
-std::vector<char> code(short s)
+std::vector<unsigned char> code(short s)
 {
-	std::vector<char> v;
+	std::vector<unsigned char> v;
 	v.push_back(static_cast<char>(s));
 	v.push_back(static_cast<char>(s>>8));
 	return v;
 }
-std::vector<char> code(int i)
+std::vector<unsigned char> code(int i)
 {
-	std::vector<char> v;
+	std::vector<unsigned char> v;
 	v.push_back(static_cast<char>(i));
 	v.push_back(static_cast<char>(i>>8));
 	v.push_back(static_cast<char>(i>>16));
 	v.push_back(static_cast<char>(i>>24));
 	return v;
 }
-std::vector<char> code(const std::string s)
+std::vector<unsigned char> code(const std::string s)
 {
-	std::vector<char> v;
+	std::vector<unsigned char> v;
 	for_each(s.begin(),s.end(),[&](const char c){v.push_back(c);});
 	return v;
 }
 
 //Lowbyte zuerst
-short decodeShort(const std::vector<char>& v, int from)
+short decodeShort(const std::vector<unsigned char>& v, int from)
 {
 	short s;
 	s = v[from];
 	s += v[from+1]<<8;
 	return s;
 }
-int decodeInt(const std::vector<char>& v, int from)
+int decodeInt(const std::vector<unsigned char>& v, int from)
 {
 	short i;
 	i = v[from];
@@ -44,7 +44,7 @@ int decodeInt(const std::vector<char>& v, int from)
 	i += v[from+3]<<24;
 	return i;
 }
-std::string decodeString(const std::vector<char>& v, int from, int len)
+std::string decodeString(const std::vector<unsigned char>& v, int from, int len)
 {
 	std::string s;
 	for(int i=0;i<len;i++)
@@ -524,7 +524,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 						//Keine Daten
 
 						pPerIo->opType = OP_WRITE;
-						memcpy(pPerIo->buf,buffer,4*sizeof(char));
+						memcpy(pPerIo->buf,buffer,4*sizeof(unsigned char));
 						DWORD dwTrans = 4;
 						pPerIo->wsaBuf.len = 4;
 						// Post Receive						
@@ -562,7 +562,7 @@ unsigned __stdcall Server::ThreadProc(LPVOID lParam)
 							pPerIoData->currPos -= pPerIoData->nextMsgSize;
 							short id = (pPerIoData->buffer_[2]<<8) + pPerIoData->buffer_[3];
 
-							vector<char> message;//RECIEVE MAL MACHEN
+							vector<unsigned char> message;//RECIEVE MAL MACHEN
 							if(pPerIoData->nextMsgSize>4)
 								message.insert(message.end(),pPerIoData->buffer_.begin()+4,pPerIoData->buffer_.begin()+pPerIoData->nextMsgSize);
 							pPerIoData->buffer_.erase(pPerIoData->buffer_.begin(),pPerIoData->buffer_.begin()+pPerIoData->nextMsgSize);
@@ -643,7 +643,7 @@ void Server::sendError(SOCKET s,int errCode,string errMessage)
 	errorQueueMutex.unlock();
 }
 
-void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
+void Server::sendNewMessage(SOCKET s, short id,vector<unsigned char> data)
 {
 	bool socketIsConnected = false;
 
@@ -664,16 +664,16 @@ void Server::sendNewMessage(SOCKET s, short id,vector<char> data)
 	newMessageQueueMutex.unlock();
 }
 
-void Server::write(SOCKET s,short id,vector<char> data)
+void Server::write(SOCKET s,short id,vector<unsigned char> data)
 {
-	vector<char> toSend(data);
+	vector<unsigned char> toSend(data);
 	short size = (short) data.size()+4;//2byte länge, 2byte id
 
-	toSend.insert(toSend.begin(),(char)id);
-	toSend.insert(toSend.begin(),(char)(id>>8));
+	toSend.insert(toSend.begin(),(unsigned char)id);
+	toSend.insert(toSend.begin(),(unsigned char)(id>>8));
 
-	toSend.insert(toSend.begin(),(char)size);
-	toSend.insert(toSend.begin(),(char)(size>>8));
+	toSend.insert(toSend.begin(),(unsigned char)size);
+	toSend.insert(toSend.begin(),(unsigned char)(size>>8));
 
 	
 	writeData newData;

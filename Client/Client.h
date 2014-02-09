@@ -16,12 +16,12 @@
 using namespace std;
 
 //Lowbyte zuerst
-std::vector<char> code(short s);
-std::vector<char> code(int i);
-std::vector<char> code(const std::string s);
-short decodeShort(const std::vector<char>& v, int from);
-int decodeInt(const std::vector<char>& v, int from);
-std::string decodeString(const std::vector<char>& v, int from, int len);
+std::vector<unsigned char> code(short s);
+std::vector<unsigned char> code(int i);
+std::vector<unsigned char> code(const std::string s);
+short decodeShort(const std::vector<unsigned char>& v, int from);
+int decodeInt(const std::vector<unsigned char>& v, int from);
+std::string decodeString(const std::vector<unsigned char>& v, int from, int len);
 
 //CLIENT SOLLTE EIN LEERPAKET SCHICKEN VOR DER KOMMUNIKATION!
 //CLIENT BEKOMMT DANN AUCH NOCH EIN LEERPAKET 
@@ -30,7 +30,7 @@ class Client
 	SOCKET s;
 
 	void sendError(int errCode,string errMessage);
-	void sendNewMessage(short id,vector<char> data);
+	void sendNewMessage(short id,vector<unsigned char> data);
 	vector<NetworkParticipant*> errorCallback;
 	vector<NetworkParticipant*> newMessageCallback;
 	mutex newMessageCallbackMutex;
@@ -41,7 +41,7 @@ class Client
 	thread* readThread;
 
 	thread* writeThread;
-	list<vector<char>> toWrite;
+	list<vector<unsigned char>> toWrite;
 	mutex toWriteMutex;
 	
 	mutex writeThreadsMutex;
@@ -65,8 +65,8 @@ class Client
 	struct newMessage
 	{
 		short id;
-		std::vector<char> data;
-		newMessage(short ID,std::vector<char> Data):id(ID),data(Data){}
+		std::vector<unsigned char> data;
+		newMessage(short ID,std::vector<unsigned char> Data):id(ID),data(Data){}
 	};
 	vector<newMessage> newMessageQueue;
 	mutex newMessageQueueMutex;
@@ -91,7 +91,7 @@ public:
 	~Client();
 
 	void connectToServer(string ip, int port);
-	void write(short id, vector<char>data);
+	void write(short id, vector<unsigned char>data);
 	void beginRead();
 
 	
