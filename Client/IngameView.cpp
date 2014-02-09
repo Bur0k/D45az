@@ -931,14 +931,13 @@ void IngameView::commitMessage()
 void IngameView::commitArmyStrategy()
 {
 	vector<unsigned char> erfg;
-	UnitStrategy s = UnitStrategy::OFFENSIVE; // noch nicht dirrerenziert
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
-		switch(s) 
+		switch(m_GameData.allUnits[i]->strategy) 
 		{
 			case UnitStrategy::DEFENSIVE:
 				erfg.push_back(0); break;
