@@ -129,7 +129,6 @@ void mainGui::updateMgui(City* city, UnitGroup* army)
 	{
 		this->group = army;
 		has_army = true;
-		
 	}
 
 	
