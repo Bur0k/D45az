@@ -91,6 +91,7 @@ void GameLogic::computeTurns()
 			if(x1 == x2 && y1 == y2)
 			{
 				armies.push_back(this->playersIngame[this->movingArmies[i]->playerID]->unitGroups[j]);
+				
 			}
 		}
 
@@ -494,6 +495,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 						}
 
 						UnitGroupLogic* newGroup = new UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
+						
 
 
 						data.erase(data.begin(), data.begin() + 5);
