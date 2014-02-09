@@ -25,7 +25,7 @@ MusikSampler::MusikSampler(void)
 	m_vSongFiles.push_back("menu.ogg");
 	m_vSongFiles.push_back("1_Steps.ogg"); //songnamen manuell einfügen
 	m_vSongFiles.push_back("2_Fallen.ogg");
-	m_vSongFiles.push_back("3_Pearl.ogg");
+	m_vSongFiles.push_back("3_Archangel.ogg");
 	m_vSongFiles.push_back("4_Requium.ogg");
 
 	m_Songnumber = 3; // vorinitialisieren, dann 1. track gespielt

@@ -249,6 +249,11 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 					{
 							//send pos
 								std::vector<unsigned char> tmp;
+								
+								tmp = code((int)this->playersIngame[i]->player_ID);
+								for (unsigned int l = 0; l < tmp.size(); l++)
+									erfg.push_back(tmp[l]);
+
 								tmp = code((int)this->playersIngame[i]->unitGroups[j]->pos->x>>1);
 								for (unsigned int l = 0; l < tmp.size(); l++)
 									erfg.push_back(tmp[l]);

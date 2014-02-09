@@ -414,9 +414,6 @@
     <None Include="Data\Songs\2_Fallen.ogg">
       <Filter>Data\songs</Filter>
     </None>
-    <None Include="Data\Songs\3_Pearl.ogg">
-      <Filter>Data\songs</Filter>
-    </None>
     <None Include="Data\Songs\menu2.ogg">
       <Filter>Data\songs</Filter>
     </None>
@@ -425,6 +422,9 @@
     </None>
     <None Include="..\Server\Data\Maps\Map2.tmx">
       <Filter>Data\map</Filter>
+    </None>
+    <None Include="Data\Songs\3_Archangel.ogg">
+      <Filter>Data\songs</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

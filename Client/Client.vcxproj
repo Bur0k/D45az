@@ -192,7 +192,7 @@
     <None Include="Data\Maps\TestMap.tmx" />
     <None Include="Data\Songs\1_Steps.ogg" />
     <None Include="Data\Songs\2_Fallen.ogg" />
-    <None Include="Data\Songs\3_Pearl.ogg" />
+    <None Include="Data\Songs\3_Archangel.ogg" />
     <None Include="Data\Songs\4_Requium.ogg" />
     <None Include="Data\Songs\login.ogg" />
     <None Include="Data\Songs\menu.ogg" />
