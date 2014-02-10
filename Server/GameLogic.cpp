@@ -107,23 +107,8 @@ void GameLogic::computeTurns()
 			{
 				armies[i]->pos = this->movingArmies[i]->move[0];
 				this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
-			
-				POINT* loser = this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
 
-				if(loser->x != 0)
-				{
-					for(int j = 0; j < this->movingArmies.size(); j++)
-					{
-						if(armies[i]->pos->x == loser->x && armies[i]->pos->y == loser->y)
-						{
-							this->movingArmies.erase(this->movingArmies.begin() + i);
-							armies.erase(armies.begin() + i);
-						}
-					}
-				}
-				this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
-
-				// wenn derjenige, der gerade läuft stirbt, muss Städtedurchsuchung übersprungen werden
+							// wenn derjenige, der gerade läuft stirbt, muss Städtedurchsuchung übersprungen werden
 				for(unsigned int s = 0; s < startCities.size(); s ++)
 				{
 					if(armies[i]->pos->x == startCities[s]->position->x && armies[i]->pos->y == startCities[s]->position->y)
@@ -134,7 +119,23 @@ void GameLogic::computeTurns()
 					if(armies[i]->pos->x == neutralCities[s]->position->x && armies[i]->pos->y == neutralCities[s]->position->y)
 						neutralCities[s]->player_ID = armies[i]->player_ID;
 				}
-		}
+
+				/*
+				POINT* loser = this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
+
+				if(loser->x != 0) // es gibt ihn
+					for(int j = 0; j < this->movingArmies.size(); j++) // Bewegungen auf Loser durchsuchen
+						{
+							if(movingArmies[j]->move.size() > 0) // falls auf Einheit trifft, die rumgammelt
+								if(movingArmies[j]->move[0]->x == loser->x && movingArmies[j]->move[0]->y == loser->y) // Verlierer gefunden
+								{
+									this->movingArmies.erase(this->movingArmies.begin() + j); // Verlierer aus Bewegung entfernen+
+									armies.erase(armies.begin() + j);
+								}
+						}
+				*/
+
+			}
 		}
 
 		for(unsigned int i = 0; i < this->movingArmies.size(); i++) // Wenn keine Schritte übrig, dann aus Beweungsbefehlen raus
@@ -176,21 +177,44 @@ POINT* GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				cout << "FIGHT";
 				
 				UnitGroupLogic* Winner = fight(currentArmy, armies[i]); 
-				if(Winner->pos->x == currentArmy->pos->x && Winner->pos->y == currentArmy->pos->y)
+				if(Winner->pos->x == currentArmy->pos->x && Winner->pos->y == currentArmy->pos->y) // Current hat gewonnen 
 				{
 					POINT* pl = new POINT();
-					pl->x = armies[i]->pos->x;
+					pl->x = armies[i]->pos->x; // Loserkoords
 					pl->y = armies[i]->pos->y;
+
+					for (int m = 0; m < this->playersIngame.size(); m++) // Armee aus Verbund killen
+					{
+						for(int n = 0; n < this->playersIngame[m]->unitGroups.size(); n++)
+						{
+							if(playersIngame[m]->unitGroups[n]->pos->x == pl->x && playersIngame[m]->unitGroups[n]->pos->y == pl->y)
+								playersIngame[m]->unitGroups.erase(playersIngame[m]->unitGroups.begin() + n);
+						}
+					}
+
 					delete armies[i]; // Loser killen
-					armies.push_back(Winner); // gewinner ist ehemaliger current, also wieder reinpuschen
+
+					armies.push_back(Winner); // Gewinner ist ehemaliger current, also wieder reinpuschen
+
 					return pl;
 				}
 				else
 				{
 					POINT* pl = new POINT();
-					pl->x = currentArmy->pos->x;
+					pl->x = currentArmy->pos->x; //Verliererkoords
 					pl->y = currentArmy->pos->y;
+									
+					for (int m = 0; m < this->playersIngame.size(); m++) // Armee aus Verbund killen
+					{
+						for(int n = 0; n < this->playersIngame[m]->unitGroups.size(); n++)
+						{
+							if(playersIngame[m]->unitGroups[n]->pos->x == pl->x && playersIngame[m]->unitGroups[n]->pos->y == pl->y)
+								playersIngame[m]->unitGroups.erase(playersIngame[m]->unitGroups.begin() + n);
+						}
+					}					
+
 					delete currentArmy; // Loser killen
+
 					return pl;
 				}
 			}
