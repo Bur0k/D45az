@@ -178,14 +178,20 @@ POINT* GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				UnitGroupLogic* Winner = fight(currentArmy, armies[i]); 
 				if(Winner->pos->x == currentArmy->pos->x && Winner->pos->y == currentArmy->pos->y)
 				{
+					POINT* pl = new POINT();
+					pl->x = armies[i]->pos->x;
+					pl->y = armies[i]->pos->y;
 					delete armies[i]; // Loser killen
 					armies.push_back(Winner); // gewinner ist ehemaliger current, also wieder reinpuschen
-					return armies[i]->pos;
+					return pl;
 				}
 				else
 				{
+					POINT* pl = new POINT();
+					pl->x = currentArmy->pos->x;
+					pl->y = currentArmy->pos->y;
 					delete currentArmy; // Loser killen
-					return currentArmy->pos;
+					return pl;
 				}
 			}
 		}
