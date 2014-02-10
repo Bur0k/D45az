@@ -22,10 +22,8 @@ using namespace std;
 enum class UnitTypes{LIGHT, HEAVY, LONGRANGE, ARTILLERY};
 
 
-class UnitLogic : public NetworkParticipant
+class UnitLogic
 {
-private:
-	Server* server;
 
 public:
 	UnitLogic(UnitTypes type);
@@ -36,9 +34,6 @@ public:
 	short living; // 25 Einheiten
 	int range;
 	double attackpower;
-
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
-	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
 };
 
 #endif

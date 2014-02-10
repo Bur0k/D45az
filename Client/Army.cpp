@@ -11,10 +11,16 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 	m_mouseOver = false;
 	m_animating = false;
 
+	m_inCity = isInCity;
 	m_isVisible = isVisible;
 	m_marked = false;
+	m_isDead = false;
+
+	m_playerID = ug->player_ID;
 
 	m_playerColor = MyColors.player[ug->player_ID];
+
+	m_original_position = Vector2i(ug->pos.x, ug->pos.y);
 
 	units = ug;
 	m_position = Vector2i(ug->pos.x, ug->pos.y);
@@ -38,8 +44,9 @@ Army::Army(UnitGroup* ug, Rect<int> & mapView, bool isVisible,bool isInCity)
 	c.a = 100;
 	m_pBarBg.setFillColor(c);
 
-
 	m_markedIndicator.setFillColor(MyColors.Transparent);
+
+	m_mapViewOffset = Vector2i(mapView.left, mapView.top);
 
 	PositionGraphics();
 }
@@ -72,9 +79,9 @@ void Army::PositionGraphics()
 //IDrawable
 void Army::draw(sf::RenderWindow* rw)
 {
-	if(!m_isVisible)
+	if(!m_isVisible || m_isDead)
 		return;
-	if(m_inCity)
+	if(!m_inCity)
 	{
 		if(m_marked || m_mouseOver) 
 			rw->draw(m_markedIndicator);
@@ -89,7 +96,7 @@ void Army::draw(sf::RenderWindow* rw)
 //IClickable
 bool Army::MouseMoved(sf::Vector2i & mouse)
 {
-	if(!m_isVisible)
+	if(!m_isVisible || m_isDead)
 		return false;
 
 	if( mouse.x == units->pos.x && mouse.y == units->pos.y)
@@ -111,8 +118,9 @@ bool Army::MouseMoved(sf::Vector2i & mouse)
 
 bool Army::PressedLeft()
 {
-	if(!m_isVisible)
+	if(!m_isVisible || m_isDead)
 		return false;
+
 	if(m_mouseOver)
 	{
 		m_marked = true;

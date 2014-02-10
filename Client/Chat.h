@@ -55,7 +55,7 @@ public:
 
 	void onTextBoxSend(int ID, std::string s);
 
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 
 	void onButtonClick(int);

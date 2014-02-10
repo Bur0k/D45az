@@ -24,8 +24,8 @@ Lobby::~Lobby()
 
 void Lobby::connectToGameLobby(short mapid)
 {
-	vector<char> msg;
-	vector<char> tmp = code(mapid);
+	vector<unsigned char> msg;
+	vector<unsigned char> tmp = code(mapid);
 	msg.push_back(tmp[0]);
 	msg.push_back(tmp[1]);
 
@@ -33,8 +33,8 @@ void Lobby::connectToGameLobby(short mapid)
 }
 void Lobby::createNewGameLobby(std::string gamename)
 {
-	vector<char> msg;
-	vector<char> tmp;
+	vector<unsigned char> msg;
+	vector<unsigned char> tmp;
 
 	tmp = code ((short) gamename.length());
 	msg.push_back(tmp[0]);
@@ -51,12 +51,12 @@ void Lobby::createNewGameLobby(std::string gamename)
 
 void Lobby::askforLobbyData()
 {
-		vector<char> leer;
+		vector<unsigned char> leer;
 
 		c->write(0x0201,leer);
 }
 
-void Lobby::processNewMessage(short id,vector<char> data)
+void Lobby::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch (id)
 	{

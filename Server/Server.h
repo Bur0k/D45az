@@ -18,12 +18,12 @@
 using namespace std;
 
 //Lowbyte zuerst
-std::vector<char> code(short s);
-std::vector<char> code(int i);
-std::vector<char> code(const std::string s);
-short decodeShort(const std::vector<char>& v, int from);
-int decodeInt(const std::vector<char>& v, int from);
-std::string decodeString(const std::vector<char>& v, int from, int len);
+std::vector<unsigned char> code(short s);
+std::vector<unsigned char> code(int i);
+std::vector<unsigned char> code(const std::string s);
+short decodeShort(const std::vector<unsigned char>& v, int from);
+int decodeInt(const std::vector<unsigned char>& v, int from);
+std::string decodeString(const std::vector<unsigned char>& v, int from, int len);
 
 class Server
 {
@@ -93,7 +93,7 @@ class Server
 
 		short currPos;
 		short nextMsgSize;
-		vector<char> buffer_;
+		vector<unsigned char> buffer_;
 	}PERIODATA;
 
 	HANDLE hThread[4];
@@ -113,7 +113,7 @@ class Server
 
 
 	void sendError(SOCKET s,int errCode,string errMessage);
-	void sendNewMessage(SOCKET s, short id,vector<char> data);
+	void sendNewMessage(SOCKET s, short id,vector<unsigned char> data);
 	vector<NetworkParticipant*> errorCallback;
 	vector<NetworkParticipant*> newMessageCallback;
 	mutex newMessageCallbackMutex;
@@ -123,8 +123,8 @@ class Server
 	{
 	public:
 		SOCKET s;
-		vector<char> data;
-		writeData(SOCKET S,vector<char> Data)
+		vector<unsigned char> data;
+		writeData(SOCKET S,vector<unsigned char> Data)
 		{
 			s=S;
 			data=Data;
@@ -157,8 +157,8 @@ class Server
 	{
 		SOCKET s;
 		short id;
-		std::vector<char> data;
-		newMessage(SOCKET S,short ID,std::vector<char> Data):s(S),id(ID),data(Data){}
+		std::vector<unsigned char> data;
+		newMessage(SOCKET S,short ID,std::vector<unsigned char> Data):s(S),id(ID),data(Data){}
 	};
 	vector<newMessage> newMessageQueue;
 	mutex newMessageQueueMutex;
@@ -184,7 +184,7 @@ public:
 	std::vector<PlayerData> connectedPlayers;
 
 	void startListening();
-	void write(SOCKET s,short id,vector<char> data);
+	void write(SOCKET s,short id,vector<unsigned char> data);
 
 	void addToNewMessageCallback(NetworkParticipant* np);
 	void deleteFromNewMessageCallback(NetworkParticipant* np);

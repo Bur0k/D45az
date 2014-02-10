@@ -8,7 +8,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 	this->player_ID = id;
 
 	server->addToNewMessageCallback(this);
-	server->addToErrorCallback(this);
+	server->addToErrorCallback(this); // as
 
 	this->owner = owner;
 	this->gold = 500;
@@ -20,6 +20,7 @@ IngameLogic::IngameLogic(int id, PlayerData owner, CityLogic* startCity)
 	UnitTypes type = UnitTypes::LIGHT;
 
 	UnitGroupLogic* uGroup = new UnitGroupLogic(8, type, p, &this->unitGroups);
+	uGroup->player_ID = startCity->player_ID;
 }
 
 IngameLogic::~IngameLogic()
@@ -29,9 +30,9 @@ IngameLogic::~IngameLogic()
 }
 
 
-void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void IngameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	switch(id)
 	{

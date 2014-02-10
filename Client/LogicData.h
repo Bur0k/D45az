@@ -23,6 +23,7 @@ public:
 	vector<City*> ownedCities;
 	vector<UnitGroup*> allUnits;
 	vector<UnitGroup*> ownedUnits;
+	std::vector<std::vector<sf::Vector2i>> result_moves;
 	int gold;
 	bool serverReady;
 
@@ -39,7 +40,7 @@ public:
 	void requestOwnedUnits();
 	void requestGold();
 
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 };
 

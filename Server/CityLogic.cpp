@@ -34,7 +34,7 @@ bool CityLogic::upgradeCity()
 		return false;
 }
 
-void CityLogic::processNewMessage(SOCKET s,short id,std::vector<char> data)
+void CityLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> data)
 {
 }
 

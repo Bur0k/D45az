@@ -47,10 +47,10 @@ public:
 
 	UnitStrategy strategy;
 
-	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, City* producer);
+	UnitGroup(POINT pos, UnitTypes types[16], short livingsoldiers[16], UnitStrategy strategy, int ownerID);
 	~UnitGroup();
 
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 	float getUnitgroupStrength();
 };

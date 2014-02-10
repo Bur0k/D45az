@@ -7,8 +7,6 @@ LogicData::LogicData()
 
 	this->serverReady  = false;
 	this->updateGameData();
-
-
 }
 
 LogicData::~LogicData()
@@ -27,45 +25,45 @@ void LogicData::updateGameData()
 
 void LogicData::requestPlayers()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	erfg.push_back(0);
 	c->write(0x0400, erfg);
 }
 
 void LogicData::requestAllCities()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0402, erfg);
 }
 
 void LogicData::requestOwnedCities()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0404, erfg);
 }
 
 void LogicData::requestAllUnits()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0408, erfg);
 }
 
 void LogicData::requestOwnedUnits()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 	c->write(0x0410, erfg);
 }
 
 void LogicData::requestGold()
 {
-	vector<char> erfg;
-	erfg.push_back((char)this->ownedCities[0]->player_ID);
+	vector<unsigned char> erfg;
+	erfg.push_back((unsigned char)this->ownedCities[0]->player_ID);
 	c->write(0x0418, erfg);
 }
 
-void LogicData::processNewMessage(short id,vector<char> data)
+void LogicData::processNewMessage(short id,vector<unsigned char> data)
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
 	switch(id)
 	{
@@ -89,6 +87,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 	case 0x0403:
 		{
 			int length = data[0];
+			short playerID;
 			sf::Vector2i pos;
 			int level;
 
@@ -99,8 +98,9 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				pos.x = data[1];
 				pos.y = data[2];
 				level = data[3];
+				playerID = data[4];
 
-				City* c = new City(pos, level, 5);
+				City* c = new City(pos, level, playerID);
 
 				this->allCities.push_back(c);
 
@@ -109,7 +109,7 @@ void LogicData::processNewMessage(short id,vector<char> data)
 		}break;
 	case 0x0405:
 		{
-			short player_ID = data[4];
+			short player_ID;
 			int length = data[0];
 			sf::Vector2i pos;
 			int level;
@@ -121,24 +121,30 @@ void LogicData::processNewMessage(short id,vector<char> data)
 				pos.x = data[1];
 				pos.y = data[2];
 				level = data[3];
+				player_ID = data[4];
 
 				City* c = new City(pos, level, player_ID);
 
 				this->ownedCities.push_back(c);
 
-				data.erase(data.begin() + 1, data.begin() + 3);
+				data.erase(data.begin() + 1, data.begin() + 5);
 			}
 		}break;
 	case 0x0409:
 		{
-			for (unsigned int i = 0; i < data.size(); i+=74)
+			for (unsigned int i = 0; i < data.size(); i+=78)
 			{
+				for(auto it : allUnits)
+					delete it;
 				allUnits.clear();
 				
 				UnitStrategy strategy;
 				UnitTypes types[16];
 				short livingsoldiers[16];
 				POINT pos;
+
+				i+=4;//kurz was umgehen
+
 				//pos auslesen
 				pos.x = decodeInt(data, i);
 				pos.y = decodeInt(data, i + 4);
@@ -151,16 +157,23 @@ void LogicData::processNewMessage(short id,vector<char> data)
 					types[j] = (UnitTypes)decodeShort(data, i + 10 + 4 * j + 2);
 					livingsoldiers[j] =  decodeShort(data, i + 10 + 4*j);				
 				}
+				i-=4;//kurz was umgehen
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, this->ownedCities[0]);
-				 allUnits.push_back(ugroup);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, decodeInt(data,i));
+				allUnits.push_back(ugroup);
 			}	
 		}break;
 	case 0x0411:
 		{
+			bool enable = false;	// Sperre für setValue der Statusbar, da sie bei der ersten Datenübertragung noch nicht vorhanden ist
+			if(this->ownedUnits.size() != 0)
+				enable = true;
+
+			ownedUnits.clear();
+
 			for (unsigned int i = 0; i < data.size(); i+=74)
 			{
-				ownedUnits.clear();
+				
 				
 				UnitStrategy strategy;
 				UnitTypes types[16];
@@ -180,8 +193,14 @@ void LogicData::processNewMessage(short id,vector<char> data)
 
 				}
 
-				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]);
+				UnitGroup* ugroup = new UnitGroup(pos, types, livingsoldiers, strategy, ownedCities[0]->player_ID);
 				ownedUnits.push_back(ugroup);
+				
+				/*if(enable)
+				{*/
+					erfg.clear();	
+					c->write(0x0601, erfg);	// Message an den Server -> Alle neuen Daten eingelesen
+				//}
 			}
 		}break;
 	case 0x0413:
@@ -201,6 +220,14 @@ void LogicData::processNewMessage(short id,vector<char> data)
 	case 0x0415:
 		{		
 			this->serverReady = true;
+		}break;
+	case 0x0417:
+		{
+			// data enthält alle Moves die durchgeführt werden
+
+			// z.B data[0] -> playerID
+			// data[1] -> x Koordinate
+			// data[2] -> y Koordinate
 		}break;
 }
 }

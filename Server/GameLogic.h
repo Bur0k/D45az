@@ -36,14 +36,13 @@ private:
 public:
 	GameLogic::GameLogic(vector<PlayerData> players, Map* map);
 	GameLogic::~GameLogic();
-
 	void computeTurns();
-	void isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
-	vector<char> divideForMessage(int number);
+	POINT* isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
+	vector<unsigned char> divideForMessage(int number);
 
-	void processNewMessage(SOCKET s,short id,std::vector<char> data);
+	void processNewMessage(SOCKET s,short id,std::vector<unsigned char> data);
 	void processNetworkError(SOCKET s,int errCode,std::string errMessage);
-	UnitGroupLogic fight(UnitGroupLogic army1, UnitGroupLogic army2);
+	UnitGroupLogic* fight(UnitGroupLogic* army1, UnitGroupLogic* army2);
 };
 
 #endif

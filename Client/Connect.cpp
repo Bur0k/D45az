@@ -1,11 +1,11 @@
 #include "Connect.h"
 
-void Connect::processNewMessage(short id,vector<char> data)
+void Connect::processNewMessage(short id,vector<unsigned char> data)
 {
 	if(id==0x0001)
 	{
 		c->beginRead();
-		c->write(0,std::vector<char>());//Einmal irgendwas senden. Muss sein
+		c->write(0,std::vector<unsigned char>());//Einmal irgendwas senden. Muss sein
 		state = 1;
 	}
 }

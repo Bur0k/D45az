@@ -19,7 +19,7 @@ public:
 	//returns 0 for no Response until now, returns 1 a succesfull connection, returns -1 if there is an error
 	std::string getErrorMsg(){return *(errorMsg.operator std::string *());}
 	short getState();
-	void processNewMessage(short id,vector<char> data);
+	void processNewMessage(short id,vector<unsigned char> data);
 	void processNetworkError(int id, std::string msg);
 };
 

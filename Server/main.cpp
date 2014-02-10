@@ -12,7 +12,7 @@ Server* server;
 
 class testServer : public NetworkParticipant
 {
-	void processNewMessage(SOCKET s,short id,vector<char> data)
+	void processNewMessage(SOCKET s,short id,vector<unsigned char> data)
 	{
 		std::cout<<"Client mit ID "<<s<<" hat folgendes gesendet:\nID:"<<std::hex<<(int)id<<"\nData:\n";
 		for(unsigned int i=0;i<data.size();i++)

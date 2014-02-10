@@ -3,6 +3,8 @@
 //TODO update constructor 
 IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function, InagameViewPhases startphase)
 {
+
+
 	c = Client::get();
 	c->addToNewMessageCallback(this);
 
@@ -15,15 +17,17 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_scrolldir = Vector2i(0,0);
 	m_scrollspeed = Vector2f(0,0);
 
+	m_resultMoveStep = 0;
+
 	m_phase = startphase;
 
 
 	m_turnOnPathDraw = false;
-	
-	
+
+
 	m_pMS = MusikSampler::getInstance(); // singleton!
 
-	
+
 	m_map.load("Data/Maps/Map1.tmx");
 	m_tileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight) * 2;
 	m_mapTileSize = Vector2i(m_map.layers[0]->TileWidth, m_map.layers[0]->TileHeight);
@@ -51,7 +55,12 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	m_ClickV.push_back(m_SBar);
 	m_AnimateV.push_back(m_SBar);
 	
+	this->turnCount = 1;
 	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+	this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+	this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+	this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+	
 
 	m_mapMouseOver.setOutlineColor(MyColors.WhiteTransparent);
 	m_mapMouseOver.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
@@ -70,8 +79,13 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 	updateNewFogOfWar = true;
 	turnOnFogOfWar = true;
 
+	//toDraw.clear();
+	//std::vector<bool> temp;
+	//temp.resize(m_map.layers[0]->layer[0].size(),true);//X Values
+	//for(unsigned int i=0;i<m_map.layers[0]->layer.size();i++)//Y Values
+	//	toDraw.push_back(temp);
 
-	mainGuiOBJECT.onResize(screensize); // wieso wird das als Fehler angezeit?
+	mainGuiOBJECT.onResize(screensize);
 	m_DrawV.push_back(&mainGuiOBJECT);
 	m_ClickV.push_back(&mainGuiOBJECT);
 	m_AnimateV.push_back(&mainGuiOBJECT);
@@ -79,7 +93,14 @@ IngameView::IngameView(Vector2u & screensize, StatusBarFunctions* SBar_Function,
 
 	//m_GameData.ownedCities.push_back(new City(sf::Vector2i(2,2),1));
 
-	this->loadGamestate();
+	mainGuiOBJECT.deleteMoveFunction = this;
+	mainGuiOBJECT.statusbar = m_SBar;
+
+	m_commitB->setIsEnabled(false);
+
+	//the server ready bool has to be set for the game to load the actual game data
+	//TODO LOADING GRAPHIC
+	//this->loadGamestate();
 
 	updateFogOfWar();
 }
@@ -90,6 +111,8 @@ IngameView::~IngameView()
 	delete u1;
 	delete m_SBar;
 	delete m_commitB;
+
+	c->deleteFromNewMessageCallback(this);
 }
 
 
@@ -123,8 +146,6 @@ void IngameView::onTextBoxSend(int ID, std::string s)
 {
 
 }
-
-
 
 bool IngameView::MouseMoved(sf::Vector2i & mouse)
 {
@@ -209,14 +230,29 @@ bool IngameView::PressedLeft()
 	{
 		if(m_pointAt == Vector2i(m_GameData.ownedUnits[i]->pos.x, m_GameData.ownedUnits[i]->pos.y))
 		{
-			displayArmyInfo(m_GameData.ownedUnits[i]);
 			tmpUG = m_GameData.ownedUnits[i];
+			switch (tmpUG->strategy)
+			{
+			case UnitStrategy::DEFENSIVE:
+				m_pathMaxLength = 7;
+				break;
+
+			case UnitStrategy::OFFENSIVE:
+				m_pathMaxLength = 10;
+				break;
+
+			case UnitStrategy::RUNNING:
+				m_pathMaxLength = 15;
+				break;
+
+			default:
+				break;
+			}
+			displayArmyInfo(m_GameData.ownedUnits[i]);
+
 			break;
 		}
 	}
-
-	for(Army* a : m_owned_armys)
-		a->ReleasedLeft();
 
 	if(tmpCity != NULL || tmpUG != NULL)
 		mainGuiOBJECT.updateMgui(tmpCity, tmpUG);
@@ -253,6 +289,9 @@ void IngameView::animationTick()
 	for(unsigned int i = 0; i < m_AnimateV.size(); i++)
 		m_AnimateV[i]->animationTick();
 
+	if(m_phase == InagameViewPhases::WATCHRESULTS)
+		AnimateArmyMoves();
+		
 	moveMap();
 }
 	
@@ -263,8 +302,23 @@ void IngameView::onKeyDown(sf::Event e)
 		m_KeyV[i]->onKeyDown(e);
 
 	if(Keyboard::isKeyPressed(Keyboard::F))
+	{
 		loadGamestate();
+	}
 
+	int x = 0;
+	int y = 0;
+
+	if(Keyboard::isKeyPressed(Keyboard::Left))
+		x = -1;
+	else if(Keyboard::isKeyPressed(Keyboard::Right))
+		x = +1;
+	if(Keyboard::isKeyPressed(Keyboard::Down))
+		y = +1;
+	else if(Keyboard::isKeyPressed(Keyboard::Up))
+		y = -1;
+	if(x != 0 || y != 0)
+		setScrollDirection(x,y);
 }
 
 void IngameView::onKeyUp(sf::Event e)
@@ -272,6 +326,20 @@ void IngameView::onKeyUp(sf::Event e)
 	chat.onKeyUp(e);
 	for(unsigned int i = 0; i < m_KeyV.size(); i++)
 		m_KeyV[i]->onKeyUp(e);
+	
+	int x = 0;
+	int y = 0;
+
+	if(Keyboard::isKeyPressed(Keyboard::Left))
+		x = -1;
+	else if(Keyboard::isKeyPressed(Keyboard::Right))
+		x = +1;
+	if(Keyboard::isKeyPressed(Keyboard::Down))
+		y = +1;
+	else if(Keyboard::isKeyPressed(Keyboard::Up))
+		y = -1;
+	if(x == 0 || y == 0)
+		setScrollDirection(x,y);
 }
 
 void IngameView::onTextInput(std::string s)
@@ -289,6 +357,8 @@ void IngameView::draw(sf::RenderWindow* rw)
 	fogOfWardraw(rw);
 	
 	pathDraw(rw);
+
+	rw->draw(m_mapMouseOver);
 	
 	//draw displayed armys
 	for(Army* a : m_owned_armys)
@@ -299,7 +369,7 @@ void IngameView::draw(sf::RenderWindow* rw)
 	for(unsigned int i = 0; i < m_DrawV.size(); i++)
 		m_DrawV[i]->draw(rw);	
 
-	rw->draw(m_mapMouseOver);
+	
 	
 	chat.draw(rw);
 	Rect<float> MapView;
@@ -409,7 +479,7 @@ Views IngameView::nextState()
 
 void IngameView::update(double elapsedMs)
 {
-	if(m_phase == InagameViewPhases::WAITFORPLAYERS && m_GameData.serverReady)
+	if((m_phase == InagameViewPhases::WAITFORPLAYERS || m_phase == InagameViewPhases::STARTPHASE) && m_GameData.serverReady)
 	{
 		m_GameData.serverReady = false;
 		nextPhase();
@@ -439,29 +509,20 @@ void IngameView::nextPhase()
 		// Button disablen
 		m_commitB->setIsEnabled(false);
 
-		// Befehle vom Spieler werden dem Server übermittelt
-		// aber momentan wird sofort noch nach Berechnungen gefragt.
-		// dass ist aber eigentlich erst sinnvoll, wenn Server alle
-		// Berechnungen (erst möglich wenn alle Spieler submitted haben)
-		// durchgeführt hat
-		// --> Server muss selbst sehen, wann er fertig ist und der Clien
-		// bräuchte gar keine Nachfragenachricht! Sondern müsste
-		// eigentlich auch Server warten !!!
 		commitMessage();
 
 		m_phase = InagameViewPhases::WAITFORPLAYERS;
 		break;
 
 	case InagameViewPhases::WAITFORPLAYERS:
-		// wird zyklisch aufgerufen, aber hier darf doch noch gar nicht
-		// geladen werden, wenn Server noch gar nicht alles brechnet hat!?
-		// heißt doch die Phase deswegen "WAIT..." !!!
-		loadGamestate();
-		m_commitB->setIsEnabled(true);
+		//reset animation variables
+		m_resultMoveStep = 0;
+		m_resultMoveStepMax = 0;
+		for(std::vector<Vector2i> v : m_GameData.result_moves)
+			if(v.size() > m_resultMoveStepMax)
+				m_resultMoveStepMax = v.size();
 
-		// hier müsste zu Watchresults gegangen werden, wenn man aktuellen 
-		// State vom Server erhalten hat !!!
-		m_phase = InagameViewPhases::YOURTURN;
+		m_phase = InagameViewPhases::WATCHRESULTS;
 		break;
 
 	case InagameViewPhases::WATCHRESULTS:
@@ -475,15 +536,19 @@ void IngameView::nextPhase()
 		break;
 
 	case InagameViewPhases::GAMEOVER:
-		//do things..
 		//remove fow
 		std::cout << "This Game has ended!" << std::endl;
-		//if winner
+		if(m_GameData.ownedCities.size() > 0)
 			m_pMS->play_sound(WIN);
-			//else = LOSER
+		else
 			m_pMS->play_sound(LOSE);
 		break;
-
+	case InagameViewPhases::STARTPHASE:
+		
+		loadGamestate();
+		m_commitB->setIsEnabled(true);
+		m_phase = InagameViewPhases::YOURTURN;
+		break;
 	default:
 		std::cout << "IngameView Error: unknown phase!" << std::endl;
 		break;
@@ -573,6 +638,7 @@ void IngameView::moveMap()
 		for(unsigned int i = 0; i < m_enemy_armys.size(); i++)
 			m_enemy_armys[i]->m_mapViewOffset = Vector2i(m_mapView.left, m_mapView.top);
 	}
+
 	//update rectanglescity
 	if (tmpView != m_mapView)
 	{
@@ -589,6 +655,11 @@ void IngameView::moveMap()
 		a->onMapMove(m_mapView);
 	for(Army* a : m_enemy_armys)
 		a->onMapMove(m_mapView);
+
+	//update mouse over rectangle
+	m_mapMouseOver.setPosition( static_cast<float>(m_pointAt.x * m_tileSize.x + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.left), 
+								static_cast<float>(m_pointAt.y * m_tileSize.y + INGAMEVIEW_MOUSEOVER_RECT_BORDER - m_mapView.top));
+
 }
 
 void IngameView::displayCityInfo(City *c)
@@ -602,7 +673,7 @@ void IngameView::displayArmyInfo(UnitGroup * u)
 	currentTurn.clear();
 	mouseOverTurn.clear();
 	
-	m_maxLen=10;
+	m_maxLen=m_pathMaxLength;
 	for(auto it : army_moves)
 	{
 		if(it[0] == sf::Vector2i(u->pos.x, u->pos.y))
@@ -625,7 +696,7 @@ void IngameView::drawPath()
 	{
 		if(currentTurn.size() == 0)
 		{
-			m_maxLen=10;
+			m_maxLen = m_pathMaxLength;
 			currentTurn.push_back(turn(m_pointAt));
 			if(	collisionLayer->layer[currentTurn.back().pos.y*2][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2][currentTurn.back().pos.x*2+1] != 0 ||
 				collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2] != 0 || collisionLayer->layer[currentTurn.back().pos.y*2+1][currentTurn.back().pos.x*2+1] != 0)
@@ -799,7 +870,7 @@ void IngameView::updateFogOfWar()
 		if(it2->isCityTerrainLayer)//Wird nur ein Layer durchgehen ab hier
 			for(auto it3:m_GameData.ownedCities)
 			{
-				int id = it2->layer[it3->position.y][it3->position.x];
+				int id = it2->layer[it3->position.y<<1][it3->position.x<<1];
 				for(unsigned int i=0;i<it2->layer.size();i++)
 					for(unsigned int j=0;j<it2->layer[0].size();j++)
 						if(id == it2->layer[i][j])
@@ -814,9 +885,18 @@ void IngameView::loadGamestate()
 		delete army;
 	for(Army* army : m_enemy_armys)
 		delete army;
+
+	mainGuiOBJECT.Clear();
+
+	for(std::vector<Vector2i> v : army_moves)
+		v.clear();
+	army_moves.clear();
+
 	m_owned_armys.clear();
 	m_enemy_armys.clear();
 	
+	updateFogOfWar();
+
 	short my_ID;
 	//my player id is read from the city at position 0
 	if(m_GameData.ownedCities.size() > 0)
@@ -826,41 +906,39 @@ void IngameView::loadGamestate()
 	
 	//load owned units
 	for(unsigned int i = 0; i < m_GameData.ownedUnits.size(); i++)
-		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true,isInCity(m_GameData.ownedUnits[i])));
+		m_owned_armys.push_back(new Army(m_GameData.ownedUnits[i], m_mapView, true, isInCity(Vector2i(m_GameData.ownedUnits[i]->pos.x, m_GameData.ownedUnits[i]->pos.y))));
 
 
 	for(unsigned int i = 0; i < m_GameData.allUnits.size(); i++)
 		if(m_GameData.allUnits[i]->player_ID != my_ID)
-			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.x)),isInCity(m_GameData.ownedUnits[i])));
+			m_enemy_armys.push_back(new Army(m_GameData.allUnits[i], m_mapView, isVisible(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.y)),isInCity(Vector2i(m_GameData.allUnits[i]->pos.x, m_GameData.allUnits[i]->pos.y))));
 
 	//clear RectangleVector
 	m_RectangleCityShapes.clear();
 	//fill RectangleVector
-	for (auto city: m_GameData.allCities)
+	for (City* city: m_GameData.allCities) // es werden gar nicht alle Cities durchgegangen?!
 	{
 		RectangleShape r;
 		Color c;
 		if (city->player_ID >= 0 && city->player_ID <= 5 && city->player_ID != 4)
 			c = MyColors.player[city->player_ID];
 		else
-			c = MyColors.Black;
+			c = MyColors.Orange;
 		c.a = 100;
 		r.setOutlineColor(c);
 		r.setFillColor(MyColors.Transparent);
-		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER);
+		r.setOutlineThickness(INGAMEVIEW_MOUSEOVER_RECT_BORDER * 2);
 		r.setPosition((float)(city->position.x * m_tileSize.x - m_mapView.left + INGAMEVIEW_MOUSEOVER_RECT_BORDER),
 						(float)(city->position.y * m_tileSize.y - m_mapView.top + INGAMEVIEW_MOUSEOVER_RECT_BORDER));
 		r.setSize(sf::Vector2f((float)(m_tileSize.x - 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER),(float)(m_tileSize.y- 2 * INGAMEVIEW_MOUSEOVER_RECT_BORDER)));
 		m_RectangleCityShapes.push_back(r);
 	}
-
-	updateFogOfWar();
 }
 
-bool IngameView::isInCity(UnitGroup* u)
+bool IngameView::isInCity(Vector2i pos)
 {
 	for(City* c : m_GameData.allCities)
-		if(Vector2i(u->pos.x, u->pos.y) == c->position)
+		if(pos == c->position)
 			return true;
 	return false;
 }
@@ -870,32 +948,28 @@ bool IngameView::isVisible(Vector2i pos)
 {
 	pos *= 2;
 	if(toDraw[pos.y][pos.x] || toDraw[pos.y + 1][pos.x] || toDraw[pos.y][pos.x + 1] || toDraw[pos.y + 1][pos.x + 1])
-		return true;
-	else	
 		return false;
+	else	
+		return true;
 }
 
 void IngameView::commitMessage()
 {
-	this->commitArmyStrategy();
-	this->commitMoves();
+	this->commitArmyStrategy();	
 	this->commitCityActions();
-	this->m_GameData.updateGameData(); // Warum!?  Hier ist doch noch gar nichts brechnet, 
-							//sondern erst, wenn der Server alle (Spieler-)Infos hat
-	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold); // hat noch keine Info, weil nix brechnet (Zeitlich)
+	this->commitMoves();
 }
 
 void IngameView::commitArmyStrategy()
 {
-	vector<char> erfg;
-	UnitStrategy s = UnitStrategy::OFFENSIVE; // noch nicht dirrerenziert
+	vector<unsigned char> erfg;
 
 	for(unsigned int i = 0; i < this->m_GameData.allUnits.size(); i++)
 	{
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.x);
 		erfg.push_back((const char)this->m_GameData.allUnits[i]->pos.y);
 
-		switch(s) 
+		switch(m_GameData.allUnits[i]->strategy) 
 		{
 			case UnitStrategy::DEFENSIVE:
 				erfg.push_back(0); break;
@@ -905,25 +979,26 @@ void IngameView::commitArmyStrategy()
 				erfg.push_back(2); break;
 		}
 	}
-
-	c->write(0x0416, erfg);
+	if(erfg.size() > 0)
+		c->write(0x0416, erfg);
 }
 
 void IngameView::commitMoves()
 {
-	vector<char> erfg;
+	vector<unsigned char> erfg;
 
-	erfg.push_back((char)this->m_GameData.ownedCities[0]->player_ID);
+	erfg.push_back((unsigned char)this->m_GameData.ownedCities[0]->player_ID);
 
 	for(unsigned int i = 0; i < this->army_moves.size(); i++)
 	{
-		for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
-		{
-			erfg.push_back(this->army_moves[i][j].x);
-			erfg.push_back(this->army_moves[i][j].y);
-		}
+			for(unsigned int j = 0; j < this->army_moves[i].size(); j++)
+			{
+				erfg.push_back(this->army_moves[i][j].x);
+				erfg.push_back(this->army_moves[i][j].y);
+			}
 
 		erfg.push_back('/');
+
 	}
 
 	this->army_moves.clear();
@@ -936,19 +1011,100 @@ void IngameView::commitCityActions()
 	c->write(0x0414,mainGuiOBJECT.getCityActionData());
 }
 
-void IngameView::processNewMessage(short id,vector<char> data)
+void IngameView::processNewMessage(short id,vector<unsigned char> data)
 {
 	switch(id)
 	{
-	case 0x0600:
-		{
-			
-		//	this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);
+	case 0x0600: // Alle Spieler haben Committed -> Server schickt update Freigabe
+		{		
+			this->m_GameData.updateGameData();
 		}break;
+	case 0x0602:	// Alle Daten Up to Date -> Freigabe Statusbar update
+		{
+			this->turnCount++;
+			if(turnCount > 1)
+			{
+				this->m_SBar->setValue(Icons::MONEY, this->m_GameData.gold);			
+				this->m_SBar->setValue(Icons::ROUNDS, this->turnCount);
+				this->m_SBar->setValue(Icons::CITIES, this->m_GameData.ownedCities.size());
+				this->m_SBar->setValue(Icons::ARMIES, this->m_GameData.ownedUnits.size());
+			}
+		}break;
+
 	}
 }
 
 void IngameView::processNetworkError(int id, std::string msg)
 {
 
+}
+
+void IngameView::deleteMoves(UnitGroup* ug, int length)
+{
+	Vector2i pos = Vector2i(ug->pos.x, ug->pos.y);
+	for(unsigned int i = 0; i < army_moves.size(); i++)
+		if(pos == army_moves[i][0]) 
+		{
+			army_moves.erase(army_moves.begin() + i);
+			break;
+		}
+
+	if(length != -1)
+		m_pathMaxLength = length;
+}
+
+void IngameView::AnimateArmyMoves()
+{
+	bool animation = false;
+	for(Army* a : m_owned_armys)
+		animation |= a->m_animating;
+	for(Army* a : m_enemy_armys)
+		animation |= a->m_animating;
+
+	if(!animation)
+	{
+		for(Army* a : m_owned_armys)
+		{
+			Vector2i nextPos = getNextAnimationPosition(a->m_original_position, m_resultMoveStep);
+
+			if(nextPos == ARMY_DIED)
+				a->m_isDead = true;
+			else if(nextPos != ARMY_STOPPED)
+			{
+				a->animatedMove(nextPos);
+				a->m_inCity = isInCity(nextPos);
+			}
+		}
+
+		for(Army* a : m_enemy_armys)
+		{
+			Vector2i nextPos = getNextAnimationPosition(a->m_original_position, m_resultMoveStep);
+
+			if(nextPos == ARMY_DIED)
+				a->m_isDead = true;
+			else if(nextPos != ARMY_STOPPED)
+			{
+				a->animatedMove(nextPos);
+				a->m_isVisible = isVisible(nextPos);
+			}
+		}
+		m_resultMoveStep++;
+		if((unsigned)m_resultMoveStep >= m_resultMoveStepMax)
+		{
+			nextPhase();
+		}
+	}
+}
+
+Vector2i IngameView::getNextAnimationPosition(Vector2i startpos, int index)
+{
+	for(std::vector<Vector2i> v : m_GameData.result_moves)
+		if(startpos == v[0] && v.size() > (unsigned)index)
+			return v[index];
+		else if(v.size() <= (unsigned)index)
+			return ARMY_STOPPED;
+
+	//error case: return stopped
+	return ARMY_STOPPED;
+			
 }

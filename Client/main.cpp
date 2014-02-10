@@ -24,7 +24,7 @@ using namespace std;
 
 class testClient : public NetworkParticipant
 {
-	void processNewMessage(short id,vector<char> data)
+	void processNewMessage(short id,vector<unsigned char> data)
 	{
 		std::cout<<"Server hat folgendes gesendet:\nID:"<<std::hex<<(int)id<<"\nData:\n";
 		for(unsigned int i=0;i<data.size();i++)
@@ -60,7 +60,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 
 
 	//erlaubte einstiegspunkte für Views::
-	//TESTSCREEN LOGIN LOBBY
+	//TESTSCREEN LOGIN
 	Game* g = new Game(&window, Views::LOGIN, sf::Vector2f(1280, 850));
 	
 	
@@ -75,6 +75,8 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 		g->Draw();
 		
 		window.display();
+
+		sleep(sf::milliseconds(1));
 	}
 	
 	delete g;

@@ -23,9 +23,9 @@ LobbyLogic::~LobbyLogic()
 		delete it->second;
 }
 
-void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
+void LobbyLogic::processNewMessage(SOCKET s,short id,vector<unsigned char> data)
 {
-	std::vector<char> erfg;
+	std::vector<unsigned char> erfg;
 
 	switch (id)
 	{
@@ -43,7 +43,7 @@ void LobbyLogic::processNewMessage(SOCKET s,short id,vector<char> data)
 				}
 				else
 				{
-					std::vector<char> tmp;
+					std::vector<unsigned char> tmp;
 
 					//erfg.push_back(it->first);
 
