@@ -37,7 +37,7 @@ public:
 	GameLogic::GameLogic(vector<PlayerData> players, Map* map);
 	GameLogic::~GameLogic();
 	void computeTurns();
-	void isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
+	POINT* isCollision(POINT* pos, vector<UnitGroupLogic*> armies);
 	vector<unsigned char> divideForMessage(int number);
 
 	void processNewMessage(SOCKET s,short id,std::vector<unsigned char> data);
