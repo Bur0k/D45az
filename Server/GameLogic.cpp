@@ -487,6 +487,8 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 								if(this->playersIngame[playerID]->cities[i]->upgradeCity())
 									this->playersIngame[playerID]->gold -= 50;
 							}
+
+							this->playersIngame[playerID]->gold -= armyCount * 10;
 						}
 
 						p.y += 2;
@@ -501,7 +503,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 						}
 
 						UnitGroupLogic* newGroup = new UnitGroupLogic(armyCount, atype, p, &this->playersIngame[playerID]->unitGroups);
-						
+						newGroup->player_ID = this->playersIngame[playerID]->cities[0]->player_ID;
 
 
 						data.erase(data.begin(), data.begin() + 5);

@@ -92,7 +92,7 @@ void mainGui::positionGraphics()
 	select_city->setPosition(200, y_origin + 25);
 
 	for(unsigned int i = 0; i < units.size(); i++)
-		units[i]->setPosition(Vector2f(20 + 70 * (float)(i % 8), (i < 7)? y_offset - 186 : y_offset - 92));
+		units[i]->setPosition(Vector2f(20 + 70 * (float)(i % 8), (i <= 7)? y_offset - 186 : y_offset - 92));
 
 	for(int i = 0; i < 3; i++)
 		army_mode[i]->setPosition(Vector2f(600,y_origin + 90 + i * 40));
