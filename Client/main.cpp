@@ -53,7 +53,7 @@ int main()//Im Debug Mode verwenden wir Console als SubSystem. Es wird trotzdem 
 	cout << endl << "Hallo D45az" << endl << "oeffne Fenster" << endl;
 
 	// create the window
-	sf::RenderWindow window(sf::VideoMode(1280, 850), "D45az finezt");
+	sf::RenderWindow window(sf::VideoMode(1280, 850), "ZERBERSTEN!");
 	//window.setPosition(sf::Vector2i(400,0)); NEIN RICHARD
 	window.setMouseCursorVisible(false);
 

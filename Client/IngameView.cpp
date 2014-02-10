@@ -998,6 +998,7 @@ void IngameView::commitMoves()
 			}
 
 		erfg.push_back('/');
+		erfg.push_back('/');
 
 	}
 

@@ -112,12 +112,18 @@ void GameLogic::computeTurns()
 				for(unsigned int s = 0; s < startCities.size(); s ++)
 				{
 					if(armies[i]->pos->x == startCities[s]->position->x && armies[i]->pos->y == startCities[s]->position->y)
+					{
 						startCities[s]->player_ID = armies[i]->player_ID; // Stadt übernommen
+						this->playersIngame[armies[i]->player_ID]->cities.push_back(startCities[s]);
+					}
 				}
 				for(unsigned int s = 0; s < neutralCities.size(); s ++)
 				{
 					if(armies[i]->pos->x == neutralCities[s]->position->x && armies[i]->pos->y == neutralCities[s]->position->y)
+					{
 						neutralCities[s]->player_ID = armies[i]->player_ID;
+						this->playersIngame[armies[i]->player_ID]->cities.push_back(neutralCities[s]);
+					}
 				}
 
 				/*
@@ -257,7 +263,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 					erfg.push_back(static_cast<char>((this->neutralCities[i]->position->x)>>1));
 					erfg.push_back(static_cast<char>((this->neutralCities[i]->position->y)>>1));
 					erfg.push_back(this->neutralCities[i]->level);
-					erfg.push_back(5);
+					erfg.push_back(neutralCities[i]->player_ID);
 				}
 				for(unsigned int i = 0; i < this->startCities.size(); i++)
 				{
@@ -435,6 +441,7 @@ void GameLogic::processNewMessage(SOCKET s,short id,std::vector<unsigned char> d
 							{
 								pArmy* movingArmy = new pArmy(player_ID, vp);
 								this->movingArmies.push_back(movingArmy);
+								vp.clear();
 							}
 						}
 						else
