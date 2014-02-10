@@ -74,7 +74,10 @@ Client::Client()
 			toWriteMutex.unlock();
 
 			if(dataToSend.size() == 0)
+			{
+				Sleep(1);
 				continue;
+			}
 
 			char* buffer = new char[dataToSend.size()];
 			for(unsigned int i=0;i<dataToSend.size();i++)
