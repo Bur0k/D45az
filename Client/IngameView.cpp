@@ -916,7 +916,7 @@ void IngameView::loadGamestate()
 	//clear RectangleVector
 	m_RectangleCityShapes.clear();
 	//fill RectangleVector
-	for (City* city: m_GameData.allCities)
+	for (City* city: m_GameData.allCities) // es werden gar nicht alle Cities durchgegangen?!
 	{
 		RectangleShape r;
 		Color c;

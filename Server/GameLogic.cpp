@@ -100,6 +100,7 @@ void GameLogic::computeTurns()
 
 	while(this->movingArmies.size() > 0)
 	{
+		// Jede Armee um 1 Schritt  bis keine Bewegungsbefehle mehr da sind
 		for(unsigned int i = 0; i < this->movingArmies.size(); i++) // hier wird nochmal tote Armee durchgelaufen
 		{
 			if(this->movingArmies[i]->move.size() > 0)
@@ -120,10 +121,23 @@ void GameLogic::computeTurns()
 						}
 					}
 				}
-			}
+				this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
+
+				// wenn derjenige, der gerade läuft stirbt, muss Städtedurchsuchung übersprungen werden
+				for(unsigned int s = 0; s < startCities.size(); s ++)
+				{
+					if(armies[i]->pos->x == startCities[s]->position->x && armies[i]->pos->y == startCities[s]->position->y)
+						startCities[s]->player_ID = armies[i]->player_ID; // Stadt übernommen
+				}
+				for(unsigned int s = 0; s < neutralCities.size(); s ++)
+				{
+					if(armies[i]->pos->x == neutralCities[s]->position->x && armies[i]->pos->y == neutralCities[s]->position->y)
+						neutralCities[s]->player_ID = armies[i]->player_ID;
+				}
+		}
 		}
 
-		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
+		for(unsigned int i = 0; i < this->movingArmies.size(); i++) // Wenn keine Schritte übrig, dann aus Beweungsbefehlen raus
 		{
 			if(this->movingArmies[i]->move.size() == 0)
 			{
