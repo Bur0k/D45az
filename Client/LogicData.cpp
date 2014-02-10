@@ -169,9 +169,11 @@ void LogicData::processNewMessage(short id,vector<unsigned char> data)
 			if(this->ownedUnits.size() != 0)
 				enable = true;
 
+			ownedUnits.clear();
+
 			for (unsigned int i = 0; i < data.size(); i+=74)
 			{
-				ownedUnits.clear();
+				
 				
 				UnitStrategy strategy;
 				UnitTypes types[16];
