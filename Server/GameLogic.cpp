@@ -107,7 +107,19 @@ void GameLogic::computeTurns()
 				armies[i]->pos = this->movingArmies[i]->move[0];
 				this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
 			
-				this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
+				POINT* loser = this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
+
+				if(loser->x != 0)
+				{
+					for(int j = 0; j < this->movingArmies.size(); j++)
+					{
+						if(armies[i]->pos->x == loser->x && armies[i]->pos->y == loser->y)
+						{
+							this->movingArmies.erase(this->movingArmies.begin() + i);
+							armies.erase(armies.begin() + i);
+						}
+					}
+				}
 			}
 		}
 
@@ -122,7 +134,7 @@ void GameLogic::computeTurns()
 	}
 }
 
-void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
+POINT* GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 {
 	UnitGroupLogic* currentArmy = armies[0]; // Fehlerumgehung
 
@@ -154,15 +166,18 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 				{
 					delete armies[i]; // Loser killen
 					armies.push_back(Winner); // gewinner ist ehemaliger current, also wieder reinpuschen
-					return;
+					return armies[i]->pos;
 				}
 				else
 				{
 					delete currentArmy; // Loser killen
-					return;
+					return currentArmy->pos;
 				}
 			}
 		}
+
+		POINT* p = (0,0);
+		return p;
 	}
 }
 
