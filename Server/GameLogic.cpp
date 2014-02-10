@@ -100,14 +100,14 @@ void GameLogic::computeTurns()
 
 	while(this->movingArmies.size() > 0)
 	{
-		for(unsigned int i = 0; i < this->movingArmies.size(); i++)
+		for(unsigned int i = 0; i < this->movingArmies.size(); i++) // hier wird nochmal tote Armee durchgelaufen
 		{
 			if(this->movingArmies[i]->move.size() > 0)
 			{
 				armies[i]->pos = this->movingArmies[i]->move[0];
 				this->movingArmies[i]->move.erase(this->movingArmies[i]->move.begin());
 			
-				this->isCollision(armies[i]->pos, armies);
+				this->isCollision(armies[i]->pos, armies); // in armies sind tote Armeen auch noch drin
 			}
 		}
 
@@ -144,34 +144,21 @@ void GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 			if(currentArmy->player_ID == armies[i]->player_ID)
 			{
 				cout << "MERGE";
-				
-				UnitGroupLogic Winner = fight(*currentArmy, *armies[i]); 
-				if(Winner.pos->x == currentArmy->pos->x && Winner.pos->y == currentArmy->pos->y) // Gewinner der Current?
-				{
-					delete armies[i];	// Loser deleten
-					armies.push_back(&Winner); // ehemaliges Current wieder reinpacken
-					return;
-				}
-				else
-				{
-					delete currentArmy; // Current deleten
-					return;
-				}
 			}
 			else
 			{
 				cout << "FIGHT";
 				
-				UnitGroupLogic Winner = fight(*currentArmy, *armies[i]); 
-				if(Winner.pos->x == currentArmy->pos->x && Winner.pos->y == currentArmy->pos->y)
+				UnitGroupLogic* Winner = fight(currentArmy, armies[i]); 
+				if(Winner->pos->x == currentArmy->pos->x && Winner->pos->y == currentArmy->pos->y)
 				{
-					delete armies[i];
-					armies.push_back(&Winner);
+					delete armies[i]; // Loser killen
+					armies.push_back(Winner); // gewinner ist ehemaliger current, also wieder reinpuschen
 					return;
 				}
 				else
 				{
-					delete currentArmy;
+					delete currentArmy; // Loser killen
 					return;
 				}
 			}
@@ -586,46 +573,46 @@ void GameLogic::processNetworkError(SOCKET s,int errCode,std::string errMessage)
 
 }
 
-UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // Karre liefert nur Gewinner zurück, anderer tot
+UnitGroupLogic* GameLogic::fight(UnitGroupLogic* army1, UnitGroupLogic* army2) // Karre liefert nur Gewinner zurück, anderer tot
 {
-	while(army1.units.size() != 0 && army2.units.size() != 0) // bis eine Armee keine Kompanien mehr hat
+	while(army1->units.size() != 0 && army2->units.size() != 0) // bis eine Armee keine Kompanien mehr hat
 	{
-                if(army1.units.size() < army2.units.size())
+        if(army1->units.size() < army2->units.size())
 		{
-                    int Kompanies = army1.units.size();
-                    for (int k = 0; k < Kompanies; k++) // alle Kompanien kämpfen 
+            int Kompanies = army1->units.size();
+            for (int k = 0; k < Kompanies; k++) // alle Kompanien kämpfen 
 			{
-                        while(army1.units[k]->living != 0 && army2.units[k]->living != 0) // bis eine Kompanie keine Einheiten mehr hat
+                        while(army1->units[k]->living != 0 && army2->units[k]->living != 0) // bis eine Kompanie keine Einheiten mehr hat
 				{
-                            if(army1.units[k]->living < army2.units[k]->living)
+                            if(army1->units[k]->living < army2->units[k]->living)
 						{
-                                int Einheiten = army1.units[k]->living;
+                                int Einheiten = army1->units[k]->living;
                                 for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
                                 {
 							double atk1 = 0.0;
 							double atk2 = 0.0;
 
-                                    switch(army1.strategy) // ArmeeStrategie
+                                    switch(army1->strategy) // ArmeeStrategie
 							{
 							case UnitStrategy::OFFENSIVE: atk1 += off; break;
 									case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING:	atk1 += run; break;
 							}
-                                    switch(army2.strategy)
+                                    switch(army2->strategy)
 							{
 							case UnitStrategy::OFFENSIVE: atk2 += off; break;
                                         case UnitStrategy::DEFENSIVE: atk2 += def; break;
                                         case UnitStrategy::RUNNING: atk2 += run; break;
 							}
 							
-									switch(army1.units[k]->type) // KompanieTyp
+									switch(army1->units[k]->type) // KompanieTyp
                                     {
 									case UnitTypes::LIGHT: atk1 += light; break;
                                     case UnitTypes::HEAVY: atk1 += heavy; break;
                                     case UnitTypes::LONGRANGE: atk1 += longrange; break;
                                     case UnitTypes::ARTILLERY: atk1 += artillery; break;
                                     }
-                                    switch(army2.units[k]->type)
+                                    switch(army2->units[k]->type)
                                     {
                                     case UnitTypes::LIGHT: atk2 += light; break;
                                     case UnitTypes::HEAVY: atk2 += heavy; break;
@@ -641,40 +628,40 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
                                     atk2 += bonus;
 
                                     if(atk1 < atk2)
-                                        army1.units[k]->living --;
+                                        army1->units[k]->living --;
 							else
-                                        army2.units[k]->living --;
+                                        army2->units[k]->living --;
 						}
 						}
 					else 
 						{
-                                int Einheiten = army2.units[k]->living;
+                                int Einheiten = army2->units[k]->living;
                                 for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
                                 {
 							double atk1 = 0.0;
 							double atk2 = 0.0;
 
-                                    switch(army1.strategy) // ArmeeStrategie
+                                    switch(army1->strategy) // ArmeeStrategie
 							{
 							case UnitStrategy::OFFENSIVE: atk1 += off; break;
 									case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING: atk1 += run; break;
 							}
-                                    switch(army2.strategy)
+                                    switch(army2->strategy)
 							{
 							case UnitStrategy::OFFENSIVE: atk2 += off; break;
                                     case UnitStrategy::DEFENSIVE: atk2 += def; break;
                                     case UnitStrategy::RUNNING: atk2 += run; break;
 							}
 							
-                                    switch(army1.units[k]->type) // KompanieTyp
+                                    switch(army1->units[k]->type) // KompanieTyp
                                     {
 									case UnitTypes::LIGHT: atk1 += light; break;
 									case UnitTypes::HEAVY: atk1 += heavy; break;
 									case UnitTypes::LONGRANGE: atk1 += longrange; break;
 									case UnitTypes::ARTILLERY: atk1 += artillery; break;
                                     }
-                                    switch(army2.units[k]->type)
+                                    switch(army2->units[k]->type)
                                     {
 									case UnitTypes::LIGHT: atk2 += light; break;
 									case UnitTypes::HEAVY: atk2 += heavy; break;
@@ -689,60 +676,60 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
                                     atk2 += bonus;
 
                                     if(atk1 < atk2)
-                                        army1.units[k]->living --;
+                                        army1->units[k]->living --;
 							else
-                                        army2.units[k]->living --;
+                                        army2->units[k]->living --;
 						}
 				}
                         }
 				
-                    if(army1.units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
-						army1.units.erase(army1.units.begin()+k);
-                    else if (army2.units[k]->living == 0)
-                        army2.units.erase(army2.units.begin()+k);
+                    if(army1->units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
+						army1->units.erase(army1->units.begin()+k);
+                    else if (army2->units[k]->living == 0)
+                        army2->units.erase(army2->units.begin()+k);
 
-                    if (army1.units.size() < army2.units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
-                        Kompanies = army1.units.size();
+                    if (army1->units.size() < army2->units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
+                        Kompanies = army1->units.size();
 				else
-                        Kompanies = army2.units.size();
+                        Kompanies = army2->units.size();
 			}
 		}
 		else
 		{
-			int Kompanies = army2.units.size();
+			int Kompanies = army2->units.size();
 			for(int k = 0; k < Kompanies; k++) // alle Kompanien kämpfen 
 			{
-                while(army1.units[k]->living != 0 && army2.units[k]->living != 0) // bis eine Kompanie keine Einheiten mehr hat
+                while(army1->units[k]->living != 0 && army2->units[k]->living != 0) // bis eine Kompanie keine Einheiten mehr hat
 				{
-                     if(army1.units[k]->living < army2.units[k]->living)
+					if(army1->units[k]->living < army2->units[k]->living)
 					{
-                        int Einheiten = army1.units[k]->living;
+                        int Einheiten = army1->units[k]->living;
                         for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
 						{
 							double atk1 = 0.0;
 							double atk2 = 0.0;
 
-                            switch(army1.strategy) // ArmeeStrategie
+                            switch(army1->strategy) // ArmeeStrategie
 							{
 							case UnitStrategy::OFFENSIVE: atk1 += off; break;
 							case UnitStrategy::DEFENSIVE: atk1 += def; break;
 									case UnitStrategy::RUNNING: atk1 += run; break;
 							}
-                            switch(army2.strategy)
+                            switch(army2->strategy)
 							{
 							case UnitStrategy::OFFENSIVE: atk2 += off; break;
 							case UnitStrategy::DEFENSIVE: atk2 += def; break;
 							case UnitStrategy::RUNNING: atk2 += run; break;
 							}
 
-                            switch(army1.units[k]->type) // KompanieTyp
+                            switch(army1->units[k]->type) // KompanieTyp
                             {
 							case UnitTypes::LIGHT: atk1 += light; break;
 							case UnitTypes::HEAVY: atk1 += heavy; break;
 							case UnitTypes::LONGRANGE: atk1 += longrange; break;
 							case UnitTypes::ARTILLERY: atk1 += artillery; break;
                             }
-                            switch(army2.units[k]->type)
+                            switch(army2->units[k]->type)
                             {
 							case UnitTypes::LIGHT: atk2 += light; break;
 							case UnitTypes::HEAVY: atk2 += heavy; break;
@@ -757,40 +744,40 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
                             atk2 += bonus;
 
                             if(atk1 < atk2)
-                                army1.units[k]->living --;
+                                army1->units[k]->living --;
 							else
-                                army2.units[k]->living --;
+                                army2->units[k]->living --;
 						}
 					}
 					else 
 					{
-                        int Einheiten = army2.units[k]->living;
+                        int Einheiten = army2->units[k]->living;
                         for(int u = 0; u < Einheiten; u++) // alle Einheiten der Kompanie kämpfen lassen
 						{
 							double atk1 = 0.0;
 							double atk2 = 0.0;
 
-                            switch(army1.strategy) // ArmeeStrategie
+                            switch(army1->strategy) // ArmeeStrategie
 							{
 							case UnitStrategy::OFFENSIVE: atk1 += off; break;
 							case UnitStrategy::DEFENSIVE: atk1 += def; break;
 							case UnitStrategy::RUNNING: atk1 += run; break;
 							}
-                            switch(army2.strategy)
+                            switch(army2->strategy)
 							{
 							case UnitStrategy::OFFENSIVE: atk2 += off; break;
 							case UnitStrategy::DEFENSIVE: atk2 += def; break;
 							case UnitStrategy::RUNNING: atk2 += run; break;
 							}
 							
-							switch(army1.units[k]->type) // KompanieTyp
+							switch(army1->units[k]->type) // KompanieTyp
 							{
 							case UnitTypes::LIGHT: atk1 += light; break;
 							case UnitTypes::HEAVY: atk1 += heavy; break;
 							case UnitTypes::LONGRANGE: atk1 += longrange; break;
 							case UnitTypes::ARTILLERY: atk1 += artillery; break;
 							}
-							switch(army2.units[k]->type)
+							switch(army2->units[k]->type)
 							{
 							case UnitTypes::LIGHT: atk2 += light; break;
 							case UnitTypes::HEAVY: atk2 += heavy; break;
@@ -805,27 +792,27 @@ UnitGroupLogic GameLogic::fight(UnitGroupLogic army1, UnitGroupLogic army2) // K
 							atk2 += bonus;
 
 							if(atk1 < atk2)
-								army1.units[k]->living --; // STerben der Einheiten
+								army1->units[k]->living --; // STerben der Einheiten
 							else
-								army2.units[k]->living --;
+								army2->units[k]->living --;
 						}
 					}
 				}
 							
-                if (army2.units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
-                    army2.units.erase(army2.units.begin()+k);
-                else if (army1.units[k]->living == 0)
-                    army1.units.erase(army1.units.begin()+k);
+                if (army2->units[k]->living == 0) // Wenn Kompanie auf 0 Einheiten reduziert wird, löschen
+                    army2->units.erase(army2->units.begin()+k);
+                else if (army1->units[k]->living == 0)
+                    army1->units.erase(army1->units.begin()+k);
 
-                if (army1.units.size() < army2.units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
-                    Kompanies = army1.units.size();
+                if (army1->units.size() < army2->units.size()) // Max neusetzen, damit nicht verstorbene Kompanien bearbeitet werden
+                    Kompanies = army1->units.size();
 				else
-                    Kompanies = army2.units.size();
+                    Kompanies = army2->units.size();
 			}		
 		}
 	}
 	
-	if(army1.units.size() == 0)
+	if(army1->units.size() == 0)
 	{
 		return army2;
 	}
