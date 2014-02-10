@@ -176,7 +176,9 @@ POINT* GameLogic::isCollision(POINT* pos, vector<UnitGroupLogic*> armies)
 			}
 		}
 
-		POINT* p = (0,0);
+		POINT* p = new POINT();
+		p->x = 0;
+		p->y = 0;
 		return p;
 	}
 }
