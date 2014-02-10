@@ -42,7 +42,7 @@ MusikSampler::MusikSampler(void)
 		m_vBuffer.push_back(preload_soundbuffer(i));
 
 
-	// Lautstärke am Anfang 100%
+	// Lautstärke am Anfang  - Sounds müssen etwas lauter als Musik sein, sonst übertönt
 	m_BgVolume = 80.0;
 	m_SoVolume = 100.0;
 }
